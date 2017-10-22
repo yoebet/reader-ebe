@@ -1,0 +1,25 @@
+.grid.grid-pad(*ngIf='chap')
+  .col-1-4(*ngFor='let para of chap.paras; trackBy: paraTracker;index as index; first as first;last as last')
+    div(*ngIf='index===insertPos')
+      p
+        label Insert:
+        textarea(#insertPara='')
+        button((click)='this.insertPos=null') Cancel
+        button((click)="insertBeforeSave(index,insertPara.value); insertPara.value=''")
+          | Save
+    div([hidden]='editingPara===para')
+      p {{para.content}}
+      button(*ngIf='!first', (click)='mergeUp(index)') mergeUp
+      button(*ngIf='!last', (click)='mergeDown(index)') mergeDown
+      button((click)='insertBeforeEdit(index)') insertBefore
+      button((click)='edit(para)') Edit
+      button((click)='remove(para)') Remove
+    div(*ngIf='editingPara==para')
+      textarea(#paraContent='') {{para.content}}
+      button((click)='this.editingPara=null') Cancel
+      button((click)='save(paraContent.value)') Save
+  p
+    label Append:
+    textarea(#newPara='')
+    button((click)="append(newPara.value); newPara.value=''")
+      | Add

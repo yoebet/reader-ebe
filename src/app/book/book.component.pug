@@ -1,0 +1,13 @@
+div(*ngIf='book')
+  div([hidden]='editing')
+    h3 Book: {{book.name}} by {{book.author}}
+    button((click)='edit()') Edit
+  div(*ngIf='editing')
+    label Book name:
+    input([value]='book.name', #bookName='')
+    label Author:
+    input([value]='book.author', #bookAuthor='')
+    button((click)='this.editing=false') Cancel
+    button((click)='save(bookName.value,bookAuthor.value)') Save
+  book-chaps([book]='book')
+button((click)='goBack()') Back

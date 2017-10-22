@@ -1,16 +1,15 @@
-<div *ngIf="chap" class="grid grid-pad">
-  <div *ngFor="let para of chap.paras; trackBy: paraTracker;index as index; first as first;last as last"
-       class="col-1-4">
+
+<div class="grid grid-pad" *ngIf="chap">
+  <div class="col-1-4" *ngFor="let para of chap.paras; trackBy: paraTracker;index as index; first as first;last as last">
     <div *ngIf="index===insertPos">
       <p>
-        <label>Insert:</label> <textarea #insertPara></textarea>
+        <label>Insert:</label>
+        <textarea #insertPara=""></textarea>
         <button (click)="this.insertPos=null">Cancel</button>
-        <button (click)="insertBeforeSave(index,insertPara.value); insertPara.value=''">
-          Save
-        </button>
+        <button (click)="insertBeforeSave(index,insertPara.value); insertPara.value=''">Save</button>
       </p>
     </div>
-    <div [hidden]="editingPara==para">
+    <div [hidden]="editingPara===para">
       <p>{{para.content}}</p>
       <button *ngIf="!first" (click)="mergeUp(index)">mergeUp</button>
       <button *ngIf="!last" (click)="mergeDown(index)">mergeDown</button>
@@ -19,15 +18,14 @@
       <button (click)="remove(para)">Remove</button>
     </div>
     <div *ngIf="editingPara==para">
-      <textarea #paraContent>{{para.content}}</textarea>
+      <textarea #paraContent="">{{para.content}}</textarea>
       <button (click)="this.editingPara=null">Cancel</button>
       <button (click)="save(paraContent.value)">Save</button>
     </div>
   </div>
   <p>
-    <label>Append:</label> <textarea #newPara></textarea>
-    <button (click)="append(newPara.value); newPara.value=''">
-      Add
-    </button>
+    <label>Append:</label>
+    <textarea #newPara=""></textarea>
+    <button (click)="append(newPara.value); newPara.value=''">Add</button>
   </p>
 </div>

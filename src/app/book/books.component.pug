@@ -1,0 +1,11 @@
+.grid.grid-pad
+  div(*ngFor='let book of books; trackBy: bookTracker')
+    a.col-1-4((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
+      .module.book
+        h4 {{book.name}}
+    button((click)='remove(book)') Remove
+  label New Book:
+  input(#bookName='', placeholder='Book Name')
+  input(#author='', placeholder='Author')
+  button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
+    | Add

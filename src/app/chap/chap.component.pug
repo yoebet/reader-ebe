@@ -1,0 +1,11 @@
+.grid.grid-pad(*ngIf='chap')
+  div([hidden]='editing')
+    h4 Chapter: {{chap.name}}
+    button((click)='edit()') Edit
+  div(*ngIf='editing')
+    label Chap Title:
+    input([value]='chap.name', #chapName='')
+    button((click)='this.editing=false') Cancel
+    button((click)='save(chapName.value)') Save
+  chap-paras([chap]='chap')
+button((click)='goBack()') Back

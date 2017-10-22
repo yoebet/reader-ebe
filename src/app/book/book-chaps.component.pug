@@ -1,0 +1,15 @@
+div(*ngIf='book')
+  ul.grid.grid-pad
+    li.col-1-4(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
+      a([routerLink]="['/chaps', chap._id]")
+        h4 {{chap.name}}
+      button(*ngIf='!first', (click)='moveUp(chap)') moveUp
+      button(*ngIf='!last', (click)='moveDown(chap)') moveDown
+      button(*ngIf='!first', (click)='moveTop(chap)') moveTop
+      button(*ngIf='!last', (click)='moveBottom(chap)') moveBottom
+      button((click)='remove(chap)') Remove
+  div
+    label New Chap:
+    input(#chapName='', placeholder='Title')
+    button((click)="add(chapName.value); chapName.value=''")
+      | Add

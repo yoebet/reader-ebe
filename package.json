@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "puggy": "pug src -P -w",
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run puggy & ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -42,6 +43,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
+    "pug-cli": "^1.0.0-alpha6",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "~2.3.3"
