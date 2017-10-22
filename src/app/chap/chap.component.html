@@ -1,0 +1,13 @@
+<div *ngIf="chap" class="grid grid-pad">
+  <div [hidden]="editing">
+  <h4>Chapter: {{chap.name}}</h4>
+    <button (click)="edit()">Edit</button>
+  </div>
+  <div *ngIf="editing">
+    <label>Chap Title:</label> <input [value]="chap.name" #chapName/>
+    <button (click)="this.editing=false">Cancel</button>
+    <button (click)="save(chapName.value)">Save</button>
+  </div>
+  <chap-paras [chap]="chap"></chap-paras>
+</div>
+<button (click)="goBack()">Back</button>
