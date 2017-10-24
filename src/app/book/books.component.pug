@@ -1,11 +1,19 @@
-.grid.grid-pad
-  div(*ngFor='let book of books; trackBy: bookTracker')
-    a.col-1-4((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
-      .module.book
-        h4 {{book.name}}
-    button((click)='remove(book)') Remove
-  label New Book:
-  input(#bookName='', placeholder='Book Name')
-  input(#author='', placeholder='Author')
-  button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
-    | Add
+.ui.header
+  | Book List
+.ui.celled.list
+  .item(*ngFor='let book of books; trackBy: bookTracker')
+    a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
+      | {{book.name}}
+    button.ui.small.button.right.floated((click)='remove(book)') Remove
+
+.ui.form
+  .field
+    label New Book:
+  .fields
+    .field
+      input(#bookName='', placeholder='Book Name')
+    .field
+      input(#author='', placeholder='Author')
+    .field
+      button.ui.small.button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
+        | Add

@@ -1,6 +1,10 @@
-h2 EB
-ul
-  li
-    h3
-      a(routerLink='/books', routerLinkActive='active') Books-wsx
-router-outlet
+.ui.container
+  .ui.secondary.pointing.menu
+    a.item(routerLink='/books', routerLinkActive='active') Books
+    .right.menu
+      .ui.item
+        | Login
+
+  router-outlet
+
+  p &nbsp;

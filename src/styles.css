@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url('assets/semantic/reset.css');
+@import url('assets/semantic/site.css');
+@import url('assets/semantic/button.css');
+@import url('assets/semantic/container.css');
+@import url('assets/semantic/divider.css');
+@import url('assets/semantic/header.css');
+@import url('assets/semantic/icon.css');
+@import url('assets/semantic/image.css');
+@import url('assets/semantic/input.css');
+@import url('assets/semantic/checkbox.css');
+@import url('assets/semantic/label.css');
+@import url('assets/semantic/list.css');
+@import url('assets/semantic/form.css');
+@import url('assets/semantic/menu.css');
+@import url('assets/semantic/item.css');
+@import url('assets/semantic/table.css');
+@import url('assets/semantic/message.css');
+@import url('assets/semantic/accordion.css');
+@import url('assets/semantic/dropdown.css');
+@import url('assets/semantic/popup.css');
+@import url('assets/semantic/search.css');
+@import url('assets/semantic/sidebar.css');
+@import url('assets/semantic/tab.css');
+@import url('assets/semantic/segment.css');

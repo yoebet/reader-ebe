@@ -1,13 +1,27 @@
 div(*ngIf='book')
   div([hidden]='editing')
-    h3 Book: {{book.name}} by {{book.author}}
-    button((click)='edit()') Edit
-  div(*ngIf='editing')
-    label Book name:
-    input([value]='book.name', #bookName='')
-    label Author:
-    input([value]='book.author', #bookAuthor='')
-    button((click)='this.editing=false') Cancel
-    button((click)='save(bookName.value,bookAuthor.value)') Save
-  book-chaps([book]='book')
-button((click)='goBack()') Back
+    .ui.right.floated.header
+      a([hidden]='editing', (click)='edit()' href='javascript:') edit
+    .ui.header {{book.name}}
+    .sub.header by {{book.author}}
+  .ui.form(*ngIf='editing')
+    .fields
+      .four.wide.field
+        input([value]='book.name', placeholder='Book Name', #bookName='')
+      .two.wide.field
+        input([value]='book.author', placeholder='Author', #bookAuthor='')
+    .field
+      button.ui.small.button((click)='this.editing=false') Cancel
+      button.small.ui.primary.button((click)='save(bookName.value,bookAuthor.value)') Save
+  .ui.hidden.clearing.divider
+  .ui.header
+    | Chapters
+    .ui.right.floated.header
+      button.ui.small.basic.button((click)='chapsTuneOrder=!chapsTuneOrder') order
+      button.ui.small.basic.button((click)='chapOperations=!chapOperations') edit/remove
+
+  .ui.hidden.clearing.divider
+  book-chaps([book]='book', [tuneOrder]='chapsTuneOrder', [operations]='chapOperations')
+
+.ui.hidden.divider
+button.ui.small.button((click)='goBack()') Back

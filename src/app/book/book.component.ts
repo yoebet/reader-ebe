@@ -17,6 +17,8 @@ import {OpResult} from '../models/op-result';
 export class BookComponent implements OnInit {
   book: Book;
   editing = false;
+  chapsTuneOrder = false;
+  chapOperations = false;
 
   constructor(private bookService: BookService,
               private route: ActivatedRoute,

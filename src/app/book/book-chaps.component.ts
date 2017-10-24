@@ -13,6 +13,9 @@ import {OpResult} from '../models/op-result';
 })
 export class BookChapsComponent implements OnInit {
   @Input() book: Book;
+  @Input() tuneOrder: boolean;
+  @Input() operations: boolean;
+  editingChap: Chap;
 
   constructor(private chapService: ChapService,
               private router: Router) {
@@ -50,6 +53,25 @@ export class BookChapsComponent implements OnInit {
         }
         this.book.chaps = this.book.chaps.filter(h => h !== chap);
       });
+  }
+
+  edit(chap: Chap): void {
+    this.editingChap = chap;
+  }
+
+  saveChap(chap: Chap, name: string): void {
+    name = name.trim();
+    if (!name) {
+      return;
+    }
+    chap.name = name;
+    this.chapService.update(chap).subscribe((opr: OpResult) => {
+      if (opr.ok === 0) {
+        alert(opr.message || 'Fail');
+        return;
+      }
+      this.editingChap = null;
+    });
   }
 
   protected move(chap: Chap, dir: string) {

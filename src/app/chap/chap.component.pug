@@ -1,11 +1,25 @@
-.grid.grid-pad(*ngIf='chap')
+h3.ui.header(*ngIf='book')
+  | {{book.name}}
+div(*ngIf='chap')
   div([hidden]='editing')
-    h4 Chapter: {{chap.name}}
-    button((click)='edit()') Edit
-  div(*ngIf='editing')
-    label Chap Title:
-    input([value]='chap.name', #chapName='')
-    button((click)='this.editing=false') Cancel
-    button((click)='save(chapName.value)') Save
+    .ui.right.floated.header
+      a([hidden]='editing', (click)='edit()' href='javascript:') edit
+    h4.ui.header {{chap.name}}
+  .ui.form(*ngIf='editing')
+    .fields
+      .six.wide.field
+        input([value]='chap.name', #chapName='')
+      .field
+        button.ui.small.button((click)='editing=false') Cancel
+      .field
+        button.ui.small.primary.button((click)='save(chapName.value)') Save
+
+  .ui.hidden.divider
+  .ui.header
+    | &nbsp;
+    .ui.right.floated.header
+      button.ui.small.basic.button((click)='chapsTuneOrder=!chapsTuneOrder') order
   chap-paras([chap]='chap')
-button((click)='goBack()') Back
+
+.ui.hidden.divider
+button.ui.small.button((click)='goBack()') Back
