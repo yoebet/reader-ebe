@@ -1,0 +1,38 @@
+sticky.opertions {
+  background-color: white;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+  padding: 5px 0 5px 5px;
+}
+
+.ui[class*="right floated"].header {
+  margin: 0 0 .5em 0;
+}
+
+.item.paragraph {
+  margin: 0;
+}
+
+.ui.statistic.para-no {
+  min-width: 1.8em;
+  padding-top: 0.3em;
+}
+
+.ui.statistic.para-no .value {
+  text-align: right;
+  font-size: 1.3rem !important;
+}
+
+.paragraph > .para-content {
+  flex: 1 1 auto;
+  border: 1px solid white;
+  padding: 0.3em;
+}
+
+.paragraph > .selected.para-content {
+  border-color: yellowgreen;
+}
+
+.paragraph .para-no {
+  cursor: pointer;
+}

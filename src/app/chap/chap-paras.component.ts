@@ -19,7 +19,9 @@ const LF = '\n';
 export class ChapParasComponent implements OnInit {
   @Input() chap: Chap;
   editingPara: Para;
+  selectedPara: Para;
   insertPos: number;
+  editButtons: false;
 
   constructor(private chapService: ChapService,
               private paraService: ParaService,
@@ -32,6 +34,18 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
+  selectPara(para): void {
+    this.selectedPara = para;
+  }
+
+  selectPara2(para): void {
+    if (this.selectedPara === para) {
+      this.selectedPara = null;
+      return;
+    }
+    this.selectedPara = para;
+  }
+
   append(content: string): void {
     let model = {content} as Para;
     model.chapId = this.chap._id;
@@ -42,6 +56,10 @@ export class ChapParasComponent implements OnInit {
   }
 
   remove(para: Para): void {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
     if (!confirm('Are You Sure?')) {
       return;
     }
@@ -57,6 +75,10 @@ export class ChapParasComponent implements OnInit {
   }
 
   edit(para: Para): void {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
     this.editingPara = para;
   }
 
@@ -72,23 +94,44 @@ export class ChapParasComponent implements OnInit {
       });
   }
 
-  insertBeforeEdit(index: number) {
-    this.insertPos = index;
+  insertBefore(para) {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
+    this.insertPos = this.chap.paras.indexOf(para);
   }
 
-  insertBeforeSave(index: number, content: string) {
-    let target = this.chap.paras[index];
+  insertAfter(para) {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
+    let index = this.chap.paras.indexOf(para);
+    this.insertPos = index + 1;
+  }
+
+  saveInsert(content: string) {
+    if (!this.insertPos) {
+      return;
+    }
+    let target = this.chap.paras[this.insertPos];
     let model = {content} as Para;
     model.chapId = this.chap._id;
-    this.paraService.createBefore(target._id, model)
-      .subscribe(para => {
-        if (!para._id) {
-          alert('Fail');
-          return;
-        }
-        this.chap.paras.splice(index, 0, model);
-        this.insertPos = null;
-      });
+    let obs;
+    if (this.insertPos < this.chap.paras.length) {
+      obs = this.paraService.createBefore(target._id, model);
+    } else {
+      obs = this.paraService.create(model);
+    }
+    obs.subscribe(para => {
+      if (!para._id) {
+        alert('Fail');
+        return;
+      }
+      this.chap.paras.splice(this.insertPos, 0, model);
+      this.insertPos = null;
+    });
   }
 
   private mergeContent(p1, p2, target) {
@@ -125,20 +168,34 @@ export class ChapParasComponent implements OnInit {
 
   }
 
-  mergeUp(index: number): void {
+  mergeUp(para): void {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
     let paras = this.chap.paras;
-    let removePara = paras[index];
+    let index = paras.indexOf(para);
+    if (index === 0) {
+      return;
+    }
     let targetPara = paras[index - 1];
-    this.mergeContent(targetPara, removePara, targetPara);
-    this.saveMerge(targetPara, removePara);
+    this.mergeContent(targetPara, para, targetPara);
+    this.saveMerge(targetPara, para);
   }
 
-  mergeDown(index: number): void {
+  mergeDown(para): void {
+    para = para || this.selectedPara;
+    if (!para) {
+      return;
+    }
     let paras = this.chap.paras;
-    let removePara = paras[index];
+    let index = paras.indexOf(para);
+    if (index === paras.length - 1) {
+      return;
+    }
     let targetPara = paras[index + 1];
-    this.mergeContent(removePara, targetPara, targetPara);
-    this.saveMerge(targetPara, removePara);
+    this.mergeContent(para, targetPara, targetPara);
+    this.saveMerge(targetPara, para);
   }
 
   paraTracker(index, para) {

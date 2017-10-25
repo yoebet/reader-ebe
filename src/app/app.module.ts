@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
+import {StickyModule} from 'ng2-sticky-kit';
+
 import {AppRoutingModule} from './app-routing.module';
 
 import {BookService} from './services/book.service';
@@ -29,7 +31,8 @@ import {ChapParasComponent} from './chap/chap-paras.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StickyModule
   ],
   providers: [BookService, ChapService, ParaService],
   bootstrap: [AppComponent]

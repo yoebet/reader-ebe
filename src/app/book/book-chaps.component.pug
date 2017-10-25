@@ -20,13 +20,12 @@ div(*ngIf='book')
             button.ui.small.button((click)='edit(chap)') Edit
             button.ui.small.button((click)='remove(chap)') Remove
 
-        .ui.header
-          a([routerLink]="['/chaps', chap._id]") {{chap.name}}
+        a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}
 
       .ui.form(*ngIf="chap===editingChap")
         .fields
           .eight.wide.field
-            input([value]='chap.name', #editChapName='', placeholder='Title')
+            textarea(rows='2',[value]='chap.name', #editChapName='')
           .field
             button.ui.small.button((click)="editingChap=null")
               | Cancel
