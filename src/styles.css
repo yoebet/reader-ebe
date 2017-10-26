@@ -14,13 +14,13 @@
 @import url('assets/semantic/menu.css');
 @import url('assets/semantic/item.css');
 @import url('assets/semantic/statistic.css');
+@import url('assets/semantic/popup.css');
 /*@import url('assets/semantic/image.css');*/
 /*@import url('assets/semantic/label.css');*/
 /*@import url('assets/semantic/table.css');*/
 /*@import url('assets/semantic/message.css');*/
 /*@import url('assets/semantic/accordion.css');*/
 /*@import url('assets/semantic/dropdown.css');*/
-/*@import url('assets/semantic/popup.css');*/
 /*@import url('assets/semantic/search.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
 /*@import url('assets/semantic/tab.css');*/
@@ -29,4 +29,17 @@
 
 .pre-wrap {
   white-space: pre-wrap;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+
+.ui.toggle.checkbox {
+  padding-right: 0.5rem;
+}
+
+.ui.toggle.checkbox label {
+  padding-left: 4.0rem;
 }

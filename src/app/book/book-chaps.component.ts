@@ -51,7 +51,7 @@ export class BookChapsComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.book.chaps = this.book.chaps.filter(h => h !== chap);
+        this.book.chaps = this.book.chaps.filter(c => c !== chap);
       });
   }
 

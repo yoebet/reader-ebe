@@ -1,21 +1,24 @@
 div(*ngIf='chap')
   sticky.ui.right.floated.header.opertions([sticky-offset-top]="10")
-    button.ui.tiny.primary.basic.button(*ngIf='!first', (click)='mergeUp()')
+    button.ui.tiny.primary.basic.button(*ngIf='!first', (click)='mergeUp()', suiPopup, popupText="Merge Up", popupDelay="1000")
       i.chevron.up.icon
-      | Merge Up
-    button.ui.tiny.primary.basic.button(*ngIf='!last', (click)='mergeDown()')
+      | Merge
+    button.ui.tiny.primary.basic.button(*ngIf='!last', (click)='mergeDown()', suiPopup, popupText="Merge Down", popupDelay="1000")
       i.chevron.down.icon
-      | Merge Down
-    button.ui.tiny.primary.basic.button((click)='insertBefore()')
+      | Merge
+    button.ui.tiny.primary.basic.button((click)='insertBefore()', data-tooltip="Insert Before")
       i.add.icon
-      | Insert Before
+      | Insert
     button.ui.tiny.primary.basic.button((click)='edit()')
       i.edit.icon
       | Edit
     button.ui.tiny.primary.basic.button((click)='remove()')
       i.remove.icon
       | Remove
-    button.ui.tiny.primary.basic.button((click)='editButtons=!editButtons')
+    //button.ui.tiny.primary.basic.button
+    sui-checkbox.toggle([(ngModel)]='clickToEdit') Click to Edit
+    sui-checkbox.toggle([(ngModel)]='continuousEditing', data-tooltip="Continuous Inserting/Appending") Continuous
+    //button.ui.tiny.primary.basic.button((click)='editButtons=!editButtons')
       i.toggle.icon([ngClass]='{"on": editButtons, "off": !editButtons}')
       | Toggle Button
 
@@ -24,49 +27,24 @@ div(*ngIf='chap')
       .item.paragraph(*ngIf='index===insertPos')
         .ui.left.floated.mini.statistic.para-no
           .value +
-        .ui.form.content
-          .fields
-            .eight.wide.field
-              textarea(rows='3', #insertPara='')
-            .field
-              button.ui.small.button((click)='this.insertPos=null') Cancel
-            .field
-              button.ui.small.primary.button((click)="saveInsert(insertPara.value); insertPara.value=''")
-                | Save
+        para-form.ui.form.content((onSave)="save($event)", (onCancel)="cancelEdit()")
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
         .para-content([ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
-          .right.floated(*ngIf='editButtons')
+          //.right.floated(*ngIf='editButtons')
             button.ui.mini.button(*ngIf='!first', (click)='mergeUp(para)')
               i.chevron.up.icon
-            button.ui.mini.button(*ngIf='!last', (click)='mergeDown(para)')
-              i.chevron.down.icon
-            button.ui.mini.button((click)='insertBefore(para)')
-              i.add.icon
-            button.ui.mini.button((click)='edit(para)')
-              i.edit.icon
-            button.ui.mini.button((click)='remove(para)')
-              i.remove.icon
 
           .pre-wrap([innerHTML]='para.content')
 
-        .ui.form.content(*ngIf='editingPara===para')
-          .fields
-            .twelve.wide.field
-              textarea(#paraContent='') {{para.content}}
-            .field
-              button.ui.small.button((click)='this.editingPara=null') Cancel
-            .field
-              button.ui.small.primary.button((click)='save(paraContent.value)') Save
+        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', (onSave)="save($event)", (onCancel)="cancelEdit()")
+
+    .item.paragraph(*ngIf='insertPos===chap.paras.length')
+      .ui.left.floated.mini.statistic.para-no
+        .value +
+      para-form.ui.form.content((onSave)="save($event)", (onCancel)="cancelEdit()")
 
   .ui.hidden.divider
-  .ui.form
-    .field
-      label New:
-    .two.fields
-      .field
-        textarea(rows='3', #newPara='')
-      .field
-        button.ui.small.primary.button((click)="append(newPara.value); newPara.value=''")
-          | Append
+  .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
+    button.ui.small.button((click)='append()') Append

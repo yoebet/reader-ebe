@@ -47,7 +47,7 @@ export class BooksComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.books = this.books.filter(h => h !== book);
+        this.books = this.books.filter(b => b !== book);
       });
   }
 

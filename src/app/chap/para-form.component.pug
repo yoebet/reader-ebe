@@ -1,0 +1,7 @@
+.fields
+  .twelve.wide.field
+    textarea([(ngModel)]="para.content", #content='')
+  .field
+    button.ui.small.button((click)='cancel()') Cancel
+  .field
+    button.ui.small.primary.button((click)='save()') Save

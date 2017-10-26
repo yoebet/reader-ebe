@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
@@ -9,6 +9,8 @@ import {ChapService} from '../services/chap.service';
 import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
+import {ParaFormComponent} from './para-form.component';
+
 const LF = '\n';
 
 @Component({
@@ -18,10 +20,15 @@ const LF = '\n';
 })
 export class ChapParasComponent implements OnInit {
   @Input() chap: Chap;
+  @ViewChild(ParaFormComponent)
+  private paraFormComponent: ParaFormComponent;
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
-  editButtons: false;
+  clickToEdit: false;
+  continuousEditing: false;
+
+  //editButtons: false;
 
   constructor(private chapService: ChapService,
               private paraService: ParaService,
@@ -36,6 +43,9 @@ export class ChapParasComponent implements OnInit {
 
   selectPara(para): void {
     this.selectedPara = para;
+    if (this.clickToEdit) {
+      this.edit(para);
+    }
   }
 
   selectPara2(para): void {
@@ -44,15 +54,6 @@ export class ChapParasComponent implements OnInit {
       return;
     }
     this.selectedPara = para;
-  }
-
-  append(content: string): void {
-    let model = {content} as Para;
-    model.chapId = this.chap._id;
-    this.paraService.create(model)
-      .subscribe(para => {
-        this.chap.paras.push(para);
-      });
   }
 
   remove(para: Para): void {
@@ -70,7 +71,7 @@ export class ChapParasComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.chap.paras = this.chap.paras.filter(h => h !== para);
+        this.chap.paras = this.chap.paras.filter(p => p !== para);
       });
   }
 
@@ -82,16 +83,13 @@ export class ChapParasComponent implements OnInit {
     this.editingPara = para;
   }
 
-  save(content): void {
-    this.editingPara.content = content;
-    this.paraService.update(this.editingPara)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        this.editingPara = null;
-      });
+  append(): void {
+    this.insertPos = this.chap.paras.length;
+  }
+
+  cancelEdit(): void {
+    this.editingPara = null;
+    this.insertPos = null;
   }
 
   insertBefore(para) {
@@ -102,35 +100,55 @@ export class ChapParasComponent implements OnInit {
     this.insertPos = this.chap.paras.indexOf(para);
   }
 
-  insertAfter(para) {
-    para = para || this.selectedPara;
-    if (!para) {
+  // insertAfter(para) {
+  //   para = para || this.selectedPara;
+  //   if (!para) {
+  //     return;
+  //   }
+  //   let index = this.chap.paras.indexOf(para);
+  //   this.insertPos = index + 1;
+  // }
+
+  save(para: Para) {
+    if (para._id) {
+      if (!this.editingPara) {
+        return;
+      }
+      this.paraService.update(para)
+        .subscribe((opr: OpResult) => {
+          if (opr.ok === 0) {
+            alert(opr.message || 'Fail');
+            return;
+          }
+          Object.assign(this.editingPara, para);
+          this.editingPara = null;
+        });
       return;
     }
-    let index = this.chap.paras.indexOf(para);
-    this.insertPos = index + 1;
-  }
-
-  saveInsert(content: string) {
     if (!this.insertPos) {
       return;
     }
-    let target = this.chap.paras[this.insertPos];
-    let model = {content} as Para;
-    model.chapId = this.chap._id;
+    para.chapId = this.chap._id;
     let obs;
     if (this.insertPos < this.chap.paras.length) {
-      obs = this.paraService.createBefore(target._id, model);
+      let target = this.chap.paras[this.insertPos];
+      obs = this.paraService.createBefore(target._id, para);
     } else {
-      obs = this.paraService.create(model);
+      obs = this.paraService.create(para);
     }
-    obs.subscribe(para => {
-      if (!para._id) {
+    obs.subscribe(p => {
+      if (!p._id) {
         alert('Fail');
         return;
       }
-      this.chap.paras.splice(this.insertPos, 0, model);
-      this.insertPos = null;
+      this.chap.paras.splice(this.insertPos, 0, p);
+
+      if (this.continuousEditing) {
+        this.paraFormComponent.clear();
+        this.insertPos++;
+      } else {
+        this.insertPos = null;
+      }
     });
   }
 
@@ -163,9 +181,9 @@ export class ChapParasComponent implements OnInit {
           alert(opr.message || 'Fail To Remove');
           return;
         }
-        this.chap.paras = this.chap.paras.filter(h => h !== removePara);
+        this.chap.paras = this.chap.paras.filter(p => p !== removePara);
+        this.selectedPara = targetPara;
       });
-
   }
 
   mergeUp(para): void {

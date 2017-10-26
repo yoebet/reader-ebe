@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
+import {SuiModule} from 'ng2-semantic-ui';
 import {StickyModule} from 'ng2-sticky-kit';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -17,6 +18,7 @@ import {BookComponent} from './book/book.component';
 import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
+import {ParaFormComponent} from './chap/para-form.component';
 
 @NgModule({
   declarations: [
@@ -25,13 +27,15 @@ import {ChapParasComponent} from './chap/chap-paras.component';
     BookComponent,
     BookChapsComponent,
     ChapComponent,
-    ChapParasComponent
+    ChapParasComponent,
+    ParaFormComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    SuiModule,
     StickyModule
   ],
   providers: [BookService, ChapService, ParaService],
