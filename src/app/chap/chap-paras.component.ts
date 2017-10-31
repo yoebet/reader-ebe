@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
@@ -25,14 +26,15 @@ export class ChapParasComponent implements OnInit {
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
-  clickToEdit: false;
-  continuousEditing: false;
-
-  //editButtons: false;
+  clickToEdit = false;
+  continuousEditing = false;
+  compileContent = false;
+  editButtons = true;
 
   constructor(private chapService: ChapService,
               private paraService: ParaService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private domSanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
@@ -125,7 +127,7 @@ export class ChapParasComponent implements OnInit {
         });
       return;
     }
-    if (!this.insertPos) {
+    if (this.insertPos == null) {
       return;
     }
     para.chapId = this.chap._id;

@@ -6,7 +6,7 @@ div(*ngIf='chap')
     button.ui.tiny.primary.basic.button(*ngIf='!last', (click)='mergeDown()', suiPopup, popupText="Merge Down", popupDelay="1000")
       i.chevron.down.icon
       | Merge
-    button.ui.tiny.primary.basic.button((click)='insertBefore()', data-tooltip="Insert Before")
+    button.ui.tiny.primary.basic.button((click)='insertBefore()', suiPopup, popupText="Insert Before", popupDelay="1000")
       i.add.icon
       | Insert
     button.ui.tiny.primary.basic.button((click)='edit()')
@@ -31,12 +31,10 @@ div(*ngIf='chap')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
-        .para-content([ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
+        para-content.para-content([content]='para.content', [compile]='para===selectedPara', [ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
           //.right.floated(*ngIf='editButtons')
             button.ui.mini.button(*ngIf='!first', (click)='mergeUp(para)')
               i.chevron.up.icon
-
-          .pre-wrap([innerHTML]='para.content')
 
         para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', (onSave)="save($event)", (onCancel)="cancelEdit()")
 
@@ -45,6 +43,6 @@ div(*ngIf='chap')
         .value +
       para-form.ui.form.content((onSave)="save($event)", (onCancel)="cancelEdit()")
 
-  .ui.hidden.divider
+  .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
     button.ui.small.button((click)='append()') Append

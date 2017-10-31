@@ -31,6 +31,10 @@
   white-space: pre-wrap;
 }
 
+.pre-wrap > * {
+  white-space: initial;
+}
+
 [hidden] {
   display: none !important;
 }
@@ -42,4 +46,8 @@
 
 .ui.toggle.checkbox label {
   padding-left: 4.0rem;
+}
+
+sticky.opertions .ui.checkbox label {
+  font-size: .7em ;
 }
