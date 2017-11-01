@@ -17,8 +17,8 @@ div(*ngIf='book')
   .ui.header
     | Chapters
     .ui.right.floated.header
-      button.ui.small.basic.button((click)='chapsTuneOrder=!chapsTuneOrder') order
-      button.ui.small.basic.button((click)='chapOperations=!chapOperations') edit/remove
+      button.ui.small.basic.button((click)='chapsTuneOrder=!chapsTuneOrder') Order
+      button.ui.small.basic.button((click)='chapOperations=!chapOperations') Remove
 
   .ui.hidden.clearing.divider
   book-chaps([book]='book', [tuneOrder]='chapsTuneOrder', [operations]='chapOperations')

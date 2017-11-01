@@ -16,7 +16,8 @@ div(*ngIf='chap')
       i.remove.icon
       | Remove
     //button.ui.tiny.primary.basic.button
-    sui-checkbox.toggle([(ngModel)]='clickToEdit') Click to Edit
+    sui-checkbox.toggle([(ngModel)]='clickToEdit', data-tooltip="Go into Edit Directly on Clicking") Click to Edit
+    sui-checkbox.toggle([(ngModel)]='splitMode', data-tooltip="Split A Paragraph With an Empty Line") Splitting
     sui-checkbox.toggle([(ngModel)]='continuousEditing', data-tooltip="Continuous Inserting/Appending") Continuous
     //button.ui.tiny.primary.basic.button((click)='editButtons=!editButtons')
       i.toggle.icon([ngClass]='{"on": editButtons, "off": !editButtons}')
@@ -31,7 +32,7 @@ div(*ngIf='chap')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
-        para-content.para-content([content]='para.content', [compile]='para===selectedPara', [ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
+        para-content.para-content([content]='para.content', [compile]='compileContent', [ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
           //.right.floated(*ngIf='editButtons')
             button.ui.mini.button(*ngIf='!first', (click)='mergeUp(para)')
               i.chevron.up.icon

@@ -15,17 +15,33 @@ export class SorterService<M extends Model> extends BaseService<M> {
 
   protected createBeforeOrAfter(target: M | string, model: M, pos: string): Observable<M> {
     let targetId = this.modelId(target);
-    const url = `${this.baseUrl}/${targetId}/${pos}`;
+    const url = `${this.baseUrl}/${targetId}/create${pos}`;
     return this.http.post<M>(url, model, this.httpOptions)
       .catch(this.handleError);
   }
 
   createBefore(target: M | string, model: M): Observable<M> {
-    return this.createBeforeOrAfter(target, model, 'createBefore');
+    return this.createBeforeOrAfter(target, model, 'Before');
   }
 
   createAfter(target: M | string, model: M): Observable<M> {
-    return this.createBeforeOrAfter(target, model, 'createAfter');
+    return this.createBeforeOrAfter(target, model, 'After');
+  }
+
+  protected createManyBeforeOrAfter(target: M | string,
+                                    models: M[], pos: string): Observable<M[]> {
+    let targetId = this.modelId(target);
+    const url = `${this.baseUrl}/${targetId}/createMany${pos}`;
+    return this.http.post<M>(url, models, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  createManyBefore(target: M | string, models: M[]): Observable<M[]> {
+    return this.createManyBeforeOrAfter(target, models, 'Before');
+  }
+
+  createManyAfter(target: M | string, models: M[]): Observable<M[]> {
+    return this.createManyBeforeOrAfter(target, models, 'After');
   }
 
   protected move(model: M | string, dir: string): Observable<OpResult> {

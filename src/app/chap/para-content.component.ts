@@ -9,7 +9,6 @@ import {DomSanitizer, BrowserModule} from '@angular/platform-browser';
 
 import {FormsModule} from '@angular/forms';
 import {SuiModule} from 'ng2-semantic-ui';
-import {nextTick} from 'q';
 
 @Component({
   selector: 'para-content',
@@ -32,8 +31,16 @@ export class ParaContentComponent implements /*OnInit, */OnChanges {
   // }
 
   onClick() {
-    this.compile = !this.compile;
     console.log('click');
+  }
+
+  onMouseup() {
+    console.log('mouseup');
+    let sel: Selection = window.getSelection();
+    let selection = sel.toString();
+    if (selection && selection.length > 0) {
+      alert(selection);
+    }
   }
 
   refresh() {
@@ -95,9 +102,6 @@ export class ParaContentComponent implements /*OnInit, */OnChanges {
   // }
 
   ngOnChanges(changes: SimpleChanges) {
-    for(let c in changes){
-      console.log(c);
-    }
     if (changes.content || changes.compile) {
       this.refresh();
     }

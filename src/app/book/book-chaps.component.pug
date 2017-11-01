@@ -16,8 +16,8 @@ div(*ngIf='book')
             button.ui.small.button(*ngIf='!last', (click)='moveBottom(chap)')
               i.angle.double.down.icon
               | bottom
+          button.ui.small.button((click)='edit(chap)') Edit
           ng-template([ngIf]="operations")
-            button.ui.small.button((click)='edit(chap)') Edit
             button.ui.small.button((click)='remove(chap)') Remove
 
         a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}

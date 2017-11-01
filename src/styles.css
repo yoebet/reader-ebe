@@ -51,3 +51,7 @@
 sticky.opertions .ui.checkbox label {
   font-size: .7em ;
 }
+
+para-form.ui.form .fields {
+  margin: 1em -0.5em;
+}

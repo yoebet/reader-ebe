@@ -1,7 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {ActivatedRoute, Router, ParamMap} from '@angular/router';
-import {Location} from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 import {Chap} from '../models/chap';
@@ -13,6 +11,7 @@ import {OpResult} from '../models/op-result';
 import {ParaFormComponent} from './para-form.component';
 
 const LF = '\n';
+const Splitter = /\n\n+/;
 
 @Component({
   selector: 'chap-paras',
@@ -29,12 +28,12 @@ export class ChapParasComponent implements OnInit {
   clickToEdit = false;
   continuousEditing = false;
   compileContent = false;
+  splitMode = false;
   editButtons = true;
 
   constructor(private chapService: ChapService,
               private paraService: ParaService,
-              private route: ActivatedRoute,
-              private domSanitizer: DomSanitizer) {
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -111,34 +110,110 @@ export class ChapParasComponent implements OnInit {
   //   this.insertPos = index + 1;
   // }
 
-  save(para: Para) {
+  private splitIfNeeded(para): Para[] {
+    if (!this.splitMode) {
+      return null;
+    }
+    if (!Splitter.test(para.content) &&
+      !Splitter.test(para.trans)) {
+      return null;
+    }
+
+    let parasCreateAfter = [];
+    let contents = para.content.split(Splitter);
+    let transs = [];
+    if (para.trans) {
+      transs = para.trans.split(Splitter);
+    }
+    let size = Math.max(contents.length, transs.length);
+    para.content = contents[0] || '';
+    para.trans = transs[0] || '';
+    for (let index = 1; index < size; index++) {
+      let np = new Para();
+      np.chapId = para.chapId;
+      np.content = contents[index] || '';
+      np.trans = transs[index] || '';
+      parasCreateAfter.push(np);
+    }
+
+    return parasCreateAfter;
+  }
+
+  private update(para) {
+    let parasCreateAfter = this.splitIfNeeded(para);
+    console.log(para);
+    console.log(parasCreateAfter);
+    if (parasCreateAfter) {
+      this.paraService.createManyAfter(para, parasCreateAfter)
+        .subscribe((paras: Para[]) => {
+          let index = this.chap.paras.indexOf(this.editingPara);
+          this.chap.paras.splice(index + 1, 0, ...paras);
+          this.doUpdate(para);
+        });
+    } else {
+      this.doUpdate(para);
+    }
+  }
+
+  private doUpdate(para) {
+    this.paraService.update(para)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        Object.assign(this.editingPara, para);
+        this.editingPara = null;
+      });
+  }
+
+  save(para) {
     if (para._id) {
       if (!this.editingPara) {
         return;
       }
-      this.paraService.update(para)
-        .subscribe((opr: OpResult) => {
-          if (opr.ok === 0) {
-            alert(opr.message || 'Fail');
-            return;
-          }
-          Object.assign(this.editingPara, para);
-          this.editingPara = null;
-        });
+      this.update(para);
       return;
     }
     if (this.insertPos == null) {
       return;
     }
     para.chapId = this.chap._id;
-    let obs;
+
+    let paras = this.splitIfNeeded(para);
+    console.log(paras);
+
+    if (paras) {
+      paras.unshift(para);
+      let obs;
+      if (this.insertPos < this.chap.paras.length) {
+        let target = this.chap.paras[this.insertPos];
+        obs = this.paraService.createManyBefore(target._id, paras);
+      } else {
+        obs = this.paraService.createMany(paras);
+      }
+      obs.subscribe(ps => {
+        this.chap.paras.splice(this.insertPos, 0, ...ps);
+
+        console.log(ps);
+        if (this.continuousEditing) {
+          this.paraFormComponent.clear();
+          this.insertPos += ps.length;
+        } else {
+          this.insertPos = null;
+        }
+      });
+      return;
+    }
+
+    let obs2;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
-      obs = this.paraService.createBefore(target._id, para);
+      obs2 = this.paraService.createBefore(target._id, para);
     } else {
-      obs = this.paraService.create(para);
+      obs2 = this.paraService.create(para);
     }
-    obs.subscribe(p => {
+    obs2.subscribe(p => {
       if (!p._id) {
         alert('Fail');
         return;
