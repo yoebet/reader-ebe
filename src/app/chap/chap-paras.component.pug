@@ -32,7 +32,12 @@ div(*ngIf='chap')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
-        para-content.para-content([content]='para.content', [compile]='compileContent', [ngClass]='{"selected": para===selectedPara}', [hidden]='editingPara===para', (click)='selectPara(para)')
+        para-content.para-content([content]='para.content',
+          [compile]='compileContent',
+          [gotFocus]='para===selectedPara',
+          [ngClass]='{"selected": para===selectedPara}',
+          [hidden]='editingPara===para',
+          (click)='selectPara(para)')
           //.right.floated(*ngIf='editButtons')
             button.ui.mini.button(*ngIf='!first', (click)='mergeUp(para)')
               i.chevron.up.icon

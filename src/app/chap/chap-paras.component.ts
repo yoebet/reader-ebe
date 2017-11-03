@@ -141,8 +141,6 @@ export class ChapParasComponent implements OnInit {
 
   private update(para) {
     let parasCreateAfter = this.splitIfNeeded(para);
-    console.log(para);
-    console.log(parasCreateAfter);
     if (parasCreateAfter) {
       this.paraService.createManyAfter(para, parasCreateAfter)
         .subscribe((paras: Para[]) => {
@@ -181,7 +179,6 @@ export class ChapParasComponent implements OnInit {
     para.chapId = this.chap._id;
 
     let paras = this.splitIfNeeded(para);
-    console.log(paras);
 
     if (paras) {
       paras.unshift(para);
@@ -195,7 +192,6 @@ export class ChapParasComponent implements OnInit {
       obs.subscribe(ps => {
         this.chap.paras.splice(this.insertPos, 0, ...ps);
 
-        console.log(ps);
         if (this.continuousEditing) {
           this.paraFormComponent.clear();
           this.insertPos += ps.length;

@@ -31,8 +31,24 @@
   white-space: pre-wrap;
 }
 
-.pre-wrap > * {
-  white-space: initial;
+/*.pre-wrap > * {*/
+  /*white-space: initial;*/
+/*}*/
+
+.sw {
+  color: blue;
+}
+
+x-ss {
+  color: red;
+}
+
+x-wsx, .wsx {
+  color: green;
+}
+
+.para-content i {
+  color: gray;
 }
 
 [hidden] {
