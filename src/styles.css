@@ -39,12 +39,16 @@
   color: blue;
 }
 
-x-ss {
+x-wsx, .wsx {
+  color: green;
+}
+
+sp-sub, .sp-sub {
   color: red;
 }
 
-x-wsx, .wsx {
-  color: green;
+sp-obj, .sp-obj {
+  color: orange;
 }
 
 .para-content i {
