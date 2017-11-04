@@ -9,6 +9,7 @@ import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
+import {Annotations} from '../content/annatations';
 
 const LF = '\n';
 const Splitter = /\n\n+/;
@@ -29,7 +30,11 @@ export class ChapParasComponent implements OnInit {
   continuousEditing = false;
   compileContent = false;
   splitMode = false;
-  editButtons = true;
+  annotating = true;
+  groupedAnnotations = Annotations.grouped;
+  currentAnnotation: string = null;
+
+  // editButtons = true;
 
   constructor(private chapService: ChapService,
               private paraService: ParaService,
@@ -55,6 +60,14 @@ export class ChapParasComponent implements OnInit {
       return;
     }
     this.selectedPara = para;
+  }
+
+  switchAnnotation(name): void {
+    if (this.currentAnnotation === name) {
+      this.currentAnnotation = null;
+    } else {
+      this.currentAnnotation = name;
+    }
   }
 
   remove(para: Para): void {

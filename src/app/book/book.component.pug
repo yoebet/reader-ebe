@@ -1,7 +1,7 @@
 div(*ngIf='book')
   div([hidden]='editing')
     .ui.right.floated.header
-      a([hidden]='editing', (click)='edit()' href='javascript:') edit
+      a([hidden]='editing', (click)='edit()' href='javascript:') Edit
     .ui.header {{book.name}}
     .sub.header by {{book.author}}
   .ui.form(*ngIf='editing')

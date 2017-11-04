@@ -1,12 +1,16 @@
-sticky.opertions {
+sticky.operations {
   background-color: white;
   border: 1px solid whitesmoke;
   border-radius: 5px;
-  padding: 5px 0 5px 5px;
+  padding: 5px 5px 5px 5px;
 }
 
 .ui[class*="right floated"].header {
   margin: 0 0 .5em 0;
+}
+
+.annotations .ui.buttons {
+  margin-right: 0.5rem;
 }
 
 .item.paragraph {

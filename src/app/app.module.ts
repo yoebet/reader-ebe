@@ -19,7 +19,7 @@ import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';
-import {ParaContentComponent} from './chap/para-content.component';
+import {ParaContentComponent} from './content/para-content.component';
 
 @NgModule({
   imports: [

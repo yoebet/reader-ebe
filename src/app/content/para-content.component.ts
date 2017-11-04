@@ -9,7 +9,8 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {FormsModule} from '@angular/forms';
 import {SuiModule} from 'ng2-semantic-ui';
-import {ParaAnnotator} from './para-annotator';
+import {SelectionAnnotator} from './selection-annotator';
+import {Annotations} from './annatations';
 
 
 @Component({
@@ -21,18 +22,8 @@ export class ParaContentComponent implements OnInit, OnChanges {
   @Input() content: string;
   @Input() compile;
   @Input() gotFocus;
-  annotator: ParaAnnotator;
-
-  annotations = {
-    spSub: {
-      cssClass: 'sp-sub',
-      tagName: 'sp-sub'
-    },
-    spObj: {
-      cssClass: 'sp-obj',
-      tagName: 'sp-obj'
-    }
-  };
+  _annotator: SelectionAnnotator;
+  @Input() annotation: string = null;
 
   constructor(private _compiler: Compiler,
               private _injector: Injector,
@@ -40,10 +31,16 @@ export class ParaContentComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    let containerSelector = '.pre-wrap';
-    this.annotator = new ParaAnnotator(this.annotations, containerSelector);
-    this.annotator.switchAnnotation('spSub');
-    this.annotator.selectionBreakerSelector = '.line-break';
+  }
+
+  get annotator() {
+    if (!this._annotator) {
+      let containerSelector = '.pre-wrap';
+      this._annotator = new SelectionAnnotator(Annotations.forAnnotator, containerSelector);
+      this._annotator.selectionBreakerSelector = '.line-break';
+    }
+    this._annotator.switchAnnotation(this.annotation);
+    return this._annotator;
   }
 
   onMouseup() {
@@ -116,6 +113,8 @@ export class ParaContentComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.content || changes.compile) {
       this.refresh();
+    } else if (changes.annotation) {
+      this.annotator.annotate(true);
     }
   }
 }
