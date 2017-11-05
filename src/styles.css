@@ -14,7 +14,8 @@
 @import url('assets/semantic/menu.css');
 @import url('assets/semantic/item.css');
 @import url('assets/semantic/statistic.css');
-@import url('assets/semantic/popup.css');
+@import url('assets/semantic/rail.css');
+/*@import url('assets/semantic/popup.css');*/
 /*@import url('assets/semantic/image.css');*/
 /*@import url('assets/semantic/label.css');*/
 /*@import url('assets/semantic/table.css');*/
@@ -51,9 +52,9 @@ sp-obj, .sp-obj {
   color: orange;
 }
 
-.para-content i {
-  color: gray;
-}
+/*.para-content i {*/
+  /*color: gray;*/
+/*}*/
 
 [hidden] {
   display: none !important;
@@ -74,4 +75,13 @@ sticky.opertions .ui.checkbox label {
 
 para-form.ui.form .fields {
   margin: 1em -0.5em;
+}
+
+.para-content .ui.right.rail {
+  margin-left: 1em;
+  padding-left: 0;
+}
+
+.para-content .ui.right.rail .ui.list {
+  padding: 0;
 }

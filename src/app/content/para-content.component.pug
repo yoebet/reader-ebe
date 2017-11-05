@@ -1,2 +1,12 @@
 div((mouseup)='onMouseup()')
   div(#vc='')
+.ui.right.rail(*ngIf='beenChanged')
+  .ui.list([hidden]='!gotFocus')
+    .ui.item
+      button.ui.mini.primary.basic.button((click)='notifySave()', [ngClass]='{disabled: !changed}')
+        i.checkmark.icon
+        | Save
+    .ui.item
+      button.ui.mini.primary.basic.button((click)='discard()', [ngClass]='{disabled: !changed}')
+        i.undo.icon
+        | Discard

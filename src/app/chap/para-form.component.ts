@@ -1,8 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
-import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 
-import {Chap} from '../models/chap';
 import {Para} from '../models/para';
 
 @Component({

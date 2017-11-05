@@ -1,8 +1,8 @@
 export class SelectionAnnotator {
 
   charPattern = /[-a-zA-Z]/;
-
   inlineTagName = 'span';
+  wordAtCursorIfNoSelection = true;
   selectionBreakerSelector: string = null;
   // element or selector
   container: Element | string = null;
@@ -197,7 +197,7 @@ export class SelectionAnnotator {
   private removeAnnotations(element) {
     let selector = '.' + this.annotateClass;
     if (this.annotateTag) {
-      selector = '' + this.annotateTag + ',' + selector;
+      selector = this.annotateTag + ',' + selector;
     }
     let annotated = element.querySelectorAll(selector);
     annotated.forEach(ae => {
@@ -205,7 +205,7 @@ export class SelectionAnnotator {
     });
   }
 
-  private doInOneTextNode(textNode: Text, offset1, offset2) {
+  private doInOneTextNode(textNode: Text, offset1, offset2): boolean {
 
     let nodeText = textNode.textContent;
     if (offset1 > offset2) {
@@ -215,12 +215,12 @@ export class SelectionAnnotator {
     let annotatedNode = this.lookupAnnotated(textNode);
     if (annotatedNode) {
       this.resetAnnotation(annotatedNode, 'remove');
-      return;
+      return true;
     }
 
     let [wordStart, wordEnd] = this.extendWholeWord(nodeText, offset1, offset2);
     if (wordStart === wordEnd) {
-      return;
+      return false;
     }
 
     let selectedText = nodeText.substring(wordStart, wordEnd);
@@ -230,7 +230,7 @@ export class SelectionAnnotator {
         // the only one TextNode
         let exactNode = textNode.parentNode;
         this.resetAnnotation(exactNode, 'toggle');
-        return;
+        return true;
       }
     }
 
@@ -246,9 +246,11 @@ export class SelectionAnnotator {
     let wrapping = this.createWrappingTag();
     parent.replaceChild(wrapping, wordsNode);
     wrapping.appendChild(wordsNode);
+
+    return true;
   }
 
-  private doInSameParent(parent: Node, textNode1: Text, offset1, textNode2: Text, offset2) {
+  private doInSameParent(parent: Node, textNode1: Text, offset1, textNode2: Text, offset2): boolean {
 
     let cns = Array.from(parent.childNodes);
     let nodeIndex1 = cns.indexOf(textNode1);
@@ -269,11 +271,11 @@ export class SelectionAnnotator {
         if (sbs && item instanceof Element) {
           let el = item as Element;
           if (el.matches(sbs)) {
-            return;
+            return false;
           }
           let lf = el.querySelector(sbs);
           if (lf) {
-            return;
+            return false;
           }
         }
         interNodes.push(item);
@@ -305,15 +307,64 @@ export class SelectionAnnotator {
     wrapping.appendChild(endingNode);
 
     this.removeAnnotations(wrapping);
+
+    return true;
   }
 
-  annotate(noopIfNoSelection = false) {
+  annotate(wordAtCursorIfNoSelection: boolean = undefined): boolean {
     if (!this.current) {
-      return;
+      return false;
     }
     let selection = window.getSelection();
-    this.doAnnotate(selection, noopIfNoSelection);
-    selection.removeAllRanges();
+    let savedWacins = this.wordAtCursorIfNoSelection;
+    if (typeof wordAtCursorIfNoSelection === 'boolean') {
+      this.wordAtCursorIfNoSelection = wordAtCursorIfNoSelection;
+    }
+    try {
+      let changed = this.doAnnotate(selection);
+      selection.removeAllRanges();
+      return changed;
+    } finally {
+      this.wordAtCursorIfNoSelection = savedWacins;
+    }
+  }
+
+  private doAnnotate(selection: Selection) {
+    let node1 = selection.anchorNode;
+    let node2 = selection.focusNode;
+    let offset1 = selection.anchorOffset;
+    let offset2 = selection.focusOffset;
+
+    if (!this.wordAtCursorIfNoSelection) {
+      if (node1 === node2 && offset1 === offset2) {
+        return false;
+      }
+    }
+
+    if (node1.nodeType !== Node.TEXT_NODE
+      || node2.nodeType !== Node.TEXT_NODE) {
+      return false;
+    }
+
+    if (node1.parentNode !== node2.parentNode) {
+      return false;
+    }
+
+    if (!this.inContainer(node1, node2)) {
+      return false;
+    }
+
+    let textNode1 = node1 as Text;
+    let textNode2 = node2 as Text;
+
+    if (textNode1 === textNode2) {
+      return this.doInOneTextNode(textNode1, offset1, offset2);
+    }
+
+    // textNode1 !== textNode2
+    // textNode1.parentNode === textNode2.parentNode
+    let parent = textNode1.parentNode;
+    return this.doInSameParent(parent, textNode1, offset1, textNode2, offset2);
   }
 
   private closest(node, selector) {
@@ -363,44 +414,6 @@ export class SelectionAnnotator {
     }
 
     return true;
-  }
-
-  private doAnnotate(selection: Selection, returnIfNoSelection = false) {
-    let node1 = selection.anchorNode;
-    let node2 = selection.focusNode;
-    let offset1 = selection.anchorOffset;
-    let offset2 = selection.focusOffset;
-
-    if (returnIfNoSelection) {
-      if (node1 === node2 && offset1 === offset2) {
-        return;
-      }
-    }
-
-    if (node1.nodeType !== Node.TEXT_NODE
-      || node2.nodeType !== Node.TEXT_NODE) {
-      return;
-    }
-
-    if (node1.parentNode !== node2.parentNode) {
-      return;
-    }
-
-    if (!this.inContainer(node1, node2)) {
-      return;
-    }
-
-    let textNode1 = node1 as Text;
-    let textNode2 = node2 as Text;
-
-    if (textNode1 === textNode2) {
-      this.doInOneTextNode(textNode1, offset1, offset2);
-    } else {
-      // textNode1 !== textNode2
-      // textNode1.parentNode === textNode2.parentNode
-      let parent = textNode1.parentNode;
-      this.doInSameParent(parent, textNode1, offset1, textNode2, offset2);
-    }
   }
 
 }

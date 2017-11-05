@@ -28,17 +28,18 @@ export class ChapParasComponent implements OnInit {
   insertPos: number;
   clickToEdit = false;
   continuousEditing = false;
-  compileContent = false;
   splitMode = false;
   annotating = true;
   groupedAnnotations = Annotations.grouped;
   currentAnnotation: string = null;
 
-  // editButtons = true;
+  // {
+  //   para: {},
+  //   pullContent: fn
+  // }
+  contentChangedNotification = null;
 
-  constructor(private chapService: ChapService,
-              private paraService: ParaService,
-              private route: ActivatedRoute) {
+  constructor(private paraService: ParaService) {
   }
 
   ngOnInit(): void {
@@ -48,6 +49,10 @@ export class ChapParasComponent implements OnInit {
   }
 
   selectPara(para): void {
+    if (this.selectedPara === para) {
+      return;
+    }
+    this.saveChangedContentIfAny();
     this.selectedPara = para;
     if (this.clickToEdit) {
       this.edit(para);
@@ -59,7 +64,7 @@ export class ChapParasComponent implements OnInit {
       this.selectedPara = null;
       return;
     }
-    this.selectedPara = para;
+    this.selectPara(para);
   }
 
   switchAnnotation(name): void {
@@ -82,7 +87,7 @@ export class ChapParasComponent implements OnInit {
       .remove(para._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
+          console.error(opr.message || 'Fail');
           return;
         }
         this.chap.paras = this.chap.paras.filter(p => p !== para);
@@ -104,6 +109,48 @@ export class ChapParasComponent implements OnInit {
   cancelEdit(): void {
     this.editingPara = null;
     this.insertPos = null;
+  }
+
+  private saveChangedContentIfAny() {
+    if (!this.contentChangedNotification) {
+      return;
+    }
+    let {para, pullContent} = this.contentChangedNotification;
+    let changedContent = pullContent.call();
+    if (changedContent === para.content) {
+      return;
+    }
+
+    let toSave = {_id: para._id, content: changedContent} as Para;
+
+    this.paraService.update(toSave)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          console.error(opr.message || 'Fail');
+          return;
+        }
+        para.content = changedContent;
+      });
+  }
+
+  onContentChange(para, pullContent) {
+    let ccn = this.contentChangedNotification;
+    if (ccn && ccn.para._id !== para._id) {
+      this.saveChangedContentIfAny();
+    }
+    this.contentChangedNotification = {para, pullContent};
+  }
+
+  onContentCommand(para, command) {
+    let ccn = this.contentChangedNotification;
+    if (ccn && ccn.para._id === para._id) {
+      if (command === 'save') {
+        this.saveChangedContentIfAny();
+      }
+      if (command === 'save' || command === 'discard') {
+        this.contentChangedNotification = null;
+      }
+    }
   }
 
   insertBefore(para) {
@@ -153,6 +200,7 @@ export class ChapParasComponent implements OnInit {
   }
 
   private update(para) {
+    // assert: para._id === this.editingPara._id && para !== this.editingPara
     let parasCreateAfter = this.splitIfNeeded(para);
     if (parasCreateAfter) {
       this.paraService.createManyAfter(para, parasCreateAfter)
@@ -170,7 +218,7 @@ export class ChapParasComponent implements OnInit {
     this.paraService.update(para)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
+          console.error(opr.message || 'Fail');
           return;
         }
         Object.assign(this.editingPara, para);
@@ -224,7 +272,7 @@ export class ChapParasComponent implements OnInit {
     }
     obs2.subscribe(p => {
       if (!p._id) {
-        alert('Fail');
+        console.error('Fail');
         return;
       }
       this.chap.paras.splice(this.insertPos, 0, p);
@@ -257,14 +305,14 @@ export class ChapParasComponent implements OnInit {
   private saveMerge(targetPara, removePara) {
     this.paraService.update(targetPara).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
-        alert(opr.message || 'Fail To Save');
+        console.error(opr.message || 'Fail To Save');
         return;
       }
     });
     this.paraService.remove(removePara._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          alert(opr.message || 'Fail To Remove');
+          console.error(opr.message || 'Fail To Remove');
           return;
         }
         this.chap.paras = this.chap.paras.filter(p => p !== removePara);
