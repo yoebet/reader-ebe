@@ -1,8 +1,17 @@
-sticky.operations {
+.sticky.header {
   background-color: white;
-  border: 1px solid whitesmoke;
+  border: 1px solid silver;
   border-radius: 5px;
-  padding: 5px 5px 5px 5px;
+  padding: 5px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+}
+
+.sticky.header .operations {
+  padding: .3em;
+  border-bottom: 1px dashed silver;
 }
 
 .ui[class*="right floated"].header {
@@ -24,7 +33,7 @@ sticky.operations {
 
 .ui.statistic.para-no .value {
   text-align: right;
-  font-size: 1.3rem !important;
+  font-size: 1.2rem !important;
 }
 
 .paragraph > .para-content {
@@ -32,10 +41,13 @@ sticky.operations {
   flex: 1 1 auto;
   border: 1px solid white;
   padding: 0.3em;
+  border-radius: 0.5em;
+  line-height: 1.4rem;
+  font-size: 1.1rem;
 }
 
 .paragraph > .selected.para-content {
-  border-color: yellowgreen;
+  border-color: lightskyblue;
 }
 
 .paragraph .para-no {

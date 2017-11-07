@@ -1,0 +1,13 @@
+
+.para-text {
+  white-space: pre-wrap;
+}
+
+.para-content .ui.right.rail {
+  margin-left: 1em;
+  padding-left: 0;
+}
+
+.para-content .ui.right.rail .ui.list {
+  padding: 0;
+}

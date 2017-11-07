@@ -4,7 +4,8 @@ export class SelectionAnnotator {
   inlineTagName = 'span';
   wordAtCursorIfNoSelection = true;
   selectionBreakerSelector: string = null;
-  // element or selector
+  isExtendWholeWord = true;
+  // element or selector,
   container: Element | string = null;
   // {
   //   name: {
@@ -110,23 +111,31 @@ export class SelectionAnnotator {
     return wrapping;
   }
 
+  private checkIsContainer(element: Element): boolean {
+    if (!this.container) {
+      return false;
+    }
+    if (typeof this.container === 'string') {
+      if (element.matches(this.container as string)) {
+        return true;
+      }
+    } else if (this.container === element) {
+      return true;
+    }
+    return false;
+  }
+
   private lookupAnnotated(textNode) {
     let element = textNode.parentNode;
     while (element) {
       if (element.nodeType !== Node.ELEMENT_NODE) {
         return null;
       }
+      if (this.checkIsContainer(element)) {
+        return null;
+      }
       if (element.tagName === this.annotateTag) {
         return element;
-      }
-      if (this.container) {
-        if (typeof this.container === 'string') {
-          if (element.matches(this.container)) {
-            return null;
-          }
-        } else if (this.container === element) { // instanceof Element
-          return null;
-        }
       }
       let classList = element.classList;
       if (classList.contains(this.annotateClass)) {
@@ -218,7 +227,10 @@ export class SelectionAnnotator {
       return true;
     }
 
-    let [wordStart, wordEnd] = this.extendWholeWord(nodeText, offset1, offset2);
+    let [wordStart, wordEnd] = [offset1, offset2];
+    if (this.isExtendWholeWord) {
+      [wordStart, wordEnd] = this.extendWholeWord(nodeText, wordStart, wordEnd);
+    }
     if (wordStart === wordEnd) {
       return false;
     }
@@ -285,9 +297,13 @@ export class SelectionAnnotator {
       }
     }
 
+    let [wordStart1, wordEnd2] = [offset1, offset2];
     let text1 = textNode1.textContent, text2 = textNode2.textContent;
-    let [wordStart1, _wordEnd1] = this.extendWholeWord(text1, offset1, text1.length);
-    let [_wordStart2, wordEnd2] = this.extendWholeWord(text2, 0, offset2);
+
+    if (this.isExtendWholeWord) {
+      [wordStart1,] = this.extendWholeWord(text1, wordStart1, text1.length);
+      [, wordEnd2] = this.extendWholeWord(text2, 0, wordEnd2);
+    }
 
     let beginingNode = textNode1;
     if (wordStart1 > 0) {
@@ -311,6 +327,50 @@ export class SelectionAnnotator {
     return true;
   }
 
+  getAnnotationsAtCursor() {
+    let selection = window.getSelection();
+    let node = selection.focusNode;
+    if (!node) {
+      return [];
+    }
+    let annoClasses = {};
+    let annoTags = {};
+    for (let name in this.annotations) {
+      let anno = this.annotations[name];
+      annoClasses[anno.cssClass] = name;
+      if (anno.tagName) {
+        annoTags[anno.tagName.toUpperCase()] = name;
+      }
+    }
+
+    let foundAnnotationNames = [];
+
+    while (node) {
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        node = node.parentNode;
+        continue;
+      }
+      let element = node as Element;
+      if (this.checkIsContainer(element)) {
+        break;
+      }
+
+      if (annoTags[element.tagName]) {
+        foundAnnotationNames.push(annoTags[element.tagName]);
+      }
+      let cl = element.classList;
+      for (let i = 0; i < cl.length; i++) {
+        let className = cl[i];
+        if (annoClasses[className]) {
+          foundAnnotationNames.push(annoClasses[className]);
+        }
+      }
+      node = node.parentNode;
+    }
+
+    return foundAnnotationNames;
+  }
+
   annotate(wordAtCursorIfNoSelection: boolean = undefined): boolean {
     if (!this.current) {
       return false;
@@ -332,6 +392,11 @@ export class SelectionAnnotator {
   private doAnnotate(selection: Selection) {
     let node1 = selection.anchorNode;
     let node2 = selection.focusNode;
+
+    if (!node1 || !node2) {
+      return false;
+    }
+
     let offset1 = selection.anchorOffset;
     let offset2 = selection.focusOffset;
 

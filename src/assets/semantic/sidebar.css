@@ -237,7 +237,7 @@ body.pushable > .pusher {
           transform: translate3d(0, -36px, 0);
 }
 
-/* opposite sides visible forces content overlay */
+/* opposite sides visible forces para-content overlay */
 .ui.visible.left.sidebar ~ .ui.visible.right.sidebar ~ .fixed,
 .ui.visible.left.sidebar ~ .ui.visible.right.sidebar ~ .pusher,
 .ui.visible.right.sidebar ~ .ui.visible.left.sidebar ~ .fixed,

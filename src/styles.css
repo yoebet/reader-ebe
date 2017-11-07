@@ -15,7 +15,7 @@
 @import url('assets/semantic/item.css');
 @import url('assets/semantic/statistic.css');
 @import url('assets/semantic/rail.css');
-/*@import url('assets/semantic/popup.css');*/
+@import url('assets/semantic/popup.css');
 /*@import url('assets/semantic/image.css');*/
 /*@import url('assets/semantic/label.css');*/
 /*@import url('assets/semantic/table.css');*/
@@ -65,23 +65,14 @@ sp-obj, .sp-obj {
   padding-right: 0.5rem;
 }
 
-.ui.toggle.checkbox label {
-  padding-left: 4.0rem;
-}
+/*.ui.toggle.checkbox label {*/
+  /*padding-left: 4.0rem;*/
+/*}*/
 
-sticky.opertions .ui.checkbox label {
-  font-size: .7em ;
+.ui.checkbox .box, .ui.checkbox label {
+  padding-left: 1.4em
 }
 
 para-form.ui.form .fields {
   margin: 1em -0.5em;
-}
-
-.para-content .ui.right.rail {
-  margin-left: 1em;
-  padding-left: 0;
-}
-
-.para-content .ui.right.rail .ui.list {
-  padding: 0;
 }

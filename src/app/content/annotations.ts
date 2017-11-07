@@ -2,25 +2,30 @@ export class Annotations {
 
   private static _grouped = [
     {
-      groupName: 'zz',
+      groupName: 'color',
       tip: '',
       annotations: [
         {
-          name: 'zzz',
+          name: 'red',
           displayName: 'zz',
           tip: '',
           cssClass: 'sp-sub',
           tagName: 'sp-sub'
         },
         {
-          name: 'ffz',
+          name: 'blue',
+          cssClass: 'sp-obj',
+          tagName: 'sp-obj'
+        },
+        {
+          name: 'green',
           cssClass: 'sp-obj',
           tagName: 'sp-obj'
         }
       ]
     },
     {
-      groupName: 'ff',
+      groupName: 'text-decorator',
       annotations: [
         {
           name: 'zz2',

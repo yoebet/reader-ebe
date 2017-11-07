@@ -1,7 +1,7 @@
 .fields
   .twelve.wide.field
-    textarea([(ngModel)]="para.content", #content='')
+    textarea([(ngModel)]="para.content", #content='', spellcheck='false')
   .field
-    button.ui.small.button((click)='cancel()') Cancel
+    button.ui.small.button((click)='cancel()') 取消
   .field
-    button.ui.small.primary.button((click)='save()') Save
+    button.ui.small.primary.button((click)='save()') 保存

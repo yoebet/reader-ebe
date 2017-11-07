@@ -3,20 +3,20 @@ h3.ui.header(*ngIf='book')
 div(*ngIf='chap')
   div([hidden]='editing')
     .ui.right.floated.header
-      a([hidden]='editing', (click)='edit()' href='javascript:') Edit
+      a([hidden]='editing', (click)='edit()' href='javascript:') 修改
     h4.ui.header
       .pre-wrap {{chap.name}}
   .ui.form(*ngIf='editing')
     .fields
-      .eight.wide.field
-        textarea(rows='2',[value]='chap.name', #chapName='')
+      .twelve.wide.field
+        textarea(rows='3', [value]='chap.name', #chapName='')
       .field
-        button.ui.small.button((click)='editing=false') Cancel
+        button.ui.small.button((click)='editing=false') 取消
       .field
-        button.ui.small.primary.button((click)='save(chapName.value)') Save
+        button.ui.small.primary.button((click)='save(chapName.value)') 保存
 
   .ui.hidden.divider
   chap-paras([chap]='chap')
 
 .ui.hidden.clearing.divider
-button.ui.small.button((click)='goBack()') Back
+button.ui.small.button((click)='goBack()') 返回

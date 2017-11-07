@@ -94,7 +94,7 @@
   display: block;
 }
 
-/* If there is an avatar move content over */
+/* If there is an avatar move para-content over */
 .ui.comments .comment > .avatar ~ .content {
   margin-left: 3.5em;
 }

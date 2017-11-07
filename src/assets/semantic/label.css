@@ -125,7 +125,7 @@ a.ui.label {
   border-bottom-right-radius: 0;
 }
 
-/* Padding on next content after a label */
+/* Padding on next para-content after a label */
 .ui.top.attached.label:first-child + :not(.attached),
 .ui.top.attached.label + [class*="right floated"] + * {
   margin-top: 2rem !important;

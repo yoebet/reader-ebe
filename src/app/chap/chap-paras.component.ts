@@ -1,15 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
-import {ChapService} from '../services/chap.service';
 import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
-import {Annotations} from '../content/annatations';
+import {Annotations} from '../content/annotations';
 
 const LF = '\n';
 const Splitter = /\n\n+/;
@@ -30,6 +28,8 @@ export class ChapParasComponent implements OnInit {
   continuousEditing = false;
   splitMode = false;
   annotating = true;
+  annotateOnly = false;
+  editInplace = false;
   groupedAnnotations = Annotations.grouped;
   currentAnnotation: string = null;
 
@@ -121,16 +121,9 @@ export class ChapParasComponent implements OnInit {
       return;
     }
 
-    let toSave = {_id: para._id, content: changedContent} as Para;
-
-    this.paraService.update(toSave)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          console.error(opr.message || 'Fail');
-          return;
-        }
-        para.content = changedContent;
-      });
+    let toSave = Object.assign(new Para(), para);
+    toSave.content = changedContent;
+    this.save(toSave);
   }
 
   onContentChange(para, pullContent) {
@@ -200,12 +193,11 @@ export class ChapParasComponent implements OnInit {
   }
 
   private update(para) {
-    // assert: para._id === this.editingPara._id && para !== this.editingPara
     let parasCreateAfter = this.splitIfNeeded(para);
     if (parasCreateAfter) {
       this.paraService.createManyAfter(para, parasCreateAfter)
         .subscribe((paras: Para[]) => {
-          let index = this.chap.paras.indexOf(this.editingPara);
+          let index = this.chap.paras.findIndex(p => p._id === para._id);
           this.chap.paras.splice(index + 1, 0, ...paras);
           this.doUpdate(para);
         });
@@ -221,16 +213,16 @@ export class ChapParasComponent implements OnInit {
           console.error(opr.message || 'Fail');
           return;
         }
-        Object.assign(this.editingPara, para);
-        this.editingPara = null;
+        let currentPara = this.chap.paras.find(p => p._id === para._id);
+        Object.assign(currentPara, para);
+        if (this.editingPara && para._id === this.editingPara._id) {
+          this.editingPara = null;
+        }
       });
   }
 
   save(para) {
     if (para._id) {
-      if (!this.editingPara) {
-        return;
-      }
       this.update(para);
       return;
     }
