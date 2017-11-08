@@ -20,19 +20,9 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string = null;
   @Output() contentChange = new EventEmitter();
   @Output() contentCommand = new EventEmitter();
-  groupedAnnotations = Annotations.grouped;
   _annotator: SelectionAnnotator;
   beenChanged = false;
   changed = false;
-
-
-  // switchAnnotation(name): void {
-  //   if (this.annotation === name) {
-  //     this.annotation = null;
-  //   } else {
-  //     this.annotation = name;
-  //   }
-  // }
 
   get annotator() {
     if (!this._annotator) {

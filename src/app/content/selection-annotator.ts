@@ -13,7 +13,11 @@ export class SelectionAnnotator {
   //     tagName: 'x-subj'
   //   }
   // };
-  annotations = null;
+  private _annotations = null;
+
+  private tagToName = null;
+
+  private classToName = null;
 
   current: string;
 
@@ -26,8 +30,18 @@ export class SelectionAnnotator {
     this.current = annotationName;
   }
 
+  set annotations(annotations) {
+    this._annotations = annotations;
+    this.tagToName = annotations['$tagToName'];
+    this.classToName = annotations['$classToName'];
+  }
+
+  get annotations() {
+    return this._annotations;
+  }
+
   get annotateClass() {
-    let annotation = this.annotations[this.current];
+    let annotation = this._annotations[this.current];
     if (annotation) {
       return annotation.cssClass;
     }
@@ -35,7 +49,7 @@ export class SelectionAnnotator {
   }
 
   get annotateTag() {
-    let annotation = this.annotations[this.current];
+    let annotation = this._annotations[this.current];
     if (annotation) {
       let tagName = annotation.tagName;
       if (tagName) {
@@ -44,6 +58,32 @@ export class SelectionAnnotator {
     }
     return null;
   }
+
+  // private buildReversedNameMap() {
+  //   let t2n = this._tagToName = {};
+  //   let c2n = this._classToName = {};
+  //   for (let name in this.annotations) {
+  //     let anno = this.annotations[name];
+  //     t2n[anno.cssClass] = name;
+  //     if (anno.tagName) {
+  //       c2n[anno.tagName.toUpperCase()] = name;
+  //     }
+  //   }
+  // }
+  //
+  // get tagToName() {
+  //   if (!this._tagToName) {
+  //     this.buildReversedNameMap();
+  //   }
+  //   return this._tagToName;
+  // }
+  //
+  // get classToName() {
+  //   if (!this._classToName) {
+  //     this.buildReversedNameMap();
+  //   }
+  //   return this._classToName;
+  // }
 
   private extendWholeWord(text, wordStart, wordEnd) {
     let trimLeft = false, trimRight = false;
@@ -333,15 +373,6 @@ export class SelectionAnnotator {
     if (!node) {
       return [];
     }
-    let annoClasses = {};
-    let annoTags = {};
-    for (let name in this.annotations) {
-      let anno = this.annotations[name];
-      annoClasses[anno.cssClass] = name;
-      if (anno.tagName) {
-        annoTags[anno.tagName.toUpperCase()] = name;
-      }
-    }
 
     let foundAnnotationNames = [];
 
@@ -355,14 +386,14 @@ export class SelectionAnnotator {
         break;
       }
 
-      if (annoTags[element.tagName]) {
-        foundAnnotationNames.push(annoTags[element.tagName]);
+      if (this.tagToName[element.tagName]) {
+        foundAnnotationNames.push(this.tagToName[element.tagName]);
       }
       let cl = element.classList;
       for (let i = 0; i < cl.length; i++) {
         let className = cl[i];
-        if (annoClasses[className]) {
-          foundAnnotationNames.push(annoClasses[className]);
+        if (this.classToName[className]) {
+          foundAnnotationNames.push(this.classToName[className]);
         }
       }
       node = node.parentNode;

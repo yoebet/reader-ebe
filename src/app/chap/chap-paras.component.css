@@ -5,7 +5,7 @@
   padding: 5px;
   position: -webkit-sticky;
   position: sticky;
-  top: 10px;
+  top: 0;
   z-index: 10;
 }
 
@@ -54,3 +54,41 @@
   cursor: pointer;
 }
 
+.operations .title {
+  margin-right: 0.5em;
+  display: inline-block;
+  border-bottom-style: double;
+  border-bottom-color: silver;
+}
+
+.operations, .operations .ui.header {
+  font-weight: normal;
+  font-size: 0.8em;
+}
+
+.annotations.operations .ui.text.menu {
+  margin: .5em -0.5em;
+}
+
+.annotations.operations .ui.menu .item > i.dropdown.icon {
+  margin-left: 0.5em;
+}
+
+.annotations.operations .ui.popup {
+  margin-top: 2.4em;
+  display: block;
+  position: absolute;
+  top: auto;
+  left: auto;
+  right: auto;
+  padding-bottom: 0.33em;
+}
+
+.annotations.operations .ui.button {
+  margin-bottom: 0.5em;
+}
+
+.annotations.operations .ui.button :before,
+.annotations.operations .ui.button :after {
+  display: none;
+}

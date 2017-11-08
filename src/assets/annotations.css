@@ -1,0 +1,419 @@
+/* *** 词类 Parts of Speech *** */
+
+/* 名词 Noun */
+p-n, .pn {
+  color: blue;
+}
+
+p-n:before, .pn:before {
+  /*content: '>';*/
+  /*color: darkorange;*/
+  /*vertical-align: super;*/
+}
+
+p-n:after, .pn:after {
+  content: '名';
+}
+
+/* 动词 Verb */
+p-v, .pv {
+  color: darkred;
+}
+
+p-v:before, .pv:before {
+}
+
+p-v:after, .pv:after {
+  content: '动';
+}
+
+/* 形容词 Adjective */
+p-a, .pa {
+  color: green;
+}
+
+p-a:before, .pa:before {
+}
+
+p-a:after, .pa:after {
+  content: '形';
+}
+
+/* 副词 Adverb */
+p-d, .pd {
+  color: brown;
+}
+
+p-d:before, .pd:before {
+}
+
+p-d:after, .pd:after {
+  content: '副';
+}
+
+/* 感叹词 Interjection */
+p-i, .pi {
+  color: mediumvioletred;
+}
+
+p-i:before, .pi:before {
+}
+
+p-i:after, .pi:after {
+  content: '叹';
+}
+
+/* 介词 Preposition */
+p-p, .pp {
+  color: gray;
+}
+
+p-p:before, .pp:before {
+}
+
+p-p:after, .pp:after {
+  content: '介';
+}
+
+/* 连词 Conjunction */
+p-c, .pc {
+}
+
+p-c:before, .pc:before {
+}
+
+p-c:after, .pc:after {
+  content: '连';
+}
+
+/* *** 名词 Noun *** */
+
+/* 个体名词 Individual Nouns */
+n-i, .ni {
+}
+
+n-i:before, .ni:before {
+}
+
+n-i:after, .ni:after {
+  content: '个';
+}
+
+/* 集体名词 Collective Nouns */
+n-c, .nc {
+}
+
+n-c:before, .nc:before {
+}
+
+n-c:after, .nc:after {
+  content: '集';
+}
+
+/* 物质名词 Material Nouns */
+n-m, .nm {
+}
+
+n-m:before, .nm:before {
+}
+
+n-m:after, .nm:after {
+  content: '物质';
+}
+
+/* 抽象名词 Abstract Nouns */
+n-a, .na {
+}
+
+n-a:before, .na:before {
+}
+
+n-a:after, .na:after {
+  content: '抽象';
+}
+
+/* 可数名词 Countable Nouns */
+n-n, .nn {
+}
+
+n-n:before, .nn:before {
+}
+
+n-n:after, .nn:after {
+  content: '可数';
+}
+
+/* 不可数名词 Uncountable Nouns */
+n-u, .nu {
+}
+
+n-u:before, .nu:before {
+}
+
+n-u:after, .nu:after {
+  content: '不可数';
+}
+
+/* 单数 Singular Form */
+n-s, .ns {
+}
+
+n-s:before, .ns:before {
+}
+
+n-s:after, .ns:after {
+  content: '单';
+}
+
+/* 复数 Plural Form */
+n-p, .np {
+}
+
+n-p:before, .np:before {
+}
+
+n-p:after, .np:after {
+  content: '复';
+}
+
+/* 动名词 Gerund */
+n-g, .ng {
+}
+
+n-g:before, .ng:before {
+}
+
+n-g:after, .ng:after {
+  content: '动名';
+}
+
+/* *** 动词 Verb *** */
+
+/* 及物动词 Transitive Verbs */
+v-t, .vt {
+}
+
+v-t:before, .vt:before {
+}
+
+v-t:after, .vt:after {
+  content: 'vt.';
+}
+
+/* 不及物动词 Intransitive Verbs */
+v-i, .vi {
+}
+
+v-i:before, .vi:before {
+}
+
+v-i:after, .vi:after {
+  content: 'vi.';
+}
+
+/* 及物/不及物动词 Ergative Verbs */
+v-e, .ve {
+}
+
+v-e:before, .ve:before {
+}
+
+v-e:after, .ve:after {
+  content: 'vt./vi.';
+}
+
+/* 系动词 Link-verbs */
+v-l, .vl {
+}
+
+v-l:before, .vl:before {
+}
+
+v-l:after, .vl:after {
+  content: '系';
+}
+
+/* 情态动词 Modal Verbs */
+v-m, .vm {
+}
+
+v-m:before, .vm:before {
+}
+
+v-m:after, .vm:after {
+  content: '情态';
+}
+
+/* 不规则动词 Irregular Verbs */
+v-r, .vr {
+}
+
+v-r:before, .vr:before {
+}
+
+v-r:after, .vr:after {
+  content: '不规则';
+}
+
+/* 双宾动词 Ditransitive Verbs */
+v-d, .vd {
+}
+
+v-d:before, .vd:before {
+}
+
+v-d:after, .vd:after {
+  content: '双宾动词';
+}
+
+/* 短暂动词 Instantaneous Verbs */
+v-s, .vs {
+}
+
+v-s:before, .vs:before {
+}
+
+v-s:after, .vs:after {
+  content: '短暂动词';
+}
+
+/* *** 句子成分 Members of the Sentence *** */
+
+/* 主语 Subject */
+m-s, .ms {
+  border-bottom-color: blue;
+  border-bottom-style: double;
+}
+
+m-s:before, .ms:before {
+}
+
+m-s:after, .ms:after {
+  content: '主';
+  color: blue;
+}
+
+/* 谓语 Predicate */
+m-p, .mp {
+  border-bottom-color: darkred;
+  border-bottom-style: double;
+}
+
+m-p:before, .mp:before {
+}
+
+m-p:after, .mp:after {
+  content: '谓';
+  color: darkred;
+}
+
+/* 宾语 Object */
+m-o, .mo {
+  border-bottom-color: #0d71bb;
+  border-bottom-style: double;
+}
+
+m-o:before, .mo:before {
+}
+
+m-o:after, .mo:after {
+  content: '宾';
+  color: #0d71bb;
+}
+
+/* 直接宾语 Direct Object */
+m-d, .md {
+}
+
+m-d:before, .md:before {
+}
+
+m-d:after, .md:after {
+}
+
+/* 间接宾语 Indirect Object */
+m-i, .mi {
+}
+
+m-i:before, .mi:before {
+}
+
+m-i:after, .mi:after {
+}
+
+/* 表语 Predicative */
+m-e, .me {
+  border-bottom: 1px dashed dimgrey;
+}
+
+m-e:before, .me:before {
+}
+
+m-e:after, .me:after {
+  content: '表';
+}
+
+/* 定语 Attribute */
+m-a, .ma {
+  border-bottom: 1px dashed dimgrey;
+}
+
+m-a:before, .ma:before {
+}
+
+m-a:after, .ma:after {
+  content: '定';
+}
+
+/* 状语 Adverbial */
+m-v, .mv {
+}
+
+m-v:before, .mv:before {
+}
+
+m-v:after, .mv:after {
+  content: '状';
+}
+
+/* 同位语 Appositive */
+m-t, .mt {
+}
+
+m-t:before, .mt:before {
+}
+
+m-t:after, .mt:after {
+  content: '同位';
+}
+
+/* 插入语 Parenthesis */
+m-r, .mr {
+  color: gray;
+}
+
+m-r:before, .mr:before {
+}
+
+m-r:after, .mr:after {
+  content: '插入';
+}
+
+/* 分词短语 Participial Phrases */
+m-c, .mc {
+  border-bottom: 1px dashed dimgrey;
+}
+
+m-c:before, .mc:before {
+}
+
+m-c:after, .mc:after {
+  content: '分词短语';
+}
+
+
+/**********************/
+
+.para-content :before, .para-content :after {
+  font-size: 0.5em;
+}

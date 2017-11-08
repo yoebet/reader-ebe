@@ -31,7 +31,13 @@ export class ChapParasComponent implements OnInit {
   annotateOnly = false;
   editInplace = false;
   groupedAnnotations = Annotations.grouped;
-  currentAnnotation: string = null;
+  annotationGroup = null;
+  currentAnnotation = null;
+  latestAnnotations = [];
+
+  keepAgPopup = false;
+  agPopupHiddenTimer = null;
+  agPopupTimer = null;
 
   // {
   //   para: {},
@@ -46,6 +52,14 @@ export class ChapParasComponent implements OnInit {
     if (!this.chap.paras) {
       this.chap.paras = [];
     }
+    let ag = this.groupedAnnotations[0];
+    if (ag) {
+      let size = Math.min(ag.annotations.length, 3);
+      for (let i = 0; i < size; i++) {
+        this.latestAnnotations.push(ag.annotations[i]);
+      }
+    }
+
   }
 
   selectPara(para): void {
@@ -67,12 +81,66 @@ export class ChapParasComponent implements OnInit {
     this.selectPara(para);
   }
 
-  switchAnnotation(name): void {
-    if (this.currentAnnotation === name) {
+  clickAnnotationGroup(group) {
+    this.keepAgPopup = !this.keepAgPopup;
+    this.annotationGroup = group
+  }
+
+  selectAnnotationGroup(group) {
+    this.annotationGroup = group;
+    if (this.agPopupHiddenTimer) {
+      clearInterval(this.agPopupHiddenTimer);
+      this.agPopupHiddenTimer = null;
+    }
+  }
+
+  agPopupMouseover(group) {
+    if (this.agPopupHiddenTimer) {
+      clearInterval(this.agPopupHiddenTimer);
+      this.agPopupHiddenTimer = null;
+    }
+    if (this.annotationGroup !== null) {
+      this.annotationGroup = group;
+      return;
+    }
+    this.agPopupTimer = setTimeout(() => {
+      this.annotationGroup = group;
+    }, 500);
+  }
+
+  agPopupMouseout(group) {
+    if (this.keepAgPopup) {
+      return;
+    }
+    if (this.agPopupTimer) {
+      clearInterval(this.agPopupTimer);
+      this.agPopupTimer = null;
+    }
+    this.agPopupHiddenTimer = setTimeout(() => {
+      if (this.annotationGroup === group) {
+        this.annotationGroup = null;
+      }
+      this.agPopupHiddenTimer = null;
+    }, 500);
+  }
+
+  switchAnnotation(annotation, $event): void {
+    if (this.currentAnnotation === annotation) {
       this.currentAnnotation = null;
     } else {
-      this.currentAnnotation = name;
+      this.currentAnnotation = annotation;
+      if (this.latestAnnotations.indexOf(annotation) === -1) {
+        if (this.latestAnnotations.length >= 20) {
+          this.latestAnnotations.shift();
+        }
+        this.latestAnnotations.push(annotation);
+      }
     }
+  }
+
+  removeFromLatest(annotation, $event) {
+    this.latestAnnotations = this.latestAnnotations.filter(a => a !== annotation);
+    $event.preventDefault();
   }
 
   remove(para: Para): void {

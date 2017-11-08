@@ -1,9 +1,10 @@
 div(*ngIf='chap')
-  //sticky.operations.ui.right.floated.header([sticky-offset-top]="10")
+  //sticky.sticky.ui.right.floated.header([sticky-offset-top]="10")
   .sticky.ui.right.floated.header
     .operations([hidden]='annotateOnly')
-      i.paragraph.icon
-      | 段落
+      .title
+        i.paragraph.icon
+        | 段落
       button.ui.mini.button(*ngIf='!first', (click)='mergeUp()')
         i.chevron.up.icon
         | 向上合并
@@ -16,46 +17,51 @@ div(*ngIf='chap')
       button.ui.mini.button((click)='insertBefore()', data-tooltip="Insert Before")
         i.add.icon
         | 插入
-      //button.ui.mini.button((click)='continuousEditing=!continuousEditing', data-tooltip="Continuous Inserting/Appending")
-        i.write.icon
-        i.toggle.icon([ngClass]='continuousEditing? "on":"off"')
-        | Continuous
       sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
-      //button.ui.mini.button((click)='splitMode=!splitMode', data-tooltip="Split a Paragraph When Input an Empty Line")
-        i.paragraph.icon
-        i.toggle.icon([ngClass]='splitMode? "on":"off"')
-        | Split
       sui-checkbox([(ngModel)]='splitMode') 空行分段
     .operations([hidden]='annotateOnly')
-      i.write.icon
-      | 编辑
+      .title
+        i.write.icon
+        | 编辑
       button.ui.mini.button((click)='edit()')
         i.edit.icon
         | 编辑
-      //button.ui.mini.button((click)='clickToEdit=!clickToEdit', data-tooltip="Go into Edit on Clicking")
-        i.hand.pointer.icon
-        i.toggle.icon([ngClass]='{"on": clickToEdit, "off": !clickToEdit}')
-        | Click to Edit
       sui-checkbox([(ngModel)]='clickToEdit') 选中即编辑
-      //button.ui.mini.button((click)='editInplace=!editInplace')
-        i.text.cursor.icon
-        i.toggle.icon([ngClass]='editInplace? "on":"off"')
-        | Edit Inplace
       sui-checkbox([(ngModel)]='editInplace') 原地编辑
-      //button.ui.mini.button((click)='annotating=!annotating')
-        i.text.cursor.icon
-        i.toggle.icon([ngClass]='annotating? "on":"off"')
-        | Annotate
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')
-      i.text.cursor.icon
-      | 标注
-      .ui.basic.mini.buttons(*ngFor='let agroup of groupedAnnotations')
-        .ui.mini.button(*ngFor='let ann of agroup.annotations', [ngClass]='{active: ann.name===currentAnnotation}', (click)='switchAnnotation(ann.name)')
-          span(class='{{ann.cssClass}}') {{ann.name}}
       .ui.right.floated.header
-        sui-checkbox([(ngModel)]='annotateOnly') 隐藏其他
+        sui-checkbox([(ngModel)]='annotateOnly') 仅标注
+      .title
+        i.text.cursor.icon
+        | 标注
+      .ui.mini.basic.button(*ngFor='let ann of latestAnnotations',
+      [ngClass]='{active: ann===currentAnnotation}',
+      (click)='switchAnnotation(ann)',
+      (contextmenu)='removeFromLatest(ann,$event)')
+        span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
+      .ui.text.menu
+        ng-template(ngFor='', let-agroup='', [ngForOf]="groupedAnnotations")
+          a.item([ngClass]='{active: agroup===annotationGroup}',
+          (click)='clickAnnotationGroup(agroup)',
+          (mouseover)='agPopupMouseover(agroup)',
+          (mouseout)='agPopupMouseout(agroup)')
+            | {{agroup.name}}
+            i.dropdown.icon
+          .ui.flowing.basic.popup([hidden]='agroup!==annotationGroup',
+          (mouseover)='selectAnnotationGroup(agroup)',
+          (mouseout)='agPopupMouseout(agroup)')
+            .ui.right.floated.header
+              .ui.mini.item
+                i.pin.icon(*ngIf='keepAgPopup')
+            .ui.mini.basic.button(*ngFor='let ann of agroup.annotations',
+            [ngClass]='{active: ann===currentAnnotation}',
+            (click)='switchAnnotation(ann)')
+              span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
+      //.ui.mini.basic.vertical.buttons(*ngFor='let agroup of groupedAnnotations')
+        .ui.mini.basic.button(*ngFor='let ann of agroup.annotations', [ngClass]='{active: ann===currentAnnotation}', (click)='switchAnnotation(ann)')
+          span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
 
   .ui.list.items
     ng-template(ngFor='', let-para='', [ngForOf]="chap.paras", let-index="index", let-first="first", let-last="last", [ngForTrackBy]="paraTracker")
@@ -70,7 +76,7 @@ div(*ngIf='chap')
         [gotFocus]='para===selectedPara',
         [editable]='editInplace',
         [annotating]='annotating',
-        [annotation]='currentAnnotation',
+        [annotation]='currentAnnotation?.name',
         [ngClass]='{"selected": para===selectedPara}',
         [hidden]='editingPara===para',
         (click)='selectPara(para)',
