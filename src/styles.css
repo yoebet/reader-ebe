@@ -16,17 +16,18 @@
 @import url('assets/semantic/statistic.css');
 @import url('assets/semantic/rail.css');
 @import url('assets/semantic/popup.css');
-/*@import url('assets/semantic/dropdown.css');*/
-/*@import url('assets/semantic/grid.css');*/
+@import url('assets/semantic/search.css');
+@import url('assets/semantic/transition.css');
+@import url('assets/semantic/segment.css');
+@import url('assets/semantic/dropdown.css');
+@import url('assets/semantic/grid.css');
 /*@import url('assets/semantic/image.css');*/
 /*@import url('assets/semantic/label.css');*/
 /*@import url('assets/semantic/table.css');*/
 /*@import url('assets/semantic/message.css');*/
 /*@import url('assets/semantic/accordion.css');*/
-/*@import url('assets/semantic/search.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
 /*@import url('assets/semantic/tab.css');*/
-/*@import url('assets/semantic/segment.css');*/
 
 @import url('assets/annotations.css');
 
@@ -34,29 +35,6 @@
   white-space: pre-wrap;
 }
 
-/*.pre-wrap > * {*/
-  /*white-space: initial;*/
-/*}*/
-
-.sw {
-  color: blue;
-}
-
-x-wsx, .wsx {
-  color: green;
-}
-
-sp-sub, .sp-sub {
-  color: red;
-}
-
-sp-obj, .sp-obj {
-  color: orange;
-}
-
-/*.para-content i {*/
-  /*color: gray;*/
-/*}*/
 
 [hidden] {
   display: none !important;

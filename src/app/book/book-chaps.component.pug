@@ -1,36 +1,35 @@
-div(*ngIf='book')
-  .ui.celled.list
-    .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
-      div([hidden]="chap===editingChap")
-        .right.floated.header
-          ng-template([ngIf]="tuneOrder")
-            button.ui.small.button(*ngIf='!first', (click)='moveUp(chap)')
-              i.angle.arrow.up.icon
-              | up
-            button.ui.small.button(*ngIf='!last', (click)='moveDown(chap)')
-              i.angle.arrow.down.icon
-              | down
-            button.ui.small.button(*ngIf='!first', (click)='moveTop(chap)')
-              i.angle.double.up.icon
-              | top
-            button.ui.small.button(*ngIf='!last', (click)='moveBottom(chap)')
-              i.angle.double.down.icon
-              | bottom
-          button.ui.small.button((click)='edit(chap)') Edit
-          ng-template([ngIf]="operations")
-            button.ui.small.button((click)='remove(chap)') Remove
+.ui.celled.list(*ngIf='book')
+  .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
+    div([hidden]="chap===editingChap")
+      .right.floated.header
+        ng-template([ngIf]="tuneOrder")
+          button.ui.small.button(*ngIf='!first', (click)='moveUp(chap)')
+            i.angle.arrow.up.icon
+            | up
+          button.ui.small.button(*ngIf='!last', (click)='moveDown(chap)')
+            i.angle.arrow.down.icon
+            | down
+          button.ui.small.button(*ngIf='!first', (click)='moveTop(chap)')
+            i.angle.double.up.icon
+            | top
+          button.ui.small.button(*ngIf='!last', (click)='moveBottom(chap)')
+            i.angle.double.down.icon
+            | bottom
+        button.ui.small.button((click)='edit(chap)') Edit
+        ng-template([ngIf]="operations")
+          button.ui.small.button((click)='remove(chap)') Remove
 
-        a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}
+      a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}
 
-      .ui.form(*ngIf="chap===editingChap")
-        .fields
-          .eight.wide.field
-            textarea(rows='2',[value]='chap.name', #editChapName='')
-          .field
-            button.ui.small.button((click)="editingChap=null")
-              | Cancel
-            button.ui.small.primary.button((click)="saveChap(chap,editChapName.value)")
-              | Save
+    .ui.form(*ngIf="chap===editingChap")
+      .fields
+        .eight.wide.field
+          textarea(rows='2',[value]='chap.name', #editChapName='')
+        .field
+          button.ui.small.button((click)="editingChap=null")
+            | Cancel
+          button.ui.small.primary.button((click)="saveChap(chap,editChapName.value)")
+            | Save
 
   .ui.hidden.divider
   .ui.form

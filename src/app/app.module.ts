@@ -4,13 +4,13 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
 import {SuiModule} from 'ng2-semantic-ui';
-import {StickyModule} from 'ng2-sticky-kit';
 
 import {AppRoutingModule} from './app-routing.module';
 
 import {BookService} from './services/book.service';
 import {ChapService} from './services/chap.service';
 import {ParaService} from './services/para.service';
+import {DictService} from './services/dict.service';
 
 import {AppComponent} from './app.component';
 import {BooksComponent} from './book/books.component';
@@ -20,6 +20,7 @@ import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';
 import {ParaContentComponent} from './content/para-content.component';
+import {DictComponent} from './dict/dict.component';
 
 @NgModule({
   imports: [
@@ -27,8 +28,7 @@ import {ParaContentComponent} from './content/para-content.component';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    SuiModule,
-    StickyModule
+    SuiModule
   ],
   declarations: [
     AppComponent,
@@ -38,9 +38,10 @@ import {ParaContentComponent} from './content/para-content.component';
     ChapComponent,
     ChapParasComponent,
     ParaFormComponent,
-    ParaContentComponent
+    ParaContentComponent,
+    DictComponent
   ],
-  providers: [BookService, ChapService, ParaService],
+  providers: [BookService, ChapService, ParaService, DictService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

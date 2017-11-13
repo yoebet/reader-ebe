@@ -82,6 +82,7 @@
   left: auto;
   right: auto;
   padding-bottom: 0.33em;
+  padding-right: 0;
 }
 
 .annotations.operations .ui.button {

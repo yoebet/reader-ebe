@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, ParamMap} from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
-// import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-// import 'rxjs/add/observable/fromPromise';
 
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';

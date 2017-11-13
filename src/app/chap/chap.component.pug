@@ -3,7 +3,7 @@ h3.ui.header(*ngIf='book')
 div(*ngIf='chap')
   div([hidden]='editing')
     .ui.right.floated.header
-      a([hidden]='editing', (click)='edit()' href='javascript:') 修改
+      a([hidden]='editing', (click)='edit()', href='javascript:') 修改
     h4.ui.header
       .pre-wrap {{chap.name}}
   .ui.form(*ngIf='editing')

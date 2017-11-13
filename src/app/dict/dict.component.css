@@ -1,0 +1,40 @@
+.ui.list.words-history {
+  margin-top: 3.5em;
+}
+
+.ui.search .prompt {
+  border-radius: 0.7rem;
+}
+
+.simple-explain-row, .pos-header {
+  line-height: 2.5em;
+}
+
+.simple-explain-row {
+  margin-left: 3em;
+}
+
+.pos-meanings {
+  margin-top: 0.5em;
+}
+
+.ui.list.meaning-items {
+  margin-top: 0;
+  margin-left: 3em;
+}
+
+.ui.list.meaning-items .item {
+  line-height: 1.5em;
+}
+
+.pos-header {
+  font-weight: bold;
+}
+
+.ui.divider {
+  margin: 0.5em 0;
+}
+
+.clearing {
+  clear: both;
+}

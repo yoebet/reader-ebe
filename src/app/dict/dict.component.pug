@@ -1,0 +1,77 @@
+.ui.grid
+  .three.wide.column
+    .ui.list.words-history
+      a.item(*ngFor='let entry of entryHistory', (click)='selectHistoryEntry(entry)', href='javascript:')
+        | {{entry.word}}
+  .thirteen.wide.column
+    sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
+    (resultSelected)="selectEntry($event)", [retainSelectedResult]="false", placeholder='单词、短语...')
+    .ui.segment.small.form.dict-entry(*ngIf='entry')
+      .ui.header
+        .ui.right.floated.sub.header
+          .ui.small.button([hidden]='editing', (click)='startEditing()') 编辑
+          .ui.small.primary.button(*ngIf='editing', (click)='saveEdit()') 完成
+        | {{entry.word}}
+
+      .clearing
+      .simple-explain-row
+        //.ui.right.floated.sub.header
+          .ui.mini.button(*ngIf='editing && !editingSimpleExplain', (click)='editingSimpleExplain=true') 编辑
+        .ui.fields(*ngIf='editingSimpleExplain')
+          .field
+            input([(ngModel)]='entry.explain', (blur)='editingSimpleExplain=false', #simpleExplain='')
+          .field
+            button.ui.mini.primary.button((click)='editingSimpleExplain=false;simpleExplain.focus()')
+              i.checkmark.icon
+              | OK
+        .simple-explain([hidden]='editingSimpleExplain', (click)='clickSimpleExplain()')
+          | {{entry.explain}}
+
+      .ui.clearing.divider
+      .pos-meanings(*ngFor='let posMeanings of entry.complete')
+        .ui.right.floated.sub.header(*ngIf='editing')
+          .ui.basic.mini.button((click)='newMeaningItem(posMeanings)')
+            i.add.icon
+            | 义项
+        .pos-header {{posMeanings.pos}}
+        .clearing
+        .ui.ordered.list.meaning-items
+          .ui.item(*ngFor='let item of posMeanings.items')
+            //.ui.right.floated.header
+              .ui.basic.mini.button(*ngIf='editing && item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+                i.edit.icon
+                | 编辑
+            .fields(*ngIf='item===editingMeaningItem')
+              .field
+                input([(ngModel)]='item.explain', (blur)='editingMeaningItem=null', #itemExplain='')
+              .field
+                button.ui.tiny.primary.button((click)='editingMeaningItem=null')
+                  i.checkmark.icon
+                  | OK
+            .meaning-item([hidden]='item===editingMeaningItem', (click)='clickMeaningItem(posMeanings,item)')
+              | {{item.explain}}
+          .fields(*ngIf='posMeanings===editingPosMeanings && editNewMeaningItem')
+            .field
+              input(#newExplain='')
+            .field
+              button.ui.tiny.button((click)='editNewMeaningItem=false') Cancel
+              button.ui.tiny.primary.button((click)='addMeaningItem(newExplain.value)')
+                i.checkmark.icon
+                | 增加
+
+      .new-pos(*ngIf='editing')
+        .ui.clearing.divider
+        .ui.right.floated.header
+          .ui.basic.mini.button((click)='newPosMeanings()')
+            i.add.icon
+            | 词性
+        .fields(*ngIf='newPos')
+          .field
+            sui-select.selection([(ngModel)]="newPos.pos", [options]="posOptions", valueField="abbr",
+            labelField="name", placeholder='词性', #posSelect='')
+              sui-select-option(*ngFor="let option of posSelect.filteredOptions", [value]="option")
+            //input(#newPos='')
+          .field
+            button.ui.tiny.button((click)='newPos=null') Cancel
+            button.ui.tiny.primary.button((click)='addPosMeanings()') 增加
+        .clearing

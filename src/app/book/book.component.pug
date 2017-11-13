@@ -1,7 +1,7 @@
 div(*ngIf='book')
   div([hidden]='editing')
     .ui.right.floated.header
-      a([hidden]='editing', (click)='edit()' href='javascript:') Edit
+      a([hidden]='editing', (click)='edit()', href='javascript:') Edit
     .ui.header {{book.name}}
     .sub.header by {{book.author}}
   .ui.form(*ngIf='editing')
@@ -12,7 +12,7 @@ div(*ngIf='book')
         input([value]='book.author', placeholder='Author', #bookAuthor='')
     .field
       button.ui.small.button((click)='this.editing=false') Cancel
-      button.small.ui.primary.button((click)='save(bookName.value,bookAuthor.value)') Save
+      button.ui.small.primary.button((click)='save(bookName.value,bookAuthor.value)') Save
   .ui.hidden.clearing.divider
   .ui.header
     | Chapters
