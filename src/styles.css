@@ -6,10 +6,10 @@
 @import url('assets/semantic/container.css');
 @import url('assets/semantic/divider.css');
 @import url('assets/semantic/header.css');
-@import url('assets/semantic/icon.css');
 @import url('assets/semantic/input.css');
 @import url('assets/semantic/checkbox.css');
 @import url('assets/semantic/list.css');
+@import url('assets/semantic/icon.css');
 @import url('assets/semantic/form.css');
 @import url('assets/semantic/menu.css');
 @import url('assets/semantic/item.css');
@@ -21,8 +21,8 @@
 @import url('assets/semantic/segment.css');
 @import url('assets/semantic/dropdown.css');
 @import url('assets/semantic/grid.css');
+@import url('assets/semantic/label.css');
 /*@import url('assets/semantic/image.css');*/
-/*@import url('assets/semantic/label.css');*/
 /*@import url('assets/semantic/table.css');*/
 /*@import url('assets/semantic/message.css');*/
 /*@import url('assets/semantic/accordion.css');*/
@@ -60,4 +60,8 @@
 
 para-form.ui.form .fields {
   margin: 1em -0.5em;
+}
+
+sui-multi-select i.list.icon {
+  margin: 0em 0.25rem 0em 0em !important;
 }

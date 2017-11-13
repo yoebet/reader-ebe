@@ -10,9 +10,8 @@
   line-height: 2.5em;
 }
 
-.dict-entry .ui.header
 .simple-explain-row {
-  margin-left: 3em;
+  margin-left: 2em;
 }
 
 .entry-word {
@@ -33,13 +32,13 @@
   font-size: 0.8rem;
 }
 
-.cat-labels label {
-  padding: 0 0.5em;
+.cat-labels label, .cat-labels .ui.label {
+  padding: 0 0.4rem;
+  margin-left: 0.1rem;
   display: inline-block;
   background: silver;
   font-size: 0.8rem;
-  line-height: 1rem;
-  border-radius: 0.2rem;
+  line-height: 1.1rem;
 }
 
 .pos-meanings {
@@ -52,7 +51,11 @@
 }
 
 .ui.list.meaning-items .item {
-  line-height: 1.5em;
+  /*line-height: 2.3em;*/
+}
+
+.ui.list.meaning-items .item sui-select-option {
+  line-height: 1rem;
 }
 
 .pos-header {
@@ -67,4 +70,17 @@
 
 .clearing {
   clear: both;
+}
+
+.item-explain {
+  padding-left: 0.5em;
+}
+
+.ui.button {
+  /*padding: 0.5em 1.3em 0.5em*/
+}
+
+.meaning-item .ui.label {
+  /*padding: 0.5833em 0.833em;*/
+  padding: 0.2em 0.3em;
 }

@@ -15,15 +15,15 @@
         .entry-word {{entry.word}}
         .categories
           .cat-labels([hidden]='editCategories')
-            label(*ngIf='categories.cet4') CET 4
-            label(*ngIf='categories.cet6') CET 6
-            label(*ngIf='categories.gre') GRE
-            label(*ngIf='categories.yasi') 雅思
-            label(*ngIf='categories.pro4') 专四
-            label(*ngIf='categories.pro8') 专八
+            label.ui.mini.label(*ngIf='categories.cet4') CET 4
+            label.ui.mini.label(*ngIf='categories.cet6') CET 6
+            label.ui.mini.label(*ngIf='categories.gre') GRE
+            label.ui.mini.label(*ngIf='categories.yasi') 雅思
+            label.ui.mini.label(*ngIf='categories.pro4') 专四
+            label.ui.mini.label(*ngIf='categories.pro8') 专八
             ng-template([ngIf]='categories.haici')
-              label 海词 {{entry.categories.haici}}星
-            a([hidden]='!editing || editCategories', (click)='editCategories=true', href='javascript:') 词汇范围
+              label.ui.mini.label 海词 {{entry.categories.haici}}星
+            a([hidden]='!editing || editCategories', (click)='editCategories=true', href='javascript:') 设置范围
           .ui.inline.field(*ngIf='editCategories')
             sui-checkbox([(ngModel)]="categories.cet4") CET 4
             sui-checkbox([(ngModel)]="categories.cet6") CET 6
@@ -87,19 +87,30 @@
                 | 删除
             .fields(*ngIf='item===editingMeaningItem')
               .field
+                sui-multi-select([(ngModel)]='item.tags', [options]='posTags', valueField="value",
+                labelField='label', icon='list', placeholder='标签', #tagsSelect='')
+                  .scrolling.menu
+                    sui-select-option(*ngFor='let o of tagsSelect.filteredOptions', [value]='o')
+              .field
                 input([(ngModel)]='item.explain', (blur)='editingMeaningItem=null', #itemExplain='')
               .field
                 button.ui.basic.mini.button((click)='editingMeaningItem=null')
                   i.checkmark.icon
                   | OK
             .meaning-item([hidden]='item===editingMeaningItem', (click)='clickMeaningItem(posMeanings,item)')
-              | {{item.explain}}
-          .fields(*ngIf='posMeanings===editingPosMeanings && editNewMeaningItem')
+              span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
+              span.item-explain {{item.explain}}
+          .fields(*ngIf='posMeanings===editingPosMeanings && newItem')
             .field
-              input(#newExplain='')
+              sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
+              labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
+                .scrolling.menu
+                  sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
             .field
-              button.ui.mini.button((click)='editNewMeaningItem=false') Cancel
-              button.ui.basic.mini.button((click)='addMeaningItem(newExplain.value)')
+              input([(ngModel)]='newItem.explain')
+            .field
+              button.ui.mini.button((click)='newItem=null') Cancel
+              button.ui.basic.mini.button((click)='addMeaningItem()')
                 i.checkmark.icon
                 | 增加
 

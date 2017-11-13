@@ -21,7 +21,7 @@ export class DictComponent {
   editingPosMeanings: PosMeanings = null;
   editingMeaningItem: MeaningItem = null;
   newPos = null;
-  editNewMeaningItem = false;
+  newItem = null;
   sortMeaningItems = false;
   editCategories = false;
 
@@ -30,8 +30,6 @@ export class DictComponent {
   private static _POS = [
     {abbr: 'n.', name: 'n. 名词'},
     {abbr: 'v.', name: 'v. 动词'},
-    {abbr: 'vt.', name: 'vt. 及物动词'},
-    {abbr: 'vi.', name: 'vi. 不及物动词'},
     {abbr: 'adj.', name: 'adj. 形容词'},
     {abbr: 'adv.', name: 'adv. 副词'},
     {abbr: 'prep.', name: 'prep. 介词'},
@@ -43,6 +41,40 @@ export class DictComponent {
   posOptions = null;
 
 
+  private _posTags = {
+    common: [
+      {value: 'idiom', label: '习语'},
+      {value: 'slang', label: '俚语'},
+      {value: 'colloquial', label: '口语'},
+      {value: 'euphemism', label: '委婉语'},
+      {value: 'figurative', label: '比喻'}
+    ],
+    'n.': [
+      {value: 'individual', label: '个体'},
+      {value: 'collective', label: '集体'},
+      {value: 'material', label: '物质'},
+      {value: 'abstract', label: '抽象'},
+      {value: 'countable', label: '可数'},
+      {value: 'uncountable', label: '不可数'},
+      {value: 'singular', label: '单数'},
+      {value: 'countable', label: '复数'},
+      {value: 'gerund', label: '动名词'},
+      {value: 'proper', label: '专有'}
+    ],
+    'v.': [
+      {value: 'transitive', label: 'vt.'},
+      {value: 'intransitive', label: 'vi.'},
+      {value: 'ergative', label: 'vi.&vt.'},
+      {value: 'link', label: '系动词'},
+      {value: 'modal', label: '情态'},
+      {value: 'ditransitive', label: '双宾'},
+      {value: 'irregular', label: '不规则'},
+      {value: 'instantaneous', label: '短暂'},
+    ]
+  };
+
+  private _tagLabelMap = null;
+
   dictSearch = (key: string) => {
     key = key.trim();
     let o = this.dictService.search(key);
@@ -53,8 +85,33 @@ export class DictComponent {
               private router: Router) {
   }
 
-  get categories(){
+  get categories() {
     return this.entry.categories;
+  }
+
+  get posTags() {
+    let pt = this._posTags;
+    let merged = pt.common;
+    let pm = this.editingPosMeanings;
+    if (pm && pt[pm.pos]) {
+      merged = pt[pm.pos].concat(merged);
+    }
+    return merged;
+  }
+
+  get tagLabelMap() {
+    if (this._tagLabelMap == null) {
+      let tm = this._tagLabelMap = {};
+      for (let pos in this._posTags) {
+        let tags = this._posTags[pos];
+        if (tags) {
+          for (let tag of tags) {
+            tm[tag.value] = tag.label;
+          }
+        }
+      }
+    }
+    return this._tagLabelMap;
   }
 
   selectEntry(entrySimple) {
@@ -99,7 +156,7 @@ export class DictComponent {
     this.editingPosMeanings = null;
     this.editingMeaningItem = null;
     this.newPos = null;
-    this.editNewMeaningItem = false;
+    this.newItem = null;
     this.editCategories = false;
     this._originEntry = null;
   }
@@ -161,7 +218,7 @@ export class DictComponent {
 
   newMeaningItem(pm: PosMeanings) {
     this.editingPosMeanings = pm;
-    this.editNewMeaningItem = true;
+    this.newItem = new MeaningItem();
   }
 
   editMeaningItem(pm: PosMeanings, mi: MeaningItem) {
@@ -225,19 +282,17 @@ export class DictComponent {
     this.newPos = null;
   }
 
-  addMeaningItem(explain) {
-    explain = explain.trim();
-    if (!explain) {
+  addMeaningItem() {
+    let ni = this.newItem;
+    if (!ni || !ni.explain) {
       return;
     }
-    let mi = new MeaningItem();
-    mi.id = DictEntry.nextMeaningItemId(this.entry);
-    mi.explain = explain;
+    ni.id = DictEntry.nextMeaningItemId(this.entry);
     if (!this.editingPosMeanings.items) {
       this.editingPosMeanings.items = [];
     }
-    this.editingPosMeanings.items.push(mi);
-    this.editNewMeaningItem = false;
+    this.editingPosMeanings.items.push(ni);
+    this.newItem = null;
   }
 
 }

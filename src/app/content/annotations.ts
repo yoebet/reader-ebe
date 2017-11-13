@@ -106,6 +106,8 @@ export class Annotations {
       annotations: [
         ['Idiom', '习语', 'wi', 'w-i'],
         ['Slang', '俚语', 'ws', 'w-s'],
+        ['Colloquial', '口语', 'wc', 'w-c'],
+        ['Euphemism', '委婉语', 'we', 'w-e'],
         ['Figurative', '比喻义', 'wf', 'w-f'],
     //   ]
     // },
