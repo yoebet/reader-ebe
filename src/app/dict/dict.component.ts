@@ -22,6 +22,8 @@ export class DictComponent {
   editingMeaningItem: MeaningItem = null;
   newPos = null;
   editNewMeaningItem = false;
+  sortMeaningItems = false;
+  editCategories = false;
 
   entryHistory: DictEntry[] = [];
 
@@ -40,6 +42,7 @@ export class DictComponent {
   ];
   posOptions = null;
 
+
   dictSearch = (key: string) => {
     key = key.trim();
     let o = this.dictService.search(key);
@@ -50,11 +53,21 @@ export class DictComponent {
               private router: Router) {
   }
 
+  get categories(){
+    return this.entry.categories;
+  }
+
   selectEntry(entrySimple) {
     this.dictService.getOne(entrySimple._id)
       .subscribe(e => {
           if (!e.explain) {
             e.explain = '...';
+          }
+          if (!e.complete) {
+            e.complete = [];
+          }
+          if (!e.categories) {
+            e.categories = {};
           }
           this.entry = e;
           let eh = this.entryHistory;
@@ -87,6 +100,7 @@ export class DictComponent {
     this.editingMeaningItem = null;
     this.newPos = null;
     this.editNewMeaningItem = false;
+    this.editCategories = false;
     this._originEntry = null;
   }
 
@@ -101,10 +115,8 @@ export class DictComponent {
       return;
     }
 
-    if (entry.complete) {
-      entry.complete = entry.complete
-        .filter(pm => pm.items && pm.items.length > 0);
-    }
+    entry.complete = entry.complete
+      .filter(pm => pm.items && pm.items.length > 0);
 
     let ori = JSON.stringify(this._originEntry);
     let current = JSON.stringify(entry);
@@ -142,9 +154,6 @@ export class DictComponent {
 
   newPosMeanings() {
     this.newPos = new PosMeanings();
-    if (!this.entry.complete) {
-      this.entry.complete = [];
-    }
     let poss = this.entry.complete.map(pm => pm.pos);
     this.posOptions = DictComponent._POS
       .filter(posOption => poss.indexOf(posOption.abbr) === -1);
@@ -158,6 +167,45 @@ export class DictComponent {
   editMeaningItem(pm: PosMeanings, mi: MeaningItem) {
     this.editingPosMeanings = pm;
     this.editingMeaningItem = mi;
+  }
+
+  removeMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+    if (!confirm('Are You Sure?')) {
+      return;
+    }
+    pm.items = pm.items.filter(item => item !== mi);
+  }
+
+
+  private swapArrayElements(arr, index1, index2) {
+    if (index1 < 0 || index2 >= arr.length) {
+      return;
+    }
+    let t = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = t;
+  }
+
+  moveUpPos(pm: PosMeanings) {
+    let complete = this.entry.complete;
+    let index = complete.indexOf(pm);
+    this.swapArrayElements(complete, index - 1, index);
+  }
+
+  moveDownPos(pm: PosMeanings) {
+    let complete = this.entry.complete;
+    let index = complete.indexOf(pm);
+    this.swapArrayElements(complete, index, index + 1);
+  }
+
+  moveUpMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+    let index = pm.items.indexOf(mi);
+    this.swapArrayElements(pm.items, index - 1, index);
+  }
+
+  moveDownMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+    let index = pm.items.indexOf(mi);
+    this.swapArrayElements(pm.items, index, index + 1);
   }
 
   addPosMeanings() {

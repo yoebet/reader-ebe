@@ -10,8 +10,36 @@
   line-height: 2.5em;
 }
 
+.dict-entry .ui.header
 .simple-explain-row {
   margin-left: 3em;
+}
+
+.entry-word {
+  padding-right: 1em;
+  font-size: 1.4em;
+}
+
+.entry-word, .categories, .categories > * {
+  display: inline;
+}
+
+.categories * {
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.categories .mini.button {
+  font-size: 0.8rem;
+}
+
+.cat-labels label {
+  padding: 0 0.5em;
+  display: inline-block;
+  background: silver;
+  font-size: 0.8rem;
+  line-height: 1rem;
+  border-radius: 0.2rem;
 }
 
 .pos-meanings {
@@ -29,6 +57,8 @@
 
 .pos-header {
   font-weight: bold;
+  padding: 3px;
+  margin: 3px;
 }
 
 .ui.divider {

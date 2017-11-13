@@ -45,13 +45,18 @@
   padding-right: 0.5rem;
 }
 
+
+.ui.checkbox label {
+  padding-right: 0.7em;
+}
+
+.ui.checkbox label {
+  padding-left: 1.4em
+}
+
 /*.ui.toggle.checkbox label {*/
   /*padding-left: 4.0rem;*/
 /*}*/
-
-.ui.checkbox .box, .ui.checkbox label {
-  padding-left: 1.4em
-}
 
 para-form.ui.form .fields {
   margin: 1em -0.5em;

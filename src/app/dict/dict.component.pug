@@ -7,11 +7,39 @@
     sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
     (resultSelected)="selectEntry($event)", [retainSelectedResult]="false", placeholder='单词、短语...')
     .ui.segment.small.form.dict-entry(*ngIf='entry')
-      .ui.header
+      .ui.header.entry-header
         .ui.right.floated.sub.header
-          .ui.small.button([hidden]='editing', (click)='startEditing()') 编辑
-          .ui.small.primary.button(*ngIf='editing', (click)='saveEdit()') 完成
-        | {{entry.word}}
+          sui-checkbox([hidden]='!editing', [(ngModel)]="sortMeaningItems") 释义排序
+          .ui.tiny.button([hidden]='editing', (click)='startEditing()') 编辑
+          .ui.tiny.primary.button([hidden]='!editing', (click)='saveEdit()') 完成
+        .entry-word {{entry.word}}
+        .categories
+          .cat-labels([hidden]='editCategories')
+            label(*ngIf='categories.cet4') CET 4
+            label(*ngIf='categories.cet6') CET 6
+            label(*ngIf='categories.gre') GRE
+            label(*ngIf='categories.yasi') 雅思
+            label(*ngIf='categories.pro4') 专四
+            label(*ngIf='categories.pro8') 专八
+            ng-template([ngIf]='categories.haici')
+              label 海词 {{entry.categories.haici}}星
+            a([hidden]='!editing || editCategories', (click)='editCategories=true', href='javascript:') 词汇范围
+          .ui.inline.field(*ngIf='editCategories')
+            sui-checkbox([(ngModel)]="categories.cet4") CET 4
+            sui-checkbox([(ngModel)]="categories.cet6") CET 6
+            sui-checkbox([(ngModel)]="categories.gre") GRE
+            sui-checkbox([(ngModel)]="categories.yasi") 雅思
+            sui-checkbox([(ngModel)]="categories.pro4") 专四
+            sui-checkbox([(ngModel)]="categories.pro8") 专八
+            span
+              | 海词
+              sui-select.inline([(ngModel)]="entry.categories.haici",
+              [options]='[{v: 0, l: "无"}, {v: 1, l: "1星"}, {v: 2, l: "2星"}, {v: 3, l: "3星"}, {v: 4, l: "4星"}, {v: 5, l: "5星"}]',
+              valueField="v", labelField="l", placeholder='星级', #haiciSelect='')
+                sui-select-option(*ngFor="let option of haiciSelect.filteredOptions", [value]="option")
+            button.ui.basic.mini.button((click)='editCategories=false')
+              i.checkmark.icon
+              | OK
 
       .clearing
       .simple-explain-row
@@ -21,31 +49,47 @@
           .field
             input([(ngModel)]='entry.explain', (blur)='editingSimpleExplain=false', #simpleExplain='')
           .field
-            button.ui.mini.primary.button((click)='editingSimpleExplain=false;simpleExplain.focus()')
+            button.ui.basic.mini.button((click)='editingSimpleExplain=false;simpleExplain.focus()')
               i.checkmark.icon
               | OK
         .simple-explain([hidden]='editingSimpleExplain', (click)='clickSimpleExplain()')
           | {{entry.explain}}
 
       .ui.clearing.divider
-      .pos-meanings(*ngFor='let posMeanings of entry.complete')
-        .ui.right.floated.sub.header(*ngIf='editing')
-          .ui.basic.mini.button((click)='newMeaningItem(posMeanings)')
-            i.add.icon
-            | 义项
-        .pos-header {{posMeanings.pos}}
+      .pos-meanings(*ngFor='let posMeanings of entry.complete; first as firstPos; last as lastPos')
+        .pos-header
+          .ui.right.floated.sub.header([hidden]='!editing')
+            .ui.mini.button(*ngIf='sortMeaningItems && !firstPos', (click)='moveUpPos(posMeanings)')
+              i.angle.arrow.up.icon
+              | 上移
+            .ui.mini.button(*ngIf='sortMeaningItems && !lastPos', (click)='moveDownPos(posMeanings)')
+              i.angle.arrow.down.icon
+              | 下移
+            .ui.mini.button((click)='newMeaningItem(posMeanings)')
+              i.add.icon
+              | 义项
+          | {{posMeanings.pos}}
         .clearing
         .ui.ordered.list.meaning-items
-          .ui.item(*ngFor='let item of posMeanings.items')
-            //.ui.right.floated.header
-              .ui.basic.mini.button(*ngIf='editing && item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+          .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem')
+            .ui.right.floated.sub.header([hidden]='!editing')
+              //.ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
                 i.edit.icon
                 | 编辑
+              .ui.basic.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
+                i.angle.arrow.up.icon
+                | 上移
+              .ui.basic.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
+                i.angle.arrow.down.icon
+                | 下移
+              .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
+                i.remove.icon
+                | 删除
             .fields(*ngIf='item===editingMeaningItem')
               .field
                 input([(ngModel)]='item.explain', (blur)='editingMeaningItem=null', #itemExplain='')
               .field
-                button.ui.tiny.primary.button((click)='editingMeaningItem=null')
+                button.ui.basic.mini.button((click)='editingMeaningItem=null')
                   i.checkmark.icon
                   | OK
             .meaning-item([hidden]='item===editingMeaningItem', (click)='clickMeaningItem(posMeanings,item)')
@@ -54,12 +98,12 @@
             .field
               input(#newExplain='')
             .field
-              button.ui.tiny.button((click)='editNewMeaningItem=false') Cancel
-              button.ui.tiny.primary.button((click)='addMeaningItem(newExplain.value)')
+              button.ui.mini.button((click)='editNewMeaningItem=false') Cancel
+              button.ui.basic.mini.button((click)='addMeaningItem(newExplain.value)')
                 i.checkmark.icon
                 | 增加
 
-      .new-pos(*ngIf='editing')
+      .new-pos([hidden]='!editing')
         .ui.clearing.divider
         .ui.right.floated.header
           .ui.basic.mini.button((click)='newPosMeanings()')
@@ -72,6 +116,6 @@
               sui-select-option(*ngFor="let option of posSelect.filteredOptions", [value]="option")
             //input(#newPos='')
           .field
-            button.ui.tiny.button((click)='newPos=null') Cancel
-            button.ui.tiny.primary.button((click)='addPosMeanings()') 增加
+            button.ui.mini.button((click)='newPos=null') Cancel
+            button.ui.basic.mini.button((click)='addPosMeanings()') 增加
         .clearing
