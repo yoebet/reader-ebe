@@ -27,7 +27,8 @@ div(*ngIf='chap')
         i.edit.icon
         | 编辑
       sui-checkbox([(ngModel)]='clickToEdit') 选中即编辑
-      sui-checkbox([(ngModel)]='editInplace') 原地编辑
+      sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
+      sui-checkbox([(ngModel)]='showTrans') 中文
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')
@@ -38,13 +39,13 @@ div(*ngIf='chap')
         | 标注
       .ui.mini.basic.button(*ngFor='let ann of latestAnnotations',
       [ngClass]='{active: ann===currentAnnotation}',
-      (click)='switchAnnotation(ann)',
+      (click)='switchAnnotation(ann,$event)',
       (contextmenu)='removeFromLatest(ann,$event)')
         span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
       .ui.text.menu
         ng-template(ngFor='', let-agroup='', [ngForOf]="groupedAnnotations")
           a.item([ngClass]='{active: agroup===annotationGroup}',
-          (click)='clickAnnotationGroup(agroup)',
+          (click)='clickAnnotationGroup(agroup,$event)',
           (mouseover)='agPopupMouseover(agroup)',
           (mouseout)='agPopupMouseout(agroup)')
             | {{agroup.name}}
@@ -57,7 +58,7 @@ div(*ngIf='chap')
                 i.pin.icon(*ngIf='keepAgPopup')
             .ui.mini.basic.button(*ngFor='let ann of agroup.annotations',
             [ngClass]='{active: ann===currentAnnotation}',
-            (click)='switchAnnotation(ann)')
+            (click)='switchAnnotation(ann,$event)')
               span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
       //.ui.mini.basic.vertical.buttons(*ngFor='let agroup of groupedAnnotations')
         .ui.mini.basic.button(*ngFor='let ann of agroup.annotations', [ngClass]='{active: ann===currentAnnotation}', (click)='switchAnnotation(ann)')
@@ -72,21 +73,21 @@ div(*ngIf='chap')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
-        para-content.para-content([content]='para.content',
+        para-content.para-content([hidden]='editingPara===para',
+        [content]='para.content',
+        [trans]='para.trans',
+        [showTrans]='showTrans',
         [gotFocus]='para===selectedPara',
-        [editable]='editInplace',
-        [annotating]='annotating',
-        [annotation]='currentAnnotation?.name',
+        [editable]='para===selectedPara && editInplace',
+        [annotating]='para===selectedPara && annotating',
+        [annotation]='(para===selectedPara)? currentAnnotation?.name : null',
         [ngClass]='{"selected": para===selectedPara}',
-        [hidden]='editingPara===para',
         (click)='selectPara(para)',
         (contentChange)="onContentChange(para,$event)",
         (contentCommand)="onContentCommand(para,$event)")
-          //.right.floated(*ngIf='editButtons')
-            button.ui.mini.button(*ngIf='!first', (click)='mergeUp(para)')
-              i.chevron.up.icon
 
-        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', (onSave)="save($event)", (onCancel)="cancelEdit()")
+        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para',
+        [showTrans]='showTrans', (onSave)="save($event)", (onCancel)="cancelEdit()")
 
     .item.paragraph(*ngIf='insertPos===chap.paras.length')
       .ui.left.floated.mini.statistic.para-no

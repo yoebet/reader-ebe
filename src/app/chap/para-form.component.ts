@@ -11,14 +11,17 @@ import {Para} from '../models/para';
 export class ParaFormComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
   @Input() para: Para;
+  @Input() showTrans: boolean;
   @Output() onSave = new EventEmitter<Para>();
   @Output() onCancel = new EventEmitter();
 
   ngOnInit(): void {
     if (this.para) {
-      let ip = this.para;
-      this.para = new Para();
-      Object.assign(this.para, ip);
+      // deep clone
+      this.para = JSON.parse(JSON.stringify(this.para));
+      if (!this.para.trans) {
+        this.para.trans = '';
+      }
     } else {
       this.para = new Para();
     }

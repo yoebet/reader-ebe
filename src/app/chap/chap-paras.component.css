@@ -37,7 +37,8 @@
 }
 
 .paragraph > .para-content {
-  position: relative;
+  /*position: relative;*/
+  display: flex;
   flex: 1 1 auto;
   border: 1px solid white;
   padding: 0.3em;

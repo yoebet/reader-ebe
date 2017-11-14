@@ -44,10 +44,10 @@ export class DictComponent {
   private _posTags = {
     common: [
       {value: 'idiom', label: '习语'},
-      {value: 'slang', label: '俚语'},
       {value: 'colloquial', label: '口语'},
-      {value: 'euphemism', label: '委婉语'},
-      {value: 'figurative', label: '比喻'}
+      {value: 'figurative', label: '比喻'},
+      {value: 'slang', label: '俚语'},
+      {value: 'euphemism', label: '委婉'}
     ],
     'n.': [
       {value: 'individual', label: '个体'},
@@ -69,7 +69,7 @@ export class DictComponent {
       {value: 'modal', label: '情态'},
       {value: 'ditransitive', label: '双宾'},
       {value: 'irregular', label: '不规则'},
-      {value: 'instantaneous', label: '短暂'},
+      {value: 'instantaneous', label: '短暂'}
     ]
   };
 

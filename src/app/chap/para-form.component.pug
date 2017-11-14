@@ -1,7 +1,10 @@
 .fields
-  .twelve.wide.field
+  .wide.field([ngClass]='showTrans? "seven":"fourteen"')
     textarea([(ngModel)]="para.content", #content='', spellcheck='false')
+  .seven.wide.field(*ngIf='showTrans')
+    textarea([(ngModel)]="para.trans", #trans='', spellcheck='false')
   .field
-    button.ui.small.button((click)='cancel()') 取消
-  .field
-    button.ui.small.primary.button((click)='save()') 保存
+    button.ui.tiny.button((click)='cancel()') 取消
+    br
+    br
+    button.ui.tiny.primary.button((click)='save()') 保存

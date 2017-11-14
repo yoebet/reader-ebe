@@ -24,6 +24,7 @@ export class ChapParasComponent implements OnInit {
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
+  showTrans = false;
   clickToEdit = false;
   continuousEditing = false;
   splitMode = false;
@@ -81,9 +82,11 @@ export class ChapParasComponent implements OnInit {
     this.selectPara(para);
   }
 
-  clickAnnotationGroup(group) {
+  clickAnnotationGroup(group, $event) {
     this.keepAgPopup = !this.keepAgPopup;
-    this.annotationGroup = group
+    this.annotationGroup = group;
+    $event.preventDefault();
+    $event.stopPropagation();
   }
 
   selectAnnotationGroup(group) {
@@ -136,6 +139,10 @@ export class ChapParasComponent implements OnInit {
         this.latestAnnotations.push(annotation);
       }
     }
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
   }
 
   removeFromLatest(annotation, $event) {
@@ -184,13 +191,9 @@ export class ChapParasComponent implements OnInit {
       return;
     }
     let {para, pullContent} = this.contentChangedNotification;
-    let changedContent = pullContent.call();
-    if (changedContent === para.content) {
-      return;
-    }
-
-    let toSave = Object.assign(new Para(), para);
-    toSave.content = changedContent;
+    //{content, trans}
+    let toSave = pullContent.call();
+    toSave._id = para._id;
     this.save(toSave);
   }
 
@@ -275,13 +278,31 @@ export class ChapParasComponent implements OnInit {
   }
 
   private doUpdate(para) {
+    //deep clone
+    para = JSON.parse(JSON.stringify(para));
+    let currentPara = this.chap.paras.find(p => p._id === para._id);
+
+    let contentNotChanged = typeof para.content === 'undefined' || para.content === currentPara.content;
+    let transNotChanged = typeof para.trans === 'undefined' || para.trans === currentPara.trans;
+    if (contentNotChanged && transNotChanged) {
+      if (this.editingPara && para._id === this.editingPara._id) {
+        this.editingPara = null;
+      }
+      return;
+    }
+    if (para.content === currentPara.content) {
+      //needn't to transfer
+      delete para.content;
+    }
+    if (para.trans === currentPara.trans) {
+      delete para.trans;
+    }
     this.paraService.update(para)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
           console.error(opr.message || 'Fail');
           return;
         }
-        let currentPara = this.chap.paras.find(p => p._id === para._id);
         Object.assign(currentPara, para);
         if (this.editingPara && para._id === this.editingPara._id) {
           this.editingPara = null;

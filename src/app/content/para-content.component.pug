@@ -1,8 +1,5 @@
-.para-text(#paraText='',
-(mouseup)='onMouseup()',
-(keyup)='onKeyup()',
-[attr.contenteditable]='editable',
-spellcheck='false')
+.para-text.content-text(#paraText='', (mouseup)='onMouseup()', (keyup)='onKeyup()', [attr.contenteditable]='editable', spellcheck='false')
+.para-text.trans-text([hidden]='!showTrans', #paraTrans='', (keyup)='onTransKeyup()', [attr.contenteditable]='editable', spellcheck='false')
 .ui.right.rail(*ngIf='beenChanged')
   .ui.list([hidden]='!gotFocus')
     .ui.item
