@@ -1,25 +1,19 @@
-
-//div
-  h2 An app with DYNAMIC content
-  hr
-  dynamic-detail
-
 .ui.header
   | Book List
 .ui.celled.list
   .item(*ngFor='let book of books; trackBy: bookTracker')
     a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
       | {{book.name}}
-    button.ui.small.button.right.floated((click)='remove(book)') Remove
+    button.ui.tiny.button.right.floated((click)='remove(book)') Remove
 
-.ui.form
+.ui.small.form
   .field
     label New Book:
   .fields
-    .field
+    .seven.wide.field
       input(#bookName='', placeholder='Book Name')
-    .field
+    .three.wide.field
       input(#author='', placeholder='Author')
     .field
-      button.ui.small.button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
+      button.ui.tiny.button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
         | Add

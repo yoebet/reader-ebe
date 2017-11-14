@@ -3,21 +3,21 @@
     div([hidden]="chap===editingChap")
       .right.floated.header
         ng-template([ngIf]="tuneOrder")
-          button.ui.small.button(*ngIf='!first', (click)='moveUp(chap)')
+          button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
             i.angle.arrow.up.icon
             | up
-          button.ui.small.button(*ngIf='!last', (click)='moveDown(chap)')
+          button.ui.tiny.button(*ngIf='!last', (click)='moveDown(chap)')
             i.angle.arrow.down.icon
             | down
-          button.ui.small.button(*ngIf='!first', (click)='moveTop(chap)')
+          button.ui.tiny.button(*ngIf='!first', (click)='moveTop(chap)')
             i.angle.double.up.icon
             | top
-          button.ui.small.button(*ngIf='!last', (click)='moveBottom(chap)')
+          button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
             i.angle.double.down.icon
             | bottom
-        button.ui.small.button((click)='edit(chap)') Edit
+        button.ui.tiny.button((click)='edit(chap)') Edit
         ng-template([ngIf]="operations")
-          button.ui.small.button((click)='remove(chap)') Remove
+          button.ui.tiny.button((click)='remove(chap)') Remove
 
       a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}
 
@@ -26,18 +26,18 @@
         .eight.wide.field
           textarea(rows='2',[value]='chap.name', #editChapName='')
         .field
-          button.ui.small.button((click)="editingChap=null")
+          button.ui.tiny.button((click)="editingChap=null")
             | Cancel
-          button.ui.small.primary.button((click)="saveChap(chap,editChapName.value)")
+          button.ui.tiny.primary.button((click)="saveChap(chap,editChapName.value)")
             | Save
 
   .ui.hidden.divider
-  .ui.form
+  .ui.small.form
     .fields
       .field
         label New Chapter:
       .eight.wide.field
         input(#chapName='', placeholder='Title')
       .field
-        button.ui.small.primary.button((click)="add(chapName.value); chapName.value=''")
+        button.ui.tiny.primary.button((click)="add(chapName.value); chapName.value=''")
           | Add
