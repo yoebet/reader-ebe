@@ -3,10 +3,10 @@
 .ui.right.rail(*ngIf='beenChanged')
   .ui.list([hidden]='!gotFocus')
     .ui.item
-      button.ui.mini.primary.basic.button((click)='notifySave()', [ngClass]='{disabled: !changed}')
+      button.ui.mini.primary.basic.button((click)='notifySave()', [ngClass]='{disabled: !contentChanged&&!transChanged}')
         i.checkmark.icon
         | 保存
     .ui.item
-      button.ui.mini.primary.basic.button((click)='discard()', [ngClass]='{disabled: !changed}')
+      button.ui.mini.primary.basic.button((click)='discard()', [ngClass]='{disabled: !contentChanged&&!transChanged}')
         i.undo.icon
         | 撤销

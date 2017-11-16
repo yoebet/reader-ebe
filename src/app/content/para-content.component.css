@@ -3,6 +3,10 @@
   flex: 1;
 }
 
+.para-text.trans-text {
+  margin-left: 1em;
+}
+
 .ui.right.rail {
   margin-left: 1em;
   padding-left: 0;

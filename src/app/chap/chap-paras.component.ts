@@ -3,14 +3,17 @@ import 'rxjs/add/operator/switchMap';
 
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
+import {ParaLiveContent} from '../models/para-live-content';
 import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
 import {Annotations} from '../content/annotations';
 
-const LF = '\n';
-const Splitter = /\n\n+/;
+interface ContentChangedNotification {
+  para: Para;
+  liveContent: ParaLiveContent;
+}
 
 @Component({
   selector: 'chap-paras',
@@ -44,7 +47,7 @@ export class ChapParasComponent implements OnInit {
   //   para: {},
   //   pullContent: fn
   // }
-  contentChangedNotification = null;
+  lastChanged: ContentChangedNotification = null;
 
   constructor(private paraService: ParaService) {
   }
@@ -187,32 +190,32 @@ export class ChapParasComponent implements OnInit {
   }
 
   private saveChangedContentIfAny() {
-    if (!this.contentChangedNotification) {
+    if (!this.lastChanged) {
       return;
     }
-    let {para, pullContent} = this.contentChangedNotification;
+    let {para, liveContent} = this.lastChanged;
     //{content, trans}
-    let toSave = pullContent.call();
+    let toSave = liveContent() as any;
     toSave._id = para._id;
     this.save(toSave);
   }
 
-  onContentChange(para, pullContent) {
-    let ccn = this.contentChangedNotification;
+  onContentChange(para, liveContent) {
+    let ccn = this.lastChanged;
     if (ccn && ccn.para._id !== para._id) {
       this.saveChangedContentIfAny();
     }
-    this.contentChangedNotification = {para, pullContent};
+    this.lastChanged = {para, liveContent};
   }
 
   onContentCommand(para, command) {
-    let ccn = this.contentChangedNotification;
+    let ccn = this.lastChanged;
     if (ccn && ccn.para._id === para._id) {
       if (command === 'save') {
         this.saveChangedContentIfAny();
       }
       if (command === 'save' || command === 'discard') {
-        this.contentChangedNotification = null;
+        this.lastChanged = null;
       }
     }
   }
@@ -238,16 +241,17 @@ export class ChapParasComponent implements OnInit {
     if (!this.splitMode) {
       return null;
     }
-    if (!Splitter.test(para.content) &&
-      !Splitter.test(para.trans)) {
+    let splitter = /\n\n+/;
+    if (!splitter.test(para.content) &&
+      !splitter.test(para.trans)) {
       return null;
     }
 
     let parasCreateAfter = [];
-    let contents = para.content.split(Splitter);
+    let contents = para.content.split(splitter);
     let transs = [];
     if (para.trans) {
-      transs = para.trans.split(Splitter);
+      transs = para.trans.split(splitter);
     }
     let size = Math.max(contents.length, transs.length);
     para.content = contents[0] || '';
@@ -263,15 +267,24 @@ export class ChapParasComponent implements OnInit {
     return parasCreateAfter;
   }
 
+  saveSplittedPara(paras) {
+    let para = paras.shift();
+    this.createManyAfterAndUpdate(para, paras);
+  }
+
+  private createManyAfterAndUpdate(para, newParas) {
+    this.paraService.createManyAfter(para, newParas)
+      .subscribe((paras: Para[]) => {
+        let index = this.chap.paras.findIndex(p => p._id === para._id);
+        this.chap.paras.splice(index + 1, 0, ...paras);
+        this.doUpdate(para);
+      });
+  }
+
   private update(para) {
     let parasCreateAfter = this.splitIfNeeded(para);
     if (parasCreateAfter) {
-      this.paraService.createManyAfter(para, parasCreateAfter)
-        .subscribe((paras: Para[]) => {
-          let index = this.chap.paras.findIndex(p => p._id === para._id);
-          this.chap.paras.splice(index + 1, 0, ...paras);
-          this.doUpdate(para);
-        });
+      this.createManyAfterAndUpdate(para, parasCreateAfter);
     } else {
       this.doUpdate(para);
     }
@@ -370,13 +383,13 @@ export class ChapParasComponent implements OnInit {
   private mergeContent(p1, p2, target) {
     let {content: content1, trans: trans1} = p1;
     let {content: content2, trans: trans2} = p2;
-    let content = content1 + LF + content2;
+    let content = content1 + '\n' + content2;
     let trans;
     if (trans1 || trans2) {
       if (!trans1) {
         trans = trans2;
       } else if (trans2) {
-        trans = trans1 + LF + trans2;
+        trans = trans1 + '\n' + trans2;
       }
     }
     target.content = content;

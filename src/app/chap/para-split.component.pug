@@ -1,0 +1,28 @@
+.ui.header.para-split-header
+  | 分段 & 对齐
+  span.tip （按空行分段）
+.ui.content
+  .ui.column.grid.form.para-split(#parasGrid='')
+    .row.splitted-para(*ngFor='let row of rows; index as index; first as first')
+      .two.wide.column
+        .ui.right.floated.list.left-buttons
+          .ui.item
+            button.ui.right.floated.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"left")')
+              i.chevron.up.icon
+              | 合并
+            .ui.mini.teal.label.rowno {{index+1}}
+      .six.wide.column
+        textarea([(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)',
+        (blur)='onBlur(index,"left",$event)')
+      .six.wide.column
+        textarea([(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)',
+        (blur)='onBlur(index,"right",$event)')
+      .two.wide.column
+        .ui.list.right-buttons
+          .ui.item
+            button.ui.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"right")')
+              i.chevron.up.icon
+              | 合并
+.actions
+  button.ui.tiny.button((click)="cancel()") 取消
+  button.ui.tiny.primary.button((click)="completeAndSave()", autofocus='') 完成并保存

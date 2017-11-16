@@ -1,7 +1,8 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
-import 'rxjs/add/operator/switchMap';
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Para} from '../models/para';
+import {ParaSplitModal} from './para-split.component';
 
 @Component({
   selector: 'para-form',
@@ -13,7 +14,11 @@ export class ParaFormComponent implements OnInit {
   @Input() para: Para;
   @Input() showTrans: boolean;
   @Output() onSave = new EventEmitter<Para>();
+  @Output() onSplit = new EventEmitter<Para[]>();
   @Output() onCancel = new EventEmitter();
+
+  constructor(public modalService: SuiModalService) {
+  }
 
   ngOnInit(): void {
     if (this.para) {
@@ -42,4 +47,18 @@ export class ParaFormComponent implements OnInit {
   cancel() {
     this.onCancel.emit();
   }
+
+  splitParas() {
+    this.modalService
+      .open(new ParaSplitModal(this.para))
+      .onApprove((paras: Para[]) => {
+        this.para.content = paras[0].content;
+        this.para.trans = paras[0].trans;
+        //keep other fields
+        paras[0] = this.para;
+        this.onSplit.emit(paras);
+      });
+    // .onDeny((d) => {});
+  }
+
 }

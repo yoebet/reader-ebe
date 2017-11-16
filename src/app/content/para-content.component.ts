@@ -3,6 +3,7 @@ import {
   Component, ViewChild, ViewContainerRef
 } from '@angular/core';
 
+import {ParaLiveContent} from '../models/para-live-content';
 import {SelectionAnnotator} from './selection-annotator';
 import {Annotations} from './annotations';
 
@@ -21,11 +22,11 @@ export class ParaContentComponent implements OnChanges {
   @Input() editable: boolean;
   @Input() annotating: boolean;
   @Input() annotation: string;
-  @Output() contentChange = new EventEmitter();
-  @Output() contentCommand = new EventEmitter();
+  @Output() contentChange = new EventEmitter<ParaLiveContent>();
+  @Output() contentCommand = new EventEmitter<string>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
-  changed = false;
+  contentChanged = false;
   transChanged = false;
   transRendered = false;
 
@@ -61,18 +62,24 @@ export class ParaContentComponent implements OnChanges {
     this.onContentChange();
   }
 
+  private onContentChange() {
+    if (this.contentChanged) {
+      return;
+    }
+    this.beenChanged = true;
+    this.contentChanged = true;
+    this.contentChange.emit(this.getLiveContent.bind(this));
+  }
+
   onTransKeyup() {
     if (!this.editable) {
       return;
     }
+    if (this.transChanged) {
+      return;
+    }
+    this.beenChanged = true;
     this.transChanged = true;
-    this.beenChanged = true;
-    this.contentChange.emit(this.getLiveContent.bind(this));
-  }
-
-  private onContentChange() {
-    this.beenChanged = true;
-    this.changed = true;
     this.contentChange.emit(this.getLiveContent.bind(this));
   }
 
@@ -81,6 +88,9 @@ export class ParaContentComponent implements OnChanges {
     let contents = [];
     //:scope > .part
     let textEls = contentEl.querySelectorAll('.para-text > .part');
+    if (textEls.length === 0) {
+      textEls = [contentEl];
+    }
     for (let textEl of textEls) {
       //ofui: Only For UI
       let toStripElements = textEl.querySelectorAll('.ofui, br');
@@ -99,16 +109,14 @@ export class ParaContentComponent implements OnChanges {
 
     let contents: any = {};
 
-    if (this.changed) {
+    if (this.contentChanged) {
       let contentEl = this.paraText.element.nativeElement;
-      let content = this.parseHtml(contentEl);
-      contents.content = content;
-      this.changed = false;
+      contents.content = this.parseHtml(contentEl);
+      this.contentChanged = false;
     }
     if (this.transChanged) {
       let transEl = this.paraTrans.element.nativeElement;
-      let trans = this.parseHtml(transEl);
-      contents.trans = trans;
+      contents.trans = this.parseHtml(transEl);
       this.transChanged = false;
     }
 
@@ -121,9 +129,9 @@ export class ParaContentComponent implements OnChanges {
 
   discard() {
     this.contentCommand.emit('discard');
-    if (this.changed) {
-      this.changed = false;
-      this.refresh();
+    if (this.contentChanged) {
+      this.contentChanged = false;
+      this.refreshContent();
     }
     if (this.transChanged) {
       this.transChanged = false;
@@ -131,8 +139,8 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
-  refresh() {
-    let html = this.content;
+  refreshContent() {
+    let html = this.content || ' ';
     // html = html.replace(
     //   /\n/g,
     //   () =>
@@ -143,7 +151,7 @@ export class ParaContentComponent implements OnChanges {
   }
 
   refreshTrans() {
-    let html = this.trans || '';
+    let html = this.trans || ' ';
     html = `<div class="part">${html}</div>`;
     this.paraTrans.element.nativeElement.innerHTML = html;
     this.transRendered = true;
@@ -157,7 +165,7 @@ export class ParaContentComponent implements OnChanges {
       this.refreshTrans();
     }
     if (changes.content) {
-      this.refresh();
+      this.refreshContent();
       return;
     }
     if (changes.annotation) {

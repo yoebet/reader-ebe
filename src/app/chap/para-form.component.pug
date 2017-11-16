@@ -1,10 +1,21 @@
 .fields
-  .wide.field([ngClass]='showTrans? "seven":"fourteen"')
+  .wide.field([ngClass]='showTrans? "eight":"sixteen"')
     textarea([(ngModel)]="para.content", #content='', spellcheck='false')
-  .seven.wide.field(*ngIf='showTrans')
+  .eight.wide.field(*ngIf='showTrans')
     textarea([(ngModel)]="para.trans", #trans='', spellcheck='false')
-  .field
+.field
+  button.ui.tiny.button((click)='splitParas()')
+    i.align.right.icon
+    | &nbsp;
+    i.align.left.icon
+    | 分段 & 中英对齐
+  .ui.right.floated.tiny.buttons
     button.ui.tiny.button((click)='cancel()') 取消
-    br
-    br
+    .or
     button.ui.tiny.primary.button((click)='save()') 保存
+
+//ng-template(let-context='', let-modal='modal', #splitAlignTemplate='')
+  para-split([content]='para.content', [trans]='para.trans')
+  //.actions
+    button.ui.button((click)="modal.deny('denied')") Cancel
+    //button.ui.primary.button((click)="modal.approve('approved')", autofocus='') OK

@@ -19,6 +19,7 @@ import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';
+import {ParaSplitComponent} from './chap/para-split.component';
 import {ParaContentComponent} from './content/para-content.component';
 import {DictComponent} from './dict/dict.component';
 
@@ -38,10 +39,12 @@ import {DictComponent} from './dict/dict.component';
     ChapComponent,
     ChapParasComponent,
     ParaFormComponent,
+    ParaSplitComponent,
     ParaContentComponent,
     DictComponent
   ],
   providers: [BookService, ChapService, ParaService, DictService],
+  entryComponents: [ParaSplitComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

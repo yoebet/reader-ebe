@@ -60,16 +60,13 @@ div(*ngIf='chap')
             [ngClass]='{active: ann===currentAnnotation}',
             (click)='switchAnnotation(ann,$event)')
               span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
-      //.ui.mini.basic.vertical.buttons(*ngFor='let agroup of groupedAnnotations')
-        .ui.mini.basic.button(*ngFor='let ann of agroup.annotations', [ngClass]='{active: ann===currentAnnotation}', (click)='switchAnnotation(ann)')
-          span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
 
   .ui.list.items
     ng-template(ngFor='', let-para='', [ngForOf]="chap.paras", let-index="index", let-first="first", let-last="last", [ngForTrackBy]="paraTracker")
       .item.paragraph(*ngIf='index===insertPos')
         .ui.left.floated.mini.statistic.para-no
           .value +
-        para-form.ui.form.content((onSave)="save($event)", (onCancel)="cancelEdit()")
+        para-form.ui.form.content((onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
@@ -86,13 +83,13 @@ div(*ngIf='chap')
         (contentChange)="onContentChange(para,$event)",
         (contentCommand)="onContentCommand(para,$event)")
 
-        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para',
-        [showTrans]='showTrans', (onSave)="save($event)", (onCancel)="cancelEdit()")
+        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
+        (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
     .item.paragraph(*ngIf='insertPos===chap.paras.length')
       .ui.left.floated.mini.statistic.para-no
         .value +
-      para-form.ui.form.content((onSave)="save($event)", (onCancel)="cancelEdit()")
+      para-form.ui.form.content((onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
   .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
