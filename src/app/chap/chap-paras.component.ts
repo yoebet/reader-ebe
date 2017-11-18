@@ -151,6 +151,7 @@ export class ChapParasComponent implements OnInit {
   removeFromLatest(annotation, $event) {
     this.latestAnnotations = this.latestAnnotations.filter(a => a !== annotation);
     $event.preventDefault();
+    $event.stopPropagation();
   }
 
   remove(para: Para): void {
@@ -177,6 +178,7 @@ export class ChapParasComponent implements OnInit {
     if (!para) {
       return;
     }
+    this.insertPos = null;
     this.editingPara = para;
   }
 
@@ -225,6 +227,7 @@ export class ChapParasComponent implements OnInit {
     if (!para) {
       return;
     }
+    this.editingPara = null;
     this.insertPos = this.chap.paras.indexOf(para);
   }
 
@@ -268,8 +271,12 @@ export class ChapParasComponent implements OnInit {
   }
 
   saveSplittedPara(paras) {
-    let para = paras.shift();
-    this.createManyAfterAndUpdate(para, paras);
+    if (paras[0]._id) {
+      let para = paras.shift();
+      this.createManyAfterAndUpdate(para, paras);
+    } else {
+      this.createMany(paras);
+    }
   }
 
   private createManyAfterAndUpdate(para, newParas) {
@@ -323,6 +330,27 @@ export class ChapParasComponent implements OnInit {
       });
   }
 
+  private createMany(paras) {
+
+    let obs;
+    if (this.insertPos < this.chap.paras.length) {
+      let target = this.chap.paras[this.insertPos];
+      obs = this.paraService.createManyBefore(target._id, paras);
+    } else {
+      obs = this.paraService.createMany(paras);
+    }
+    obs.subscribe(ps => {
+      this.chap.paras.splice(this.insertPos, 0, ...ps);
+
+      if (this.continuousEditing) {
+        this.paraFormComponent.clear();
+        this.insertPos += ps.length;
+      } else {
+        this.insertPos = null;
+      }
+    });
+  }
+
   save(para) {
     if (para._id) {
       this.update(para);
@@ -337,23 +365,7 @@ export class ChapParasComponent implements OnInit {
 
     if (paras) {
       paras.unshift(para);
-      let obs;
-      if (this.insertPos < this.chap.paras.length) {
-        let target = this.chap.paras[this.insertPos];
-        obs = this.paraService.createManyBefore(target._id, paras);
-      } else {
-        obs = this.paraService.createMany(paras);
-      }
-      obs.subscribe(ps => {
-        this.chap.paras.splice(this.insertPos, 0, ...ps);
-
-        if (this.continuousEditing) {
-          this.paraFormComponent.clear();
-          this.insertPos += ps.length;
-        } else {
-          this.insertPos = null;
-        }
-      });
+      this.createMany(paras);
       return;
     }
 

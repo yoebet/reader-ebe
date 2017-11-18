@@ -7,7 +7,7 @@
       .two.wide.column
         .ui.right.floated.list.left-buttons
           .ui.item
-            button.ui.right.floated.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"left")')
+            button.ui.right.floated.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"left", $event)')
               i.chevron.up.icon
               | 合并
             .ui.mini.teal.label.rowno {{index+1}}
@@ -20,7 +20,7 @@
       .two.wide.column
         .ui.list.right-buttons
           .ui.item
-            button.ui.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"right")')
+            button.ui.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"right", $event)')
               i.chevron.up.icon
               | 合并
 .actions

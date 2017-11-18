@@ -40,7 +40,8 @@ export class ParaContentComponent implements OnChanges {
     return this._annotator;
   }
 
-  onMouseup() {
+  onMouseup($event) {
+    $event.stopPropagation();
     if (!this.gotFocus) {
       return;
     }
@@ -55,7 +56,8 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
-  onKeyup() {
+  onKeyup($event) {
+    $event.stopPropagation();
     if (!this.editable) {
       return;
     }
@@ -71,7 +73,8 @@ export class ParaContentComponent implements OnChanges {
     this.contentChange.emit(this.getLiveContent.bind(this));
   }
 
-  onTransKeyup() {
+  onTransKeyup($event) {
+    $event.stopPropagation();
     if (!this.editable) {
       return;
     }

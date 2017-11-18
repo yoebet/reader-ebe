@@ -26,6 +26,10 @@
   margin: 0;
 }
 
+.item.paragraph .ui.form {
+  margin-bottom: 1em;
+}
+
 .ui.statistic.para-no {
   min-width: 1.8em;
   padding-top: 0.6em;

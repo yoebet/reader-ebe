@@ -35,14 +35,17 @@ export class ParaSplitComponent implements AfterContentChecked {
   }
 
   onKeyup(index, part, $event) {
+    $event.stopPropagation();
     let textarea = $event.target;
     let idx = textarea.value.indexOf('\n\n');
     if ($event.keyCode === 13 && idx >= 0) {
       let texts = textarea.value.split(/\n\n+/);
       let addedRowCount = texts.length - 1;
-      let lastRow = this.rows[this.rows.length - 1];
-      if (lastRow[part] == '') {
-        addedRowCount--;
+      for (let i = this.rows.length - 1; i > 1; i--) {
+        let r = this.rows[i];
+        if (r[part] == '' && addedRowCount > 0) {
+          addedRowCount--;
+        }
       }
       for (let i = index + 1; i < this.rows.length; i++) {
         let row = this.rows[i];
@@ -64,22 +67,21 @@ export class ParaSplitComponent implements AfterContentChecked {
 
 
   onBlur(index, part, $event) {
+    $event.stopPropagation();
     let textarea = $event.target;
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
   }
 
-  private mergeRow(row1, row2, part) {
-    if (row1[part] && row2[part]) {
-      row1[part] = row1[part] + '\n';
-    }
-    row1[part] = row1[part] + row2[part];
-  }
-
-  moveUp(index, part) {
+  moveUp(index, part, $event) {
     let preRow = this.rows[index - 1];
     let thisRow = this.rows[index];
-    this.mergeRow(preRow, thisRow, part);
+
+    if (preRow[part] && thisRow[part]) {
+      preRow[part] = preRow[part] + '\n';
+    }
+    preRow[part] = preRow[part] + thisRow[part];
+
     for (let i = index; i < this.rows.length - 1; i++) {
       let r1 = this.rows[i];
       let r2 = this.rows[i + 1];
