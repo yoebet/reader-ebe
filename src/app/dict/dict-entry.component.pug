@@ -35,5 +35,5 @@
     .ui.right.floated.tiny.buttons
       button.ui.mini.button((click)='cancel()') 取消
       .or
-      button.ui.mini.primary.button([ngClass]='{disabled: !selectedItemChanged}', (click)='done()') 确定
+      button.ui.mini.primary.button([ngClass]='{disabled: oriItemId===selectedItemId}', (click)='done()') 确定
     .optip 选择义项

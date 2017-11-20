@@ -47,6 +47,24 @@ export class ParaContentComponent implements OnChanges {
     return this._annotator;
   }
 
+  private removeTagIfDummy(el) {
+    if (el.tagName !== 'SPAN') {
+      return;
+    }
+    if (el.className === '') {
+      el.removeAttribute('class');
+    }
+    if (!el.hasAttributes()) {
+      //remove tag
+      let pp = el.parentNode;
+      while (el.firstChild) {
+        pp.insertBefore(el.firstChild, el);
+      }
+      pp.removeChild(el);
+      pp.normalize();
+    }
+  };
+
   selectWordMeaning() {
     let wordTag = this.annotator.getOrCreateWordTag();
     if (!wordTag) {
@@ -63,19 +81,16 @@ export class ParaContentComponent implements OnChanges {
 
     let meaningItemSelectedCallback = (mid) => {
       if (mid != null && oriMid !== mid) {
-        element.dataset.mid = mid;
+        if (mid === -1) {
+          element.removeAttribute('data-mid');
+          this.removeTagIfDummy(element);
+        } else {
+          element.dataset.mid = mid;
+        }
         this.onContentChange();
       } else {
         // cancel
-        if (created && !element.hasAttributes()) {
-          //remove tag
-          let pp = element.parentNode;
-          while (element.firstChild) {
-            pp.insertBefore(element.firstChild, element);
-          }
-          pp.removeChild(element);
-          pp.normalize();
-        }
+        this.removeTagIfDummy(element);
       }
     };
 

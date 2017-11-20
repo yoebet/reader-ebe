@@ -1,5 +1,4 @@
 
-
 .simple-explain-row, .pos-header {
   /*line-height: 2.5em;*/
 }
@@ -26,7 +25,8 @@
   padding: 0 0.4rem;
   margin-left: 0.1rem;
   display: inline-block;
-  background: silver;
+  background: #e8e8e8;
+  color: rgba(0, 0, 0, 0.8);
   font-size: 0.8rem;
   line-height: 1.1rem;
 }

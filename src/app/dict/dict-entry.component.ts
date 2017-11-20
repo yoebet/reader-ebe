@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit} from '@angular/core';
 
 import {DictEntry, PosMeanings, MeaningItem, TagLabelMap} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -8,15 +8,19 @@ import {DictService} from '../services/dict.service';
   templateUrl: './dict-entry.component.html',
   styleUrls: ['./dict-entry.component.css']
 })
-export class DictEntryComponent implements AfterViewInit {
+export class DictEntryComponent implements OnInit, AfterViewInit {
   @Input() entry: DictEntry;
   @Input() selectedItemId: number;
   @Output() viewReady = new EventEmitter();
   @Output() dictItemSelected = new EventEmitter();
   viewReadyEntry = null;
-  selectedItemChanged = false;
+  oriItemId = null;
 
   constructor(private dictService: DictService) {
+  }
+
+  ngOnInit() {
+    this.oriItemId = this.selectedItemId;
   }
 
   get cats() {
@@ -28,10 +32,12 @@ export class DictEntryComponent implements AfterViewInit {
   }
 
   clickMeaningItem(pm: PosMeanings, mi: MeaningItem) {
-    if (this.selectedItemId !== mi.id) {
-      this.selectedItemId = mi.id;
-      this.selectedItemChanged = true;
+    if (mi.id === this.selectedItemId) {
+      // null: not set; -1: unset
+      this.selectedItemId = (this.oriItemId === null) ? null : -1;
+      return;
     }
+    this.selectedItemId = mi.id;
   }
 
   ngAfterViewInit() {
