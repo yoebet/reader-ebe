@@ -10,6 +10,12 @@ import {OpResult} from '../models/op-result';
 import {ParaFormComponent} from './para-form.component';
 import {Annotations} from '../content/annotations';
 
+import {DictEntry} from '../models/dict-entry';
+
+import Tether from 'tether';
+
+// import Drop from 'tether-drop';
+
 interface ContentChangedNotification {
   para: Para;
   liveContent: ParaLiveContent;
@@ -43,6 +49,10 @@ export class ChapParasComponent implements OnInit {
   agPopupHiddenTimer = null;
   agPopupTimer = null;
 
+  dictTether = null;
+  dictWordElement: Element = null;
+  dictEntry: DictEntry = null;
+
   // {
   //   para: {},
   //   pullContent: fn
@@ -63,6 +73,18 @@ export class ChapParasComponent implements OnInit {
         this.latestAnnotations.push(ag.annotations[i]);
       }
     }
+
+    document.addEventListener('click', (event) => {
+      if (this.dictWordElement) {
+        let dictPopup = document.getElementById('dictPopup');
+        if (event.target) {
+          if (dictPopup.contains(event.target as Node)) {
+            return;
+          }
+        }
+        this.closeDictPopup();
+      }
+    }, true)
 
   }
 
@@ -454,6 +476,52 @@ export class ChapParasComponent implements OnInit {
     let targetPara = paras[index + 1];
     this.mergeContent(para, targetPara, targetPara);
     this.saveMerge(targetPara, para);
+  }
+
+  private tetherClassPrefix = 'dp';
+
+  private closeDictPopup() {
+    if (this.dictTether) {
+      this.dictTether.destroy();
+      this.dictTether = null;
+    }
+    if (this.dictWordElement) {
+      let el = this.dictWordElement;
+      el.className = el.className.split(' ')
+        .filter(n => !n.startsWith(this.tetherClassPrefix + '-')).join(' ');
+      this.dictWordElement = null;
+    }
+  }
+
+  onDictRequest(dictRequest) {
+
+    this.closeDictPopup();
+
+    let dictPopup = document.getElementById('dictPopup');
+    let {wordElement, dictEntry} = dictRequest;
+    this.dictWordElement = wordElement;
+    this.dictEntry = dictEntry;
+
+    this.dictTether = new Tether({
+      element: dictPopup,
+      target: wordElement,
+      attachment: 'top center',
+      targetAttachment: 'bottom center',
+      constraints: [
+        {
+          to: 'window',
+          attachment: 'together'
+        }
+      ],
+      // optimizations: {
+      //   gpu: false
+      // },
+      // classes: {
+      //   'out-of-bounds': false
+      // },
+      classPrefix: this.tetherClassPrefix
+    });
+
   }
 
   paraTracker(index, para) {

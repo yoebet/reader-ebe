@@ -15,25 +15,25 @@
         .entry-word {{entry.word}}
         .categories
           .cat-labels([hidden]='editCategories')
-            label.ui.mini.label(*ngIf='categories.cet4') CET 4
-            label.ui.mini.label(*ngIf='categories.cet6') CET 6
-            label.ui.mini.label(*ngIf='categories.gre') GRE
-            label.ui.mini.label(*ngIf='categories.yasi') 雅思
-            label.ui.mini.label(*ngIf='categories.pro4') 专四
-            label.ui.mini.label(*ngIf='categories.pro8') 专八
-            ng-template([ngIf]='categories.haici')
-              label.ui.mini.label 海词 {{entry.categories.haici}}星
+            label.ui.mini.label(*ngIf='cats.cet4') CET 4
+            label.ui.mini.label(*ngIf='cats.cet6') CET 6
+            label.ui.mini.label(*ngIf='cats.gre') GRE
+            label.ui.mini.label(*ngIf='cats.yasi') 雅思
+            label.ui.mini.label(*ngIf='cats.pro4') 专四
+            label.ui.mini.label(*ngIf='cats.pro8') 专八
+            ng-template([ngIf]='cats.haici')
+              label.ui.mini.label 海词 {{cats.haici}}星
             a([hidden]='!editing || editCategories', (click)='editCategories=true', href='javascript:') 设置范围
           .ui.inline.field(*ngIf='editCategories')
-            sui-checkbox([(ngModel)]="categories.cet4") CET 4
-            sui-checkbox([(ngModel)]="categories.cet6") CET 6
-            sui-checkbox([(ngModel)]="categories.gre") GRE
-            sui-checkbox([(ngModel)]="categories.yasi") 雅思
-            sui-checkbox([(ngModel)]="categories.pro4") 专四
-            sui-checkbox([(ngModel)]="categories.pro8") 专八
+            sui-checkbox([(ngModel)]="cats.cet4") CET 4
+            sui-checkbox([(ngModel)]="cats.cet6") CET 6
+            sui-checkbox([(ngModel)]="cats.gre") GRE
+            sui-checkbox([(ngModel)]="cats.yasi") 雅思
+            sui-checkbox([(ngModel)]="cats.pro4") 专四
+            sui-checkbox([(ngModel)]="cats.pro8") 专八
             span
               | 海词
-              sui-select.inline([(ngModel)]="entry.categories.haici",
+              sui-select.inline([(ngModel)]="cats.haici",
               [options]='[{v: 0, l: "无"}, {v: 1, l: "1星"}, {v: 2, l: "2星"}, {v: 3, l: "3星"}, {v: 4, l: "4星"}, {v: 5, l: "5星"}]',
               valueField="v", labelField="l", placeholder='星级', #haiciSelect='')
                 sui-select-option(*ngFor="let option of haiciSelect.filteredOptions", [value]="option")

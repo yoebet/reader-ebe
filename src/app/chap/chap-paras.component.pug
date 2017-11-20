@@ -81,7 +81,8 @@ div(*ngIf='chap')
         [ngClass]='{"selected": para===selectedPara}',
         (click)='selectPara(para)',
         (contentChange)="onContentChange(para,$event)",
-        (contentCommand)="onContentCommand(para,$event)")
+        (contentCommand)="onContentCommand(para,$event)",
+        (dictRequest)="onDictRequest($event)")
 
         para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
         (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
@@ -94,3 +95,6 @@ div(*ngIf='chap')
   .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
     button.ui.tiny.button((click)='append()') 新增
+
+  #dictPopup.ui.basic.popup
+    dict-entry([entry]='dictEntry')

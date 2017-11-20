@@ -29,6 +29,7 @@
 /*@import url('assets/semantic/accordion.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
 /*@import url('assets/semantic/tab.css');*/
+@import url('assets/dict-popup.css');
 @import url('assets/annotations.css');
 
 .pre-wrap {
@@ -83,7 +84,6 @@ sui-multi-select i.list.icon {
 .splitted-para.row .column {
   padding: 0 !important;
 }
-
 
 .splitted-para textarea {
   height: initial;

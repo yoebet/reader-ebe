@@ -7,6 +7,9 @@ import {ParaLiveContent} from '../models/para-live-content';
 import {SelectionAnnotator} from './selection-annotator';
 import {Annotations} from './annotations';
 
+import {DictEntry} from '../models/dict-entry';
+import {DictService} from '../services/dict.service';
+
 @Component({
   selector: 'para-content',
   templateUrl: './para-content.component.html',
@@ -24,11 +27,15 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
+  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry }>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
   contentChanged = false;
   transChanged = false;
   transRendered = false;
+
+  constructor(private dictService: DictService) {
+  }
 
   get annotator() {
     if (!this._annotator) {
@@ -40,16 +47,35 @@ export class ParaContentComponent implements OnChanges {
     return this._annotator;
   }
 
+  selectWordMeaning() {
+    let wordTag = this.annotator.getOrCreateWordTag();
+    if (!wordTag) {
+      return;
+    }
+    console.log(wordTag);
+    let {element, word, created} = wordTag;
+
+    this.dictService.getEntry(word).subscribe((entry: DictEntry) => {
+      if (entry) {
+        //selectCallback
+        //cancelCallback
+        let dr = {wordElement: element, dictEntry: entry};
+        this.dictRequest.emit(dr);
+      }
+    });
+
+  }
+
   onMouseup($event) {
     $event.stopPropagation();
     if (!this.gotFocus) {
       return;
     }
+    this.selectWordMeaning();
+
     if (!this.annotating) {
       return;
     }
-    // let annos = this.annotator.getAnnotationsAtCursor();
-    // console.log(annos);
     let altered = this.annotator.annotate();
     if (altered) {
       this.onContentChange();

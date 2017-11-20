@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {DictEntry, PosMeanings, MeaningItem} from '../models/dict-entry';
+import {DictEntry, PosMeanings, MeaningItem, PosTags, TagLabelMap, POS} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
 
@@ -27,53 +27,8 @@ export class DictComponent {
 
   entryHistory: DictEntry[] = [];
 
-  private static _POS = [
-    {abbr: 'n.', name: 'n. 名词'},
-    {abbr: 'v.', name: 'v. 动词'},
-    {abbr: 'adj.', name: 'adj. 形容词'},
-    {abbr: 'adv.', name: 'adv. 副词'},
-    {abbr: 'prep.', name: 'prep. 介词'},
-    {abbr: 'pron.', name: 'pron. 代词'},
-    {abbr: 'conj.', name: 'conj. 连词'},
-    {abbr: 'int.', name: 'int. 感叹词'},
-    {abbr: 'other', name: 'other...'},
-  ];
   posOptions = null;
 
-
-  private _posTags = {
-    common: [
-      {value: 'idiom', label: '习语'},
-      {value: 'colloquial', label: '口语'},
-      {value: 'figurative', label: '比喻'},
-      {value: 'slang', label: '俚语'},
-      {value: 'euphemism', label: '委婉'}
-    ],
-    'n.': [
-      {value: 'individual', label: '个体'},
-      {value: 'collective', label: '集体'},
-      {value: 'material', label: '物质'},
-      {value: 'abstract', label: '抽象'},
-      {value: 'countable', label: '可数'},
-      {value: 'uncountable', label: '不可数'},
-      {value: 'singular', label: '单数'},
-      {value: 'countable', label: '复数'},
-      {value: 'gerund', label: '动名词'},
-      {value: 'proper', label: '专有'}
-    ],
-    'v.': [
-      {value: 'transitive', label: 'vt.'},
-      {value: 'intransitive', label: 'vi.'},
-      {value: 'ergative', label: 'vi.&vt.'},
-      {value: 'link', label: '系动词'},
-      {value: 'modal', label: '情态'},
-      {value: 'ditransitive', label: '双宾'},
-      {value: 'irregular', label: '不规则'},
-      {value: 'instantaneous', label: '短暂'}
-    ]
-  };
-
-  private _tagLabelMap = null;
 
   dictSearch = (key: string) => {
     key = key.trim();
@@ -85,12 +40,12 @@ export class DictComponent {
               private router: Router) {
   }
 
-  get categories() {
+  get cats() {
     return this.entry.categories;
   }
 
   get posTags() {
-    let pt = this._posTags;
+    let pt = PosTags;
     let merged = pt.common;
     let pm = this.editingPosMeanings;
     if (pm && pt[pm.pos]) {
@@ -100,18 +55,7 @@ export class DictComponent {
   }
 
   get tagLabelMap() {
-    if (this._tagLabelMap == null) {
-      let tm = this._tagLabelMap = {};
-      for (let pos in this._posTags) {
-        let tags = this._posTags[pos];
-        if (tags) {
-          for (let tag of tags) {
-            tm[tag.value] = tag.label;
-          }
-        }
-      }
-    }
-    return this._tagLabelMap;
+    return TagLabelMap;
   }
 
   selectEntry(entrySimple) {
@@ -212,7 +156,7 @@ export class DictComponent {
   newPosMeanings() {
     this.newPos = new PosMeanings();
     let poss = this.entry.complete.map(pm => pm.pos);
-    this.posOptions = DictComponent._POS
+    this.posOptions = POS
       .filter(posOption => poss.indexOf(posOption.abbr) === -1);
   }
 

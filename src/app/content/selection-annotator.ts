@@ -228,7 +228,9 @@ export class SelectionAnnotator {
       }
     }
 
-    if (classList.length === 0 && tagName === this.inlineTagName.toUpperCase()) {
+    if (classList.length === 0 &&
+      tagName === this.inlineTagName.toUpperCase() &&
+      !element.hasAttributes()) {
       removeTag = true;
     }
 
@@ -510,6 +512,86 @@ export class SelectionAnnotator {
     }
 
     return true;
+  }
+
+  // return {element,created}
+  getOrCreateWordTag(maxWords = 3, minLength = 3) {
+    let selection = window.getSelection();
+
+    let node1 = selection.anchorNode;
+    let node2 = selection.focusNode;
+
+    if (!node1 || !node2) {
+      return null;
+    }
+
+    let offset1 = selection.anchorOffset;
+    let offset2 = selection.focusOffset;
+
+    if (node1.nodeType !== Node.TEXT_NODE
+      || node2.nodeType !== Node.TEXT_NODE) {
+      return null;
+    }
+
+    if (node1.parentNode !== node2.parentNode) {
+      return null;
+    }
+
+    if (!this.inContainer(node1, node2)) {
+      return null;
+    }
+
+    let textNode1 = node1 as Text;
+    let textNode2 = node2 as Text;
+
+    if (textNode1 !== textNode2) {
+      return null;
+    }
+
+    let nodeText = textNode1.textContent;
+    if (offset1 > offset2) {
+      [offset1, offset2] = [offset2, offset1];
+    }
+
+    let [wordStart, wordEnd] = [offset1, offset2];
+    if (this.isExtendWholeWord) {
+      [wordStart, wordEnd] = this.extendWholeWord(nodeText, wordStart, wordEnd);
+    }
+    if (wordStart === wordEnd) {
+      return null;
+    }
+
+    let selectedText = nodeText.substring(wordStart, wordEnd);
+    if (selectedText.length < minLength) {
+      return null;
+    }
+    if (selectedText.split(/ +/).length > maxWords) {
+      return null;
+    }
+
+    if (selectedText === nodeText) {
+      if (textNode1.previousSibling === null && textNode1.nextSibling === null) {
+        // the only one TextNode
+        let exactNode = textNode1.parentNode as Element;
+        return {element: exactNode, word: selectedText, created: false};
+      }
+    }
+
+    let wordsNode = textNode1;
+    if (wordStart > 0) {
+      wordsNode = wordsNode.splitText(wordStart);
+    }
+    if (wordEnd < nodeText.length) {
+      wordsNode.splitText(selectedText.length);
+    }
+
+    let parent = textNode1.parentNode;
+
+    let wrapping = document.createElement(this.inlineTagName) as Element;
+    parent.replaceChild(wrapping, wordsNode);
+    wrapping.appendChild(wordsNode);
+
+    return {element: wrapping, word: selectedText, created: true};
   }
 
 }

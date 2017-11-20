@@ -22,6 +22,7 @@ import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
 import {ParaContentComponent} from './content/para-content.component';
 import {DictComponent} from './dict/dict.component';
+import {DictEntryComponent} from './dict/dict-entry.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import {DictComponent} from './dict/dict.component';
     ParaFormComponent,
     ParaSplitComponent,
     ParaContentComponent,
-    DictComponent
+    DictComponent,
+    DictEntryComponent
   ],
   providers: [BookService, ChapService, ParaService, DictService],
   entryComponents: [ParaSplitComponent],
