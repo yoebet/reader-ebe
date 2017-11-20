@@ -51,6 +51,7 @@ export class ParaFormComponent implements OnInit {
   splitParas() {
     this.modalService
       .open(new ParaSplitModal(this.para))
+      // .onDeny((d) => {})
       .onApprove((paras: Para[]) => {
         this.para.content = paras[0].content;
         this.para.trans = paras[0].trans;
@@ -58,7 +59,6 @@ export class ParaFormComponent implements OnInit {
         paras[0] = this.para;
         this.onSplit.emit(paras);
       });
-    // .onDeny((d) => {});
   }
 
 }

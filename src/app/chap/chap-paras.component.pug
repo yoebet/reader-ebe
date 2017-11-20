@@ -97,4 +97,8 @@ div(*ngIf='chap')
     button.ui.tiny.button((click)='append()') 新增
 
   #dictPopup.ui.basic.popup
-    dict-entry([entry]='dictEntry')
+    dict-entry(*ngIf='dictRequest',
+    [entry]='dictRequest.dictEntry',
+    [selectedItemId]='dictRequest.meaningItemId',
+    (viewReady)='onDictPopupReady()',
+    (dictItemSelected)='onDictItemSelect($event)')

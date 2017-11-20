@@ -37,11 +37,12 @@
 
 .ui.list.meaning-items {
   margin-top: 0;
-  margin-left: 3em;
+  margin-left: 2em;
 }
 
-.ui.list.meaning-items .item sui-select-option {
-  line-height: 1rem;
+.ui.selection.list > .item {
+  padding: 0.3rem 0;
+  color: inherit;
 }
 
 .ui.header.entry-header {
@@ -70,4 +71,13 @@
 .meaning-item .ui.label {
   /*padding: 0.5833em 0.833em;*/
   padding: 0.2em 0.3em;
+}
+
+.optip {
+  color: silver;
+  font-size: 0.8em;
+}
+
+.meaning-item.selected {
+  color: #bf4040;
 }

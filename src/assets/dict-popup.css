@@ -7,18 +7,15 @@
   .dp-element.dp-enabled {
     display: block; }
 
-.dp-target {
-  background: yellow;
-}
-
 .dp-element-attached-bottom.dp-target-attached-top {
   margin-top: -5px;
 }
 
 .dp-element-attached-top.dp-target-attached-bottom {
-  margin-top: 5px;
+  margin-top: 3px;
 }
 
-/*.dp-element.ui.popup {*/
-  /*display: block;*/
-/*}*/
+
+.dp-target {
+  background: yellow;
+}

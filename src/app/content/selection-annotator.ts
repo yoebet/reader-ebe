@@ -572,7 +572,7 @@ export class SelectionAnnotator {
     if (selectedText === nodeText) {
       if (textNode1.previousSibling === null && textNode1.nextSibling === null) {
         // the only one TextNode
-        let exactNode = textNode1.parentNode as Element;
+        let exactNode = textNode1.parentNode as HTMLElement;
         return {element: exactNode, word: selectedText, created: false};
       }
     }
@@ -587,7 +587,7 @@ export class SelectionAnnotator {
 
     let parent = textNode1.parentNode;
 
-    let wrapping = document.createElement(this.inlineTagName) as Element;
+    let wrapping = document.createElement(this.inlineTagName) as HTMLElement;
     parent.replaceChild(wrapping, wordsNode);
     wrapping.appendChild(wordsNode);
 

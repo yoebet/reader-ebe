@@ -27,7 +27,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
-  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry }>();
+  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, meaningItemSelectedCallback }>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
   contentChanged = false;
@@ -52,14 +52,41 @@ export class ParaContentComponent implements OnChanges {
     if (!wordTag) {
       return;
     }
-    console.log(wordTag);
     let {element, word, created} = wordTag;
+    let oriMid = null;
+    if (element.dataset.mid) {
+      let mid = parseInt(element.dataset.mid);
+      if (!isNaN(mid)) {
+        oriMid = mid;
+      }
+    }
+
+    let meaningItemSelectedCallback = (mid) => {
+      if (mid != null && oriMid !== mid) {
+        element.dataset.mid = mid;
+        this.onContentChange();
+      } else {
+        // cancel
+        if (created && !element.hasAttributes()) {
+          //remove tag
+          let pp = element.parentNode;
+          while (element.firstChild) {
+            pp.insertBefore(element.firstChild, element);
+          }
+          pp.removeChild(element);
+          pp.normalize();
+        }
+      }
+    };
 
     this.dictService.getEntry(word).subscribe((entry: DictEntry) => {
       if (entry) {
-        //selectCallback
-        //cancelCallback
-        let dr = {wordElement: element, dictEntry: entry};
+        let dr = {
+          wordElement: element,
+          dictEntry: entry,
+          meaningItemId: oriMid,
+          meaningItemSelectedCallback
+        };
         this.dictRequest.emit(dr);
       }
     });

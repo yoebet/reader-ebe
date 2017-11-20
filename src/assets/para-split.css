@@ -1,0 +1,46 @@
+.para-split-header.header {
+  font-size: 1.3rem !important;
+}
+
+.para-split-header .tip {
+  font-size: 1.1rem !important;
+}
+
+.splitted-para.row {
+  padding: 0 !important;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.splitted-para.row .column {
+  padding: 0 !important;
+}
+
+.splitted-para textarea {
+  height: initial;
+  min-height: initial !important;
+  max-height: initial;
+  display: block;
+  overflow: hidden;
+  border-radius: initial !important;
+  resize: none !important;
+  padding: 0.5rem !important;
+  border-color: white !important;
+  border-radius: 0.28rem !important;
+}
+
+.splitted-para textarea:focus {
+  border-color: #85B7D9 !important;
+}
+
+.splitted-para .right-buttons.list {
+  padding-left: 0.5em !important;
+  padding-top: 0.5em !important;
+}
+
+.splitted-para .left-buttons.list {
+  padding-right: 0.5em !important;
+  padding-top: 0.5em !important;
+}
+
+.splitted-para .rowno {
+}

@@ -24,8 +24,16 @@
     .pos-header
       | {{posMeanings.pos}}
     .clearing
-    .ui.ordered.list.meaning-items
+    .ui.ordered.selection.divided.list.meaning-items
       .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem')
-        .meaning-item((click)='clickMeaningItem(posMeanings,item)')
+        .meaning-item([ngClass]='{selected: selectedItemId===item.id}', (click)='clickMeaningItem(posMeanings,item)')
           span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
           span.item-explain {{item.explain}}
+
+  .ui.clearing.divider
+  .ui.fields
+    .ui.right.floated.tiny.buttons
+      button.ui.mini.button((click)='cancel()') 取消
+      .or
+      button.ui.mini.primary.button([ngClass]='{disabled: !selectedItemChanged}', (click)='done()') 确定
+    .optip 选择义项

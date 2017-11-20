@@ -49,9 +49,8 @@ export class ChapParasComponent implements OnInit {
   agPopupHiddenTimer = null;
   agPopupTimer = null;
 
+  dictRequest: { wordElement, dictEntry, meaningItemId, meaningItemSelectedCallback } = null;
   dictTether = null;
-  dictWordElement: Element = null;
-  dictEntry: DictEntry = null;
 
   // {
   //   para: {},
@@ -75,7 +74,7 @@ export class ChapParasComponent implements OnInit {
     }
 
     document.addEventListener('click', (event) => {
-      if (this.dictWordElement) {
+      if (this.dictRequest && this.dictRequest.wordElement) {
         let dictPopup = document.getElementById('dictPopup');
         if (event.target) {
           if (dictPopup.contains(event.target as Node)) {
@@ -485,26 +484,30 @@ export class ChapParasComponent implements OnInit {
       this.dictTether.destroy();
       this.dictTether = null;
     }
-    if (this.dictWordElement) {
-      let el = this.dictWordElement;
+    if (this.dictRequest) {
+      let el = this.dictRequest.wordElement;
       el.className = el.className.split(' ')
         .filter(n => !n.startsWith(this.tetherClassPrefix + '-')).join(' ');
-      this.dictWordElement = null;
+      if (el.className === '') {
+        el.removeAttribute('class');
+      }
+      this.dictRequest = null;
     }
   }
 
   onDictRequest(dictRequest) {
-
     this.closeDictPopup();
+    this.dictRequest = dictRequest;
+  }
 
+  onDictPopupReady() {
+    if (!this.dictRequest) {
+      return;
+    }
     let dictPopup = document.getElementById('dictPopup');
-    let {wordElement, dictEntry} = dictRequest;
-    this.dictWordElement = wordElement;
-    this.dictEntry = dictEntry;
-
     this.dictTether = new Tether({
       element: dictPopup,
-      target: wordElement,
+      target: this.dictRequest.wordElement,
       attachment: 'top center',
       targetAttachment: 'bottom center',
       constraints: [
@@ -521,7 +524,16 @@ export class ChapParasComponent implements OnInit {
       // },
       classPrefix: this.tetherClassPrefix
     });
+  }
 
+  onDictItemSelect(selectedItemId) {
+    if (!this.dictRequest) {
+      return;
+    }
+    let dr = this.dictRequest;
+    this.closeDictPopup();
+
+    dr.meaningItemSelectedCallback(selectedItemId);
   }
 
   paraTracker(index, para) {
