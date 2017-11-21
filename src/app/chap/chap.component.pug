@@ -1,20 +1,23 @@
-h3.ui.header(*ngIf='book')
-  | {{book.name}}
+h4.ui.header(*ngIf='book')
+  .book-name {{book.name}}
+  .book-zhname(*ngIf='book.zhName') {{book.zhName}}
 div(*ngIf='chap')
-  div([hidden]='editing')
-    h4.ui.header
-      .chap-name.pre-wrap {{chap.name}}
-      a.edit-chap-name([hidden]='editing', (click)='edit()', href='javascript:') 修改标题
+  h5.ui.header([hidden]='editing')
+    button.ui.right.floated.tiny.button((click)='edit()') 修改标题
+    .chap-name.pre-wrap {{chap.name}}
+    .chap-zhname.pre-wrap(*ngIf='chap.zhName') {{chap.zhName}}
   .ui.form(*ngIf='editing')
     .fields
-      .twelve.wide.field
-        textarea(rows='3', [value]='chap.name', #chapName='')
-      .field
-        button.ui.tiny.button((click)='editing=false') 取消
-      .field
-        button.ui.tiny.primary.button((click)='save(chapName.value)') 保存
+      .eight.wide.field
+        textarea(rows='2', [value]='chap.name', #chapName='')
+      .eight.wide.field
+        textarea(rows='2', [value]='chap.zhName', #chapZhName='')
+    .field.ui.right.floated.header
+      button.ui.tiny.button((click)='editing=false') 取消
+      button.ui.tiny.primary.button((click)='save(chapName.value,chapZhName.value)') 保存
+    .clearing
 
-  .ui.hidden.divider
+  //.ui.hidden.divider
   chap-paras([chap]='chap')
 
 .ui.hidden.clearing.divider

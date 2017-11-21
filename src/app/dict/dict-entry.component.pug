@@ -57,15 +57,15 @@
     .ui.ordered.list.meaning-items
       .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem')
         .ui.right.floated.sub.header([hidden]='!editing')
-          .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
-            i.edit.icon
-            | 编辑
           .ui.basic.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
             i.angle.arrow.up.icon
             | 上移
           .ui.basic.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
             i.angle.arrow.down.icon
             | 下移
+          .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+            i.edit.icon
+            | 编辑
           .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
             i.remove.icon
             | 删除

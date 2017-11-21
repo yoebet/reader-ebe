@@ -1,26 +1,38 @@
 div(*ngIf='book')
   div([hidden]='editing')
-    .ui.right.floated.basic.tiny.button([hidden]='editing', (click)='edit()') Edit
-    .ui.header {{book.name}}
-    .sub.header by {{book.author}}
+    .ui.right.floated.tiny.button([hidden]='editing', (click)='edit()') 修改
+    h4.ui.header.book-name
+      | {{book.name}}
+      .sub.header.author
+        span.author-by by
+        | {{book.author}}
+    h4.ui.header.book-zhname(*ngIf='book.zhName')
+      | {{book.zhName}}
+      .sub.header.zhauthor(*ngIf='book.zhAuthor')
+        span.author-by by
+        | {{book.zhAuthor}}
   .ui.small.form(*ngIf='editing')
     .fields
-      .eight.wide.field
+      .twelve.wide.field
         input([value]='book.name', placeholder='Book Name', #bookName='')
       .four.wide.field
         input([value]='book.author', placeholder='Author', #bookAuthor='')
-    .field
-      button.ui.tiny.button((click)='editing=false') Cancel
-      button.ui.tiny.primary.button((click)='save(bookName.value,bookAuthor.value)') Save
+    .fields
+      .twelve.wide.field
+        input([value]='book.zhName', placeholder='Chinese Book Name', #zhName='')
+      .four.wide.field
+        input([value]='book.zhAuthor', placeholder='Chinese Author', #zhAuthor='')
+    .field.ui.right.floated.header
+      button.ui.tiny.button((click)='editing=false') 取消
+      button.ui.tiny.primary.button((click)='save(bookName.value,bookAuthor.value,zhName.value,zhAuthor.value)') 保存
+    .clearing
   .ui.hidden.clearing.divider
   .ui.header
     | Chapters
     .ui.right.floated.header
-      button.ui.tiny.basic.button((click)='chapsTuneOrder=!chapsTuneOrder') Order
-      button.ui.tiny.basic.button((click)='chapOperations=!chapOperations') Remove
-
-  .ui.hidden.clearing.divider
+      sui-checkbox([(ngModel)]='chapsTuneOrder') Sort
+      sui-checkbox([(ngModel)]='chapOperations') Remove
   book-chaps([book]='book', [tuneOrder]='chapsTuneOrder', [operations]='chapOperations')
 
-.ui.hidden.divider
-button.ui.tiny.button((click)='goBack()') Back
+.ui.hidden.clearing.divider
+button.ui.tiny.button((click)='goBack()') 返回

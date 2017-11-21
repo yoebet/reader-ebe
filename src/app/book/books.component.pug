@@ -2,18 +2,27 @@
   | Book List
 .ui.celled.list
   .item(*ngFor='let book of books; trackBy: bookTracker')
+    button.ui.tiny.button.right.floated((click)='remove(book)') 删除
     a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
-      | {{book.name}}
-    button.ui.tiny.button.right.floated((click)='remove(book)') Remove
+      .enname {{book.name}}
+      .zhname(*ngIf='book.zhName') {{book.zhName}}
 
-.ui.small.form
+.ui.hidden.clearing.divider
+button.ui.right.floated.tiny.basic.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
+.ui.form(*ngIf='editNew')
   .field
-    label New Book:
+    label New:
   .fields
-    .seven.wide.field
+    .twelve.wide.field
       input(#bookName='', placeholder='Book Name')
-    .three.wide.field
+    .four.wide.field
       input(#author='', placeholder='Author')
-    .field
-      button.ui.tiny.button((click)="add(bookName.value,author.value); bookName.value='';author.value=''")
-        | Add
+  .fields
+    .twelve.wide.field
+      input(#zhName='', placeholder='中文版书名')
+    .four.wide.field
+      input(#zhAuthor='', placeholder='中文版作者')
+  .field.ui.right.floated.header
+    button.ui.tiny.button((click)="editNew=false") 取消
+    button.ui.tiny.primary.button((click)="add(bookName.value,author.value,zhName.value,zhAuthor.value)") 保存
+  .ui.hidden.clearing.divider

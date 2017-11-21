@@ -15,29 +15,37 @@
           button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
             i.angle.double.down.icon
             | bottom
-        button.ui.tiny.button((click)='edit(chap)') Edit
         ng-template([ngIf]="operations")
           button.ui.tiny.button((click)='remove(chap)') Remove
+        button.ui.tiny.button((click)='edit(chap)') Edit
 
-      a.pre-wrap([routerLink]="['/chaps', chap._id]") {{chap.name}}
+      a([routerLink]="['/chaps', chap._id]")
+        .pre-wrap {{chap.name}}
+        .zhname.pre-wrap(*ngIf="chap.zhName") {{chap.zhName}}
 
     .ui.form(*ngIf="chap===editingChap")
       .fields
         .eight.wide.field
-          textarea(rows='2',[value]='chap.name', #editChapName='')
-        .field
-          button.ui.tiny.button((click)="editingChap=null")
-            | Cancel
-          button.ui.tiny.primary.button((click)="saveChap(chap,editChapName.value)")
-            | Save
+          textarea(rows='2', [value]='chap.name', placeholder='Title', #chapName='')
+        .eight.wide.field
+          textarea(rows='2', [value]='chap.zhName||""', placeholder='标题', #chapZhName='')
+      .right.floated.field
+        button.ui.tiny.button((click)="editingChap=null")
+          | 取消
+        button.ui.tiny.primary.button((click)="saveChap(chap,chapName.value,chapZhName.value)")
+          | 保存
 
-  .ui.hidden.divider
-  .ui.small.form
+  .ui.hidden.clearing.divider
+  button.ui.right.floated.tiny.basic.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
+  .ui.small.form(*ngIf='editNew')
+    .field
+      label 新章节
     .fields
-      .field
-        label New Chapter:
       .eight.wide.field
-        input(#chapName='', placeholder='Title')
-      .field
-        button.ui.tiny.primary.button((click)="add(chapName.value); chapName.value=''")
-          | Add
+        textarea(rows='2', #newChapName='', placeholder='Title')
+      .eight.wide.field
+        textarea(rows='2', #newZhName='', placeholder='标题')
+    .field.ui.right.floated.header
+      button.ui.tiny.button((click)="editNew=false") 取消
+      button.ui.tiny.primary.button((click)="add(newChapName.value,newZhName.value)") 保存
+    .ui.hidden.clearing.divider

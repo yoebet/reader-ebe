@@ -1,5 +1,13 @@
-.ui.header .chap-name {
+.ui.header .book-name, .ui.header .book-zhname {
   display: inline-block;
+}
+
+.ui.header .book-zhname {
+  margin-left: 1em;
+}
+
+.chap-zhname.pre-wrap {
+  margin-top: 0.5em;
 }
 
 .ui.header a.edit-chap-name {

@@ -94,7 +94,7 @@ div(*ngIf='chap')
 
   .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
-    button.ui.tiny.button((click)='append()') 新增
+    button.ui.tiny.basic.primary.button((click)='append()') 新增
 
   #dictPopup.ui.basic.popup
     dict-entry-compact(*ngIf='dictRequest',

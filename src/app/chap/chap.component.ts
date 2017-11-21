@@ -29,23 +29,27 @@ export class ChapComponent implements OnInit {
     this.route.paramMap.switchMap((params: ParamMap) =>
       this.chapService.getDetail(params.get('id'))
     ).subscribe(chap => {
+      if (chap.zhName == null) {
+        chap.zhName = '';
+      }
       this.chap = chap;
       this.bookService.getOne(chap.bookId)
         .subscribe((book) => this.book = book);
     });
   }
 
-  save(name): void {
+  save(name, zhName): void {
     name = name.trim();
     if (!name) {
-      this.editing = false;
       return;
     }
-    if (this.chap.name === name) {
+    zhName = zhName.trim();
+    if (this.chap.name === name && this.chap.zhName === zhName) {
       this.editing = false;
       return;
     }
     this.chap.name = name;
+    this.chap.zhName = zhName;
     this.chapService.update(this.chap)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {

@@ -1,0 +1,18 @@
+.header.book-name, .header.book-zhname {
+  margin-top: 1em;
+}
+
+.header.book-name {
+
+}
+
+.author-by {
+  font-size: 0.9em;
+  color: rgba(158, 158, 158, 0.8);
+  padding-right: 0.3em;
+}
+
+.header.book-name .author, .header.book-zhname .zhauthor {
+  margin-left: 0.6em;
+  display: inline-block;
+}

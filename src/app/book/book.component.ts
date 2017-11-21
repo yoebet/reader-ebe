@@ -26,18 +26,29 @@ export class BookComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.switchMap((params: ParamMap) =>
       this.bookService.getDetail(params.get('id'))
-    ).subscribe(book => this.book = book);
+    ).subscribe(book => {
+      if (book.author == null) {
+        book.author = '';
+      }
+      if (book.zhName == null) {
+        book.zhName = '';
+      }
+      if (book.zhAuthor == null) {
+        book.zhAuthor = '';
+      }
+      this.book = book;
+    });
   }
 
-  save(name, author): void {
+  save(name, author, zhName, zhAuthor): void {
     name = name.trim();
     if (!name) {
-      this.editing = false;
       return;
     }
-    author = author.trim();
-    this.book.author = author;
     this.book.name = name;
+    this.book.author = author.trim();
+    this.book.zhName = zhName.trim();
+    this.book.zhAuthor = zhAuthor.trim();
     this.bookService.update(this.book)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {

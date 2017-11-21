@@ -81,6 +81,10 @@ sui-multi-select i.list.icon {
   z-index: 1000;
 }
 
+.clearing {
+  clear: both;
+}
+
 /*.ui.modal {*/
   /*z-index: 2001;*/
 /*}*/

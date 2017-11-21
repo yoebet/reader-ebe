@@ -16,6 +16,7 @@ export class BookChapsComponent implements OnInit {
   @Input() tuneOrder: boolean;
   @Input() operations: boolean;
   editingChap: Chap;
+  editNew = false;
 
   constructor(private chapService: ChapService,
               private router: Router) {
@@ -37,6 +38,7 @@ export class BookChapsComponent implements OnInit {
     this.chapService.create(model)
       .subscribe(chap => {
         this.book.chaps.push(chap);
+        this.editNew = false;
       });
   }
 
@@ -59,12 +61,13 @@ export class BookChapsComponent implements OnInit {
     this.editingChap = chap;
   }
 
-  saveChap(chap: Chap, name: string): void {
+  saveChap(chap: Chap, name: string, zhName: string): void {
     name = name.trim();
     if (!name) {
       return;
     }
     chap.name = name;
+    chap.zhName = zhName.trim();
     this.chapService.update(chap).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
         alert(opr.message || 'Fail');

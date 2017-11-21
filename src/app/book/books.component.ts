@@ -12,6 +12,7 @@ import {OpResult} from '../models/op-result';
 })
 export class BooksComponent implements OnInit {
   books: Book[];
+  editNew = false;
 
   constructor(private bookService: BookService,
               private router: Router) {
@@ -23,16 +24,19 @@ export class BooksComponent implements OnInit {
       .subscribe(books => this.books = books);
   }
 
-  add(name: string, author: string): void {
+  add(name: string, author: string, zhName: string, zhAuthor: string): void {
     name = name.trim();
     if (!name) {
       return;
     }
     author = author.trim();
-    let model = {name, author} as Book;
+    zhName = zhName.trim();
+    zhAuthor = zhAuthor.trim();
+    let model = {name, author, zhName, zhAuthor} as Book;
     this.bookService.create(model)
       .subscribe(book => {
         this.books.push(book);
+        this.editNew = false;
       });
   }
 
