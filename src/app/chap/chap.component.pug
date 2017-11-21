@@ -2,9 +2,9 @@ h3.ui.header(*ngIf='book')
   | {{book.name}}
 div(*ngIf='chap')
   div([hidden]='editing')
-    .ui.right.floated.basic.mini.button([hidden]='editing', (click)='edit()') 修改
     h4.ui.header
-      .pre-wrap {{chap.name}}
+      .chap-name.pre-wrap {{chap.name}}
+      a.edit-chap-name([hidden]='editing', (click)='edit()', href='javascript:') 修改标题
   .ui.form(*ngIf='editing')
     .fields
       .twelve.wide.field

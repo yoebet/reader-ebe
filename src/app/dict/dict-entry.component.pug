@@ -1,39 +1,116 @@
-.ui.dict-entry(*ngIf='entry')
+.ui.segment.small.form(*ngIf='entry')
   .ui.header.entry-header
     .ui.right.floated.sub.header
-      .ui.mini.button((click)='false') 编辑
+      sui-checkbox([hidden]='!editing', [(ngModel)]="sortMeaningItems") 释义排序
+      .ui.tiny.button([hidden]='!inModal && !editing', (click)='cancelEdit()') 取消
+      .ui.tiny.primary.button([hidden]='editing', (click)='startEditing()') 编辑
+      .ui.tiny.primary.button([hidden]='!editing', (click)='saveEdit()') 完成
     .entry-word {{entry.word}}
     .categories
       .cat-labels([hidden]='editCategories')
-        label.ui.mini.label(*ngIf='cats.cet4') CET 4
-        label.ui.mini.label(*ngIf='cats.cet6') CET 6
-        label.ui.mini.label(*ngIf='cats.gre') GRE
-        label.ui.mini.label(*ngIf='cats.yasi') 雅思
-        label.ui.mini.label(*ngIf='cats.pro4') 专四
-        label.ui.mini.label(*ngIf='cats.pro8') 专八
+        ng-template(ngFor='', let-cat='', [ngForOf]="wordCats")
+          label.ui.mini.label(*ngIf='cats[cat.key]') {{cat.name}}
         ng-template([ngIf]='cats.haici')
           label.ui.mini.label 海词 {{cats.haici}}星
+        a([hidden]='!editing || editCategories', (click)='editCategories=true', href='javascript:') 设置范围
+      .ui.inline.field(*ngIf='editCategories')
+        ng-template(ngFor='', let-cat='', [ngForOf]="wordCats")
+          sui-checkbox([(ngModel)]="cats[cat.key]") {{cat.name}}
+        span
+          | 海词
+          sui-select.inline([(ngModel)]="cats.haici",
+          [options]='[{v: 0, l: "无"}, {v: 1, l: "1星"}, {v: 2, l: "2星"}, {v: 3, l: "3星"}, {v: 4, l: "4星"}, {v: 5, l: "5星"}]',
+          valueField="v", labelField="l", placeholder='星级', #haiciSelect='')
+            sui-select-option(*ngFor="let option of haiciSelect.filteredOptions", [value]="option")
+        button.ui.basic.mini.button((click)='editCategories=false')
+          i.checkmark.icon
+          | OK
 
   .clearing
   .simple-explain-row
-    .simple-explain
+    .ui.fields(*ngIf='editingSimpleExplain')
+      .field
+        input([(ngModel)]='entry.explain', (blur)='editingSimpleExplain=false', #simpleExplain='')
+      .field
+        button.ui.basic.mini.button((click)='editingSimpleExplain=false;simpleExplain.focus()')
+          i.checkmark.icon
+          | OK
+    .simple-explain([hidden]='editingSimpleExplain')
       | {{entry.explain}}
+      a(*ngIf='editing && !editingSimpleExplain', (click)='editingSimpleExplain=true', href='javascript:') 编辑
 
   .ui.clearing.divider
   .pos-meanings(*ngFor='let posMeanings of entry.complete; first as firstPos; last as lastPos')
     .pos-header
+      .ui.right.floated.sub.header([hidden]='!editing')
+        .ui.mini.button(*ngIf='sortMeaningItems && !firstPos', (click)='moveUpPos(posMeanings)')
+          i.angle.arrow.up.icon
+          | 上移
+        .ui.mini.button(*ngIf='sortMeaningItems && !lastPos', (click)='moveDownPos(posMeanings)')
+          i.angle.arrow.down.icon
+          | 下移
+        .ui.mini.button((click)='newMeaningItem(posMeanings)')
+          i.add.icon
+          | 义项
       | {{posMeanings.pos}}
     .clearing
-    .ui.ordered.selection.divided.list.meaning-items
+    .ui.ordered.list.meaning-items
       .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem')
-        .meaning-item([ngClass]='{selected: selectedItemId===item.id}', (click)='clickMeaningItem(posMeanings,item)')
+        .ui.right.floated.sub.header([hidden]='!editing')
+          .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+            i.edit.icon
+            | 编辑
+          .ui.basic.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
+            i.angle.arrow.up.icon
+            | 上移
+          .ui.basic.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
+            i.angle.arrow.down.icon
+            | 下移
+          .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
+            i.remove.icon
+            | 删除
+        .fields(*ngIf='item===editingMeaningItem')
+          .field
+            sui-multi-select([(ngModel)]='item.tags', [options]='posTags', valueField="value",
+            labelField='label', icon='list', placeholder='标签', #tagsSelect='')
+              .scrolling.menu
+                sui-select-option(*ngFor='let o of tagsSelect.filteredOptions', [value]='o')
+          .field
+            input([(ngModel)]='item.explain', #itemExplain='')
+          .field
+            button.ui.basic.tiny.button((click)='editingMeaningItem=null')
+              i.checkmark.icon
+              | OK
+        .meaning-item([hidden]='item===editingMeaningItem')
           span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
           span.item-explain {{item.explain}}
+      .fields(*ngIf='posMeanings===editingPosMeanings && newItem')
+        .field
+          sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
+          labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
+            .scrolling.menu
+              sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
+        .field
+          input([(ngModel)]='newItem.explain')
+        .field
+          button.ui.tiny.button((click)='newItem=null') 取消
+          button.ui.basic.tiny.button((click)='addMeaningItem()')
+            i.checkmark.icon
+            | 增加
 
-  .ui.clearing.divider
-  .ui.fields
-    .ui.right.floated.tiny.buttons
-      button.ui.mini.button((click)='cancel()') 取消
-      .or
-      button.ui.mini.primary.button([ngClass]='{disabled: oriItemId===selectedItemId}', (click)='done()') 确定
-    .optip 选择义项
+  .new-pos([hidden]='!editing')
+    .ui.clearing.divider
+    .ui.right.floated.header
+      .ui.tiny.basic.primary.button((click)='newPosMeanings()')
+        i.add.icon
+        | 词性
+    .fields(*ngIf='newPos')
+      .field
+        sui-select.selection([(ngModel)]="newPos.pos", [options]="posOptions", valueField="abbr",
+        labelField="name", placeholder='词性', #posSelect='')
+          sui-select-option(*ngFor="let option of posSelect.filteredOptions", [value]="option")
+        //input(#newPos='')
+      .field
+        button.ui.tiny.button((click)='newPos=null') 取消
+        button.ui.basic.tiny.button((click)='addPosMeanings()') 增加
+    .clearing

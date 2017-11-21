@@ -1,0 +1,39 @@
+.ui.dict-entry(*ngIf='entry')
+  .ui.header.entry-header
+    .ui.right.floated.sub.header
+      .ui.mini.button((click)='modalEdit()') 编辑
+    .entry-word {{entry.word}}
+    .categories
+      .cat-labels([hidden]='editCategories')
+        ng-template(ngFor='', let-cat='', [ngForOf]="wordCats")
+          label.ui.mini.label(*ngIf='cats[cat.key]') {{cat.name}}
+        ng-template([ngIf]='cats.haici')
+          label.ui.mini.label 海词 {{cats.haici}}星
+
+  .clearing
+  .simple-explain-row
+    .simple-explain
+      | {{entry.explain}}
+
+  .ui.clearing.divider
+  .pos-meanings(*ngFor='let posMeanings of entry.complete; first as firstPos; last as lastPos')
+    .pos-header
+      | {{posMeanings.pos}}
+    .clearing
+    .ui.ordered.selection.divided.list.meaning-items
+      .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem')
+        .meaning-item([ngClass]='{selected: selectedItemId===item.id}', (click)='clickMeaningItem(posMeanings,item)')
+          span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
+          span.item-explain {{item.explain}}
+
+  .ui.clearing.divider
+  .ui.fields
+    .ui.right.floated.tiny.buttons
+      button.ui.mini.button((click)='cancel()') 取消
+      .or
+      button.ui.mini.primary.button([ngClass]='{disabled: oriItemId===selectedItemId}', (click)='done()') 确定
+    .optip 选择义项
+
+ng-template.dict-edit-modal(#modalTemplate='')
+  dict-entry(*ngIf='editing', [entry]='entry', [inModal]='true',
+  (onUpdate)='onUpdate($event)', (onCancelEdit)='onCancelEdit()')

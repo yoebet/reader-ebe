@@ -50,7 +50,7 @@
 }
 
 .ui.checkbox label {
-  padding-right: 0.7em;
+  padding-right: 0.4em;
 }
 
 .ui.checkbox label {
@@ -62,13 +62,25 @@
 /*}*/
 
 /*para-form.ui.form .fields {*/
-  /*margin: 1em -0.5em;*/
+/*margin: 1em -0.5em;*/
 /*}*/
 
 sui-multi-select i.list.icon {
   margin: 0em 0.25rem 0em 0em !important;
 }
 
+.ui.search .prompt {
+  border-radius: 0.3rem;
+}
+
 .ui.dimmer {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
+.ui.popup {
+  z-index: 1000;
+}
+
+/*.ui.modal {*/
+  /*z-index: 2001;*/
+/*}*/

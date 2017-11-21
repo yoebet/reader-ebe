@@ -74,10 +74,16 @@ export class ChapParasComponent implements OnInit {
     }
 
     document.addEventListener('click', (event) => {
-      if (this.dictRequest && this.dictRequest.wordElement) {
+      if (this.dictRequest && this.dictTether) {
+        //ui modal active visible
         let dictPopup = document.getElementById('dictPopup');
         if (event.target) {
-          if (dictPopup.contains(event.target as Node)) {
+          let node = event.target as Node;
+          let modals = document.getElementsByClassName('ui modal visible');
+          if (modals.length > 0) {
+            return;
+          }
+          if (dictPopup.contains(node)) {
             return;
           }
         }

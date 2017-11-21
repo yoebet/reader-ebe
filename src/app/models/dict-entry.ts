@@ -56,6 +56,16 @@ export class MeaningItem {
 }
 
 
+export const WordCategories = [
+  {key: 'cet4', name: 'CET 4'},
+  {key: 'cet6', name: 'CET 6'},
+  {key: 'gre', name: 'GRE'},
+  {key: 'yasi', name: '雅思'},
+  {key: 'pro4', name: '专四'},
+  {key: 'pro8', name: '专八'}
+];
+
+
 export const PosTags = {
   common: [
     {value: 'idiom', label: '习语'},

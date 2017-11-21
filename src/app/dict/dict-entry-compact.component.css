@@ -1,13 +1,10 @@
+
 .simple-explain-row, .pos-header {
-  line-height: 2.5em;
+  /*line-height: 2.5em;*/
 }
 
 .simple-explain-row {
   margin-left: 2em;
-}
-
-.simple-explain a {
-  margin-left: 1em;
 }
 
 .entry-word {
@@ -15,22 +12,13 @@
   font-size: 1.4em;
 }
 
-.entry-word, .categories > * {
+.entry-word, .categories, .categories > * {
   display: inline;
-}
-
-.categories {
-  margin-left: 1.5em;
-  margin-top: 0.5em;
 }
 
 .categories * {
   font-weight: normal;
   font-size: 0.9rem;
-}
-
-.categories .mini.button {
-  font-size: 0.8rem;
 }
 
 .cat-labels label, .cat-labels .ui.label {
@@ -44,30 +32,32 @@
 }
 
 .pos-meanings {
-  margin-top: 0.5em;
+  /*margin-top: 0.3em;*/
 }
 
 .ui.list.meaning-items {
   margin-top: 0;
-  margin-left: 3em;
+  margin-left: 2em;
 }
 
-.ui.list.meaning-items .item {
-  /*line-height: 2.3em;*/
+.ui.selection.list > .item {
+  padding: 0.3rem 0;
+  color: inherit;
 }
 
-.ui.list.meaning-items .item sui-select-option {
-  line-height: 1rem;
+.ui.header.entry-header {
+  line-height: 1.1em;
+  margin-bottom: 0.5em;
 }
 
 .pos-header {
   font-weight: bold;
   padding: 3px;
-  margin: 3px;
+  /*margin: 3px;*/
 }
 
 .ui.divider {
-  margin: 0.5em 0;
+  margin: 0.3em 0;
 }
 
 .clearing {
@@ -78,11 +68,16 @@
   padding-left: 0.5em;
 }
 
-.ui.button {
-  /*padding: 0.5em 1.3em 0.5em*/
-}
-
 .meaning-item .ui.label {
   /*padding: 0.5833em 0.833em;*/
   padding: 0.2em 0.3em;
+}
+
+.optip {
+  color: silver;
+  font-size: 0.8em;
+}
+
+.meaning-item.selected {
+  color: #bf4040;
 }
