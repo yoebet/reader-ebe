@@ -27,7 +27,8 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
-  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, meaningItemSelectedCallback }>();
+  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, meaningItemCallback }>();
+  @Output() noteRequest = new EventEmitter<{ wordElement, note, editNoteCallback }>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
   contentChanged = false;
@@ -49,10 +50,12 @@ export class ParaContentComponent implements OnChanges {
 
   private removeTagIfDummy(el) {
     if (el.tagName !== 'SPAN') {
-      return;
+      return false;
     }
+    let changed = false;
     if (el.className === '') {
       el.removeAttribute('class');
+      changed = true;
     }
     if (!el.hasAttributes()) {
       //remove tag
@@ -62,7 +65,9 @@ export class ParaContentComponent implements OnChanges {
       }
       pp.removeChild(el);
       pp.normalize();
+      changed = true;
     }
+    return changed;
   };
 
   selectWordMeaning() {
@@ -79,48 +84,92 @@ export class ParaContentComponent implements OnChanges {
       }
     }
 
-    let meaningItemSelectedCallback = (mid) => {
-      if (mid != null && oriMid !== mid) {
+    let meaningItemCallback = (mid) => {
+      if (mid == null || oriMid === mid) {
+        // cancel
+        let changed = this.removeTagIfDummy(element);
+        if (changed) {
+          this.onContentChange();
+        }
+      } else {
         if (mid === -1) {
+          //unset
           element.removeAttribute('data-mid');
           this.removeTagIfDummy(element);
         } else {
           element.dataset.mid = mid;
         }
         this.onContentChange();
-      } else {
-        // cancel
-        this.removeTagIfDummy(element);
       }
     };
 
     this.dictService.getEntry(word).subscribe((entry: DictEntry) => {
-      if (entry) {
-        let dr = {
-          wordElement: element,
-          dictEntry: entry,
-          meaningItemId: oriMid,
-          meaningItemSelectedCallback
-        };
-        this.dictRequest.emit(dr);
+      if (entry == null) {
+        return;
       }
+      let dr = {
+        wordElement: element,
+        dictEntry: entry,
+        meaningItemId: oriMid,
+        meaningItemCallback
+      };
+      this.dictRequest.emit(dr);
     });
 
   }
 
-  onMouseup($event) {
-    $event.stopPropagation();
-    if (!this.gotFocus) {
+  addANote() {
+    let wordTag = this.annotator.getOrCreateWordTag(3, 1);
+    if (!wordTag) {
       return;
     }
-    this.selectWordMeaning();
+    let {element, word, created} = wordTag;
+    let oriNote = element.dataset.note;
 
-    if (!this.annotating) {
+    let editNoteCallback = (note) => {
+      let changed = false;
+      if (note === null || note === oriNote) {
+        // cancel
+        changed = this.removeTagIfDummy(element);
+      } else {
+        if (note === '') {
+          if (typeof oriNote !== 'undefined') {
+            element.removeAttribute('data-note');
+            this.removeTagIfDummy(element);
+            this.onContentChange();
+            changed = true;
+          }
+        } else {
+          element.dataset.note = note;
+          this.onContentChange();
+          changed = true;
+        }
+      }
+      if (changed) {
+        this.onContentChange();
+      }
+    };
+
+    let nr = {wordElement: element, note: oriNote || '', editNoteCallback};
+    this.noteRequest.emit(nr)
+  }
+
+  onMouseup($event) {
+    if (!this.gotFocus || !this.annotating) {
       return;
     }
-    let altered = this.annotator.annotate();
-    if (altered) {
-      this.onContentChange();
+
+    $event.stopPropagation();
+
+    if (this.annotation === 'SelectWordMeaning') {
+      this.selectWordMeaning();
+    } else if (this.annotation === 'AddANote') {
+      this.addANote();
+    } else {
+      let altered = this.annotator.annotate();
+      if (altered) {
+        this.onContentChange();
+      }
     }
   }
 

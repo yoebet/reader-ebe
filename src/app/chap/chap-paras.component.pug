@@ -33,6 +33,10 @@ div(*ngIf='chap')
 
     .annotations.operations(*ngIf='annotating')
       .ui.right.floated.header
+        .ui.mini.basic.button([ngClass]='{active: currentAnnotation && currentAnnotation.name==="SelectWordMeaning"}',
+        (click)='switchAnnotationName("SelectWordMeaning",$event)') 选词义
+        .ui.mini.basic.button([ngClass]='{active: currentAnnotation && currentAnnotation.name==="AddANote"}',
+        (click)='switchAnnotationName("AddANote",$event)') 加注解
         sui-checkbox([(ngModel)]='annotateOnly') 仅标注
       .title
         i.text.cursor.icon
@@ -82,7 +86,8 @@ div(*ngIf='chap')
         (click)='selectPara(para)',
         (contentChange)="onContentChange(para,$event)",
         (contentCommand)="onContentCommand(para,$event)",
-        (dictRequest)="onDictRequest($event)")
+        (dictRequest)="onDictRequest($event)",
+        (noteRequest)="onNoteRequest($event)")
 
         para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
         (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
@@ -102,3 +107,12 @@ div(*ngIf='chap')
     [selectedItemId]='dictRequest.meaningItemId',
     (viewReady)='onDictPopupReady()',
     (dictItemSelected)='onDictItemSelect($event)')
+
+  #notePopup.ui.basic.popup.form
+    .ui.header Add a Note:
+    .field
+      textarea.note-textarea([(ngModel)]='noteRequestNote', #noteTextarea='')
+    .ui.right.floated.mini.buttons
+      button.ui.button((click)='completeNoteEdit(null)') 取消
+      .or
+      button.ui.primary.button((click)='completeNoteEdit(noteTextarea.value)') 保存

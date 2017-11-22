@@ -40,6 +40,7 @@ export class ChapParasComponent implements OnInit {
   annotating = true;
   annotateOnly = false;
   editInplace = false;
+
   groupedAnnotations = Annotations.grouped;
   annotationGroup = null;
   currentAnnotation = null;
@@ -49,8 +50,12 @@ export class ChapParasComponent implements OnInit {
   agPopupHiddenTimer = null;
   agPopupTimer = null;
 
-  dictRequest: { wordElement, dictEntry, meaningItemId, meaningItemSelectedCallback } = null;
+  dictRequest: { wordElement, dictEntry, meaningItemId, meaningItemCallback } = null;
   dictTether = null;
+
+  noteRequest: { wordElement, note, editNoteCallback } = null;
+  noteTether = null;
+  noteRequestNote = '';
 
   // {
   //   para: {},
@@ -179,6 +184,14 @@ export class ChapParasComponent implements OnInit {
     this.latestAnnotations = this.latestAnnotations.filter(a => a !== annotation);
     $event.preventDefault();
     $event.stopPropagation();
+  }
+
+  switchAnnotationName(annotationName, $event) {
+    this.currentAnnotation = {name: annotationName};
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
   }
 
   remove(para: Para): void {
@@ -485,24 +498,29 @@ export class ChapParasComponent implements OnInit {
 
   private tetherClassPrefix = 'dp';
 
+  private removeTetherClass(el) {
+    el.className = el.className.split(' ')
+      .filter(n => !n.startsWith(this.tetherClassPrefix + '-')).join(' ');
+    if (el.className === '') {
+      el.removeAttribute('class');
+    }
+  }
+
   private closeDictPopup() {
-    if (this.dictTether) {
+    if (this.dictRequest) {
       this.dictTether.destroy();
       this.dictTether = null;
-    }
-    if (this.dictRequest) {
       let el = this.dictRequest.wordElement;
-      el.className = el.className.split(' ')
-        .filter(n => !n.startsWith(this.tetherClassPrefix + '-')).join(' ');
-      if (el.className === '') {
-        el.removeAttribute('class');
-      }
+      this.removeTetherClass(el);
       this.dictRequest = null;
     }
   }
 
   onDictRequest(dictRequest) {
-    this.closeDictPopup();
+    if (this.dictRequest) {
+      // cancel
+      this.onDictItemSelect(null);
+    }
     this.dictRequest = dictRequest;
   }
 
@@ -538,8 +556,51 @@ export class ChapParasComponent implements OnInit {
     }
     let dr = this.dictRequest;
     this.closeDictPopup();
+    dr.meaningItemCallback(selectedItemId);
+  }
 
-    dr.meaningItemSelectedCallback(selectedItemId);
+  private closeNotePopup() {
+    if (this.noteRequest) {
+      this.noteTether.destroy();
+      this.noteTether = null;
+      let el = this.noteRequest.wordElement;
+      this.removeTetherClass(el);
+      this.noteRequest = null;
+    }
+    this.noteRequestNote = '';
+  }
+
+  onNoteRequest(noteRequest) {
+    if (this.noteRequest) {
+      // cancel
+      this.completeNoteEdit(null);
+    }
+    this.noteRequest = noteRequest;
+    this.noteRequestNote = noteRequest.note;
+
+    let notePopup = document.getElementById('notePopup');
+    this.noteTether = new Tether({
+      element: notePopup,
+      target: this.noteRequest.wordElement,
+      attachment: 'top center',
+      targetAttachment: 'bottom right',
+      constraints: [
+        {
+          to: 'window',
+          attachment: 'together'
+        }
+      ],
+      classPrefix: this.tetherClassPrefix
+    });
+  }
+
+  completeNoteEdit(note) {
+    if (!this.noteRequest) {
+      return;
+    }
+    let nr = this.noteRequest;
+    this.closeNotePopup();
+    nr.editNoteCallback(note);
   }
 
   paraTracker(index, para) {

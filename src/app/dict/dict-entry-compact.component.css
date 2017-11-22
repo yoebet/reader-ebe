@@ -1,8 +1,3 @@
-
-.simple-explain-row, .pos-header {
-  /*line-height: 2.5em;*/
-}
-
 .simple-explain-row {
   margin-left: 2em;
 }
@@ -31,10 +26,6 @@
   line-height: 1.1rem;
 }
 
-.pos-meanings {
-  /*margin-top: 0.3em;*/
-}
-
 .ui.list.meaning-items {
   margin-top: 0;
   margin-left: 2em;
@@ -53,7 +44,6 @@
 .pos-header {
   font-weight: bold;
   padding: 3px;
-  /*margin: 3px;*/
 }
 
 .ui.divider {
@@ -69,7 +59,6 @@
 }
 
 .meaning-item .ui.label {
-  /*padding: 0.5833em 0.833em;*/
   padding: 0.2em 0.3em;
 }
 

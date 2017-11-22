@@ -1,8 +1,8 @@
-h4.ui.header(*ngIf='book')
+h4.ui.gray.header(*ngIf='book')
   .book-name {{book.name}}
   .book-zhname(*ngIf='book.zhName') {{book.zhName}}
 div(*ngIf='chap')
-  h5.ui.header([hidden]='editing')
+  h5.ui.blue.header([hidden]='editing')
     button.ui.right.floated.tiny.button((click)='edit()') 修改标题
     .chap-name.pre-wrap {{chap.name}}
     .chap-zhname.pre-wrap(*ngIf='chap.zhName') {{chap.zhName}}
