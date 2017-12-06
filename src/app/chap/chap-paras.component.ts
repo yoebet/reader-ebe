@@ -84,6 +84,9 @@ export class ChapParasComponent implements OnInit {
         let dictPopup = document.getElementById('dictPopup');
         if (event.target) {
           let node = event.target as Node;
+          if (this.dictRequest.wordElement === node) {
+            return;
+          }
           let modals = document.getElementsByClassName('ui modal visible');
           if (modals.length > 0) {
             return;
@@ -508,8 +511,10 @@ export class ChapParasComponent implements OnInit {
 
   private closeDictPopup() {
     if (this.dictRequest) {
-      this.dictTether.destroy();
-      this.dictTether = null;
+      if (this.dictTether) {
+        this.dictTether.destroy();
+        this.dictTether = null;
+      }
       let el = this.dictRequest.wordElement;
       this.removeTetherClass(el);
       this.dictRequest = null;
@@ -528,26 +533,30 @@ export class ChapParasComponent implements OnInit {
     if (!this.dictRequest) {
       return;
     }
-    let dictPopup = document.getElementById('dictPopup');
-    this.dictTether = new Tether({
-      element: dictPopup,
-      target: this.dictRequest.wordElement,
-      attachment: 'top center',
-      targetAttachment: 'bottom center',
-      constraints: [
-        {
-          to: 'window',
-          attachment: 'together'
-        }
-      ],
-      // optimizations: {
-      //   gpu: false
-      // },
-      // classes: {
-      //   'out-of-bounds': false
-      // },
-      classPrefix: this.tetherClassPrefix
-    });
+    if (this.dictTether) {
+      this.dictTether.position();
+    } else {
+      let dictPopup = document.getElementById('dictPopup');
+      this.dictTether = new Tether({
+        element: dictPopup,
+        target: this.dictRequest.wordElement,
+        attachment: 'top center',
+        targetAttachment: 'bottom center',
+        constraints: [
+          {
+            to: 'window',
+            attachment: 'together'
+          }
+        ],
+        // optimizations: {
+        //   gpu: false
+        // },
+        // classes: {
+        //   'out-of-bounds': false
+        // },
+        classPrefix: this.tetherClassPrefix
+      });
+    }
   }
 
   onDictItemSelect(selectedItemId) {
@@ -561,8 +570,10 @@ export class ChapParasComponent implements OnInit {
 
   private closeNotePopup() {
     if (this.noteRequest) {
-      this.noteTether.destroy();
-      this.noteTether = null;
+      if (this.noteTether) {
+        this.noteTether.destroy();
+        this.noteTether = null;
+      }
       let el = this.noteRequest.wordElement;
       this.removeTetherClass(el);
       this.noteRequest = null;

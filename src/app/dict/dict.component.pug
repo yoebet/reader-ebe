@@ -6,4 +6,4 @@
   .thirteen.wide.column
     sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
     (resultSelected)="selectEntry($event)", [retainSelectedResult]="false", placeholder='单词、短语...')
-    dict-entry(*ngIf='entry', [entry]='entry', (onUpdate)='onUpdate($event)')
+    dict-entry.ui.segment(*ngIf='entry', [entry]='entry')

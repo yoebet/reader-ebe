@@ -1,34 +1,41 @@
 import {Model} from './model';
 
-export class DictEntrySimple extends Model {
+export class DictEntry extends Model {
   word: string;
-  explain: string;
-}
 
-export class DictEntry extends DictEntrySimple {
+  // simple: [
+  //   { pos: 'n.', exp: '' },
+  //   { pos: 'v.', exp: '' }
+  // ]
   // complete: [
   //   {
-  //     pos: 'noun',
+  //     pos: 'n.',
   //     items: [
-  //       { id: 1, explain: '' },
-  //       { id: 2, explain: '' }
+  //       { id: 1, exp: '' },
+  //       { id: 2, exp: '' }
   //       ]
   //   },
   //   {
-  //     pos: 'verb',
+  //     pos: 'v.',
   //     items: [
-  //       { id: 3, explain: '' },
-  //       { id: 4, explain: '' }
+  //       { id: 3, exp: '' },
+  //       { id: 4, exp: '' }
   //       ]
   //   }
   //   ]
   complete?: PosMeanings[] = [];
+  readonly simpleHc?: SimpleMeaning[];
+  readonly simpleYd?: SimpleMeaning[];
+  readonly completeHc?: PosMeanings[];
+  readonly completeYd?: PosMeanings[];
   nextItemId: number = 1;
   categories: any = {};
-  phonetic?: any;
-  phrases?: any[];
-  // forms?: any[];
-  // sentences?: any[];
+  phonetics?: any;
+  forms?: any;
+  baseForms?: any;
+  phrases?: string[];
+  phrases2?: string[];
+
   // usageTips?: any[];
 
 
@@ -43,27 +50,65 @@ export class DictEntry extends DictEntrySimple {
 
 }
 
+export class SimpleMeaning {
+  pos: string;
+  exp: string;
+}
+
 export class PosMeanings {
   //Part Of Speech
-  pos: string = null;
-  items: MeaningItem[] = [];
+  pos: string;
+  items: MeaningItem | string[] = [];
 }
 
 export class MeaningItem {
-  id: number = null;
+  id: number;
   tags: string[];
-  explain: string;
+  exp: string;
 }
 
 
-export const WordCategories = [
-  {key: 'cet4', name: 'CET 4'},
-  {key: 'cet6', name: 'CET 6'},
-  {key: 'gre', name: 'GRE'},
-  {key: 'yasi', name: '雅思'},
-  {key: 'pro4', name: '专四'},
-  {key: 'pro8', name: '专八'}
-];
+export function evaluateCategoryTags(categories) {
+  let tags = [];
+  if (!categories) {
+    return tags;
+  }
+  if (categories.junior) {
+    tags.push('基础');
+  } else {
+    if (categories.cet) {
+      if (categories.cet === 4) {
+        tags.push('CET 4');
+      } else if (categories.cet === 6) {
+        tags.push('CET 6');
+      }
+    } else {
+      let wCategories = [
+        ['gre', 'GRE'],
+        ['yasi', '雅思'],
+        ['pro', '英专']
+      ];
+      for (let [key, name] of wCategories) {
+        if (categories[key]) {
+          tags.push(name);
+        }
+      }
+    }
+    if (categories.haici) {
+      tags.push(`海词 ${categories.haici}星`);
+    }
+    let wordFreqs = ['coca', 'bnc', 'anc'];
+    for (let freqName of wordFreqs) {
+      let rank = categories[freqName];
+      if (rank) {
+        let align3 = rank + (3 - rank % 3);
+        tags.push(`${freqName.toUpperCase()} ${align3}000`);
+      }
+    }
+  }
+
+  return tags;
+}
 
 
 export const PosTags = {

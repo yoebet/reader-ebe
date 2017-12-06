@@ -23,12 +23,12 @@
 @import url('assets/semantic/label.css');
 @import url('assets/semantic/dimmer.css');
 @import url('assets/semantic/modal.css');
+@import url('assets/semantic/tab.css');
+@import url('assets/semantic/accordion.css');
 /*@import url('assets/semantic/image.css');*/
 /*@import url('assets/semantic/table.css');*/
 /*@import url('assets/semantic/message.css');*/
-/*@import url('assets/semantic/accordion.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
-/*@import url('assets/semantic/tab.css');*/
 @import url('assets/para-split.css');
 @import url('assets/dict-popup.css');
 @import url('assets/annotations.css');
@@ -88,10 +88,20 @@ sui-multi-select i.list.icon {
   z-index: 1000;
 }
 
+/*#dictPopup .ui.accordion .content {*/
+  /*margin: 0;*/
+  /*padding: 0.2em 0;*/
+/*}*/
+
+.dict-entry .ui.accordion .pos-meanings:not(:first-child) .title {
+  border-top: 1px dashed silver;
+  /*background: whitesmoke;*/
+}
+
 .clearing {
   clear: both;
 }
 
 /*.ui.modal {*/
-  /*z-index: 2001;*/
+/*z-index: 2001;*/
 /*}*/

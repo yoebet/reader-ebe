@@ -1,27 +1,15 @@
-.simple-explain-row, .pos-header {
-  line-height: 2.5em;
-}
-
-.simple-explain-row {
-  margin-left: 2em;
-}
-
-.simple-explain a {
-  margin-left: 1em;
-}
-
 .entry-word {
   padding-right: 1em;
   font-size: 1.4em;
 }
 
-.entry-word, .categories > * {
+.entry-word, .categories, .categories > * {
   display: inline;
 }
 
 .categories {
-  margin-left: 1.5em;
-  margin-top: 0.5em;
+  /*margin-left: 1.5em;*/
+  /*margin-top: 0.5em;*/
 }
 
 .categories * {
@@ -62,24 +50,14 @@
 
 .pos-header {
   font-weight: bold;
-  padding: 3px;
-  margin: 3px;
 }
 
 .ui.divider {
-  margin: 0.5em 0;
+  /*margin: 0.5em 0;*/
 }
 
 .clearing {
   clear: both;
-}
-
-.item-explain {
-  padding-left: 0.5em;
-}
-
-.ui.button {
-  /*padding: 0.5em 1.3em 0.5em*/
 }
 
 .meaning-item .ui.label {

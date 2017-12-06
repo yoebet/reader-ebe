@@ -1,6 +1,6 @@
 import {
   OnChanges, Input, Output, EventEmitter, SimpleChanges,
-  Component, ViewChild, ViewContainerRef
+  Component, ViewChild, ViewContainerRef, ChangeDetectorRef
 } from '@angular/core';
 
 import {ParaLiveContent} from '../models/para-live-content';
@@ -35,7 +35,7 @@ export class ParaContentComponent implements OnChanges {
   transChanged = false;
   transRendered = false;
 
-  constructor(private dictService: DictService) {
+  constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
   }
 
   get annotator() {
@@ -60,6 +60,9 @@ export class ParaContentComponent implements OnChanges {
     if (!el.hasAttributes()) {
       //remove tag
       let pp = el.parentNode;
+      if (!pp) {
+        return changed;
+      }
       while (el.firstChild) {
         pp.insertBefore(el.firstChild, el);
       }
@@ -89,7 +92,7 @@ export class ParaContentComponent implements OnChanges {
         // cancel
         let changed = this.removeTagIfDummy(element);
         if (changed) {
-          this.onContentChange();
+          // this.onContentChange();
         }
       } else {
         if (mid === -1) {
@@ -103,18 +106,19 @@ export class ParaContentComponent implements OnChanges {
       }
     };
 
-    this.dictService.getEntry(word).subscribe((entry: DictEntry) => {
-      if (entry == null) {
-        return;
-      }
-      let dr = {
-        wordElement: element,
-        dictEntry: entry,
-        meaningItemId: oriMid,
-        meaningItemCallback
-      };
-      this.dictRequest.emit(dr);
-    });
+    this.dictService.getEntry(word, {base: true, stem: true})
+      .subscribe((entry: DictEntry) => {
+        if (entry == null) {
+          return;
+        }
+        let dr = {
+          wordElement: element,
+          dictEntry: entry,
+          meaningItemId: oriMid,
+          meaningItemCallback
+        };
+        this.dictRequest.emit(dr);
+      });
 
   }
 
@@ -130,7 +134,8 @@ export class ParaContentComponent implements OnChanges {
       let changed = false;
       if (note === null || note === oriNote) {
         // cancel
-        changed = this.removeTagIfDummy(element);
+        /*changed = */
+        this.removeTagIfDummy(element);
       } else {
         if (note === '') {
           if (typeof oriNote !== 'undefined') {
@@ -294,5 +299,14 @@ export class ParaContentComponent implements OnChanges {
         this.onContentChange();
       }
     }
+    // if (changes.gotFocus) {
+    //   if (this.gotFocus) {
+    //     this.cdr.reattach();
+    //   } else {
+    //     setTimeout(() => {
+    //       this.cdr.detach();
+    //     }, 0);
+    //   }
+    // }
   }
 }

@@ -104,6 +104,11 @@
   display: none;
 }
 
+#dictPopup {
+  min-width: 300px;
+  max-width: 500px;
+}
+
 #notePopup.ui.form .field {
   margin-bottom: 0.5em;
 }

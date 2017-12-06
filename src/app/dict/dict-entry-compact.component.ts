@@ -1,17 +1,20 @@
-import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {
+  Component, Input, Output, EventEmitter,
+  OnInit, AfterViewChecked, ViewChild, ChangeDetectorRef
+} from '@angular/core';
 import {SuiModalService, TemplateModalConfig, ModalTemplate, ModalSize} from 'ng2-semantic-ui';
 
-import {DictEntry, PosMeanings, MeaningItem, WordCategories, TagLabelMap} from '../models/dict-entry';
+import {DictEntry, PosMeanings, MeaningItem} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
+import {DictEntryComponent} from './dict-entry.component';
 
 @Component({
   selector: 'dict-entry-compact',
-  templateUrl: './dict-entry-compact.component.html',
-  styleUrls: ['./dict-entry-compact.component.css']
+  templateUrl: './dict-entry.component.html',
+  styleUrls: ['./dict-entry.component.css']
 })
-export class DictEntryCompactComponent implements OnInit, AfterViewInit {
-  @ViewChild('modalTemplate') modalTemplate: ModalTemplate<DictEntry, string, string>;
-  @Input() entry: DictEntry;
+export class DictEntryCompactComponent extends DictEntryComponent implements OnInit, AfterViewChecked {
+  // @ViewChild('modalTemplate') modalTemplate: ModalTemplate<DictEntry, string, string>;
   @Input() selectedItemId: number;
   @Output() viewReady = new EventEmitter();
   @Output() dictItemSelected = new EventEmitter<number>();
@@ -20,35 +23,25 @@ export class DictEntryCompactComponent implements OnInit, AfterViewInit {
   editing = false;
   editModal = null;
 
-  constructor(private dictService: DictService, private modalService: SuiModalService) {
+  constructor(cdr: ChangeDetectorRef, dictService: DictService/*, private modalService: SuiModalService*/) {
+    super(cdr, dictService);
   }
 
   ngOnInit() {
     this.oriItemId = this.selectedItemId;
   }
 
-  get wordCats() {
-    return WordCategories;
-  }
-
-  get cats() {
-    return this.entry.categories;
-  }
-
-  get tagLabelMap() {
-    return TagLabelMap;
-  }
 
   clickMeaningItem(pm: PosMeanings, mi: MeaningItem) {
     if (mi.id === this.selectedItemId) {
-      // null: not set; -1: unset
+      // null: no change; -1: unset
       this.selectedItemId = (this.oriItemId === null) ? null : -1;
       return;
     }
     this.selectedItemId = mi.id;
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     if (this.viewReadyEntry === this.entry) {
       return;
     }
@@ -64,22 +57,22 @@ export class DictEntryCompactComponent implements OnInit, AfterViewInit {
     this.dictItemSelected.emit(this.selectedItemId);
   }
 
-  modalEdit() {
-
-    this.editing = true;
-    const config = new TemplateModalConfig<DictEntry, string, string>(this.modalTemplate);
-
-    config.isClosable = false;
-    config.size = ModalSize.Small;
-    // config.context = this.entry;
-
-    this.editModal = this.modalService
-      .open(config);
-    // .onApprove(result => { /* approve callback */
-    // })
-    // .onDeny(result => { /* deny callback */
-    // });
-  }
+  // modalEdit() {
+  //
+  //   this.editing = true;
+  //   const config = new TemplateModalConfig<DictEntry, string, string>(this.modalTemplate);
+  //
+  //   config.isClosable = false;
+  //   config.size = ModalSize.Small;
+  //   // config.context = this.entry;
+  //
+  //   this.editModal = this.modalService
+  //     .open(config);
+  //   // .onApprove(result => { /* approve callback */
+  //   // })
+  //   // .onDeny(result => { /* deny callback */
+  //   // });
+  // }
 
   onUpdate(updated) {
     this.entry = updated;
