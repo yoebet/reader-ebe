@@ -1,18 +1,17 @@
 .entry-word {
-  padding-right: 1em;
+  padding-right: 0.8em;
   font-size: 1.4em;
 }
 
-.entry-word, .categories, .categories > * {
+.entry-word, .categories, .phonetics {
   display: inline;
 }
 
-.categories {
-  /*margin-left: 1.5em;*/
-  /*margin-top: 0.5em;*/
+.phonetics {
+  padding-right: 1em;
 }
 
-.categories * {
+.categories, .categories *, .phonetics, .phonetics * {
   font-weight: normal;
   font-size: 0.9rem;
 }
@@ -21,14 +20,20 @@
   font-size: 0.8rem;
 }
 
-.cat-labels label, .cat-labels .ui.label {
+.categories .ui.label, .phonetics .ui.label, .meaning-item .ui.label {
   padding: 0 0.4rem;
-  margin-left: 0.1rem;
+  margin-left: 0.2rem;
   display: inline-block;
-  background: #e8e8e8;
+  /*background: #e8e8e8;*/
   color: rgba(0, 0, 0, 0.8);
   font-size: 0.8rem;
   line-height: 1.1rem;
+  font-weight: normal;
+}
+
+.meaning-item .ui.label {
+  margin-left: 0;
+  margin-right: 0.2rem;
 }
 
 .pos-meanings {
@@ -40,10 +45,6 @@
   margin-left: 3em;
 }
 
-.ui.list.meaning-items .item {
-  /*line-height: 2.3em;*/
-}
-
 .ui.list.meaning-items .item sui-select-option {
   line-height: 1rem;
 }
@@ -52,15 +53,18 @@
   font-weight: bold;
 }
 
-.ui.divider {
-  /*margin: 0.5em 0;*/
-}
-
 .clearing {
   clear: both;
 }
 
-.meaning-item .ui.label {
-  /*padding: 0.5833em 0.833em;*/
-  padding: 0.2em 0.3em;
+.pos-meanings .pos-header .header .ui.mini.button {
+  margin-top: -0.4em;
+}
+
+input.ui.mini.input {
+  padding: 0.57em 1em;
+}
+
+.meaning-items > .editing-item.item:before {
+  top: 0.7em;
 }

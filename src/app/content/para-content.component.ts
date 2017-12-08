@@ -3,7 +3,7 @@ import {
   Component, ViewChild, ViewContainerRef, ChangeDetectorRef
 } from '@angular/core';
 
-import {ParaLiveContent} from '../models/para-live-content';
+import {ParaLiveContent} from '../models/para';
 import {SelectionAnnotator} from './selection-annotator';
 import {Annotations} from './annotations';
 

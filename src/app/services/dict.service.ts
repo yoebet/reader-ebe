@@ -8,6 +8,7 @@ import 'rxjs/add/operator/share';
 
 import {DictEntry} from '../models/dict-entry';
 import {BaseService} from './base.service';
+import {OpResult} from '../models/op-result';
 
 @Injectable()
 export class DictService extends BaseService<DictEntry> {
@@ -21,12 +22,31 @@ export class DictService extends BaseService<DictEntry> {
     this.baseUrl = `${apiBase}dict`;
   }
 
-  search(key: string): Observable<DictEntry[]> {
-    if (!/^[a-zA-Z]/.test(key)) {
-      return Observable.of([]);
+  search(key: string, options?): Observable<DictEntry[]> {
+    let {limit, previous, next, allFields} = options;
+    if (next === true) {
+      key = key + '_';
+    } else if (previous === true) {
+      key = '_' + key;
     }
-    let url = `${this.baseUrl}/search/${key}?limit=7`;
-    return this.list(url);
+    if (!limit) {
+      limit = 8;
+    }
+    let url = `${this.baseUrl}/search/${key}?limit=${limit}`;
+
+    let switches = ['phrase', 'phraseOnly', 'cet', 'junior', 'allFields']
+      .filter(name => options[name]);
+    if (switches.length > 0) {
+      url += '&';
+      url += switches.join('&');
+    }
+
+    let obs = this.list(url);
+    if (allFields !== true) {
+      return obs;
+    }
+
+    return this.cacheList(obs);
   }
 
   get entryHistory(): DictEntry[] {
@@ -53,6 +73,28 @@ export class DictService extends BaseService<DictEntry> {
     return /^[0-9a-z]{24}$/.test(idOrWord);
   }
 
+  private cacheOne(obs: Observable<DictEntry>): Observable<DictEntry> {
+    obs = obs.share();
+    obs.subscribe(entry => {
+      if (entry) {
+        this.pushHistory(entry);
+        this.updateCache(entry);
+      }
+    });
+    return obs;
+  }
+
+  private cacheList(obs: Observable<DictEntry[]>): Observable<DictEntry[]> {
+    obs = obs.share();
+    obs.subscribe(entries => {
+      for (let entry of entries) {
+        this.pushHistory(entry);
+        this.updateCache(entry);
+      }
+    });
+    return obs;
+  }
+
   getEntry(idOrWord: string, options: any = {}): Observable<DictEntry> {
     let cachedEntry = this.entryCache.get(idOrWord);
     if (cachedEntry) {
@@ -67,16 +109,14 @@ export class DictService extends BaseService<DictEntry> {
       }
     }
 
-    let obs = this.getOneByUrl(url).share();
+    return this.cacheOne(this.getOneByUrl(url));
+  }
 
-    obs.subscribe(entry => {
-      if (entry) {
-        this.pushHistory(entry);
-        this.updateCache(entry);
-      }
-    });
 
-    return obs;
+  update(entry: DictEntry): Observable<OpResult> {
+    this.entryCache.delete(entry._id);
+    this.entryCache.delete(entry.word);
+    return super.update(entry);
   }
 
 }

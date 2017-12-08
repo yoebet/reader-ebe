@@ -5,3 +5,10 @@ export class Para extends Model {
   trans: string = '';
   chapId: string;
 }
+
+export interface ParaLiveContent {
+  (): {
+    content?: string;
+    trans?: string;
+  };
+}

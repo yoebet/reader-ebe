@@ -12,14 +12,27 @@ import 'rxjs/add/operator/toPromise';
 })
 export class DictComponent {
   entry: DictEntry;
+  phrase = false;
+  phraseOnly = false;
+  cet = false;
+  junior = false;
+
+  get searchOptions(): any {
+    return {
+      phrase: this.phrase,
+      phraseOnly: this.phraseOnly,
+      cet: this.cet,
+      junior: this.junior
+    };
+  }
 
   dictSearch = (key: string) => {
     key = key.trim();
-    let o = this.dictService.search(key);
+    let o = this.dictService.search(key, this.searchOptions);
     return o.toPromise();
   };
 
-  constructor(/*private cdr: ChangeDetectorRef, */private dictService: DictService) {
+  constructor(private dictService: DictService) {
   }
 
   get entryHistory(): DictEntry[] {
@@ -27,7 +40,7 @@ export class DictComponent {
   }
 
   selectEntry(entrySimple) {
-    this.dictService.getEntry(entrySimple._id)
+    this.dictService.getEntry(entrySimple.word)
       .subscribe(e => {
           this.entry = e;
         }
@@ -39,15 +52,35 @@ export class DictComponent {
     // this.cdr.detectChanges();
   }
 
-  // onUpdate(updated) {
-  //   let index = this.entryHistory
-  //     .findIndex(eh => eh.word === updated.word);
-  //   if (index >= 0) {
-  //     this.entryHistory[index] = updated;
-  //   }
-  //   if (this.entry._id === updated._id) {
-  //     this.entry = updated;
-  //   }
-  // }
+
+  private loadAdjacentOne(direction: string) {
+    if (!this.entry) {
+      return;
+    }
+    let so = this.searchOptions;
+    if (direction === 'next') {
+      so.next = true;
+    } else {
+      so.previous = true;
+    }
+    so.limit = 1;
+    so.allFields = true;
+    let key = this.entry.word;
+    this.dictService.search(key, so)
+      .subscribe(es => {
+          if (es.length > 0) {
+            this.entry = es[0];
+          }
+        }
+      );
+  }
+
+  loadNextEntry() {
+    this.loadAdjacentOne('next');
+  }
+
+  loadPreviousEntry() {
+    this.loadAdjacentOne('previous');
+  }
 
 }

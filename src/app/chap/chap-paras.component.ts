@@ -2,8 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 
 import {Chap} from '../models/chap';
-import {Para} from '../models/para';
-import {ParaLiveContent} from '../models/para-live-content';
+import {Para, ParaLiveContent} from '../models/para';
 import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
@@ -120,11 +119,17 @@ export class ChapParasComponent implements OnInit {
     this.selectPara(para);
   }
 
+  private stopEvent($event){
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+  }
+
   clickAnnotationGroup(group, $event) {
     this.keepAgPopup = !this.keepAgPopup;
     this.annotationGroup = group;
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.stopEvent($event);
   }
 
   selectAnnotationGroup(group) {
@@ -177,24 +182,17 @@ export class ChapParasComponent implements OnInit {
         this.latestAnnotations.push(annotation);
       }
     }
-    if ($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-    }
+    this.stopEvent($event);
   }
 
   removeFromLatest(annotation, $event) {
     this.latestAnnotations = this.latestAnnotations.filter(a => a !== annotation);
-    $event.preventDefault();
-    $event.stopPropagation();
+    this.stopEvent($event);
   }
 
   switchAnnotationName(annotationName, $event) {
     this.currentAnnotation = {name: annotationName};
-    if ($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-    }
+    this.stopEvent($event);
   }
 
   remove(para: Para): void {

@@ -26,27 +26,69 @@ export class DictEntry extends Model {
   complete?: PosMeanings[] = [];
   readonly simpleHc?: SimpleMeaning[];
   readonly simpleYd?: SimpleMeaning[];
-  readonly completeHc?: PosMeanings[];
-  readonly completeYd?: PosMeanings[];
-  nextItemId: number = 1;
+  readonly completeHc?: RefPosMeanings[];
+  readonly completeYd?: RefPosMeanings[];
   categories: any = {};
   phonetics?: any;
   forms?: any;
   baseForms?: any;
   phrases?: string[];
-  phrases2?: string[];
-
-  // usageTips?: any[];
 
 
-  static nextMeaningItemId(entry) {
-    if (!entry.nextItemId) {
-      entry.nextItemId = 1;
+  static EvaluateCategoryTags(categories) {
+    let tags = [];
+    if (!categories) {
+      return tags;
     }
-    let id = entry.nextItemId;
-    entry.nextItemId++;
-    return id;
+    if (categories.junior) {
+      tags.push('基础');
+    } else {
+      if (categories.cet) {
+        if (categories.cet === 4) {
+          tags.push('CET 4');
+        } else if (categories.cet === 6) {
+          tags.push('CET 6');
+        }
+      } else {
+        let wCategories = [
+          ['gre', 'GRE'],
+          ['yasi', '雅思'],
+          ['pro', '英专']
+        ];
+        for (let [key, name] of wCategories) {
+          if (categories[key]) {
+            tags.push(name);
+          }
+        }
+      }
+      if (categories.haici) {
+        tags.push(`海词 ${categories.haici}星`);
+      }
+      let wordFreqs = ['coca', 'bnc', 'anc'];
+      for (let freqName of wordFreqs) {
+        let rank = categories[freqName];
+        if (rank) {
+          let align3 = rank + (3 - rank % 3);
+          tags.push(`${freqName.toUpperCase()} ${align3}000`);
+        }
+      }
+    }
+
+    return tags;
   }
+
+  static POS = [
+    {abbr: 'n.', name: 'n. 名词'},
+    {abbr: 'v.', name: 'v. 动词'},
+    {abbr: 'adj.', name: 'adj. 形容词'},
+    {abbr: 'adv.', name: 'adv. 副词'},
+    {abbr: 'prep.', name: 'prep. 介词'},
+    {abbr: 'pron.', name: 'pron. 代词'},
+    {abbr: 'conj.', name: 'conj. 连词'},
+    {abbr: 'int.', name: 'int. 感叹词'},
+    {abbr: 'other', name: 'other...'},
+  ];
+
 
 }
 
@@ -58,56 +100,19 @@ export class SimpleMeaning {
 export class PosMeanings {
   //Part Of Speech
   pos: string;
-  items: MeaningItem | string[] = [];
+  items: MeaningItem[] = [];
+}
+
+export class RefPosMeanings {
+  //Part Of Speech
+  pos: string;
+  items: string[] = [];
 }
 
 export class MeaningItem {
   id: number;
   tags: string[];
   exp: string;
-}
-
-
-export function evaluateCategoryTags(categories) {
-  let tags = [];
-  if (!categories) {
-    return tags;
-  }
-  if (categories.junior) {
-    tags.push('基础');
-  } else {
-    if (categories.cet) {
-      if (categories.cet === 4) {
-        tags.push('CET 4');
-      } else if (categories.cet === 6) {
-        tags.push('CET 6');
-      }
-    } else {
-      let wCategories = [
-        ['gre', 'GRE'],
-        ['yasi', '雅思'],
-        ['pro', '英专']
-      ];
-      for (let [key, name] of wCategories) {
-        if (categories[key]) {
-          tags.push(name);
-        }
-      }
-    }
-    if (categories.haici) {
-      tags.push(`海词 ${categories.haici}星`);
-    }
-    let wordFreqs = ['coca', 'bnc', 'anc'];
-    for (let freqName of wordFreqs) {
-      let rank = categories[freqName];
-      if (rank) {
-        let align3 = rank + (3 - rank % 3);
-        tags.push(`${freqName.toUpperCase()} ${align3}000`);
-      }
-    }
-  }
-
-  return tags;
 }
 
 
@@ -127,7 +132,7 @@ export const PosTags = {
     {value: 'countable', label: '可数'},
     {value: 'uncountable', label: '不可数'},
     {value: 'singular', label: '单数'},
-    {value: 'countable', label: '复数'},
+    {value: 'plural', label: '复数'},
     {value: 'gerund', label: '动名词'},
     {value: 'proper', label: '专有'}
   ],
@@ -153,15 +158,3 @@ for (let pos in PosTags) {
     }
   }
 }
-
-export const POS = [
-  {abbr: 'n.', name: 'n. 名词'},
-  {abbr: 'v.', name: 'v. 动词'},
-  {abbr: 'adj.', name: 'adj. 形容词'},
-  {abbr: 'adv.', name: 'adv. 副词'},
-  {abbr: 'prep.', name: 'prep. 介词'},
-  {abbr: 'pron.', name: 'pron. 代词'},
-  {abbr: 'conj.', name: 'conj. 连词'},
-  {abbr: 'int.', name: 'int. 感叹词'},
-  {abbr: 'other', name: 'other...'},
-];

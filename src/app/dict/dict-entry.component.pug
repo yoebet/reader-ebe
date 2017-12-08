@@ -2,9 +2,13 @@
   .ui.header.entry-header
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
+    .phonetics(*ngIf='entry.phonetics')
+      label.ui.small.label 英
+      | {{entry.phonetics['UK']}}
+      label.ui.small.label 美
+      | {{entry.phonetics['US']}}
     .categories
-      .cat-labels
-        label.ui.mini.label(*ngFor='let cat of categoryTags') {{cat}}
+      label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
 
   .clearing
 
@@ -23,16 +27,100 @@
       a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 参考释义（hc）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
     .ui.bottom.attached.segment(suiTabContent='co')
-      sui-accordion([closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of entry.complete||[]')
+
+      .ui.right.floated.sub.header
+        sui-checkbox(*ngIf='editing', [(ngModel)]="sortMeaningItems") 释义排序
+        .ui.mini.button(*ngIf='editing', (click)='cancelEdit()') 取消
+        .ui.mini.primary.button(*ngIf='editing', (click)='saveEdit()') 完成
+        .ui.mini.button(*ngIf='!editing', (click)='startEditing()') 编辑
+      .ui.clearing.divider
+
+      sui-accordion.ui.small.form(*ngIf='editing&&editingCompleteMeanings', [closeOthers]='false')
+        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of editingCompleteMeanings; first as firstPos; last as lastPos', [isOpen]='true')
+          .pos-header(title='')
+            .ui.right.floated.sub.header
+              .ui.mini.button(*ngIf='sortMeaningItems && !firstPos', (click)='moveUpPos(posMeanings,$event)')
+                i.angle.arrow.up.icon
+                | 上移
+              .ui.mini.button(*ngIf='sortMeaningItems && !lastPos', (click)='moveDownPos(posMeanings,$event)')
+                i.angle.arrow.down.icon
+                | 下移
+              .ui.mini.button((click)='newMeaningItem(posMeanings,$event)')
+                i.add.icon
+                | 义项
+            i.dropdown.icon
+            | {{posMeanings.pos}}
+          .ui.ordered.list.meaning-items(content='')
+            .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem', [ngClass]='{"editing-item":item===editingMeaningItem}')
+              .ui.right.floated.sub.header
+                .ui.basic.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
+                  i.angle.arrow.up.icon
+                  | 上移
+                .ui.basic.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
+                  i.angle.arrow.down.icon
+                  | 下移
+                .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+                  i.edit.icon
+                  | 编辑
+                .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
+                  i.remove.icon
+                  | 删除
+              .fields(*ngIf='item===editingMeaningItem')
+                .field
+                  sui-multi-select([(ngModel)]='item.tags', [options]='posTags', valueField="value",
+                  labelField='label', icon='list', placeholder='标签', #tagsSelect='')
+                    .scrolling.menu
+                      sui-select-option(*ngFor='let o of tagsSelect.filteredOptions', [value]='o')
+                .eight.wide.field
+                  input.ui.mini.input([(ngModel)]='item.exp', #itemExplain='')
+                .field
+                  button.ui.basic.tiny.button((click)='editingMeaningItem=null')
+                    i.checkmark.icon
+                    | 确定
+              .meaning-item([hidden]='item===editingMeaningItem')
+                span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
+                span {{item.exp}}
+            .fields(*ngIf='posMeanings===editingPosMeanings && newItem')
+              .field
+                sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
+                labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
+                  .scrolling.menu
+                    sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
+              .field
+                input([(ngModel)]='newItem.exp')
+              .field
+                button.ui.tiny.button((click)='newItem=null') 取消
+                button.ui.basic.tiny.button((click)='addMeaningItem()')
+                  i.checkmark.icon
+                  | 增加
+        .new-pos
+          .ui.clearing.divider
+          .ui.right.floated.header
+            .ui.tiny.basic.primary.button(*ngIf='!newPos', (click)='newPosMeanings()')
+              i.add.icon
+              | 词性
+          .fields(*ngIf='newPos')
+            .twelve.width.field
+              sui-select.selection([(ngModel)]="newPos.pos", [options]="posOptions", valueField="abbr",
+              labelField="name", placeholder='词性', #posSelect='')
+                sui-select-option(*ngFor="let option of posSelect.filteredOptions", [value]="option")
+            .four.width.field
+              button.ui.tiny.button((click)='newPos=null') 取消
+              button.ui.basic.tiny.button((click)='addPosMeanings()') 增加
+          .clearing
+
+      sui-accordion(*ngIf='!editing', [closeOthers]='false')
+        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of entry.complete||[]', [isOpen]='true')
           .pos-header(title='')
             i.dropdown.icon
             | {{posMeanings.pos}}
           .ui.ordered.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
-              .meaning-item {{item.exp}}
+              .meaning-item
+                span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
+                | {{item.exp}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
-      .ui.list.simple-explain
+      .ui.list.simple-explain(*ngIf='!entry.completeYd')
         .ui.item(*ngFor='let item of entry.simpleYd')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeYd', [closeOthers]='false')
@@ -40,11 +128,12 @@
           .pos-header(title='')
             i.dropdown.icon
             | {{posMeanings.pos}}
+            | {{posMeanings.exp}}
           .ui.ordered.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
-              .meaning-item {{item}}
+              span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleHc', suiTabContent='hc')
-      .ui.list.simple-explain
+      .ui.list.simple-explain(*ngIf='!entry.simpleHc')
         .ui.item(*ngFor='let item of entry.simpleHc')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')
@@ -52,9 +141,10 @@
           .pos-header(title='')
             i.dropdown.icon
             | {{posMeanings.pos}}
+            | {{posMeanings.exp}}
           .ui.ordered.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
-              .meaning-item {{item}}
+              span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items
         a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)', href='javascript:')
