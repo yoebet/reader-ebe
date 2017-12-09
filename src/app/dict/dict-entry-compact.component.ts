@@ -1,8 +1,7 @@
 import {
   Component, Input, Output, EventEmitter,
-  OnInit, AfterViewChecked, ViewChild, ChangeDetectorRef
+  OnInit, AfterViewChecked, ChangeDetectorRef
 } from '@angular/core';
-import {SuiModalService, TemplateModalConfig, ModalTemplate, ModalSize} from 'ng2-semantic-ui';
 
 import {DictEntry, PosMeanings, MeaningItem} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -14,8 +13,6 @@ import {DictEntryComponent} from './dict-entry.component';
   styleUrls: ['./dict-entry.component.css']
 })
 export class DictEntryCompactComponent extends DictEntryComponent implements OnInit, AfterViewChecked {
-  // @ViewChild('modalTemplate') modalTemplate: ModalTemplate<DictEntry, string, string>;
-  @Input() selectedItemId: number;
   @Output() viewReady = new EventEmitter();
   @Output() dictItemSelected = new EventEmitter<number>();
   viewReadyEntry = null;
@@ -23,7 +20,7 @@ export class DictEntryCompactComponent extends DictEntryComponent implements OnI
   editing = false;
   editModal = null;
 
-  constructor(cdr: ChangeDetectorRef, dictService: DictService/*, private modalService: SuiModalService*/) {
+  constructor(cdr: ChangeDetectorRef, dictService: DictService) {
     super(cdr, dictService);
   }
 
@@ -56,23 +53,6 @@ export class DictEntryCompactComponent extends DictEntryComponent implements OnI
   done() {
     this.dictItemSelected.emit(this.selectedItemId);
   }
-
-  // modalEdit() {
-  //
-  //   this.editing = true;
-  //   const config = new TemplateModalConfig<DictEntry, string, string>(this.modalTemplate);
-  //
-  //   config.isClosable = false;
-  //   config.size = ModalSize.Small;
-  //   // config.context = this.entry;
-  //
-  //   this.editModal = this.modalService
-  //     .open(config);
-  //   // .onApprove(result => { /* approve callback */
-  //   // })
-  //   // .onDeny(result => { /* deny callback */
-  //   // });
-  // }
 
   onUpdate(updated) {
     this.entry = updated;

@@ -21,18 +21,21 @@ import {OpResult} from '../models/op-result';
 })
 export class DictEntryComponent implements OnChanges {
   @Input() entry: DictEntry;
+  @Input() selectedItemId: number;
   cdr: ChangeDetectorRef;
   dictService: DictService;
   categoryTags = null;
   entryStack = [];
 
-  editingCompleteMeanings = null;
+  sortMeaningItems = false;
+  deleteItems = false;
+
   editing = false;
+  editingCompleteMeanings = null;
   editingPosMeanings: PosMeanings = null;
   editingMeaningItem: MeaningItem = null;
   newPos = null;
   newItem = null;
-  sortMeaningItems = false;
   posOptions = null;
 
 
@@ -73,6 +76,9 @@ export class DictEntryComponent implements OnChanges {
       let pre = changes.entry.previousValue;
       if (pre) {
         this.entryStack.push(pre);
+      }
+      if (this.editing) {
+        this._endEditing;
       }
       this.onEntryChanged();
     }
@@ -251,6 +257,34 @@ export class DictEntryComponent implements OnChanges {
     }
     this.editingPosMeanings.items.push(ni);
     this.newItem = null;
+  }
+
+
+  adoptMeaningItem(pos, exp) {
+    if (!this.editing) {
+      this.startEditing();
+    }
+    let complete = this.editingCompleteMeanings;
+    let posMeanings = complete.find(pms => pms.pos === pos);
+    if (!posMeanings) {
+      posMeanings = new PosMeanings();
+      posMeanings.pos = pos;
+      complete.push(posMeanings);
+    }
+    let items = posMeanings.items;
+    if (items) {
+      let existed = items.find(item => item.exp === exp);
+      if (existed) {
+        return;
+      }
+    } else {
+      items = [];
+      posMeanings.items = items;
+    }
+    let item = new MeaningItem();
+    item.id = this.nextMeaningItemId(complete);
+    item.exp = exp;
+    items.push(item);
   }
 
 

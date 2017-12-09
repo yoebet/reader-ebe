@@ -68,3 +68,11 @@ input.ui.mini.input {
 .meaning-items > .editing-item.item:before {
   top: 0.7em;
 }
+
+.ui.selection.list > .item {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.meaning-item.selected {
+  color: #bf4040;
+}

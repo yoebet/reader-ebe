@@ -21,8 +21,8 @@ export class DictComponent {
     return {
       phrase: this.phrase,
       phraseOnly: this.phraseOnly,
-      cet: this.cet,
-      junior: this.junior
+      junior: this.junior,
+      cet: !this.junior && this.cet
     };
   }
 

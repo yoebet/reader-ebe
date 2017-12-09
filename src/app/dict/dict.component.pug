@@ -7,16 +7,16 @@
     .ui.segment
       sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
       (resultSelected)="selectEntry($event)", [retainSelectedResult]="false", placeholder='单词、短语...')
+      .ui.right.floated.header(*ngIf='entry')
+        button.ui.compact.mini.button((click)='loadPreviousEntry()')
+          i.left.arrow.icon
+        span {{entry.word}}
+        button.ui.compact.mini.button((click)='loadNextEntry()')
+          i.right.arrow.icon
       span.search-options
         sui-checkbox([(ngModel)]='phrase') 短语
         sui-checkbox([(ngModel)]='phraseOnly') 仅短语
         sui-checkbox([(ngModel)]='junior') 基础词汇
-        sui-checkbox([(ngModel)]='cet') CET词汇
-      .ui.right.floated.header(*ngIf='entry')
-        button.ui.mini.button((click)='loadPreviousEntry()')
-          i.left.arrow.icon
-        span {{entry.word}}
-        button.ui.mini.button((click)='loadNextEntry()')
-          i.right.arrow.icon
+        sui-checkbox([(ngModel)]='cet', [isDisabled]='junior') CET词汇
       .clearing
     dict-entry.ui.segment(*ngIf='entry', [entry]='entry')

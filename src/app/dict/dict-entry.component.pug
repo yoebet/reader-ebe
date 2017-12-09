@@ -4,9 +4,9 @@
     .entry-word {{entry.word}}
     .phonetics(*ngIf='entry.phonetics')
       label.ui.small.label 英
-      | {{entry.phonetics['UK']}}
+      span {{entry.phonetics['UK']}}
       label.ui.small.label 美
-      | {{entry.phonetics['US']}}
+      span {{entry.phonetics['US']}}
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
 
@@ -23,13 +23,14 @@
   sui-tabset
     .ui.top.attached.tabular.menu
       a.item(suiTabHeader='co') 释义
-      a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 参考释义（yd）
-      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 参考释义（hc）
+      a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
+      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（hc）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
     .ui.bottom.attached.segment(suiTabContent='co')
 
       .ui.right.floated.sub.header
-        sui-checkbox(*ngIf='editing', [(ngModel)]="sortMeaningItems") 释义排序
+        sui-checkbox(*ngIf='editing', [(ngModel)]="deleteItems") 删除
+        sui-checkbox(*ngIf='editing', [(ngModel)]="sortMeaningItems") 排序
         .ui.mini.button(*ngIf='editing', (click)='cancelEdit()') 取消
         .ui.mini.primary.button(*ngIf='editing', (click)='saveEdit()') 完成
         .ui.mini.button(*ngIf='!editing', (click)='startEditing()') 编辑
@@ -50,19 +51,19 @@
                 | 义项
             i.dropdown.icon
             | {{posMeanings.pos}}
-          .ui.ordered.list.meaning-items(content='')
+          .ui.ordered.selection.divided.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem', [ngClass]='{"editing-item":item===editingMeaningItem}')
               .ui.right.floated.sub.header
-                .ui.basic.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
                   i.angle.arrow.up.icon
                   | 上移
-                .ui.basic.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
                   i.angle.arrow.down.icon
                   | 下移
-                .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
                   i.edit.icon
                   | 编辑
-                .ui.basic.mini.button(*ngIf='item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='deleteItems&&item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
                   i.remove.icon
                   | 删除
               .fields(*ngIf='item===editingMeaningItem')
@@ -72,7 +73,7 @@
                     .scrolling.menu
                       sui-select-option(*ngFor='let o of tagsSelect.filteredOptions', [value]='o')
                 .eight.wide.field
-                  input.ui.mini.input([(ngModel)]='item.exp', #itemExplain='')
+                  input.ui.mini.input([(ngModel)]='item.exp')
                 .field
                   button.ui.basic.tiny.button((click)='editingMeaningItem=null')
                     i.checkmark.icon
@@ -86,17 +87,16 @@
                 labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
                   .scrolling.menu
                     sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
-              .field
-                input([(ngModel)]='newItem.exp')
+              .seven.wide.field
+                input.ui.mini.input([(ngModel)]='newItem.exp')
               .field
                 button.ui.tiny.button((click)='newItem=null') 取消
                 button.ui.basic.tiny.button((click)='addMeaningItem()')
                   i.checkmark.icon
                   | 增加
         .new-pos
-          .ui.clearing.divider
           .ui.right.floated.header
-            .ui.tiny.basic.primary.button(*ngIf='!newPos', (click)='newPosMeanings()')
+            .ui.basic.primary.mini.button(*ngIf='!newPos', (click)='newPosMeanings()')
               i.add.icon
               | 词性
           .fields(*ngIf='newPos')
@@ -114,7 +114,7 @@
           .pos-header(title='')
             i.dropdown.icon
             | {{posMeanings.pos}}
-          .ui.ordered.list.meaning-items(content='')
+          .ui.ordered.selection.divided.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
               .meaning-item
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
@@ -129,11 +129,14 @@
             i.dropdown.icon
             | {{posMeanings.pos}}
             | {{posMeanings.exp}}
-          .ui.ordered.list.meaning-items(content='')
+          .ui.ordered.selection.divided.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
+              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(posMeanings.pos,item)')
+                i.add.icon
+                | 加入
               span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleHc', suiTabContent='hc')
-      .ui.list.simple-explain(*ngIf='!entry.simpleHc')
+      .ui.list.simple-explain(*ngIf='!entry.completeHc')
         .ui.item(*ngFor='let item of entry.simpleHc')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')
@@ -142,8 +145,11 @@
             i.dropdown.icon
             | {{posMeanings.pos}}
             | {{posMeanings.exp}}
-          .ui.ordered.list.meaning-items(content='')
+          .ui.ordered.selection.divided.list.meaning-items(content='')
             .ui.item(*ngFor='let item of posMeanings.items')
+              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(posMeanings.pos,item)')
+                i.add.icon
+                | 加入
               span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items
