@@ -14,7 +14,7 @@
         button.ui.compact.mini.button((click)='loadNextEntry()')
           i.right.arrow.icon
       span.search-options
-        sui-checkbox([(ngModel)]='phrase') 短语
+        sui-checkbox([(ngModel)]='phrase', [isDisabled]='phraseOnly') 短语
         sui-checkbox([(ngModel)]='phraseOnly') 仅短语
         sui-checkbox([(ngModel)]='junior') 基础词汇
         sui-checkbox([(ngModel)]='cet', [isDisabled]='junior') CET词汇

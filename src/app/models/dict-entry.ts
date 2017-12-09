@@ -35,7 +35,7 @@ export class DictEntry extends Model {
   phrases?: string[];
 
 
-  static EvaluateCategoryTags(categories) {
+  static EvaluateCategoryTags(categories): string[] {
     let tags = [];
     if (!categories) {
       return tags;
@@ -80,15 +80,16 @@ export class DictEntry extends Model {
   static POS = [
     {abbr: 'n.', name: 'n. 名词'},
     {abbr: 'v.', name: 'v. 动词'},
+    {abbr: 'vt.', name: 'vt. 及物'},
+    {abbr: 'vi.', name: 'vi. 不及物'},
     {abbr: 'adj.', name: 'adj. 形容词'},
     {abbr: 'adv.', name: 'adv. 副词'},
     {abbr: 'prep.', name: 'prep. 介词'},
     {abbr: 'pron.', name: 'pron. 代词'},
     {abbr: 'conj.', name: 'conj. 连词'},
     {abbr: 'int.', name: 'int. 感叹词'},
-    {abbr: 'other', name: 'other...'},
+    {abbr: 'other', name: 'Other'},
   ];
-
 
 }
 

@@ -1,8 +1,8 @@
 import {
-  Component, Input, Output, OnChanges,
-  SimpleChanges, EventEmitter, ChangeDetectorRef
+  Component, Input, Output, OnInit, OnChanges,
+  SimpleChanges, EventEmitter, ChangeDetectorRef, OnDestroy
 } from '@angular/core';
-import {max} from 'lodash';
+import {max, union, last, difference} from 'lodash';
 
 import {
   DictEntry,
@@ -19,23 +19,32 @@ import {OpResult} from '../models/op-result';
   templateUrl: './dict-entry.component.html',
   styleUrls: ['./dict-entry.component.css']
 })
-export class DictEntryComponent implements OnChanges {
+export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() entry: DictEntry;
-  @Input() selectedItemId: number;
+  @Input() initialSelectedItemId: number;
+  @Input() relatedWords: string[];
   cdr: ChangeDetectorRef;
   dictService: DictService;
-  categoryTags = null;
+  categoryTags: string[];
+  refWords: string[];
+
   entryStack = [];
+  initialWord: string;
+  selectedItemId: number;
+  autoSaveOnAdoptItem = false;
+  autoSaveOnLeave = true;
+  coTabActive = false;
+  selectMeaningItem = false;
 
   sortMeaningItems = false;
   deleteItems = false;
 
   editing = false;
-  editingCompleteMeanings = null;
+  editingCompleteMeanings: PosMeanings[] = null;
   editingPosMeanings: PosMeanings = null;
   editingMeaningItem: MeaningItem = null;
-  newPos = null;
-  newItem = null;
+  newPos: PosMeanings = null;
+  newItem: MeaningItem = null;
   posOptions = null;
 
 
@@ -44,8 +53,18 @@ export class DictEntryComponent implements OnChanges {
     this.dictService = dictService;
   }
 
+  ngOnInit() {
+    this.initialWord = this.entry.word;
+    this.selectedItemId = this.initialSelectedItemId;
+  }
 
-  goto(word: string) {
+  ngOnDestroy() {
+    if (this.editing && this.autoSaveOnLeave) {
+      this.saveEdit();
+    }
+  }
+
+  private _gotoWord(word: string) {
     this.dictService.getEntry(word)
       .subscribe(e => {
           if (!e) {
@@ -58,6 +77,18 @@ export class DictEntryComponent implements OnChanges {
       );
   }
 
+  goto(word: string) {
+    if (this.editing) {
+      if (this.autoSaveOnLeave) {
+        this.saveEdit(null, word);
+      } else {
+        this._endEditing();
+      }
+    } else {
+      this._gotoWord(word);
+    }
+  }
+
   goback() {
     if (this.entryStack.length > 0) {
       this.entry = this.entryStack.pop();
@@ -68,6 +99,22 @@ export class DictEntryComponent implements OnChanges {
   private onEntryChanged() {
     let entry = this.entry;
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
+    this.refWords = null;
+    let refWords = union(entry.baseForms, this.relatedWords);
+    if (refWords.length > 0) {
+      let previous = last(this.entryStack);
+      if (previous) {
+        refWords = refWords.filter(w => w !== previous);
+      }
+      if (refWords.length > 0) {
+        this.refWords = refWords;
+      }
+    }
+    if (entry.word === this.initialWord) {
+      this.selectedItemId = this.initialSelectedItemId;
+    } else {
+      this.selectedItemId = null;
+    }
     this.cdr.detectChanges();
   }
 
@@ -76,9 +123,9 @@ export class DictEntryComponent implements OnChanges {
       let pre = changes.entry.previousValue;
       if (pre) {
         this.entryStack.push(pre);
-      }
-      if (this.editing) {
-        this._endEditing;
+        if (this.editing && this.autoSaveOnLeave) {
+          this.saveEdit(pre);
+        }
       }
       this.onEntryChanged();
     }
@@ -119,15 +166,17 @@ export class DictEntryComponent implements OnChanges {
     this.newItem = null;
   }
 
-  saveEdit() {
-    let entry = this.entry;
+  saveEdit(entry?, thenGotoWord?: string) {
+    if (!entry) {
+      entry = this.entry
+    }
 
-    this.editingCompleteMeanings = this.editingCompleteMeanings
+    let ecm = this.editingCompleteMeanings
       .filter(pm => pm.items && pm.items.length > 0);
 
     let oriCompleteMeanings = entry.complete;
     let ori = JSON.stringify(oriCompleteMeanings);
-    let current = JSON.stringify(this.editingCompleteMeanings);
+    let current = JSON.stringify(ecm);
     if (current == ori) {
       this._endEditing();
       return;
@@ -135,7 +184,7 @@ export class DictEntryComponent implements OnChanges {
     let updateObj = {
       _id: entry._id,
       word: entry.word,
-      complete: this.editingCompleteMeanings
+      complete: ecm
     } as DictEntry;
     this.dictService.update(updateObj)
       .subscribe((opr: OpResult) => {
@@ -143,8 +192,11 @@ export class DictEntryComponent implements OnChanges {
           alert(opr.message || 'Fail');
           return;
         }
-        entry.complete = this.editingCompleteMeanings;
+        entry.complete = ecm;
         this._endEditing();
+        if (thenGotoWord) {
+          this._gotoWord(thenGotoWord);
+        }
       });
   }
 
@@ -172,16 +224,18 @@ export class DictEntryComponent implements OnChanges {
     this.stopEvent($event);
   }
 
-  editMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+  editMeaningItem(pm: PosMeanings, mi: MeaningItem, $event) {
     this.editingPosMeanings = pm;
     this.editingMeaningItem = mi;
+    this.stopEvent($event);
   }
 
-  removeMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+  removeMeaningItem(pm: PosMeanings, mi: MeaningItem, $event) {
     if (!confirm('Are You Sure?')) {
       return;
     }
     pm.items = pm.items.filter(item => item !== mi);
+    this.stopEvent($event);
   }
 
 
@@ -208,14 +262,16 @@ export class DictEntryComponent implements OnChanges {
     this.stopEvent($event);
   }
 
-  moveUpMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+  moveUpMeaningItem(pm: PosMeanings, mi: MeaningItem, $event) {
     let index = pm.items.indexOf(mi);
     this.swapArrayElements(pm.items, index - 1, index);
+    this.stopEvent($event);
   }
 
-  moveDownMeaningItem(pm: PosMeanings, mi: MeaningItem) {
+  moveDownMeaningItem(pm: PosMeanings, mi: MeaningItem, $event) {
     let index = pm.items.indexOf(mi);
     this.swapArrayElements(pm.items, index, index + 1);
+    this.stopEvent($event);
   }
 
   addPosMeanings() {
@@ -259,10 +315,24 @@ export class DictEntryComponent implements OnChanges {
     this.newItem = null;
   }
 
+  clickMeaningItem(mi: MeaningItem) {
+    if (mi === this.editingMeaningItem || mi === this.newItem) {
+      return;
+    }
+    if (mi.id === this.selectedItemId) {
+      this.selectedItemId = null;
+    } else {
+      this.selectedItemId = mi.id;
+    }
+  }
+
 
   adoptMeaningItem(pos, exp) {
     if (!this.editing) {
       this.startEditing();
+      if (this.autoSaveOnAdoptItem) {
+        this.editing = false;
+      }
     }
     let complete = this.editingCompleteMeanings;
     let posMeanings = complete.find(pms => pms.pos === pos);
@@ -285,6 +355,20 @@ export class DictEntryComponent implements OnChanges {
     item.id = this.nextMeaningItemId(complete);
     item.exp = exp;
     items.push(item);
+
+    if (this.autoSaveOnAdoptItem) {
+      this.selectedItemId = item.id;
+      this.coTabActive = true;
+      this.saveEdit();
+    }
+  }
+
+  cancelSelect() {
+
+  }
+
+  doneSelect() {
+
   }
 
 

@@ -9,20 +9,19 @@
       span {{entry.phonetics['US']}}
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
-
   .clearing
 
-  .ui.horizontal.list.base-forms(*ngIf='entry.baseForms||entryStack.length > 0')
+  .ui.horizontal.list.base-forms(*ngIf='refWords||entryStack.length > 0')
     a.ui.item(*ngIf='entryStack.length > 0', (click)='goback()', href='javascript:')
       i.left.arrow.icon
       | {{entryStack[entryStack.length-1].word}}
-    a.ui.item(*ngFor='let baseForm of entry.baseForms', (click)='goto(baseForm)', href='javascript:')
-      | {{baseForm}}
+    a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)', href='javascript:')
+      | {{word}}
 
   .ui.clearing.divider
   sui-tabset
     .ui.top.attached.tabular.menu
-      a.item(suiTabHeader='co') 释义
+      a.item(suiTabHeader='co', [(isActive)]="coTabActive") 释义
       a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
       a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（hc）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
@@ -52,18 +51,20 @@
             i.dropdown.icon
             | {{posMeanings.pos}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem', [ngClass]='{"editing-item":item===editingMeaningItem}')
+            .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem',
+            [ngClass]='{"editing-item":item===editingMeaningItem, "selected-item":item.id===selectedItemId}',
+            (click)='clickMeaningItem(item)')
               .ui.right.floated.sub.header
-                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item,$event)')
                   i.angle.arrow.up.icon
                   | 上移
-                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item,$event)')
                   i.angle.arrow.down.icon
                   | 下移
-                .ui.basic.compact.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item,$event)')
                   i.edit.icon
                   | 编辑
-                .ui.basic.compact.mini.button(*ngIf='deleteItems&&item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item)')
+                .ui.basic.compact.mini.button(*ngIf='deleteItems&&item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item,$event)')
                   i.remove.icon
                   | 删除
               .fields(*ngIf='item===editingMeaningItem')
@@ -78,7 +79,7 @@
                   button.ui.basic.tiny.button((click)='editingMeaningItem=null')
                     i.checkmark.icon
                     | 确定
-              .meaning-item([hidden]='item===editingMeaningItem')
+              span.meaning-item([hidden]='item===editingMeaningItem')
                 span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 span {{item.exp}}
             .fields(*ngIf='posMeanings===editingPosMeanings && newItem')
@@ -115,8 +116,10 @@
             i.dropdown.icon
             | {{posMeanings.pos}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items')
-              .meaning-item
+            .ui.item(*ngFor='let item of posMeanings.items',
+            [ngClass]='{"selected-item":item.id===selectedItemId}',
+            (click)='clickMeaningItem(item)')
+              span.meaning-item
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 | {{item.exp}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
@@ -155,3 +158,11 @@
       .ui.ordered.list.meaning-items
         a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)', href='javascript:')
           | {{phrase}}
+
+  .ui.fields(*ngIf='selectMeaningItem')
+    .ui.right.floated.mini.buttons
+      button.ui.button((click)='cancelSelect()') 取消
+      .or
+      button.ui.primary.button([ngClass]='{disabled: selectedItemId===initialSelectedItemId&&entry.word===initialWord}',
+      (click)='doneSelect()') 确定
+    .optip 选择义项

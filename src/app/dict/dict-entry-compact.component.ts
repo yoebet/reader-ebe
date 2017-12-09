@@ -1,6 +1,6 @@
 import {
   Component, Input, Output, EventEmitter,
-  OnInit, AfterViewChecked, ChangeDetectorRef
+  AfterViewChecked, ChangeDetectorRef
 } from '@angular/core';
 
 import {DictEntry, PosMeanings, MeaningItem} from '../models/dict-entry';
@@ -12,31 +12,19 @@ import {DictEntryComponent} from './dict-entry.component';
   templateUrl: './dict-entry.component.html',
   styleUrls: ['./dict-entry.component.css']
 })
-export class DictEntryCompactComponent extends DictEntryComponent implements OnInit, AfterViewChecked {
+export class DictEntryCompactComponent extends DictEntryComponent implements AfterViewChecked {
   @Output() viewReady = new EventEmitter();
-  @Output() dictItemSelected = new EventEmitter<number>();
+  @Output() dictItemSelected = new EventEmitter<{ word: string, selectedItemId: number }>();
+
   viewReadyEntry = null;
-  oriItemId = null;
-  editing = false;
-  editModal = null;
+
 
   constructor(cdr: ChangeDetectorRef, dictService: DictService) {
     super(cdr, dictService);
+    this.autoSaveOnAdoptItem = true;
+    this.selectMeaningItem = true;
   }
 
-  ngOnInit() {
-    this.oriItemId = this.selectedItemId;
-  }
-
-
-  clickMeaningItem(pm: PosMeanings, mi: MeaningItem) {
-    if (mi.id === this.selectedItemId) {
-      // null: no change; -1: unset
-      this.selectedItemId = (this.oriItemId === null) ? null : -1;
-      return;
-    }
-    this.selectedItemId = mi.id;
-  }
 
   ngAfterViewChecked() {
     if (this.viewReadyEntry === this.entry) {
@@ -46,21 +34,22 @@ export class DictEntryCompactComponent extends DictEntryComponent implements OnI
     this.viewReadyEntry = this.entry;
   }
 
-  cancel() {
+  cancelSelect() {
     this.dictItemSelected.emit(null);
   }
 
-  done() {
-    this.dictItemSelected.emit(this.selectedItemId);
-  }
-
-  onUpdate(updated) {
-    this.entry = updated;
-    this.editModal.approve('');
-  }
-
-  onCancelEdit() {
-    this.editModal.deny(null);
+  doneSelect() {
+    let word = this.entry.word;
+    let selectedItemId = this.selectedItemId;
+    if (word === this.initialWord) {
+      // null: no change; -1: unset
+      if (this.initialSelectedItemId === this.selectedItemId) {
+        selectedItemId = null;
+      } else if (this.initialSelectedItemId !== null && this.selectedItemId == null) {
+        selectedItemId = -1;
+      }
+    }
+    this.dictItemSelected.emit({word, selectedItemId});
   }
 
 }

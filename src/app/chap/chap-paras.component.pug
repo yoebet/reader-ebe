@@ -104,7 +104,8 @@ div(*ngIf='chap')
   #dictPopup.ui.basic.popup
     dict-entry-compact(*ngIf='dictRequest',
     [entry]='dictRequest.dictEntry',
-    [selectedItemId]='dictRequest.meaningItemId',
+    [initialSelectedItemId]='dictRequest.meaningItemId',
+    [relatedWords]='dictRequest.relatedWords',
     (viewReady)='onDictPopupReady()',
     (dictItemSelected)='onDictItemSelect($event)')
 

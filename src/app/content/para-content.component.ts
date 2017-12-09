@@ -27,7 +27,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
-  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, meaningItemCallback }>();
+  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, relatedWords?, meaningItemCallback }>();
   @Output() noteRequest = new EventEmitter<{ wordElement, note, editNoteCallback }>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
@@ -86,9 +86,19 @@ export class ParaContentComponent implements OnChanges {
         oriMid = mid;
       }
     }
+    let oriForWord = element.dataset.word || word;
 
-    let meaningItemCallback = (mid) => {
-      if (mid == null || oriMid === mid) {
+    let meaningItemCallback = (selected: { word: string, selectedItemId: number }) => {
+      let mid;
+      let forWord;
+      if (selected) {
+        mid = selected.selectedItemId;
+        forWord = selected.word;
+      } else {
+        mid = null;
+        forWord = null;
+      }
+      if (mid == null) {
         // cancel
         let changed = this.removeTagIfDummy(element);
         if (changed) {
@@ -98,15 +108,21 @@ export class ParaContentComponent implements OnChanges {
         if (mid === -1) {
           //unset
           element.removeAttribute('data-mid');
+          if (element.dataset.word) {
+            element.removeAttribute('data-word');
+          }
           this.removeTagIfDummy(element);
         } else {
-          element.dataset.mid = mid;
+          element.dataset.mid = '' + mid;
+          if (forWord !== oriForWord) {
+            element.dataset.word = forWord;
+          }
         }
         this.onContentChange();
       }
     };
 
-    this.dictService.getEntry(word, {base: true, stem: true})
+    this.dictService.getEntry(oriForWord, {base: true, stem: true})
       .subscribe((entry: DictEntry) => {
         if (entry == null) {
           return;
@@ -115,11 +131,14 @@ export class ParaContentComponent implements OnChanges {
           wordElement: element,
           dictEntry: entry,
           meaningItemId: oriMid,
+          relatedWords: null,
           meaningItemCallback
         };
+        if (oriForWord !== word) {
+          dr.relatedWords = [word];
+        }
         this.dictRequest.emit(dr);
       });
-
   }
 
   addANote() {

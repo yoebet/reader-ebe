@@ -49,7 +49,7 @@ export class ChapParasComponent implements OnInit {
   agPopupHiddenTimer = null;
   agPopupTimer = null;
 
-  dictRequest: { wordElement, dictEntry, meaningItemId, meaningItemCallback } = null;
+  dictRequest: { wordElement, dictEntry, meaningItemId, relatedWords?, meaningItemCallback } = null;
   dictTether = null;
 
   noteRequest: { wordElement, note, editNoteCallback } = null;
@@ -119,7 +119,7 @@ export class ChapParasComponent implements OnInit {
     this.selectPara(para);
   }
 
-  private stopEvent($event){
+  private stopEvent($event) {
     if ($event) {
       $event.preventDefault();
       $event.stopPropagation();
@@ -557,13 +557,13 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
-  onDictItemSelect(selectedItemId) {
+  onDictItemSelect(selected: { word: string, selectedItemId: number }) {
     if (!this.dictRequest) {
       return;
     }
     let dr = this.dictRequest;
     this.closeDictPopup();
-    dr.meaningItemCallback(selectedItemId);
+    dr.meaningItemCallback(selected);
   }
 
   private closeNotePopup() {

@@ -73,6 +73,15 @@ input.ui.mini.input {
   color: rgba(0, 0, 0, 0.7);
 }
 
-.meaning-item.selected {
-  color: #bf4040;
+.ui.selection.list > .item:hover {
+  color: rgba(0, 0, 0, 1);
+}
+
+.meaning-items > .selected-item.item {
+  color: #bf4040 !important;
+}
+
+.optip {
+  color: silver;
+  font-size: 0.9em;
 }
