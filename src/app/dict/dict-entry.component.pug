@@ -20,7 +20,8 @@
 
   .ui.clearing.divider
   sui-tabset
-    .ui.top.attached.tabular.menu
+    //.ui.top.attached.tabular.menu
+    .ui.pointing.secondary.menu
       a.item(suiTabHeader='co', [(isActive)]="coTabActive") 释义
       a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
       a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（hc）

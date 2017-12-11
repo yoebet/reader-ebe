@@ -2,7 +2,7 @@ import {
   Component, Input, Output, OnInit, OnChanges,
   SimpleChanges, EventEmitter, ChangeDetectorRef, OnDestroy
 } from '@angular/core';
-import {max, union, last, difference} from 'lodash';
+import {max, union, last} from 'lodash';
 
 import {
   DictEntry,
@@ -12,6 +12,7 @@ import {
   PosTags
 } from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
+import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 
 @Component({
@@ -98,6 +99,11 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   private onEntryChanged() {
     let entry = this.entry;
+    let cd = Model.CreatedAtString(entry);
+    console.log('created at: ' + cd);
+    let ud = Model.UpdatedAtString(entry);
+    console.log('updated at: ' + ud);
+
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.refWords = null;
     let refWords = union(entry.baseForms, this.relatedWords);
@@ -231,9 +237,6 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   removeMeaningItem(pm: PosMeanings, mi: MeaningItem, $event) {
-    if (!confirm('Are You Sure?')) {
-      return;
-    }
     pm.items = pm.items.filter(item => item !== mi);
     this.stopEvent($event);
   }

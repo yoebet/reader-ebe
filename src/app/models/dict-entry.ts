@@ -33,6 +33,7 @@ export class DictEntry extends Model {
   forms?: any;
   baseForms?: any;
   phrases?: string[];
+  updatedAt?: string;
 
 
   static EvaluateCategoryTags(categories): string[] {
