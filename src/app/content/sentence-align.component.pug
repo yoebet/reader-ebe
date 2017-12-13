@@ -1,0 +1,35 @@
+.ui.header.sentences-align-header
+  | 句子对齐
+.ui.content
+  .ui.column.grid.form.sentences-align
+    .row.aligned-sentence(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
+      .two.wide.column
+        .ui.horizontal.list
+          .ui.item
+            .ui.mini.blue.label.rowno {{index+1}}
+            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
+              i.chevron.up.icon
+              | 合并
+            button.ui.mini.basic.button([ngClass]='{disabled: row.fix}', (click)='split(index,"left", $event)')
+              i.resize.vertical.icon
+              | 拆分
+      .six.wide.column
+        .sentence.content-text([innerHTML]='row.sanitizedLeft')
+      .one.wide.column
+        .fixit
+          sui-checkbox([(ngModel)]='row.fix')
+            | 固定
+      .five.wide.column
+        .sentence.trans-text([innerHTML]='row.sanitizedRight')
+      .two.wide.column
+        .ui.horizontal.list
+          .ui.item
+            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
+              i.chevron.up.icon
+              | 合并
+            button.ui.mini.basic.button([ngClass]='{disabled: row.fix}', (click)='split(index,"right", $event)')
+              i.resize.vertical.icon
+              | 拆分
+.actions
+  button.ui.tiny.button((click)="cancel()") 取消
+  button.ui.tiny.primary.button((click)="completeAndSave()", autofocus='') 完成并保存

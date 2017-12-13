@@ -2,25 +2,29 @@
   | 分段 & 对齐
   span.tip （按空行分段）
 .ui.content
-  .ui.column.grid.form.para-split(#parasGrid='')
-    .row.splitted-para(*ngFor='let row of rows; index as index; first as first')
+  .ui.column.grid.form.para-split
+    .row.splitted-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
       .two.wide.column
-        .ui.right.floated.list.left-buttons
+        .ui.horizontal.list
           .ui.item
-            button.ui.right.floated.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"left", $event)')
+            .ui.mini.teal.label.rowno {{index+1}}
+            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
               i.chevron.up.icon
               | 合并
-            .ui.mini.teal.label.rowno {{index+1}}
       .six.wide.column
-        textarea([(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)',
-        (blur)='onBlur(index,"left",$event)')
+        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="left"&&!row.fix)', [innerHTML]='row.sanitizedLeft', (click)='editingRow=row;editingPart="left"')
+        textarea(*ngIf='row===editingRow&&editingPart==="left"&&!row.fix', [(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)')
+      .one.wide.column
+        .fixit
+          sui-checkbox([(ngModel)]='row.fix')
+            | 固定
       .six.wide.column
-        textarea([(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)',
-        (blur)='onBlur(index,"right",$event)')
-      .two.wide.column
-        .ui.list.right-buttons
+        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="right"&&!row.fix)', [innerHTML]='row.sanitizedRight', (click)='editingRow=row;editingPart="right"')
+        textarea(*ngIf='row===editingRow&&editingPart==="right"&&!row.fix', [(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)')
+      .one.wide.column
+        .ui.horizontal.list
           .ui.item
-            button.ui.mini.basic.button(*ngIf='!first', (click)='moveUp(index,"right", $event)')
+            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
               i.chevron.up.icon
               | 合并
 .actions

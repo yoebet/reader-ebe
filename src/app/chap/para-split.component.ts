@@ -1,11 +1,49 @@
-import {Component, ViewChild, ViewContainerRef, AfterContentChecked} from '@angular/core';
-import {SuiModal, ComponentModalConfig, ModalSize} from "ng2-semantic-ui"
+import {Component} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
+import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui"
+import {findIndex} from 'lodash';
 
 import {Para} from '../models/para';
 
 class Row {
-  left: string = '';
-  right: string = '';
+  static sanitizer: DomSanitizer;
+  _left: string = '';
+  _right: string = '';
+  _sanitizedLeft;
+  _sanitizedRight;
+  fix = false;
+
+  get left() {
+    return this._left;
+  }
+
+  get right() {
+    return this._right;
+  }
+
+  set left(l: string) {
+    this._left = l;
+    this._sanitizedLeft = null;
+  }
+
+  set right(r: string) {
+    this._right = r;
+    this._sanitizedRight = null;
+  }
+
+  get sanitizedLeft() {
+    if (!this._sanitizedLeft) {
+      this._sanitizedLeft = Row.sanitizer.bypassSecurityTrustHtml(this._left)
+    }
+    return this._sanitizedLeft;
+  }
+
+  get sanitizedRight() {
+    if (!this._sanitizedRight) {
+      this._sanitizedRight = Row.sanitizer.bypassSecurityTrustHtml(this._right)
+    }
+    return this._sanitizedRight;
+  }
 }
 
 @Component({
@@ -13,12 +51,13 @@ class Row {
   templateUrl: './para-split.component.html',
   styleUrls: ['./para-split.component.css']
 })
-export class ParaSplitComponent implements AfterContentChecked {
-  @ViewChild('parasGrid', {read: ViewContainerRef}) parasGrid: ViewContainerRef;
+export class ParaSplitComponent {
   rows: Row[];
-  beenResetTextarea = false;
+  editingRow = null;
+  editingPart = null;
 
-  constructor(private modal: SuiModal<Para, Para[], string>) {
+  constructor(private modal: SuiModal<Para, Para[], string>, private sanitizer: DomSanitizer) {
+    Row.sanitizer = this.sanitizer;
     let {content, trans} = modal.context;
     let splitPat = /\n\n+/;
     let contents = content.split(splitPat);
@@ -29,7 +68,9 @@ export class ParaSplitComponent implements AfterContentChecked {
     for (let i = 0; i < length; i++) {
       let left = contents[i] || '';
       let right = transs[i] || '';
-      let row = {left, right} as Row;
+      let row = new Row();
+      row.left = left;
+      row.right = right;
       this.rows.push(row);
     }
   }
@@ -41,59 +82,68 @@ export class ParaSplitComponent implements AfterContentChecked {
     if ($event.keyCode === 13 && idx >= 0) {
       let texts = textarea.value.split(/\n\n+/);
       let addedRowCount = texts.length - 1;
-      for (let i = this.rows.length - 1; i > 1; i--) {
+      let fixIndex = findIndex(this.rows, r => r.fix, index + 1);
+      console.log(fixIndex);
+      if (fixIndex === -1) {
+        fixIndex = this.rows.length;
+      }
+      for (let i = fixIndex - 1; i > index; i--) {
         let r = this.rows[i];
         if (r[part] == '' && addedRowCount > 0) {
           addedRowCount--;
         }
       }
-      for (let i = index + 1; i < this.rows.length; i++) {
+      for (let i = index + 1; i < fixIndex; i++) {
         let row = this.rows[i];
-        texts.push(row[part]);
+        if (row[part] !== '') {
+          texts.push(row[part]);
+          row[part] = '';
+        }
       }
-      for (let i = 0; i < addedRowCount; i++) {
-        this.rows.push(new Row());
+      if (addedRowCount > 0) {
+        let newRows = [];
+        for (let i = 0; i < addedRowCount; i++) {
+          newRows.push(new Row());
+        }
+        this.rows.splice(index + 1, 0, ...newRows);
       }
-      for (let i = index; i < this.rows.length; i++) {
-        let row = this.rows[i];
-        row[part] = texts[i - index];
+      let ri = index;
+      for (let text of texts) {
+        let r = this.rows[ri];
+        r[part] = text;
+        ri++;
       }
-
-      this.beenResetTextarea = false;
+      this.editingRow = this.rows[index + 1];
     }
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-  }
-
-
-  onBlur(index, part, $event) {
-    $event.stopPropagation();
-    let textarea = $event.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
   }
 
   moveUp(index, part, $event) {
     let preRow = this.rows[index - 1];
     let thisRow = this.rows[index];
+    if (preRow.fix || thisRow.fix) {
+      return;
+    }
 
     if (preRow[part] && thisRow[part]) {
       preRow[part] = preRow[part] + '\n';
     }
     preRow[part] = preRow[part] + thisRow[part];
 
+    let lastIndex = index;
     for (let i = index; i < this.rows.length - 1; i++) {
       let r1 = this.rows[i];
       let r2 = this.rows[i + 1];
+      if (r2.fix) {
+        break;
+      }
       r1[part] = r2[part];
+      lastIndex = i + 1;
     }
-    let last = this.rows[this.rows.length - 1];
+    let last = this.rows[lastIndex];
     last[part] = '';
     if (last.left == '' && last.right == '') {
-      this.rows.pop();
+      this.rows.splice(lastIndex, 1);
     }
-
-    this.beenResetTextarea = false;
   }
 
   cancel() {
@@ -111,39 +161,13 @@ export class ParaSplitComponent implements AfterContentChecked {
     this.modal.approve(paras);
   }
 
-  private resetTextareaHeight() {
-    let pgEl = this.parasGrid.element.nativeElement;
-    let ts = pgEl.querySelectorAll('textarea');
-    let set = false;
-    for (let textarea of ts) {
-      let o = textarea.style.height;
-      let n = textarea.scrollHeight;
-      if (n == 0) {
-        continue;
-      }
-      if (n == o) {
-        continue;
-      }
-      set = true;
-      textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
-    }
-    return set;
-  }
-
-  ngAfterContentChecked() {
-    if (this.beenResetTextarea) {
-      return;
-    }
-    this.beenResetTextarea = this.resetTextareaHeight();
-  }
-
 }
 
 export class ParaSplitModal extends ComponentModalConfig<Para> {
   constructor(para: Para) {
     super(ParaSplitComponent, para, false);
-    this.size = ModalSize.Large;
+    // this.size = ModalSize.Large;
+    this.isFullScreen = true;
     this.mustScroll = true;
   }
 }

@@ -5,17 +5,12 @@
     textarea([(ngModel)]="para.trans", #trans='', spellcheck='false')
 .field
   button.ui.tiny.button((click)='splitParas()')
-    i.align.right.icon
-    | &nbsp;
+    i.paragraph.icon
+    | 分段
+  button.ui.tiny.button((click)='alignSentences()')
     i.align.left.icon
-    | 分段 & 中英对齐
+    | 分句
   .ui.right.floated.tiny.buttons
     button.ui.tiny.button((click)='cancel()') 取消
     .or
     button.ui.tiny.primary.button((click)='save()') 保存
-
-//ng-template(let-context='', let-modal='modal', #splitAlignTemplate='')
-  para-split([content]='para.content', [trans]='para.trans')
-  //.actions
-    button.ui.button((click)="modal.deny('denied')") Cancel
-    //button.ui.primary.button((click)="modal.approve('approved')", autofocus='') OK

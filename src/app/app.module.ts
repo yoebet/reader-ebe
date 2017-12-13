@@ -20,10 +20,11 @@ import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
+import {SentenceAlignComponent} from './content/sentence-align.component';
 import {ParaContentComponent} from './content/para-content.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
-import {DictEntryCompactComponent} from './dict/dict-entry-compact.component';
+import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 
 @NgModule({
   imports: [
@@ -42,13 +43,14 @@ import {DictEntryCompactComponent} from './dict/dict-entry-compact.component';
     ChapParasComponent,
     ParaFormComponent,
     ParaSplitComponent,
+    SentenceAlignComponent,
     ParaContentComponent,
     DictComponent,
     DictEntryComponent,
-    DictEntryCompactComponent
+    DictEntrySmiComponent
   ],
   providers: [BookService, ChapService, ParaService, DictService],
-  entryComponents: [ParaSplitComponent],
+  entryComponents: [ParaSplitComponent, SentenceAlignComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

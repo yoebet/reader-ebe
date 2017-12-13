@@ -30,6 +30,7 @@
 /*@import url('assets/semantic/message.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
 @import url('assets/para-split.css');
+@import url('assets/sentence-align.css');
 @import url('assets/dict-popup.css');
 @import url('assets/annotations.css');
 
@@ -64,6 +65,10 @@
   padding-left: 1.4em
 }
 
+.ui.form textarea {
+  line-height: 1.4;
+}
+
 /*.ui.toggle.checkbox label {*/
 /*padding-left: 4.0rem;*/
 /*}*/
@@ -90,8 +95,8 @@ sui-multi-select i.list.icon {
 }
 
 /*#dictPopup .ui.accordion .content {*/
-  /*margin: 0;*/
-  /*padding: 0.2em 0;*/
+/*margin: 0;*/
+/*padding: 0.2em 0;*/
 /*}*/
 
 .dict-entry .ui.accordion .pos-meanings:not(:first-child) .title {

@@ -3,6 +3,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Para} from '../models/para';
 import {ParaSplitModal} from './para-split.component';
+import {SentenceAlignModal} from '../content/sentence-align.component';
 
 @Component({
   selector: 'para-form',
@@ -58,6 +59,15 @@ export class ParaFormComponent implements OnInit {
         //keep other fields
         paras[0] = this.para;
         this.onSplit.emit(paras);
+      });
+  }
+
+  alignSentences() {
+    this.modalService
+      .open(new SentenceAlignModal(this.para))
+      // .onDeny((d) => {})
+      .onApprove((para: Para) => {
+        this.onSave.emit(para);
       });
   }
 
