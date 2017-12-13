@@ -4,48 +4,10 @@ import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui";
 import {differenceBy, isEqual, findIndex} from 'lodash';
 
 import {Para} from '../models/para';
+import {Row} from '../view-common/split-align';
 
-class Row {
-  static sanitizer: DomSanitizer;
-  _left: string = '';
-  _right: string = '';
-  _sanitizedLeft;
-  _sanitizedRight;
+class SentenceRow extends Row {
   sid = null;
-  fix = false;
-
-  get left() {
-    return this._left;
-  }
-
-  get right() {
-    return this._right;
-  }
-
-  set left(l: string) {
-    this._left = l;
-    this._sanitizedLeft = null;
-  }
-
-  set right(r: string) {
-    this._right = r;
-    this._sanitizedRight = null;
-  }
-
-  get sanitizedLeft() {
-    if (!this._sanitizedLeft) {
-      this._sanitizedLeft = Row.sanitizer.bypassSecurityTrustHtml(this._left)
-    }
-    return this._sanitizedLeft;
-  }
-
-  get sanitizedRight() {
-    if (!this._sanitizedRight) {
-      this._sanitizedRight = Row.sanitizer.bypassSecurityTrustHtml(this._right)
-    }
-    return this._sanitizedRight;
-  }
-
 }
 
 @Component({
@@ -54,7 +16,7 @@ class Row {
   styleUrls: ['./sentence-align.component.css']
 })
 export class SentenceAlignComponent {
-  rows: Row[];
+  rows: SentenceRow[];
   para: Para;
   endingPatternEn = /[.?!\n]+['"’\n]?/g;
   endingPatternZh = /[.?!。？！\n]+['"＇＂’”\n]?/g;
@@ -63,35 +25,44 @@ export class SentenceAlignComponent {
   constructor(private modal: SuiModal<Para, Para, string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
     this.para = modal.context;
+    this.setup();
+  }
 
+  setup() {
     let contentSents = this.splitSentences(this.para.content, this.endingPatternEn);
     let transSents = this.splitSentences(this.para.trans, this.endingPatternZh);
 
     let css = contentSents.filter(s => s.sid);
     let tss = transSents.filter(s => s.sid);
-    let ctd = differenceBy(css, tss, 'sid');
-    let tcd = differenceBy(tss, css, 'sid');
-    ctd.forEach(s => s.sid = null);
-    tcd.forEach(s => s.sid = null);
 
-    css = contentSents.filter(s => s.sid);
-    tss = transSents.filter(s => s.sid);
-    let csids = css.map(s => s.sid);
-    let tsids = tss.map(s => s.sid);
+    if (css.length > 0 || tss.length > 0) {
+      let ctd = differenceBy(css, tss, 'sid');
+      let tcd = differenceBy(tss, css, 'sid');
+      ctd.forEach(s => s.sid = null);
+      tcd.forEach(s => s.sid = null);
 
-    if (!isEqual(csids, tsids)) {
-      css.forEach(s => s.sid = null);
-      tss.forEach(s => s.sid = null);
+      css = contentSents.filter(s => s.sid);
+      tss = transSents.filter(s => s.sid);
+
+      if (css.length > 0 || tss.length > 0) {
+        let csids = css.map(s => s.sid);
+        let tsids = tss.map(s => s.sid);
+        if (!isEqual(csids, tsids)) {
+          css.forEach(s => s.sid = null);
+          tss.forEach(s => s.sid = null);
+        }
+      }
     }
 
-    let clen = contentSents.length, tlen = transSents.length;
+    let clen = contentSents.length;
+    let tlen = transSents.length;
     let ci = 0, ti = 0;
 
     this.rows = [];
     while (ci <= clen - 1 || ti <= tlen - 1) {
       let cs = contentSents[ci];
       let ts = transSents[ti];
-      let row = new Row();
+      let row = new SentenceRow();
       if (cs && ts && cs.sid == ts.sid) {
         row.left = cs.text;
         row.right = ts.text;
@@ -116,11 +87,10 @@ export class SentenceAlignComponent {
       }
       this.rows.push(row);
     }
-
   }
 
 
-  splitText(text: string, endingPattern) {
+  private splitText(text: string, endingPattern) {
     let holder = document.createElement('div');
     holder.innerHTML = text;
 
@@ -154,7 +124,7 @@ export class SentenceAlignComponent {
     return sts;
   }
 
-  splitSentences(text: string, endingPattern) {
+  private splitSentences(text: string, endingPattern) {
     text = text.replace(/<s-st[ >]/g, tagOpen => this.splitMark + tagOpen);
     text = text.replace(/<\/s-st>/g, tagClose => tagClose + this.splitMark);
 
@@ -215,7 +185,6 @@ export class SentenceAlignComponent {
     }
 
     let fixIndex = findIndex(this.rows, r => r.fix, index + 1);
-    console.log(fixIndex);
     if (fixIndex === -1) {
       fixIndex = this.rows.length;
     }
@@ -239,7 +208,7 @@ export class SentenceAlignComponent {
     if (newRowCount > 0) {
       let newRows = [];
       for (let i = 0; i < newRowCount; i++) {
-        newRows.push(new Row());
+        newRows.push(new SentenceRow());
       }
       this.rows.splice(index + 1, 0, ...newRows);
     }

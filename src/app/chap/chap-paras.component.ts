@@ -1,19 +1,18 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/switchMap';
+import Tether from 'tether';
 
 import {Chap} from '../models/chap';
-import {Para, ParaLiveContent} from '../models/para';
+import {Para} from '../models/para';
 import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
 import {Annotations} from '../content/annotations';
+import {ParaLiveContent} from '../view-common/para-live-content';
+import {DictRequest} from '../view-common/dict-request';
+import {NoteRequest} from '../view-common/note-request';
 
-import {DictEntry} from '../models/dict-entry';
-
-import Tether from 'tether';
-
-// import Drop from 'tether-drop';
 
 interface ContentChangedNotification {
   para: Para;
@@ -49,10 +48,10 @@ export class ChapParasComponent implements OnInit {
   agPopupHiddenTimer = null;
   agPopupTimer = null;
 
-  dictRequest: { wordElement, dictEntry, meaningItemId, relatedWords?, meaningItemCallback } = null;
+  dictRequest: DictRequest = null;
   dictTether = null;
 
-  noteRequest: { wordElement, note, editNoteCallback } = null;
+  noteRequest: NoteRequest = null;
   noteTether = null;
   noteRequestNote = '';
 

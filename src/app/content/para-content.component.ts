@@ -3,12 +3,14 @@ import {
   Component, ViewChild, ViewContainerRef, ChangeDetectorRef
 } from '@angular/core';
 
-import {ParaLiveContent} from '../models/para';
 import {SelectionAnnotator} from './selection-annotator';
 import {Annotations} from './annotations';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
+import {ParaLiveContent} from '../view-common/para-live-content';
+import {DictRequest} from '../view-common/dict-request';
+import {NoteRequest} from '../view-common/note-request';
 
 @Component({
   selector: 'para-content',
@@ -27,8 +29,8 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotation: string;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
-  @Output() dictRequest = new EventEmitter<{ wordElement, dictEntry, meaningItemId, relatedWords?, meaningItemCallback }>();
-  @Output() noteRequest = new EventEmitter<{ wordElement, note, editNoteCallback }>();
+  @Output() dictRequest = new EventEmitter<DictRequest>();
+  @Output() noteRequest = new EventEmitter<NoteRequest>();
   _annotator: SelectionAnnotator;
   beenChanged = false;
   contentChanged = false;
@@ -127,13 +129,12 @@ export class ParaContentComponent implements OnChanges {
         if (entry == null) {
           return;
         }
-        let dr = {
-          wordElement: element,
-          dictEntry: entry,
-          meaningItemId: oriMid,
-          relatedWords: null,
-          meaningItemCallback
-        };
+        let dr = new DictRequest();
+        dr.wordElement = element;
+        dr.dictEntry = entry;
+        dr.meaningItemId = oriMid;
+        dr.relatedWords = null;
+        dr.meaningItemCallback = meaningItemCallback;
         if (oriForWord !== word) {
           dr.relatedWords = [word];
         }
@@ -149,7 +150,7 @@ export class ParaContentComponent implements OnChanges {
     let {element, word, created} = wordTag;
     let oriNote = element.dataset.note;
 
-    let editNoteCallback = (note) => {
+    let editNoteCallback = (note: string) => {
       let changed = false;
       if (note === null || note === oriNote) {
         // cancel
@@ -174,7 +175,10 @@ export class ParaContentComponent implements OnChanges {
       }
     };
 
-    let nr = {wordElement: element, note: oriNote || '', editNoteCallback};
+    let nr = new NoteRequest();
+    nr.wordElement = element;
+    nr.note = oriNote || '';
+    nr.editNoteCallback = editNoteCallback;
     this.noteRequest.emit(nr)
   }
 
