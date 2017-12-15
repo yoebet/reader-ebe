@@ -115,3 +115,8 @@ sui-multi-select i.list.icon {
 /*.ui.modal {*/
 /*z-index: 2001;*/
 /*}*/
+
+.para-text s-st.highlight {
+  /*background: lightblue;*/
+  background: rgba(173, 216, 230, 0.4)
+}

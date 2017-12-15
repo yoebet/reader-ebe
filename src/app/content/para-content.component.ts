@@ -11,6 +11,7 @@ import {DictService} from '../services/dict.service';
 import {ParaLiveContent} from '../view-common/para-live-content';
 import {DictRequest} from '../view-common/dict-request';
 import {NoteRequest} from '../view-common/note-request';
+import {Annotation} from '../view-common/annotation';
 
 @Component({
   selector: 'para-content',
@@ -26,7 +27,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() gotFocus: boolean;
   @Input() editable: boolean;
   @Input() annotating: boolean;
-  @Input() annotation: string;
+  @Input() annotation: Annotation;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
@@ -36,6 +37,10 @@ export class ParaContentComponent implements OnChanges {
   contentChanged = false;
   transChanged = false;
   transRendered = false;
+  hover = true;
+  hoverSetup = false;
+  highlightedSentences: Element[] = [];
+  highlightedWords: Element[] = [];
 
   constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
   }
@@ -43,8 +48,8 @@ export class ParaContentComponent implements OnChanges {
   get annotator() {
     if (!this._annotator) {
       let contentEl = this.paraText.element.nativeElement;
-      this._annotator = new SelectionAnnotator(Annotations.forAnnotator, contentEl);
-      this._annotator.selectionBreakerSelector = '.linefeed';
+      this._annotator = new SelectionAnnotator(contentEl);
+      this._annotator.selectionBreakerSelector = 's-st';
     }
     this._annotator.switchAnnotation(this.annotation);
     return this._annotator;
@@ -183,15 +188,15 @@ export class ParaContentComponent implements OnChanges {
   }
 
   onMouseup($event) {
-    if (!this.gotFocus || !this.annotating) {
+    if (!this.gotFocus || !this.annotating || !this.annotation) {
       return;
     }
 
     $event.stopPropagation();
 
-    if (this.annotation === 'SelectWordMeaning') {
+    if (this.annotation.name === 'SelectWordMeaning') {
       this.selectWordMeaning();
-    } else if (this.annotation === 'AddANote') {
+    } else if (this.annotation.name === 'AddANote') {
       this.addANote();
     } else {
       let altered = this.annotator.annotate();
@@ -287,6 +292,80 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
+  private clearHighlighted() {
+
+    let hls = this.highlightedSentences;
+    while (hls.length > 0) {
+      let hl = hls.pop();
+      hl.classList.remove('highlight');
+    }
+  }
+
+  private setupSentenceHover() {
+
+    let sentenceTagName = 's-st';
+
+    let contentEl = this.paraText.element.nativeElement;
+    let transEl = this.paraTrans.element.nativeElement;
+    let contentMap = new Map<string, Element>();
+    let transMap = new Map<string, Element>();
+    for (let [textEl, selMap] of [[contentEl, contentMap], [transEl, transMap]]) {
+      let sentenceEls = textEl.querySelectorAll(sentenceTagName);
+      for (let stEl of sentenceEls) {
+        if (!stEl.dataset) {
+          continue;
+        }
+        let sid = stEl.dataset.sid;
+        if (sid) {
+          selMap.set(sid, stEl);
+        }
+      }
+    }
+
+    let component = this;
+
+    let sentenceMouseover = function (event) {
+      if (!component.gotFocus) {
+        return;
+      }
+      let el = this;
+      if (!el.dataset) {
+        return;
+      }
+      let sid = el.dataset.sid;
+      if (!sid) {
+        return;
+      }
+
+      component.clearHighlighted();
+      // console.log(sid);
+      for (let selMap of [contentMap, transMap]) {
+        let tsEl = selMap.get(sid);
+        if (tsEl) {
+          tsEl.classList.add('highlight');
+          component.highlightedSentences.push(tsEl);
+        }
+      }
+    };
+
+    for (let textEl of [contentEl, transEl]) {
+      let sentenceEls = textEl.querySelectorAll(sentenceTagName);
+      for (let sentenceEl of sentenceEls) {
+        sentenceEl.addEventListener('mouseover', sentenceMouseover);
+      }
+    }
+  }
+
+  private setupMouseoverIfNeeded() {
+
+    if (!this.gotFocus || !this.hover || this.hoverSetup) {
+      return;
+    }
+    this.setupSentenceHover();
+
+    this.hoverSetup = true;
+  }
+
   refreshContent() {
     let html = this.content || ' ';
     // html = html.replace(
@@ -296,6 +375,9 @@ export class ParaContentComponent implements OnChanges {
     // );
     html = `<div class="part">${html}</div>`;
     this.paraText.element.nativeElement.innerHTML = html;
+
+    this.hoverSetup = false;
+    this.setupMouseoverIfNeeded();
   }
 
   refreshTrans() {
@@ -303,11 +385,22 @@ export class ParaContentComponent implements OnChanges {
     html = `<div class="part">${html}</div>`;
     this.paraTrans.element.nativeElement.innerHTML = html;
     this.transRendered = true;
+
+    this.hoverSetup = false;
+    this.setupMouseoverIfNeeded();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.gotFocus) {
+      if (this.gotFocus) {
+        this.setupMouseoverIfNeeded();
+      } else {
+        this.clearHighlighted();
+      }
+    }
     if (changes.trans) {
       this.transRendered = false;
+      this.hoverSetup = false;
     }
     if (this.showTrans && !this.transRendered) {
       this.refreshTrans();

@@ -1,190 +1,184 @@
+import {AnnotationGroup} from '../view-common/annotation-group';
+import {Annotation} from '../view-common/annotation';
+
+
 export class Annotations {
 
   private static compact = [{
     name: '词类',
     nameEn: 'Parts of Speech',
+    tagName: 'p-p',
+    cssClass: 'pos',
+    dataName: 'pos',
     annotations: [
-      //name,displayName,cssClass,tagName
-      ['Noun', '名词', 'pn', 'p-n'],
-      ['Verb', '动词', 'pv', 'p-v'],
-      ['Adjective', '形容词', 'pa', 'p-a'],
-      ['Adverb', '副词', 'pd', 'p-d'],
-      ['Interjection', '感叹词', 'pi', 'p-i'],
-      ['Preposition', '介词', 'pp', 'p-p'],
-      ['Conjunction', '连词', 'pc', 'p-c'],
-      // ['Pronoun', '代词', 'pr', 'p-r'],
+      //name,displayName,dataValue
+      ['Noun', '名词', 'pn'],
+      ['Verb', '动词', 'pv'],
+      ['Adjective', '形容词', 'pa'],
+      ['Adverb', '副词', 'pd'],
+      ['Interjection', '感叹词', 'pi'],
+      ['Preposition', '介词', 'pp'],
+      ['Conjunction', '连词', 'pc'],
+      // ['Pronoun', '代词', 'pr'],
     ]
   }, {
     name: '名词',
     nameEn: 'Noun',
+    tagName: 'n-n',
+    cssClass: 'noun',
+    dataName: 'noun',
     annotations: [
-      ['Individual Nouns', '个体名词', 'ni', 'n-i'],
-      ['Collective Nouns', '集体名词', 'nc', 'n-c'],
-      ['Material Nouns', '物质名词', 'nm', 'n-m'],
-      ['Abstract Nouns', '抽象名词', 'na', 'n-a'],
-      ['Countable Nouns', '可数名词', 'nn', 'n-n'],
-      ['Uncountable Nouns', '不可数名词', 'nu', 'n-u'],
-      ['Singular Form', '单数', 'ns', 'n-s'],
-      ['Plural Form', '复数', 'np', 'n-p'],
-      ['Gerund', '动名词', 'ng', 'n-g'],
+      // ['Individual Nouns', '个体名词', 'ni'],
+      ['Collective Nouns', '集体名词', 'nc'],
+      ['Material Nouns', '物质名词', 'nm'],
+      ['Abstract Nouns', '抽象名词', 'na'],
+      ['Countable Nouns', '可数', 'nn'],
+      ['Uncountable Nouns', '不可数', 'nu'],
+      ['Singular Form', '单数', 'ns'],
+      ['Plural Form', '复数', 'np'],
+      ['Gerund', '动名词', 'ng'],
     ]
   }, {
     name: '动词',
     nameEn: 'Verb',
+    tagName: 'v-v',
+    cssClass: 'verb',
+    dataName: 'verb',
     annotations: [
-      ['Transitive Verbs', '及物动词', 'vt', 'v-t'],
-      ['Intransitive Verbs', '不及物动词', 'vi', 'v-i'],
-      ['Ergative Verbs', '及物/不及物动词', 've', 'v-e'],
-      ['Link-verbs', '系动词', 'vl', 'v-l'],
-      ['Modal Verbs', '情态动词', 'vm', 'v-m'],
-      ['Irregular Verbs', '不规则动词', 'vr', 'v-r'],
-      ['Ditransitive Verbs', '双宾动词', 'vd', 'v-d'],
-      ['Instantaneous Verbs', '短暂动词', 'vs', 'v-s'],
+      ['Transitive Verbs', '及物', 'vt'],
+      ['Intransitive Verbs', '不及物', 'vi'],
+      ['Ergative Verbs', '及物/不及物', 've'],
+      ['Link-verbs', '系动词', 'vl'],
+      ['Modal Verbs', '情态动词', 'vm'],
+      ['Irregular Verbs', '不规则', 'vr'],
+      ['Ditransitive Verbs', '双宾动词', 'vd'],
+      ['Instantaneous Verbs', '短暂动词', 'vs'],
     ]
   }, {
     name: '成分',
     nameEn: 'Members of the Sentence',
+    tagName: 'm-m',
+    cssClass: 'memb',
+    dataName: 'memb',
     annotations: [
-      ['Subject', '主语', 'ms', 'm-s'],
-      ['Predicate', '谓语', 'mp', 'm-p'],
-      ['Object', '宾语', 'mo', 'm-o'],
-      ['Direct Object', '直接宾语', 'md', 'm-d'],
-      ['Indirect Object', '间接宾语', 'mi', 'm-i'],
-      ['Predicative', '表语', 'me', 'm-e'],
-      ['Attribute', '定语', 'ma', 'm-a'],
-      ['Adverbial', '状语', 'mv', 'm-v'],
-      ['Appositive', '同位语', 'mt', 'm-t'],
-      ['Parenthesis', '插入语', 'mr', 'm-r'],
-      ['Participial Phrases', '分词小句', 'mc', 'm-c'],
-      // ['Complex Object', '复合宾语', 'mc', 'm-c'],
-      // ['Cognate Object', '同源宾语', 'mg', 'm-g'],
+      ['Subject', '主语', 'ms'],
+      ['Predicate', '谓语', 'mp'],
+      ['Object', '宾语', 'mo'],
+      ['Direct Object', '直接宾语', 'md'],
+      ['Indirect Object', '间接宾语', 'mi'],
+      ['Predicative', '表语', 'me'],
+      ['Attribute', '定语', 'ma'],
+      ['Adverbial', '状语', 'mv'],
+      ['Appositive', '同位语', 'mt'],
+      ['Parenthesis', '插入语', 'mr'],
+      ['Participial Phrases', '分词小句', 'mc'],
+      // ['Complex Object', '复合宾语', 'mc'],
+      // ['Cognate Object', '同源宾语', 'mg'],
     ]
   }, {
     name: '从句',
     nameEn: 'Clauses',
+    tagName: 'c-c',
+    cssClass: 'clau',
+    dataName: 'clau',
     annotations: [
-      ['Subject Clauses', '主语从句', 'cs', 'c-s'],
-      ['Object Clauses', '宾语从句', 'co', 'c-o'],
-      ['Predicative Clauses', '表语从句', 'cp', 'c-p'],
-      ['Attributive Clauses', '定语从句', 'ca', 'c-a'],
-      ['Appositive Clauses', '同位语从句', 'ct', 'c-t'],
-      ['Adverbial Clauses', '状语从句', 'cd', 'c-d'],
-      ['Antecedent', '先行词', 'cc', 'c-c'],
-      ['Relative', '引导词', 'cr', 'c-r'],
+      ['Subject Clauses', '主语从句', 'cs'],
+      ['Object Clauses', '宾语从句', 'co'],
+      ['Predicative Clauses', '表语从句', 'cp'],
+      ['Attributive Clauses', '定语从句', 'ca'],
+      ['Appositive Clauses', '同位语从句', 'ct'],
+      ['Adverbial Clauses', '状语从句', 'cd'],
+      ['Antecedent', '先行词', 'cc'],
+      ['Relative', '引导词', 'cr'],
     ]
   },
     {
       name: '时态',
       nameEn: 'Tense',
+      tagName: 't-t',
+      cssClass: 'tens',
+      dataName: 'tens',
       annotations: [
-        ['Present Indefinite', '现在时', 'tp', 't-p'],
-        ['Present Continuous', '现在进行时', 'tc', 't-c'],
-        ['Present Perfect', '现在完成时', 'tr', 't-r'],
-        ['Present Perfect Continuous', '现在完成进行时', 'te', 't-e'],
-        ['Past Indefinite', '过去时', 'ta', 't-a'],
-        ['Past Future', '过去将来时', 'tf', 't-f'],
-        ['Past Continuous', '过去进行时', 'ts', 't-s'],
-        ['Past Perfect', '过去完成时', 'tt', 't-t'],
-        ['Future Indefinite', '将来时', 'tu', 't-u'],
-        ['Future Perfect', '将来完成时', 'tz', 't-z'],
+        ['Present Indefinite', '现在时', 'tp'],
+        ['Present Continuous', '现在进行时', 'tc'],
+        ['Present Perfect', '现在完成时', 'tr'],
+        ['Present Perfect Continuous', '现在完成进行时', 'te'],
+        ['Past Indefinite', '过去时', 'ta'],
+        ['Past Future', '过去将来时', 'tf'],
+        ['Past Continuous', '过去进行时', 'ts'],
+        ['Past Perfect', '过去完成时', 'tt'],
+        ['Future Indefinite', '将来时', 'tu'],
+        ['Future Perfect', '将来完成时', 'tz'],
       ]
     },
     {
       name: '短语',
       nameEn: 'Phrases',
+      tagName: 'h-h',
+      cssClass: 'phra',
+      dataName: 'phra',
       annotations: [
-        ['Infinitive Phrases', '不定式短语', 'hi', 'h-i'],
-        ['Phrasal Verbs', '成语动词', 'hp', 'h-p'],
-        ['Prepositional Phrases', '介词短语', 'hr', 'h-r'],
-        ['phrases1', '组1', 'hg1', 'h-g1'],
-        ['phrases2', '组2', 'hg2', 'h-g2'],
-        ['phrases3', '组3', 'hg3', 'h-g3'],
+        ['Infinitive Phrases', '不定式短语', 'hi'],
+        ['Phrasal Verbs', '成语动词', 'hp'],
+        ['Prepositional Phrases', '介词短语', 'hr'],
+        ['phrases1', '组1', 'g1'],
+        ['phrases2', '组2', 'g2'],
+        ['phrases3', '组3', 'g3'],
       ]
     }, {
       name: '其他',
-      nameEn: 'Word',
+      nameEn: 'Misc',
+      tagName: 'w-w',
+      cssClass: 'misc',
+      dataName: 'misc',
       annotations: [
-        ['Idiom', '习语', 'wi', 'w-i'],
-        ['Slang', '俚语', 'ws', 'w-s'],
-        ['Colloquial', '口语', 'wc', 'w-c'],
-        ['Euphemism', '委婉语', 'we', 'w-e'],
-        ['Figurative', '比喻义', 'wf', 'w-f'],
-    //   ]
-    // },
-    // {
-    //   name: '语态语气',
-    //   nameEn: 'Voice',
-    //   annotations: [
-        ['Passive Voice', '被动语态', 'sp', 's-p'],
-        ['Imperative Mood', '祈使语气', 'si', 's-i'],
-        ['Subjunctive Mood', '虚拟语气', 'ss', 's-s'],
-    //   ]
-    // },
-    // {
-    //   name: '其他',
-    //   nameEn: 'Misc',
-    //   annotations: [
-        ['Footnote', '脚注', 'sf', 's-f'],
-        ['Careful', '注意', 'sc', 's-c'],
-        ['Inversion', '倒装', 'sv', 's-v'],
-        ['Ellipsis', '省略', 'se', 's-e'],
+        ['Idiom', '习语', 'wi'],
+        ['Slang', '俚语', 'ws'],
+        ['Colloquial', '口语', 'wc'],
+        ['Euphemism', '委婉语', 'we'],
+        ['Figurative', '比喻义', 'wf'],
+        ['Passive Voice', '被动语态', 'sp'],
+        ['Imperative Mood', '祈使语气', 'si'],
+        ['Subjunctive Mood', '虚拟语气', 'ss'],
+        ['Footnote', '脚注', 'sf'],
+        ['Careful', '注意', 'sc'],
+        ['Inversion', '倒装', 'sv'],
+        ['Ellipsis', '省略', 'se'],
       ]
     }
   ];
 
-  // For UI
-  // [{
-  //   groupName: '句子成分',
-  //   annotations: [{
-  //     name: 'subj',
-  //     displayName: '主语',
-  //     cssClass: 'ms',
-  //     tagName: 'm-s'
-  //   }]
-  // }];
-  private static _grouped = null;
-
-  // flatten
-  private static _forAnnotator = null;
+  private static _annotationGroups: AnnotationGroup[] = null;
 
   private static init() {
-    let grouped = Annotations._grouped = [];
-    let forAnnotator = Annotations._forAnnotator = {};
-
-    let tagToName = {};
-    let classToName = {};
+    let groups: AnnotationGroup[] = Annotations._annotationGroups = [];
 
     for (let compactGroup of Annotations.compact) {
-      let {name, nameEn} = compactGroup;
-      let group = {name, nameEn};
-      let annotations = group['annotations'] = [];
-      for (let annotationProps of compactGroup.annotations) {
-        let [name, displayName, cssClass, tagName] = annotationProps;
-
-        if (tagName) {
-          tagName = tagName.toUpperCase();
-          if (classToName[tagName]) {
-            console.log(tagName + ' used.')
-          }
-          classToName[tagName] = name;
-        }
-
-        if (tagToName[cssClass]) {
-          console.log(cssClass + ' used.')
-        }
-        tagToName[cssClass] = name;
-
-        forAnnotator[name] = {cssClass, tagName};
-        annotations.push({name, displayName, cssClass, tagName});
-
+      let group = new AnnotationGroup();
+      group.name = compactGroup.name;
+      group.nameEn = compactGroup.nameEn;
+      let {tagName, cssClass, dataName} = compactGroup;
+      if (tagName) {
+        tagName = tagName.toUpperCase();
       }
-      grouped.push(group);
+      group.tagName = tagName;
+      group.cssClass = cssClass;
+      group.dataName = dataName;
+      groups.push(group);
+
+      let annotations: Annotation[] = group.annotations = [];
+      for (let annotationProps of compactGroup.annotations) {
+        let [nameEn, name, dataValue] = annotationProps;
+        let ann = new Annotation();
+        ann.group = group;
+        ann.name = name;
+        ann.nameEn = nameEn;
+        ann.dataValue = dataValue;
+        annotations.push(ann);
+      }
     }
 
-    forAnnotator['$tagToName'] = tagToName;
-    forAnnotator['$classToName'] = classToName;
-
-    // Annotations.printStyles();
+    Annotations.printStyles();
   }
 
 
@@ -192,39 +186,34 @@ export class Annotations {
 
     let styles = [];
 
-    for (let compactGroup of Annotations.compact) {
-      let {name, nameEn} = compactGroup;
-      styles.push(`\n /* *** ${name} ${nameEn} *** */\n`);
-      for (let annotationProps of compactGroup.annotations) {
-        let [name, displayName, cssClass, tagName] = annotationProps;
-        styles.push(`/* ${displayName} ${name} */`);
-        let selector = '.' + cssClass;
-        let before = selector + ':before';
-        let after = selector + ':after';
-        if (tagName) {
-          selector = tagName + ', ' + selector;
-          before = tagName + ':before' + ', ' + before;
-          after = tagName + ':after' + ', ' + after;
-        }
-        styles.push(`${selector} {\n}\n`);
-        styles.push(`${before} {\n}\n`);
-        styles.push(`${after} {\n}\n`);
+    for (let group of Annotations.annotationGroups) {
+      let {name, nameEn, cssClass, tagName, dataName} = group;
+      styles.push(`\n/* *** ${name} ${nameEn} *** */\n`);
+      let selector = '.' + cssClass;
+      let before = selector + ':before';
+      let after = selector + ':after';
+      if (tagName) {
+        tagName = tagName.toLowerCase();
+        selector = tagName + ', ' + selector;
+        before = tagName + ':before' + ', ' + before;
+        after = tagName + ':after' + ', ' + after;
       }
+      styles.push(`${selector} {\n}\n`);
+      styles.push(`${before} {\n}\n`);
+      styles.push(`${after} {\n}\n`);
+      // for (let annotation: Annotation of group.annotations) {
+      //   let {name, nameEn, dataValue} = annotation;
+      //   styles.push(`/* ${nameEn} ${nameEn} */`);
+      // }
     }
     console.log(styles.join('\n'));
   }
 
-  static get grouped() {
-    if (Annotations._grouped == null) {
+  static get annotationGroups(): AnnotationGroup[] {
+    if (Annotations._annotationGroups == null) {
       Annotations.init();
     }
-    return Annotations._grouped;
+    return Annotations._annotationGroups;
   }
 
-  static get forAnnotator() {
-    if (Annotations._forAnnotator == null) {
-      Annotations.init();
-    }
-    return Annotations._forAnnotator;
-  }
 }

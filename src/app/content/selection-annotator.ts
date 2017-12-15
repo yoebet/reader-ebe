@@ -1,3 +1,5 @@
+import {Annotation} from '../view-common/annotation';
+
 export class SelectionAnnotator {
 
   charPattern = /[-a-zA-Z]/;
@@ -7,83 +9,16 @@ export class SelectionAnnotator {
   isExtendWholeWord = true;
   // element or selector,
   container: Element | string = null;
-  // {
-  //   name: {
-  //     cssClass: 'subj',
-  //     tagName: 'x-subj'
-  //   }
-  // };
-  private _annotations = null;
 
-  private tagToName = null;
+  current: Annotation;
 
-  private classToName = null;
-
-  current: string;
-
-  constructor(annotations, container) {
-    this.annotations = annotations;
+  constructor(container) {
     this.container = container;
   }
 
-  switchAnnotation(annotationName) {
-    this.current = annotationName;
+  switchAnnotation(annotation: Annotation) {
+    this.current = annotation;
   }
-
-  set annotations(annotations) {
-    this._annotations = annotations;
-    this.tagToName = annotations['$tagToName'];
-    this.classToName = annotations['$classToName'];
-  }
-
-  get annotations() {
-    return this._annotations;
-  }
-
-  get annotateClass() {
-    let annotation = this._annotations[this.current];
-    if (annotation) {
-      return annotation.cssClass;
-    }
-    return null;
-  }
-
-  get annotateTag() {
-    let annotation = this._annotations[this.current];
-    if (annotation) {
-      let tagName = annotation.tagName;
-      if (tagName) {
-        return tagName.toUpperCase();
-      }
-    }
-    return null;
-  }
-
-  // private buildReversedNameMap() {
-  //   let t2n = this._tagToName = {};
-  //   let c2n = this._classToName = {};
-  //   for (let name in this.annotations) {
-  //     let anno = this.annotations[name];
-  //     t2n[anno.cssClass] = name;
-  //     if (anno.tagName) {
-  //       c2n[anno.tagName.toUpperCase()] = name;
-  //     }
-  //   }
-  // }
-  //
-  // get tagToName() {
-  //   if (!this._tagToName) {
-  //     this.buildReversedNameMap();
-  //   }
-  //   return this._tagToName;
-  // }
-  //
-  // get classToName() {
-  //   if (!this._classToName) {
-  //     this.buildReversedNameMap();
-  //   }
-  //   return this._classToName;
-  // }
 
   private extendWholeWord(text, wordStart, wordEnd) {
     let trimLeft = false, trimRight = false;
@@ -141,13 +76,15 @@ export class SelectionAnnotator {
   }
 
   private createWrappingTag() {
+    let ann = this.current;
     let wrapping;
-    if (this.annotateTag) {
-      wrapping = document.createElement(this.annotateTag);
+    if (ann.tagName) {
+      wrapping = document.createElement(ann.tagName);
     } else {
       wrapping = document.createElement(this.inlineTagName);
-      wrapping.className = this.annotateClass;
+      wrapping.className = ann.cssClass;
     }
+    this.setDataAttribute(wrapping);
     return wrapping;
   }
 
@@ -166,6 +103,7 @@ export class SelectionAnnotator {
   }
 
   private lookupAnnotated(textNode) {
+    let selector = this.annotationSelector();
     let element = textNode.parentNode;
     while (element) {
       if (element.nodeType !== Node.ELEMENT_NODE) {
@@ -174,11 +112,7 @@ export class SelectionAnnotator {
       if (this.checkIsContainer(element)) {
         return null;
       }
-      if (element.tagName === this.annotateTag) {
-        return element;
-      }
-      let classList = element.classList;
-      if (classList.contains(this.annotateClass)) {
+      if (element.matches(selector)) {
         return element;
       }
       element = element.parentNode;
@@ -186,70 +120,90 @@ export class SelectionAnnotator {
     return null;
   }
 
+  private setDataAttribute(element) {
+    let ann = this.current;
+    if (ann.dataName && ann.dataValue) {
+      element.dataset[ann.dataName] = ann.dataValue;
+    }
+  }
+
+  private removeDataAttribute(element) {
+    let ann = this.current;
+    if (ann.dataName) {
+      delete element.dataset[ann.dataName];
+    }
+  }
+
+  private annotationSelector() {
+    let ann = this.current;
+    let selector = '.' + ann.cssClass;
+    if (ann.dataName) {
+      selector += `[data-${ann.dataName}]`;
+    }
+    if (ann.tagName) {
+      let tagSelector = ann.tagName.toLowerCase();
+      if (ann.dataName) {
+        tagSelector += `[data-${ann.dataName}]`;
+      }
+      selector = `${tagSelector}, ${selector}`;
+    }
+    return selector;
+  }
+
   private resetAnnotation(element, type) {
     //type: add, remove, toggle
     if (element.nodeType !== Node.ELEMENT_NODE) {
       return;
     }
-    let classList = element.classList;
-    let tagName = element.tagName;
-    let removeTag = false;
 
-    if (tagName === this.annotateTag) {
+    let ann = this.current;
+    let selector = this.annotationSelector();
+    let match = element.matches(selector);
+    if (match) {
       if (type === 'add') {
+        this.setDataAttribute(element);
         return;
       }
-      if (classList.length > 0) {
-        //replace with span
-        let wrapping = document.createElement(this.inlineTagName);
-        wrapping.className = element.className;
+      if (type === 'remove' || type === 'toggle') {
+        this.removeDataAttribute(element);
+        element.classList.remove(ann.cssClass);
+        let hasAttributes = element.hasAttributes();
+        if (element.tagName === ann.tagName && hasAttributes) {
+          //replace with span
+          let wrapping = document.createElement(this.inlineTagName);
+          wrapping.className = element.className;
 
-        //for (let item of element.childNodes)
-        while (element.firstChild) {
-          wrapping.appendChild(element.firstChild);
+          //for (let item of element.childNodes)
+          while (element.firstChild) {
+            wrapping.appendChild(element.firstChild);
+          }
+          let pp = element.parentNode;
+          pp.replaceChild(wrapping, element);
+          return;
         }
-
-        let pp = element.parentNode;
-        pp.replaceChild(wrapping, element);
-
-        return;
+        if (!hasAttributes) {
+          //remove tag
+          let pp = element.parentNode;
+          while (element.firstChild) {
+            pp.insertBefore(element.firstChild, element);
+          }
+          pp.removeChild(element);
+          pp.normalize();
+        }
       }
-      removeTag = true;
     } else {
       if (type === 'add') {
-        classList.add(this.annotateClass);
+        this.setDataAttribute(element);
+        if (element.tagName !== ann.tagName) {
+          element.classList.add(ann.cssClass);
+        }
         return;
       }
-      if (type === 'remove') {
-        classList.remove(this.annotateClass);
-      }
-      if (type === 'toggle') {
-        classList.toggle(this.annotateClass);
-      }
-    }
-
-    if (classList.length === 0 &&
-      tagName === this.inlineTagName.toUpperCase() &&
-      !element.hasAttributes()) {
-      removeTag = true;
-    }
-
-    if (removeTag) {
-      let pp = element.parentNode;
-      while (element.firstChild) {
-        pp.insertBefore(element.firstChild, element);
-      }
-      pp.removeChild(element);
-
-      pp.normalize();
     }
   }
 
   private removeAnnotations(element) {
-    let selector = '.' + this.annotateClass;
-    if (this.annotateTag) {
-      selector = this.annotateTag + ',' + selector;
-    }
+    let selector = this.annotationSelector();
     let annotated = element.querySelectorAll(selector);
     annotated.forEach(ae => {
       this.resetAnnotation(ae, 'remove');
@@ -358,56 +312,20 @@ export class SelectionAnnotator {
     let wrapping = this.createWrappingTag();
     parent.replaceChild(wrapping, beginingNode);
     wrapping.appendChild(beginingNode);
-
     for (let inode of interNodes) {
       wrapping.appendChild(inode);
     }
     wrapping.appendChild(endingNode);
-
     this.removeAnnotations(wrapping);
 
     return true;
-  }
-
-  getAnnotationsAtCursor() {
-    let selection = window.getSelection();
-    let node = selection.focusNode;
-    if (!node) {
-      return [];
-    }
-
-    let foundAnnotationNames = [];
-
-    while (node) {
-      if (node.nodeType !== Node.ELEMENT_NODE) {
-        node = node.parentNode;
-        continue;
-      }
-      let element = node as Element;
-      if (this.checkIsContainer(element)) {
-        break;
-      }
-
-      if (this.tagToName[element.tagName]) {
-        foundAnnotationNames.push(this.tagToName[element.tagName]);
-      }
-      let cl = element.classList;
-      for (let i = 0; i < cl.length; i++) {
-        let className = cl[i];
-        if (this.classToName[className]) {
-          foundAnnotationNames.push(this.classToName[className]);
-        }
-      }
-      node = node.parentNode;
-    }
-
-    return foundAnnotationNames;
   }
 
   annotate(wordAtCursorIfNoSelection: boolean = undefined): boolean {
     if (!this.current) {
       return false;
     }
+    console.log(this.current);
     let selection = window.getSelection();
     let savedWacins = this.wordAtCursorIfNoSelection;
     if (typeof wordAtCursorIfNoSelection === 'boolean') {

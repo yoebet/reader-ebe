@@ -45,9 +45,9 @@ div(*ngIf='chap')
       [ngClass]='{active: ann===currentAnnotation}',
       (click)='switchAnnotation(ann,$event)',
       (contextmenu)='removeFromLatest(ann,$event)')
-        span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
+        span(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
       .ui.text.menu
-        ng-template(ngFor='', let-agroup='', [ngForOf]="groupedAnnotations")
+        ng-template(ngFor='', let-agroup='', [ngForOf]="annotationGroups")
           a.item([ngClass]='{active: agroup===annotationGroup}',
           (click)='clickAnnotationGroup(agroup,$event)',
           (mouseover)='agPopupMouseover(agroup)',
@@ -63,7 +63,7 @@ div(*ngIf='chap')
             .ui.mini.basic.button(*ngFor='let ann of agroup.annotations',
             [ngClass]='{active: ann===currentAnnotation}',
             (click)='switchAnnotation(ann,$event)')
-              span(class='{{ann.cssClass}}') {{ann.displayName||ann.name}}
+              span(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
 
   .ui.list.items
     ng-template(ngFor='', let-para='', [ngForOf]="chap.paras", let-index="index", let-first="first", let-last="last", [ngForTrackBy]="paraTracker")
@@ -81,7 +81,7 @@ div(*ngIf='chap')
         [gotFocus]='para===selectedPara',
         [editable]='para===selectedPara && editInplace',
         [annotating]='para===selectedPara && annotating',
-        [annotation]='(para===selectedPara)? currentAnnotation?.name : null',
+        [annotation]='(para===selectedPara)? currentAnnotation : null',
         [ngClass]='{"selected": para===selectedPara}',
         (click)='selectPara(para)',
         (contentChange)="onContentChange(para,$event)",

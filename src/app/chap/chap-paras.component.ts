@@ -12,6 +12,8 @@ import {Annotations} from '../content/annotations';
 import {ParaLiveContent} from '../view-common/para-live-content';
 import {DictRequest} from '../view-common/dict-request';
 import {NoteRequest} from '../view-common/note-request';
+import {AnnotationGroup} from '../view-common/annotation-group';
+import {Annotation} from '../view-common/annotation';
 
 
 interface ContentChangedNotification {
@@ -39,10 +41,10 @@ export class ChapParasComponent implements OnInit {
   annotateOnly = false;
   editInplace = false;
 
-  groupedAnnotations = Annotations.grouped;
-  annotationGroup = null;
-  currentAnnotation = null;
-  latestAnnotations = [];
+  annotationGroups: AnnotationGroup[] = Annotations.annotationGroups;
+  annotationGroup: AnnotationGroup = null;
+  currentAnnotation: Annotation = null;
+  latestAnnotations: Annotation[] = [];
 
   keepAgPopup = false;
   agPopupHiddenTimer = null;
@@ -68,7 +70,7 @@ export class ChapParasComponent implements OnInit {
     if (!this.chap.paras) {
       this.chap.paras = [];
     }
-    let ag = this.groupedAnnotations[0];
+    let ag: AnnotationGroup = this.annotationGroups[0];
     if (ag) {
       let size = Math.min(ag.annotations.length, 3);
       for (let i = 0; i < size; i++) {
@@ -190,7 +192,11 @@ export class ChapParasComponent implements OnInit {
   }
 
   switchAnnotationName(annotationName, $event) {
-    this.currentAnnotation = {name: annotationName};
+    let group = new AnnotationGroup();
+    let ann = new Annotation();
+    ann.name = annotationName;
+    ann.group = group;
+    this.currentAnnotation = ann;
     this.stopEvent($event);
   }
 
