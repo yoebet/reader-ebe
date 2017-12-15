@@ -138,16 +138,34 @@ export class SelectionAnnotator {
     let ann = this.current;
     let selector = '.' + ann.cssClass;
     if (ann.dataName) {
-      selector += `[data-${ann.dataName}]`;
+      selector += `[data-${ann.dataName}=${ann.dataValue}]`;
     }
     if (ann.tagName) {
       let tagSelector = ann.tagName.toLowerCase();
       if (ann.dataName) {
-        tagSelector += `[data-${ann.dataName}]`;
+        tagSelector += `[data-${ann.dataName}=${ann.dataValue}]`;
       }
       selector = `${tagSelector}, ${selector}`;
     }
     return selector;
+  }
+
+  private removeTagIfDummy(element) {
+    if (element.tagName !== SelectionAnnotator.annotationTagName.toUpperCase()) {
+      return false;
+    }
+    if (element.classList.length === 0) {
+      element.removeAttribute('class');
+    }
+    if (!element.hasAttributes()) {
+      //remove tag
+      let pp = element.parentNode;
+      while (element.firstChild) {
+        pp.insertBefore(element.firstChild, element);
+      }
+      pp.removeChild(element);
+      pp.normalize();
+    }
   }
 
   private resetAnnotation(element, type) {
@@ -164,40 +182,34 @@ export class SelectionAnnotator {
         this.setDataAttribute(element);
         return;
       }
-      if (type === 'remove' || type === 'toggle') {
-        this.removeDataAttribute(element);
-        element.classList.remove(ann.cssClass);
-        let hasAttributes = element.hasAttributes();
-        if (element.tagName === ann.tagName && hasAttributes) {
-          let wrapping = document.createElement(SelectionAnnotator.annotationTagName);
-          wrapping.className = element.className;
+      // remove,toggle
+      this.removeDataAttribute(element);
+      element.classList.remove(ann.cssClass);
+      if (element.tagName === ann.tagName && element.hasAttributes()) {
+        let wrapping = document.createElement(SelectionAnnotator.annotationTagName);
+        wrapping.className = element.className;
 
-          //for (let item of element.childNodes)
-          while (element.firstChild) {
-            wrapping.appendChild(element.firstChild);
-          }
-          let pp = element.parentNode;
-          pp.replaceChild(wrapping, element);
-          return;
+        //for (let item of element.childNodes)
+        while (element.firstChild) {
+          wrapping.appendChild(element.firstChild);
         }
-        if (!hasAttributes) {
-          //remove tag
-          let pp = element.parentNode;
-          while (element.firstChild) {
-            pp.insertBefore(element.firstChild, element);
-          }
-          pp.removeChild(element);
-          pp.normalize();
-        }
+        let pp = element.parentNode;
+        pp.replaceChild(wrapping, element);
+        return;
       }
+      this.removeTagIfDummy(element);
     } else {
-      if (type === 'add') {
+      if (type === 'add' || type === 'toggle') {
         this.setDataAttribute(element);
         if (element.tagName !== ann.tagName) {
           element.classList.add(ann.cssClass);
         }
         return;
       }
+      // remove
+      this.removeDataAttribute(element);
+      element.classList.remove(ann.cssClass);
+      this.removeTagIfDummy(element);
     }
   }
 

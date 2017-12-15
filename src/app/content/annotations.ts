@@ -11,7 +11,7 @@ export class Annotations {
     cssClass: 'pos',
     dataName: 'pos',
     annotations: [
-      //name,displayName,dataValue
+      //nameEn,name,dataValue
       ['Noun', '名词', 'pn'],
       ['Verb', '动词', 'pv'],
       ['Adjective', '形容词', 'pa'],
@@ -214,6 +214,34 @@ export class Annotations {
       Annotations.init();
     }
     return Annotations._annotationGroups;
+  }
+
+}
+
+
+export class HighlightGroups {
+
+  private static group(attr, values) {
+    return values.map(v => `[data-${attr}=${v}]`).join(', ');
+  }
+
+  static groupSelectors: string[] = [
+    '[data-phra=g1]',
+    '[data-phra=g2]',
+    '[data-phra=g3]',
+    HighlightGroups.group('clau', ['cc', 'cr']),
+    HighlightGroups.group('memb', ['ms', 'mp', 'mo'])
+  ];
+
+  static highlightAnnotationSelectors = HighlightGroups.groupSelectors.join(', ');
+
+  static matchGroup(element): string {
+    for (let selector of HighlightGroups.groupSelectors) {
+      if (element.matches(selector)) {
+        return selector;
+      }
+    }
+    return null;
   }
 
 }

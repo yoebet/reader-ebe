@@ -18,6 +18,7 @@ div(*ngIf='chap')
         i.add.icon
         | 插入
       sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
+      sui-checkbox([(ngModel)]='splitMode') 空行分段
     .operations([hidden]='annotateOnly')
       .title
         i.write.icon
@@ -27,7 +28,6 @@ div(*ngIf='chap')
         | 编辑
       sui-checkbox([(ngModel)]='clickToEdit') 选中即编辑
       sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
-      sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='showTrans') 中文
       button.ui.tiny.button((click)='alignSentences()')
         i.align.left.icon

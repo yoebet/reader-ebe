@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 
 import {SelectionAnnotator} from './selection-annotator';
-import {Annotations} from './annotations';
+import {HighlightGroups} from './annotations';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -45,7 +45,7 @@ export class ParaContentComponent implements OnChanges {
 
   static sentenceTagName = 's-st';
   static highlightClass = 'highlight';
-  static highlightWordsSelector = '[data-phra=g1], [data-phra=g2], [data-phra=g3], [data-clau=cc], [data-clau=cr], [data-memb=ms], [data-memb=mp], [data-memb=mo]';
+  static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
 
   constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
   }
@@ -61,7 +61,7 @@ export class ParaContentComponent implements OnChanges {
   }
 
   private removeTagIfDummy(el) {
-    if (el.tagName !== SelectionAnnotator.annotationTagName) {
+    if (el.tagName !== SelectionAnnotator.annotationTagName.toUpperCase()) {
       return false;
     }
     let changed = false;
@@ -253,8 +253,8 @@ export class ParaContentComponent implements OnChanges {
       textEls = [contentEl];
     }
     for (let textEl of textEls) {
-      let toStripElements = textEl.querySelectorAll('br');
-      for (let toStrip of toStripElements) {
+      let toStripEls = textEl.querySelectorAll('br');
+      for (let toStrip of toStripEls) {
         let pn = toStrip.parentNode;
         if (pn) {
           pn.removeChild(toStrip);
@@ -381,7 +381,7 @@ export class ParaContentComponent implements OnChanges {
     this.sentenceHoverSetup = true;
   }
 
-  private closest(node, selector) {
+  private closest(node, selector): any {
     do {
       if (node instanceof Element) {
         let el = node as Element;
@@ -417,24 +417,7 @@ export class ParaContentComponent implements OnChanges {
         stEl = component.paraText.element.nativeElement;
       }
 
-      let groupSelector;
-      let dataset = el.dataset;
-      if (dataset.phra) {
-        let g = dataset.phra;
-        if (/^g\d$/.test(g)) {
-          groupSelector = `[data-phra=${g}]`;
-        }
-      } else if (dataset.clau) {
-        let g = dataset.clau;
-        if (g === 'cc' || g === 'cr') {
-          groupSelector = `[data-clau=cc], [data-clau=cr]`;
-        }
-      } else if (dataset.memb) {
-        let g = dataset.memb;
-        if (g === 'ms' || g === 'mp' || g === 'mo') {
-          groupSelector = `[data-memb=ms], [data-memb=mp], [data-memb=mo]`;
-        }
-      }
+      let groupSelector = HighlightGroups.matchGroup(el);
       if (!groupSelector) {
         return;
       }
