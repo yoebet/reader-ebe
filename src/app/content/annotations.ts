@@ -7,7 +7,7 @@ export class Annotations {
   private static compact = [{
     name: '词类',
     nameEn: 'Parts of Speech',
-    tagName: 'p-p',
+    tagName: null,
     cssClass: 'pos',
     dataName: 'pos',
     annotations: [
@@ -24,7 +24,7 @@ export class Annotations {
   }, {
     name: '名词',
     nameEn: 'Noun',
-    tagName: 'n-n',
+    tagName: null,
     cssClass: 'noun',
     dataName: 'noun',
     annotations: [
@@ -41,7 +41,7 @@ export class Annotations {
   }, {
     name: '动词',
     nameEn: 'Verb',
-    tagName: 'v-v',
+    tagName: null,
     cssClass: 'verb',
     dataName: 'verb',
     annotations: [
@@ -57,7 +57,7 @@ export class Annotations {
   }, {
     name: '成分',
     nameEn: 'Members of the Sentence',
-    tagName: 'm-m',
+    tagName: null,
     cssClass: 'memb',
     dataName: 'memb',
     annotations: [
@@ -78,7 +78,7 @@ export class Annotations {
   }, {
     name: '从句',
     nameEn: 'Clauses',
-    tagName: 'c-c',
+    tagName: null,
     cssClass: 'clau',
     dataName: 'clau',
     annotations: [
@@ -95,7 +95,7 @@ export class Annotations {
     {
       name: '时态',
       nameEn: 'Tense',
-      tagName: 't-t',
+      tagName: null,
       cssClass: 'tens',
       dataName: 'tens',
       annotations: [
@@ -114,7 +114,7 @@ export class Annotations {
     {
       name: '短语',
       nameEn: 'Phrases',
-      tagName: 'h-h',
+      tagName: null,
       cssClass: 'phra',
       dataName: 'phra',
       annotations: [
@@ -128,7 +128,7 @@ export class Annotations {
     }, {
       name: '其他',
       nameEn: 'Misc',
-      tagName: 'w-w',
+      tagName: null,
       cssClass: 'misc',
       dataName: 'misc',
       annotations: [
@@ -178,7 +178,7 @@ export class Annotations {
       }
     }
 
-    Annotations.printStyles();
+    // Annotations.printStyles();
   }
 
 
@@ -198,7 +198,7 @@ export class Annotations {
         before = tagName + ':before' + ', ' + before;
         after = tagName + ':after' + ', ' + after;
       }
-      styles.push(`${selector} {\n}\n`);
+      styles.push(`${selector} {\n  border-bottom: 1px dashed grey;\n}\n`);
       styles.push(`${before} {\n}\n`);
       styles.push(`${after} {\n}\n`);
       // for (let annotation: Annotation of group.annotations) {

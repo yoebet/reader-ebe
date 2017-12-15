@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SuiModalService} from 'ng2-semantic-ui';
 import 'rxjs/add/operator/switchMap';
 import Tether from 'tether';
 
@@ -14,6 +15,7 @@ import {DictRequest} from '../view-common/dict-request';
 import {NoteRequest} from '../view-common/note-request';
 import {AnnotationGroup} from '../view-common/annotation-group';
 import {Annotation} from '../view-common/annotation';
+import {SentenceAlignModal} from '../content/sentence-align.component';
 
 
 interface ContentChangedNotification {
@@ -40,6 +42,7 @@ export class ChapParasComponent implements OnInit {
   annotating = true;
   annotateOnly = false;
   editInplace = false;
+  highlightSentence = false;
 
   annotationGroups: AnnotationGroup[] = Annotations.annotationGroups;
   annotationGroup: AnnotationGroup = null;
@@ -63,7 +66,7 @@ export class ChapParasComponent implements OnInit {
   // }
   lastChanged: ContentChangedNotification = null;
 
-  constructor(private paraService: ParaService) {
+  constructor(private paraService: ParaService, public modalService: SuiModalService) {
   }
 
   ngOnInit(): void {
@@ -192,11 +195,15 @@ export class ChapParasComponent implements OnInit {
   }
 
   switchAnnotationName(annotationName, $event) {
-    let group = new AnnotationGroup();
-    let ann = new Annotation();
-    ann.name = annotationName;
-    ann.group = group;
-    this.currentAnnotation = ann;
+    if (this.currentAnnotation && this.currentAnnotation.name === annotationName) {
+      this.currentAnnotation = null;
+    } else {
+      let group = new AnnotationGroup();
+      let ann = new Annotation();
+      ann.name = annotationName;
+      ann.group = group;
+      this.currentAnnotation = ann;
+    }
     this.stopEvent($event);
   }
 
@@ -548,7 +555,7 @@ export class ChapParasComponent implements OnInit {
         constraints: [
           {
             to: 'window',
-            attachment: 'together'
+            // attachment: 'together'
           }
         ],
         // optimizations: {
@@ -615,6 +622,19 @@ export class ChapParasComponent implements OnInit {
     let nr = this.noteRequest;
     this.closeNotePopup();
     nr.editNoteCallback(note);
+  }
+
+  alignSentences() {
+    if (!this.selectedPara || this.editingPara) {
+      return;
+    }
+    let selectedPara = JSON.parse(JSON.stringify(this.selectedPara));
+    this.modalService
+      .open(new SentenceAlignModal(selectedPara))
+      // .onDeny((d) => {})
+      .onApprove((para: Para) => {
+        this.save(para);
+      });
   }
 
   paraTracker(index, para) {

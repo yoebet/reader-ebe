@@ -50,7 +50,7 @@
   content: '注';
   font-size: 0.6em;
   vertical-align: super;
-  color: #E91E63;
+  color: indianred;
 }
 
 .ui.toggle.checkbox {
@@ -119,4 +119,8 @@ sui-multi-select i.list.icon {
 .para-text s-st.highlight {
   /*background: lightblue;*/
   background: rgba(173, 216, 230, 0.4)
+}
+
+.para-text y-o.highlight {
+  border-bottom-width: 3px;
 }

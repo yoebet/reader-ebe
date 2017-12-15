@@ -26,6 +26,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() showTrans: boolean;
   @Input() gotFocus: boolean;
   @Input() editable: boolean;
+  @Input() highlightSentence: boolean;
   @Input() annotating: boolean;
   @Input() annotation: Annotation;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
@@ -37,10 +38,14 @@ export class ParaContentComponent implements OnChanges {
   contentChanged = false;
   transChanged = false;
   transRendered = false;
-  hover = true;
-  hoverSetup = false;
+  sentenceHoverSetup = false;
+  wordsHoverSetup = false;
   highlightedSentences: Element[] = [];
   highlightedWords: Element[] = [];
+
+  static sentenceTagName = 's-st';
+  static highlightClass = 'highlight';
+  static highlightWordsSelector = '[data-phra=g1], [data-phra=g2], [data-phra=g3], [data-clau=cc], [data-clau=cr], [data-memb=ms], [data-memb=mp], [data-memb=mo]';
 
   constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
   }
@@ -49,14 +54,14 @@ export class ParaContentComponent implements OnChanges {
     if (!this._annotator) {
       let contentEl = this.paraText.element.nativeElement;
       this._annotator = new SelectionAnnotator(contentEl);
-      this._annotator.selectionBreakerSelector = 's-st';
+      this._annotator.selectionBreakerSelector = ParaContentComponent.sentenceTagName;
     }
     this._annotator.switchAnnotation(this.annotation);
     return this._annotator;
   }
 
   private removeTagIfDummy(el) {
-    if (el.tagName !== 'SPAN') {
+    if (el.tagName !== SelectionAnnotator.annotationTagName) {
       return false;
     }
     let changed = false;
@@ -199,9 +204,12 @@ export class ParaContentComponent implements OnChanges {
     } else if (this.annotation.name === 'AddANote') {
       this.addANote();
     } else {
-      let altered = this.annotator.annotate();
-      if (altered) {
+      let annotatedEl = this.annotator.annotate();
+      if (annotatedEl) {
         this.onContentChange();
+        if (annotatedEl.matches(ParaContentComponent.highlightWordsSelector)) {
+          this.highlightWord(annotatedEl);
+        }
       }
     }
   }
@@ -245,12 +253,18 @@ export class ParaContentComponent implements OnChanges {
       textEls = [contentEl];
     }
     for (let textEl of textEls) {
-      //ofui: Only For UI
-      let toStripElements = textEl.querySelectorAll('.ofui, br');
+      let toStripElements = textEl.querySelectorAll('br');
       for (let toStrip of toStripElements) {
         let pn = toStrip.parentNode;
         if (pn) {
           pn.removeChild(toStrip);
+        }
+      }
+      let hlEls = textEl.querySelectorAll('.' + ParaContentComponent.highlightClass);
+      for (let hlEl of hlEls) {
+        hlEl.classList.remove(ParaContentComponent.highlightClass);
+        if (hlEl.classList.length === 0) {
+          hlEl.removeAttribute('class');
         }
       }
       contents.push(textEl.innerHTML);
@@ -292,25 +306,35 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
-  private clearHighlighted() {
+  private clearSentenceHighlights() {
 
     let hls = this.highlightedSentences;
     while (hls.length > 0) {
       let hl = hls.pop();
-      hl.classList.remove('highlight');
+      hl.classList.remove(ParaContentComponent.highlightClass);
+    }
+  }
+
+  private clearWordHighlights() {
+    let hls = this.highlightedWords;
+    while (hls.length > 0) {
+      let hl = hls.pop();
+      hl.classList.remove(ParaContentComponent.highlightClass);
     }
   }
 
   private setupSentenceHover() {
 
-    let sentenceTagName = 's-st';
+    if (this.sentenceHoverSetup || !this.highlightSentence || !this.gotFocus) {
+      return;
+    }
 
     let contentEl = this.paraText.element.nativeElement;
     let transEl = this.paraTrans.element.nativeElement;
     let contentMap = new Map<string, Element>();
     let transMap = new Map<string, Element>();
     for (let [textEl, selMap] of [[contentEl, contentMap], [transEl, transMap]]) {
-      let sentenceEls = textEl.querySelectorAll(sentenceTagName);
+      let sentenceEls = textEl.querySelectorAll(ParaContentComponent.sentenceTagName);
       for (let stEl of sentenceEls) {
         if (!stEl.dataset) {
           continue;
@@ -325,7 +349,7 @@ export class ParaContentComponent implements OnChanges {
     let component = this;
 
     let sentenceMouseover = function (event) {
-      if (!component.gotFocus) {
+      if (!component.highlightSentence || !component.gotFocus) {
         return;
       }
       let el = this;
@@ -337,47 +361,113 @@ export class ParaContentComponent implements OnChanges {
         return;
       }
 
-      component.clearHighlighted();
-      // console.log(sid);
+      component.clearSentenceHighlights();
       for (let selMap of [contentMap, transMap]) {
         let tsEl = selMap.get(sid);
         if (tsEl) {
-          tsEl.classList.add('highlight');
+          tsEl.classList.add(ParaContentComponent.highlightClass);
           component.highlightedSentences.push(tsEl);
         }
       }
     };
 
     for (let textEl of [contentEl, transEl]) {
-      let sentenceEls = textEl.querySelectorAll(sentenceTagName);
+      let sentenceEls = textEl.querySelectorAll(ParaContentComponent.sentenceTagName);
       for (let sentenceEl of sentenceEls) {
         sentenceEl.addEventListener('mouseover', sentenceMouseover);
       }
     }
+
+    this.sentenceHoverSetup = true;
   }
 
-  private setupMouseoverIfNeeded() {
+  private closest(node, selector) {
+    do {
+      if (node instanceof Element) {
+        let el = node as Element;
+        if (el.matches('.para-text')) {
+          return null;
+        }
+        if (el.matches(selector)) {
+          return el;
+        }
+      }
+      node = node.parentNode;
+    } while (node);
+    return null;
+  }
 
-    if (!this.gotFocus || !this.hover || this.hoverSetup) {
+  private highlightWord(wordEl) {
+
+    let component = this;
+
+    let wordsMouseleave = function (event) {
+      component.clearWordHighlights();
+    };
+
+    let wordsMouseover = function (event) {
+      if (!component.gotFocus) {
+        return;
+      }
+      component.clearWordHighlights();
+
+      let el = this;
+      let stEl = component.closest(el, ParaContentComponent.sentenceTagName);
+      if (!stEl) {
+        stEl = component.paraText.element.nativeElement;
+      }
+
+      let groupSelector;
+      let dataset = el.dataset;
+      if (dataset.phra) {
+        let g = dataset.phra;
+        if (/^g\d$/.test(g)) {
+          groupSelector = `[data-phra=${g}]`;
+        }
+      } else if (dataset.clau) {
+        let g = dataset.clau;
+        if (g === 'cc' || g === 'cr') {
+          groupSelector = `[data-clau=cc], [data-clau=cr]`;
+        }
+      } else if (dataset.memb) {
+        let g = dataset.memb;
+        if (g === 'ms' || g === 'mp' || g === 'mo') {
+          groupSelector = `[data-memb=ms], [data-memb=mp], [data-memb=mo]`;
+        }
+      }
+      if (!groupSelector) {
+        return;
+      }
+      let annEls = stEl.querySelectorAll(groupSelector);
+      for (let annEl of annEls) {
+        annEl.classList.add(ParaContentComponent.highlightClass);
+        component.highlightedWords.push(annEl);
+      }
+    };
+
+    wordEl.addEventListener('mouseover', wordsMouseover);
+    wordEl.addEventListener('mouseleave', wordsMouseleave);
+  }
+
+  private setupWordsHover() {
+
+    if (this.wordsHoverSetup || !this.gotFocus) {
       return;
     }
-    this.setupSentenceHover();
 
-    this.hoverSetup = true;
+    let contentEl = this.paraText.element.nativeElement;
+    let annEls = contentEl.querySelectorAll(ParaContentComponent.highlightWordsSelector);
+    for (let annEl of annEls) {
+      this.highlightWord(annEl);
+    }
+
+    this.wordsHoverSetup = true;
   }
 
   refreshContent() {
     let html = this.content || ' ';
-    // html = html.replace(
-    //   /\n/g,
-    //   () =>
-    //     ` <i class="caret up icon linefeed ofui"></i>\n`
-    // );
     html = `<div class="part">${html}</div>`;
     this.paraText.element.nativeElement.innerHTML = html;
-
-    this.hoverSetup = false;
-    this.setupMouseoverIfNeeded();
   }
 
   refreshTrans() {
@@ -385,36 +475,64 @@ export class ParaContentComponent implements OnChanges {
     html = `<div class="part">${html}</div>`;
     this.paraTrans.element.nativeElement.innerHTML = html;
     this.transRendered = true;
-
-    this.hoverSetup = false;
-    this.setupMouseoverIfNeeded();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let needClearSentenceHighlights = false;
+    let maySetupSentenceHover = false;
+    let needClearWordsHighlights = false;
+    let maySetupWordsHover = false;
     if (changes.gotFocus) {
       if (this.gotFocus) {
-        this.setupMouseoverIfNeeded();
+        maySetupSentenceHover = true;
+        maySetupWordsHover = true;
       } else {
-        this.clearHighlighted();
+        needClearSentenceHighlights = true;
+        needClearWordsHighlights = true;
+      }
+    }
+    if (changes.highlightSentence) {
+      if (this.highlightSentence) {
+        maySetupSentenceHover = true;
+      } else {
+        needClearSentenceHighlights = true;
       }
     }
     if (changes.trans) {
       this.transRendered = false;
-      this.hoverSetup = false;
     }
     if (this.showTrans && !this.transRendered) {
       this.refreshTrans();
+      this.sentenceHoverSetup = false;
+      maySetupSentenceHover = true;
     }
     if (changes.content) {
       this.refreshContent();
-      return;
-    }
-    if (changes.annotation) {
+      this.sentenceHoverSetup = false;
+      this.wordsHoverSetup = false;
+      maySetupSentenceHover = true;
+      maySetupWordsHover = true;
+    } else if (changes.annotation) {
       let contentChanged = this.annotator.annotate(false);
       if (contentChanged) {
         this.onContentChange();
       }
     }
+
+    if (needClearSentenceHighlights || maySetupSentenceHover) {
+      this.clearSentenceHighlights();
+    }
+    if (maySetupSentenceHover) {
+      this.setupSentenceHover();
+    }
+
+    if (needClearWordsHighlights || maySetupWordsHover) {
+      this.clearWordHighlights();
+    }
+    if (maySetupWordsHover) {
+      this.setupWordsHover();
+    }
+
     // if (changes.gotFocus) {
     //   if (this.gotFocus) {
     //     this.cdr.reattach();

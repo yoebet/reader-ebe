@@ -29,6 +29,10 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
       sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='showTrans') 中文
+      button.ui.tiny.button((click)='alignSentences()')
+        i.align.left.icon
+        | 分句对齐
+      sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')
@@ -45,7 +49,7 @@ div(*ngIf='chap')
       [ngClass]='{active: ann===currentAnnotation}',
       (click)='switchAnnotation(ann,$event)',
       (contextmenu)='removeFromLatest(ann,$event)')
-        span(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
+        span.yo(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
       .ui.text.menu
         ng-template(ngFor='', let-agroup='', [ngForOf]="annotationGroups")
           a.item([ngClass]='{active: agroup===annotationGroup}',
@@ -63,7 +67,7 @@ div(*ngIf='chap')
             .ui.mini.basic.button(*ngFor='let ann of agroup.annotations',
             [ngClass]='{active: ann===currentAnnotation}',
             (click)='switchAnnotation(ann,$event)')
-              span(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
+              span.yo(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
 
   .ui.list.items
     ng-template(ngFor='', let-para='', [ngForOf]="chap.paras", let-index="index", let-first="first", let-last="last", [ngForTrackBy]="paraTracker")
@@ -80,6 +84,7 @@ div(*ngIf='chap')
         [showTrans]='showTrans',
         [gotFocus]='para===selectedPara',
         [editable]='para===selectedPara && editInplace',
+        [highlightSentence]='para===selectedPara && highlightSentence',
         [annotating]='para===selectedPara && annotating',
         [annotation]='(para===selectedPara)? currentAnnotation : null',
         [ngClass]='{"selected": para===selectedPara}',

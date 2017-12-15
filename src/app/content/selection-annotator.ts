@@ -1,9 +1,9 @@
 import {Annotation} from '../view-common/annotation';
 
 export class SelectionAnnotator {
+  static annotationTagName = 'y-o';
 
   charPattern = /[-a-zA-Z]/;
-  inlineTagName = 'span';
   wordAtCursorIfNoSelection = true;
   selectionBreakerSelector: string = null;
   isExtendWholeWord = true;
@@ -81,7 +81,7 @@ export class SelectionAnnotator {
     if (ann.tagName) {
       wrapping = document.createElement(ann.tagName);
     } else {
-      wrapping = document.createElement(this.inlineTagName);
+      wrapping = document.createElement(SelectionAnnotator.annotationTagName);
       wrapping.className = ann.cssClass;
     }
     this.setDataAttribute(wrapping);
@@ -169,8 +169,7 @@ export class SelectionAnnotator {
         element.classList.remove(ann.cssClass);
         let hasAttributes = element.hasAttributes();
         if (element.tagName === ann.tagName && hasAttributes) {
-          //replace with span
-          let wrapping = document.createElement(this.inlineTagName);
+          let wrapping = document.createElement(SelectionAnnotator.annotationTagName);
           wrapping.className = element.className;
 
           //for (let item of element.childNodes)
@@ -202,7 +201,7 @@ export class SelectionAnnotator {
     }
   }
 
-  private removeAnnotations(element) {
+  private removeInnerAnnotations(element) {
     let selector = this.annotationSelector();
     let annotated = element.querySelectorAll(selector);
     annotated.forEach(ae => {
@@ -210,7 +209,7 @@ export class SelectionAnnotator {
     });
   }
 
-  private doInOneTextNode(textNode: Text, offset1, offset2): boolean {
+  private doInOneTextNode(textNode: Text, offset1, offset2): Element {
 
     let nodeText = textNode.textContent;
     if (offset1 > offset2) {
@@ -220,7 +219,7 @@ export class SelectionAnnotator {
     let annotatedNode = this.lookupAnnotated(textNode);
     if (annotatedNode) {
       this.resetAnnotation(annotatedNode, 'remove');
-      return true;
+      return annotatedNode;
     }
 
     let [wordStart, wordEnd] = [offset1, offset2];
@@ -228,7 +227,7 @@ export class SelectionAnnotator {
       [wordStart, wordEnd] = this.extendWholeWord(nodeText, wordStart, wordEnd);
     }
     if (wordStart === wordEnd) {
-      return false;
+      return null;
     }
 
     let selectedText = nodeText.substring(wordStart, wordEnd);
@@ -236,9 +235,9 @@ export class SelectionAnnotator {
     if (selectedText === nodeText) {
       if (textNode.previousSibling === null && textNode.nextSibling === null) {
         // the only one TextNode
-        let exactNode = textNode.parentNode;
+        let exactNode = textNode.parentNode as Element;
         this.resetAnnotation(exactNode, 'toggle');
-        return true;
+        return exactNode;
       }
     }
 
@@ -255,10 +254,10 @@ export class SelectionAnnotator {
     parent.replaceChild(wrapping, wordsNode);
     wrapping.appendChild(wordsNode);
 
-    return true;
+    return wrapping;
   }
 
-  private doInSameParent(parent: Node, textNode1: Text, offset1, textNode2: Text, offset2): boolean {
+  private doInSameParent(parent: Node, textNode1: Text, offset1, textNode2: Text, offset2): Element {
 
     let cns = Array.from(parent.childNodes);
     let nodeIndex1 = cns.indexOf(textNode1);
@@ -279,11 +278,11 @@ export class SelectionAnnotator {
         if (sbs && item instanceof Element) {
           let el = item as Element;
           if (el.matches(sbs)) {
-            return false;
+            return null;
           }
           let lf = el.querySelector(sbs);
           if (lf) {
-            return false;
+            return null;
           }
         }
         interNodes.push(item);
@@ -316,36 +315,35 @@ export class SelectionAnnotator {
       wrapping.appendChild(inode);
     }
     wrapping.appendChild(endingNode);
-    this.removeAnnotations(wrapping);
+    this.removeInnerAnnotations(wrapping);
 
-    return true;
+    return wrapping;
   }
 
-  annotate(wordAtCursorIfNoSelection: boolean = undefined): boolean {
+  annotate(wordAtCursorIfNoSelection: boolean = undefined): Element {
     if (!this.current) {
-      return false;
+      return null;
     }
-    console.log(this.current);
     let selection = window.getSelection();
     let savedWacins = this.wordAtCursorIfNoSelection;
     if (typeof wordAtCursorIfNoSelection === 'boolean') {
       this.wordAtCursorIfNoSelection = wordAtCursorIfNoSelection;
     }
     try {
-      let changed = this.doAnnotate(selection);
+      let el = this.doAnnotate(selection);
       selection.removeAllRanges();
-      return changed;
+      return el;
     } finally {
       this.wordAtCursorIfNoSelection = savedWacins;
     }
   }
 
-  private doAnnotate(selection: Selection) {
+  private doAnnotate(selection: Selection): Element {
     let node1 = selection.anchorNode;
     let node2 = selection.focusNode;
 
     if (!node1 || !node2) {
-      return false;
+      return null;
     }
 
     let offset1 = selection.anchorOffset;
@@ -353,21 +351,21 @@ export class SelectionAnnotator {
 
     if (!this.wordAtCursorIfNoSelection) {
       if (node1 === node2 && offset1 === offset2) {
-        return false;
+        return null;
       }
     }
 
     if (node1.nodeType !== Node.TEXT_NODE
       || node2.nodeType !== Node.TEXT_NODE) {
-      return false;
+      return null;
     }
 
     if (node1.parentNode !== node2.parentNode) {
-      return false;
+      return null;
     }
 
     if (!this.inContainer(node1, node2)) {
-      return false;
+      return null;
     }
 
     let textNode1 = node1 as Text;
@@ -505,7 +503,7 @@ export class SelectionAnnotator {
 
     let parent = textNode1.parentNode;
 
-    let wrapping = document.createElement(this.inlineTagName) as HTMLElement;
+    let wrapping = document.createElement(SelectionAnnotator.annotationTagName) as HTMLElement;
     parent.replaceChild(wrapping, wordsNode);
     wrapping.appendChild(wordsNode);
 

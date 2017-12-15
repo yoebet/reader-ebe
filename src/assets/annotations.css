@@ -1,102 +1,81 @@
 /* *** 词类 Parts of Speech *** */
 
-p-p, .pos {
-  border-bottom: 1px dashed dimgrey;
+y-o, .yo {
+  border-bottom: 1px dashed grey;
 }
 
-p-p:before, .pos:before {
+.pos {
+  border-bottom-color: dimgrey;
 }
 
-p-p:after, .pos:after {
-}
+/*.pos:before {*/
+/*}*/
 
+/*.pos:after {*/
+/*}*/
 
 /* *** 名词 Noun *** */
 
-n-n, .noun {
-  border-bottom: 1px dashed cadetblue;
+.noun {
+  border-bottom-color: cadetblue;
 }
-
-n-n:before, .noun:before {
-}
-
-n-n:after, .noun:after {
-}
-
 
 /* *** 动词 Verb *** */
 
-v-v, .verb {
-  border-bottom: 1px dashed darkgreen;
+.verb {
+  border-bottom-color: darkgreen;
 }
-
-v-v:before, .verb:before {
-}
-
-v-v:after, .verb:after {
-}
-
 
 /* *** 成分 Members of the Sentence *** */
 
-m-m, .memb {
-  border-bottom: 1px dashed lightblue;
+.memb {
+  border-bottom-color: darkolivegreen;
+  border-bottom-style: solid;
 }
 
-m-m:before, .memb:before {
+.memb[data-memb=ms], .memb[data-memb=mp], .memb[data-memb=mo] {
 }
-
-m-m:after, .memb:after {
-}
-
 
 /* *** 从句 Clauses *** */
 
-c-c, .clau {
-  border-bottom: 1px dashed silver;
+.clau {
+  border-bottom-color: silver;
 }
 
-c-c:before, .clau:before {
+.clau[data-clau=cc], .clau[data-clau=cr] {
+  border-bottom-color: palevioletred;
+  border-bottom-style: solid;
 }
-
-c-c:after, .clau:after {
-}
-
 
 /* *** 时态 Tense *** */
 
-t-t, .tens {
-  border-bottom: 1px solid olive;
+.tens {
+  border-bottom-color: olive;
+  border-bottom-style: solid;
 }
-
-t-t:before, .tens:before {
-}
-
-t-t:after, .tens:after {
-}
-
 
 /* *** 短语 Phrases *** */
 
-h-h, .phra {
-  border-bottom: 1px solid lightskyblue;
+.phra {
+  border-bottom-color: lightskyblue;
+  border-bottom-style: solid;
 }
 
-h-h:before, .phra:before {
+.phra[data-phra=g1] {
+  border-bottom-color: deepskyblue;
 }
 
-h-h:after, .phra:after {
+.phra[data-phra=g2] {
+  border-bottom-color: lightsalmon;
 }
 
+.phra[data-phra=g3] {
+  border-bottom-color: darkgreen;
+}
 
 /* *** 其他 Misc *** */
 
-w-w, .misc {
-  border-bottom: 1px solid cornflowerblue;
-}
-
-w-w:before, .misc:before {
-}
-
-w-w:after, .misc:after {
+.misc {
+  border-bottom-color: cornflowerblue;
+  border-bottom-style: solid;
 }

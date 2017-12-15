@@ -43,6 +43,8 @@
 .ui.list.meaning-items {
   margin-top: 0;
   margin-left: 3em;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .ui.list.meaning-items .item sui-select-option {
