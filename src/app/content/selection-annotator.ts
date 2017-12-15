@@ -332,22 +332,14 @@ export class SelectionAnnotator {
     return wrapping;
   }
 
-  annotate(wordAtCursorIfNoSelection: boolean = undefined): Element {
+  annotate(): Element {
     if (!this.current) {
       return null;
     }
     let selection = window.getSelection();
-    let savedWacins = this.wordAtCursorIfNoSelection;
-    if (typeof wordAtCursorIfNoSelection === 'boolean') {
-      this.wordAtCursorIfNoSelection = wordAtCursorIfNoSelection;
-    }
-    try {
-      let el = this.doAnnotate(selection);
-      selection.removeAllRanges();
-      return el;
-    } finally {
-      this.wordAtCursorIfNoSelection = savedWacins;
-    }
+    let el = this.doAnnotate(selection);
+    selection.removeAllRanges();
+    return el;
   }
 
   private doAnnotate(selection: Selection): Element {
@@ -443,7 +435,7 @@ export class SelectionAnnotator {
   }
 
   // return {element,created}
-  getOrCreateWordTag(maxWords = 3, minLength = 3) {
+  getOrCreateWordTag(maxWords = 3, minLength = 1) {
     let selection = window.getSelection();
 
     let node1 = selection.anchorNode;
@@ -455,6 +447,12 @@ export class SelectionAnnotator {
 
     let offset1 = selection.anchorOffset;
     let offset2 = selection.focusOffset;
+
+    if (!this.wordAtCursorIfNoSelection) {
+      if (node1 === node2 && offset1 === offset2) {
+        return null;
+      }
+    }
 
     if (node1.nodeType !== Node.TEXT_NODE
       || node2.nodeType !== Node.TEXT_NODE) {

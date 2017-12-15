@@ -99,10 +99,10 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   private onEntryChanged() {
     let entry = this.entry;
-    let cd = Model.CreatedAtString(entry);
-    console.log('created at: ' + cd);
-    let ud = Model.UpdatedAtString(entry);
-    console.log('updated at: ' + ud);
+    // let cd = Model.CreatedAtString(entry);
+    // console.log('created at: ' + cd);
+    // let ud = Model.UpdatedAtString(entry);
+    // console.log('updated at: ' + ud);
 
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.refWords = null;
@@ -126,11 +126,15 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.entry) {
-      let pre = changes.entry.previousValue;
-      if (pre) {
-        this.entryStack.push(pre);
-        if (this.editing && this.autoSaveOnLeave) {
-          this.saveEdit(pre);
+      if (this.selectMeaningItem) {
+        this.entryStack = [];
+      } else {
+        let pre = changes.entry.previousValue;
+        if (pre) {
+          this.entryStack.push(pre);
+          if (this.editing && this.autoSaveOnLeave) {
+            this.saveEdit(pre);
+          }
         }
       }
       this.onEntryChanged();

@@ -86,7 +86,7 @@ export class ParaContentComponent implements OnChanges {
   };
 
   selectWordMeaning() {
-    let wordTag = this.annotator.getOrCreateWordTag();
+    let wordTag = this.annotator.getOrCreateWordTag(3, 2);
     if (!wordTag) {
       return;
     }
@@ -137,6 +137,7 @@ export class ParaContentComponent implements OnChanges {
     this.dictService.getEntry(oriForWord, {base: true, stem: true})
       .subscribe((entry: DictEntry) => {
         if (entry == null) {
+          this.removeTagIfDummy(element);
           return;
         }
         let dr = new DictRequest();
@@ -192,13 +193,7 @@ export class ParaContentComponent implements OnChanges {
     this.noteRequest.emit(nr)
   }
 
-  onMouseup($event) {
-    if (!this.gotFocus || !this.annotating || !this.annotation) {
-      return;
-    }
-
-    $event.stopPropagation();
-
+  private doAnnotate() {
     if (this.annotation.name === 'SelectWordMeaning') {
       this.selectWordMeaning();
     } else if (this.annotation.name === 'AddANote') {
@@ -212,6 +207,14 @@ export class ParaContentComponent implements OnChanges {
         }
       }
     }
+  }
+
+  onMouseup($event) {
+    if (!this.gotFocus || !this.annotating || !this.annotation) {
+      return;
+    }
+    $event.stopPropagation();
+    this.doAnnotate();
   }
 
   onKeyup($event) {
@@ -307,7 +310,6 @@ export class ParaContentComponent implements OnChanges {
   }
 
   private clearSentenceHighlights() {
-
     let hls = this.highlightedSentences;
     while (hls.length > 0) {
       let hl = hls.pop();
@@ -496,9 +498,12 @@ export class ParaContentComponent implements OnChanges {
       maySetupSentenceHover = true;
       maySetupWordsHover = true;
     } else if (changes.annotation) {
-      let contentChanged = this.annotator.annotate(false);
-      if (contentChanged) {
-        this.onContentChange();
+      if (this.gotFocus && this.annotating && this.annotation) {
+        let annotator = this.annotator;
+        let wacins = annotator.wordAtCursorIfNoSelection;
+        annotator.wordAtCursorIfNoSelection = false;
+        this.doAnnotate();
+        annotator.wordAtCursorIfNoSelection = wacins;
       }
     }
 

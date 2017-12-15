@@ -80,28 +80,6 @@ export class ChapParasComponent implements OnInit {
         this.latestAnnotations.push(ag.annotations[i]);
       }
     }
-
-    document.addEventListener('click', (event) => {
-      if (this.dictRequest && this.dictTether) {
-        //ui modal active visible
-        let dictPopup = document.getElementById('dictPopup');
-        if (event.target) {
-          let node = event.target as Node;
-          if (this.dictRequest.wordElement === node) {
-            return;
-          }
-          let modals = document.getElementsByClassName('ui modal visible');
-          if (modals.length > 0) {
-            return;
-          }
-          if (dictPopup.contains(node)) {
-            return;
-          }
-        }
-        this.closeDictPopup();
-      }
-    }, true)
-
   }
 
   selectPara(para): void {
@@ -533,8 +511,13 @@ export class ChapParasComponent implements OnInit {
 
   onDictRequest(dictRequest) {
     if (this.dictRequest) {
-      // cancel
-      this.onDictItemSelect(null);
+      if (this.dictRequest.wordElement === dictRequest.wordElement) {
+        this.onDictItemSelect(null);
+        return;
+      } else {
+        // cancel
+        this.onDictItemSelect(null);
+      }
     }
     this.dictRequest = dictRequest;
   }
@@ -555,15 +538,9 @@ export class ChapParasComponent implements OnInit {
         constraints: [
           {
             to: 'window',
-            // attachment: 'together'
+            attachment: 'together'
           }
         ],
-        // optimizations: {
-        //   gpu: false
-        // },
-        // classes: {
-        //   'out-of-bounds': false
-        // },
         classPrefix: this.tetherClassPrefix
       });
     }
