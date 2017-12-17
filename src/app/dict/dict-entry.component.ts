@@ -99,10 +99,9 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   private onEntryChanged() {
     let entry = this.entry;
-    // let cd = Model.CreatedAtString(entry);
-    // console.log('created at: ' + cd);
-    // let ud = Model.UpdatedAtString(entry);
-    // console.log('updated at: ' + ud);
+    console.log('word: ' + entry.word);
+    console.log('created at: ' + Model.createdTimeString(entry));
+    console.log('updated at: ' + Model.updatedTimeString(entry));
 
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.refWords = null;

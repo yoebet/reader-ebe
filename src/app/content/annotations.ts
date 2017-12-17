@@ -150,6 +150,8 @@ export class Annotations {
 
   private static _annotationGroups: AnnotationGroup[] = null;
 
+  private static _specialAnnotations: Annotation[] = null;
+
   private static init() {
     let groups: AnnotationGroup[] = Annotations._annotationGroups = [];
 
@@ -177,6 +179,25 @@ export class Annotations {
         annotations.push(ann);
       }
     }
+
+    this._specialAnnotations = [];
+
+    let groupSwm = new AnnotationGroup();
+    groupSwm.dataName = 'mid';
+    let swm = new Annotation();
+    swm.name = '选词义';
+    swm.nameEn = 'SelectWordMeaning';
+    swm.group = groupSwm;
+
+    let groupAan = new AnnotationGroup();
+    groupAan.dataName = 'note';
+    let aan = new Annotation();
+    aan.name = '加注解';
+    aan.nameEn = 'AddANote';
+    aan.group = groupAan;
+
+    this._specialAnnotations.push(swm);
+    this._specialAnnotations.push(aan);
 
     // Annotations.printStyles();
   }
@@ -214,6 +235,13 @@ export class Annotations {
       Annotations.init();
     }
     return Annotations._annotationGroups;
+  }
+
+  static get specialAnnotations(): Annotation[] {
+    if (Annotations._specialAnnotations == null) {
+      Annotations.init();
+    }
+    return Annotations._specialAnnotations;
   }
 
 }

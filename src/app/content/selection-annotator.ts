@@ -3,9 +3,8 @@ import {Annotation} from '../view-common/annotation';
 export class SelectionAnnotator {
   static annotationTagName = 'y-o';
 
-  charPattern = /[-a-zA-Z]/;
+  charPattern = /[-a-zA-Z']/;
   wordAtCursorIfNoSelection = true;
-  selectionBreakerSelector: string = null;
   isExtendWholeWord = true;
   // element or selector,
   container: Element | string = null;
@@ -82,7 +81,9 @@ export class SelectionAnnotator {
       wrapping = document.createElement(ann.tagName);
     } else {
       wrapping = document.createElement(SelectionAnnotator.annotationTagName);
-      wrapping.className = ann.cssClass;
+      if (ann.cssClass) {
+        wrapping.className = ann.cssClass;
+      }
     }
     this.setDataAttribute(wrapping);
     return wrapping;
@@ -102,9 +103,7 @@ export class SelectionAnnotator {
     return false;
   }
 
-  private lookupAnnotated(textNode) {
-    let selector = this.annotationSelector();
-    let element = textNode.parentNode;
+  private lookupElement(element, selector) {
     while (element) {
       if (element.nodeType !== Node.ELEMENT_NODE) {
         return null;
@@ -127,23 +126,25 @@ export class SelectionAnnotator {
     }
   }
 
-  private removeDataAttribute(element) {
-    let ann = this.current;
-    if (ann.dataName) {
-      delete element.dataset[ann.dataName];
-    }
-  }
-
   private annotationSelector() {
     let ann = this.current;
-    let selector = '.' + ann.cssClass;
+    let selector = '';
+    if (ann.cssClass) {
+      selector = '.' + ann.cssClass;
+    }
+    let dataAttr = null;
     if (ann.dataName) {
-      selector += `[data-${ann.dataName}=${ann.dataValue}]`;
+      if (ann.dataValue) {
+        dataAttr = `[data-${ann.dataName}=${ann.dataValue}]`;
+      } else {
+        dataAttr = `[data-${ann.dataName}]`;
+      }
+      selector += dataAttr;
     }
     if (ann.tagName) {
       let tagSelector = ann.tagName.toLowerCase();
-      if (ann.dataName) {
-        tagSelector += `[data-${ann.dataName}=${ann.dataValue}]`;
+      if (dataAttr) {
+        tagSelector += dataAttr;
       }
       selector = `${tagSelector}, ${selector}`;
     }
@@ -183,7 +184,9 @@ export class SelectionAnnotator {
         return;
       }
       // remove,toggle
-      this.removeDataAttribute(element);
+      if (ann.dataName) {
+        delete element.dataset[ann.dataName];
+      }
       element.classList.remove(ann.cssClass);
       if (element.tagName === ann.tagName && element.hasAttributes()) {
         let wrapping = document.createElement(SelectionAnnotator.annotationTagName);
@@ -201,13 +204,15 @@ export class SelectionAnnotator {
     } else {
       if (type === 'add' || type === 'toggle') {
         this.setDataAttribute(element);
-        if (element.tagName !== ann.tagName) {
+        if (element.tagName !== ann.tagName && ann.cssClass) {
           element.classList.add(ann.cssClass);
         }
         return;
       }
       // remove
-      this.removeDataAttribute(element);
+      if (ann.dataName) {
+        delete element.dataset[ann.dataName];
+      }
       element.classList.remove(ann.cssClass);
       this.removeTagIfDummy(element);
     }
@@ -228,10 +233,17 @@ export class SelectionAnnotator {
       [offset1, offset2] = [offset2, offset1];
     }
 
-    let annotatedNode = this.lookupAnnotated(textNode);
+    let selector = this.annotationSelector();
+    let annotatedNode = this.lookupElement(textNode.parentNode, selector);
     if (annotatedNode) {
-      this.resetAnnotation(annotatedNode, 'remove');
-      return annotatedNode;
+      let ann = this.current;
+      let editAttrOutside = ann.dataName && typeof ann.dataValue === 'undefined';
+      if (editAttrOutside) {
+        return annotatedNode;
+      } else {
+        this.resetAnnotation(annotatedNode, 'remove');
+        return null;
+      }
     }
 
     let [wordStart, wordEnd] = [offset1, offset2];
@@ -248,7 +260,7 @@ export class SelectionAnnotator {
       if (textNode.previousSibling === null && textNode.nextSibling === null) {
         // the only one TextNode
         let exactNode = textNode.parentNode as Element;
-        this.resetAnnotation(exactNode, 'toggle');
+        this.resetAnnotation(exactNode, 'toggle');//add
         return exactNode;
       }
     }
@@ -281,19 +293,21 @@ export class SelectionAnnotator {
 
     let interNodes = [];
     let inter = false;
+    let ann = this.current;
+    let editAttrOutside = ann.dataName && typeof ann.dataValue === 'undefined';
     for (let item of cns) {
       if (item === textNode2) {
         break;
       }
       if (inter) {
-        let sbs = this.selectionBreakerSelector;
-        if (sbs && item instanceof Element) {
-          let el = item as Element;
-          if (el.matches(sbs)) {
+        if (item.nodeType === Node.ELEMENT_NODE && editAttrOutside) {
+          let selector = this.annotationSelector();
+          let itemEl = item as Element;
+          if (itemEl.matches(selector)) {
             return null;
           }
-          let lf = el.querySelector(sbs);
-          if (lf) {
+          let nested = itemEl.querySelector(selector);
+          if (nested) {
             return null;
           }
         }
@@ -385,19 +399,6 @@ export class SelectionAnnotator {
     return this.doInSameParent(parent, textNode1, offset1, textNode2, offset2);
   }
 
-  private closest(node, selector) {
-    do {
-      if (node instanceof Element) {
-        let el = node as Element;
-        if (el.matches(selector)) {
-          return el;
-        }
-      }
-      node = node.parentNode;
-    } while (node);
-    return null;
-  }
-
   private inContainer(node1, node2): boolean {
 
     if (!this.container) {
@@ -405,12 +406,25 @@ export class SelectionAnnotator {
     }
 
     if (typeof this.container === 'string') {
-      let container1 = this.closest(node1, this.container);
+      let lookupContainer = (node) => {
+        do {
+          if (node instanceof Element) {
+            let el = node as Element;
+            if (el.matches(this.container as string)) {
+              return el;
+            }
+          }
+          node = node.parentNode;
+        } while (node);
+        return null;
+      };
+
+      let container1 = lookupContainer(node1);
       if (!container1) {
         return false;
       }
       if (node1 !== node2) {
-        let container2 = this.closest(node2, this.container);
+        let container2 = lookupContainer(node2);
         if (!container2) {
           return false;
         }
@@ -426,98 +440,12 @@ export class SelectionAnnotator {
       if (!ct.contains(node1)) {
         return false;
       }
-      if (!ct.contains(node2)) {
+      if (node1 !== node2 && !ct.contains(node2)) {
         return false;
       }
     }
 
     return true;
-  }
-
-  // return {element,created}
-  getOrCreateWordTag(maxWords = 3, minLength = 1) {
-    let selection = window.getSelection();
-
-    let node1 = selection.anchorNode;
-    let node2 = selection.focusNode;
-
-    if (!node1 || !node2) {
-      return null;
-    }
-
-    let offset1 = selection.anchorOffset;
-    let offset2 = selection.focusOffset;
-
-    if (!this.wordAtCursorIfNoSelection) {
-      if (node1 === node2 && offset1 === offset2) {
-        return null;
-      }
-    }
-
-    if (node1.nodeType !== Node.TEXT_NODE
-      || node2.nodeType !== Node.TEXT_NODE) {
-      return null;
-    }
-
-    if (node1.parentNode !== node2.parentNode) {
-      return null;
-    }
-
-    if (!this.inContainer(node1, node2)) {
-      return null;
-    }
-
-    let textNode1 = node1 as Text;
-    let textNode2 = node2 as Text;
-
-    if (textNode1 !== textNode2) {
-      return null;
-    }
-
-    let nodeText = textNode1.textContent;
-    if (offset1 > offset2) {
-      [offset1, offset2] = [offset2, offset1];
-    }
-
-    let [wordStart, wordEnd] = [offset1, offset2];
-    if (this.isExtendWholeWord) {
-      [wordStart, wordEnd] = this.extendWholeWord(nodeText, wordStart, wordEnd);
-    }
-    if (wordStart === wordEnd) {
-      return null;
-    }
-
-    let selectedText = nodeText.substring(wordStart, wordEnd);
-    if (selectedText.length < minLength) {
-      return null;
-    }
-    if (selectedText.split(/ +/).length > maxWords) {
-      return null;
-    }
-
-    if (selectedText === nodeText) {
-      if (textNode1.previousSibling === null && textNode1.nextSibling === null) {
-        // the only one TextNode
-        let exactNode = textNode1.parentNode as HTMLElement;
-        return {element: exactNode, word: selectedText, created: false};
-      }
-    }
-
-    let wordsNode = textNode1;
-    if (wordStart > 0) {
-      wordsNode = wordsNode.splitText(wordStart);
-    }
-    if (wordEnd < nodeText.length) {
-      wordsNode.splitText(selectedText.length);
-    }
-
-    let parent = textNode1.parentNode;
-
-    let wrapping = document.createElement(SelectionAnnotator.annotationTagName) as HTMLElement;
-    parent.replaceChild(wrapping, wordsNode);
-    wrapping.appendChild(wordsNode);
-
-    return {element: wrapping, word: selectedText, created: true};
   }
 
 }

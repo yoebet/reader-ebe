@@ -54,7 +54,6 @@ export class ParaContentComponent implements OnChanges {
     if (!this._annotator) {
       let contentEl = this.paraText.element.nativeElement;
       this._annotator = new SelectionAnnotator(contentEl);
-      this._annotator.selectionBreakerSelector = ParaContentComponent.sentenceTagName;
     }
     this._annotator.switchAnnotation(this.annotation);
     return this._annotator;
@@ -86,11 +85,12 @@ export class ParaContentComponent implements OnChanges {
   };
 
   selectWordMeaning() {
-    let wordTag = this.annotator.getOrCreateWordTag(3, 2);
-    if (!wordTag) {
+    let element: any = this.annotator.annotate();
+    if (!element) {
       return;
     }
-    let {element, word, created} = wordTag;
+    let word = element.textContent;
+
     let oriMid = null;
     if (element.dataset.mid) {
       let mid = parseInt(element.dataset.mid);
@@ -154,30 +154,27 @@ export class ParaContentComponent implements OnChanges {
   }
 
   addANote() {
-    let wordTag = this.annotator.getOrCreateWordTag(3, 1);
-    if (!wordTag) {
+    let element: any = this.annotator.annotate();
+    if (!element) {
       return;
     }
-    let {element, word, created} = wordTag;
     let oriNote = element.dataset.note;
 
     let editNoteCallback = (note: string) => {
       let changed = false;
       if (note === null || note === oriNote) {
         // cancel
-        /*changed = */
         this.removeTagIfDummy(element);
       } else {
         if (note === '') {
+          // delete
+          element.removeAttribute('data-note');
+          this.removeTagIfDummy(element);
           if (typeof oriNote !== 'undefined') {
-            element.removeAttribute('data-note');
-            this.removeTagIfDummy(element);
-            this.onContentChange();
             changed = true;
           }
         } else {
           element.dataset.note = note;
-          this.onContentChange();
           changed = true;
         }
       }
@@ -194,9 +191,9 @@ export class ParaContentComponent implements OnChanges {
   }
 
   private doAnnotate() {
-    if (this.annotation.name === 'SelectWordMeaning') {
+    if (this.annotation.nameEn === 'SelectWordMeaning') {
       this.selectWordMeaning();
-    } else if (this.annotation.name === 'AddANote') {
+    } else if (this.annotation.nameEn === 'AddANote') {
       this.addANote();
     } else {
       let annotatedEl = this.annotator.annotate();

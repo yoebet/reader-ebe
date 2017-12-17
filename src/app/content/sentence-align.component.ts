@@ -4,6 +4,7 @@ import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui";
 import {differenceBy, isEqual, findIndex} from 'lodash';
 
 import {Para} from '../models/para';
+import {Model} from '../models/model';
 import {Row} from '../view-common/split-align';
 
 class SentenceRow extends Row {
@@ -242,6 +243,10 @@ export class SentenceAlignComponent {
     let contentText = '';
     let transText = '';
     let nextSid = maxSid + 1;
+    if (nextSid === 1) {
+      let seq = Model.sequenceNo(this.para._id, 1);
+      nextSid = seq * 10 + 1;
+    }
     for (let row of this.rows) {
       let {left, right, sid} = row;
       if (left === '') {

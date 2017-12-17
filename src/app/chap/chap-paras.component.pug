@@ -14,7 +14,7 @@ div(*ngIf='chap')
       button.ui.mini.button((click)='remove()')
         i.remove.icon
         | 删除
-      button.ui.mini.button((click)='insertBefore()', data-tooltip="Insert Before")
+      button.ui.mini.button((click)='insertBefore()')
         i.add.icon
         | 插入
       sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
@@ -37,10 +37,8 @@ div(*ngIf='chap')
 
     .annotations.operations(*ngIf='annotating')
       .ui.right.floated.header
-        .ui.mini.basic.button([ngClass]='{active: currentAnnotation && currentAnnotation.name==="SelectWordMeaning"}',
-        (click)='switchAnnotationName("SelectWordMeaning",$event)') 选词义
-        .ui.mini.basic.button([ngClass]='{active: currentAnnotation && currentAnnotation.name==="AddANote"}',
-        (click)='switchAnnotationName("AddANote",$event)') 加注解
+        .ui.mini.basic.button(*ngFor='let ann of specialAnnotations', [ngClass]='{active: ann===currentAnnotation}',
+        (click)='switchSpecialAnnotation(ann,$event)') {{ann.name||ann.nameEn}}
         sui-checkbox([(ngModel)]='annotateOnly') 仅标注
       .title
         i.text.cursor.icon
@@ -115,10 +113,14 @@ div(*ngIf='chap')
     (dictItemSelected)='onDictItemSelect($event)')
 
   #notePopup.ui.basic.popup.form
-    .ui.header 注：
+    .ui.sub.header 注：
     .field
-      textarea.note-textarea([(ngModel)]='noteRequestNote', #noteTextarea='')
-    .ui.right.floated.mini.buttons
-      button.ui.button((click)='completeNoteEdit(null)') 取消
-      .or
-      button.ui.primary.button((click)='completeNoteEdit(noteTextarea.value)') 保存
+      textarea.note-textarea([(ngModel)]='noteRequestNote', spellcheck='false', #noteTextarea='')
+    .field
+      button.ui.mini.compact.button((click)='completeNoteEdit("")')
+        i.remove.icon
+        | 删除
+      .ui.right.floated.mini.compact.buttons
+        button.ui.button((click)='completeNoteEdit(null)') 取消
+        .or
+        button.ui.primary.button((click)='completeNoteEdit(noteTextarea.value)') 保存

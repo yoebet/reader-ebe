@@ -5,7 +5,15 @@ export class Model {
   updatedAt?: string;
 
 
-  static TimestampOfObjectId(_id: string) {
+  static sequenceNo(_id: string, bytes: number = 3): number {
+    if (!_id) {
+      return parseInt('' + (1 << bytes * 8) * Math.random());
+    }
+    let hexChars = bytes * 2;
+    return parseInt(_id.substr(_id.length - hexChars, hexChars), 16);
+  }
+
+  static timestampOfObjectId(_id: string): Date {
     if (!_id) {
       return null;
     }
@@ -13,32 +21,34 @@ export class Model {
     return new Date(seconds * 1000);
   }
 
-  static CreatedAtString(model: Model) {
+  static createdTimeString(model: Model): string {
     if (!model) {
       return '';
     }
-    let dateCreatedAt = Model.TimestampOfObjectId(model._id);
-    return Model.TimestampString(dateCreatedAt);
+    let createdAt = Model.timestampOfObjectId(model._id);
+    return Model.timeString(createdAt);
   }
 
-  static UpdatedAtString(model: Model) {
+  static updatedTimeString(model: Model): string {
     if (!model) {
       return '';
     }
-    return Model.TimestampString(model.updatedAt);
+    return Model.timeString(model.updatedAt);
   }
 
-  static TimestampString(date: Date | string, outputFormat?) {
+  static timeString(date: Date | string, precise: string = 'date'): string {
     if (!date) {
       return '';
     }
-    if (!outputFormat) {
-      outputFormat = 'YYYY-M-D kk:mm';
-      // outputFormat = 'YYYY-M-D kk:mm:ss';
+    let format = 'YYYY-M-D';
+    if (precise === 'minute') {
+      format += ' kk:mm';
+    } else if (precise === 'second') {
+      format += ' kk:mm:ss';
     }
     let dz = moment(date);
     // dz.utcOffset(8);
-    return dz.format(outputFormat);
+    return dz.format(format);
   }
 
 }

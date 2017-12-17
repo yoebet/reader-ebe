@@ -164,6 +164,6 @@
     .ui.right.floated.mini.buttons
       button.ui.button((click)='cancelSelect()') 取消
       .or
-      button.ui.primary.button([ngClass]='{disabled: selectedItemId===initialSelectedItemId&&entry.word===initialWord}',
+      button.ui.primary.button([ngClass]='{disabled: (entry.word===initialWord&&selectedItemId===initialSelectedItemId)||(entry.word!==initialWord&&selectedItemId===null)}',
       (click)='doneSelect()') 确定
     .optip 选择义项

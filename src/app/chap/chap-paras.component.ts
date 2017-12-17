@@ -45,6 +45,7 @@ export class ChapParasComponent implements OnInit {
   highlightSentence = false;
 
   annotationGroups: AnnotationGroup[] = Annotations.annotationGroups;
+  specialAnnotations: Annotation[] = Annotations.specialAnnotations;
   annotationGroup: AnnotationGroup = null;
   currentAnnotation: Annotation = null;
   latestAnnotations: Annotation[] = [];
@@ -172,15 +173,11 @@ export class ChapParasComponent implements OnInit {
     this.stopEvent($event);
   }
 
-  switchAnnotationName(annotationName, $event) {
-    if (this.currentAnnotation && this.currentAnnotation.name === annotationName) {
+  switchSpecialAnnotation(annotation, $event) {
+    if (this.currentAnnotation === annotation) {
       this.currentAnnotation = null;
     } else {
-      let group = new AnnotationGroup();
-      let ann = new Annotation();
-      ann.name = annotationName;
-      ann.group = group;
-      this.currentAnnotation = ann;
+      this.currentAnnotation = annotation;
     }
     this.stopEvent($event);
   }

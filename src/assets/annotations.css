@@ -2,17 +2,20 @@
 
 y-o, .yo {
   border-bottom: 1px dashed grey;
+  /*border-bottom-width: 1px;*/
+  /*border-bottom-color: grey;*/
+  /*border-bottom-style: dashed;*/
 }
 
 .pos {
   border-bottom-color: dimgrey;
 }
 
-/*.pos:before {*/
-/*}*/
+/*.pos:before {
+}*/
 
-/*.pos:after {*/
-/*}*/
+/*.pos:after {
+}*/
 
 /* *** 名词 Noun *** */
 
@@ -34,6 +37,8 @@ y-o, .yo {
 }
 
 .memb[data-memb=ms], .memb[data-memb=mp], .memb[data-memb=mo] {
+  border-bottom-color: darkgreen;
+  border-bottom-style: double;
 }
 
 /* *** 从句 Clauses *** */
