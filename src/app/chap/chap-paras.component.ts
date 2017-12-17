@@ -9,12 +9,12 @@ import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
-import {Annotations} from '../content/annotations';
-import {ParaLiveContent} from '../view-common/para-live-content';
-import {DictRequest} from '../view-common/dict-request';
-import {NoteRequest} from '../view-common/note-request';
-import {AnnotationGroup} from '../view-common/annotation-group';
-import {Annotation} from '../view-common/annotation';
+import {Annotations} from '../anno/annotations';
+import {ParaLiveContent} from '../chap-types/para-live-content';
+import {DictRequest} from '../chap-types/dict-request';
+import {NoteRequest} from '../chap-types/note-request';
+import {AnnotationGroup} from '../anno/annotation-group';
+import {Annotation} from '../anno/annotation';
 import {SentenceAlignModal} from '../content/sentence-align.component';
 
 

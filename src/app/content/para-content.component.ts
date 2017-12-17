@@ -3,15 +3,15 @@ import {
   Component, ViewChild, ViewContainerRef, ChangeDetectorRef
 } from '@angular/core';
 
-import {SelectionAnnotator} from './selection-annotator';
-import {HighlightGroups} from './annotations';
+import {Annotator} from '../anno/annotator';
+import {HighlightGroups} from '../anno/annotations';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
-import {ParaLiveContent} from '../view-common/para-live-content';
-import {DictRequest} from '../view-common/dict-request';
-import {NoteRequest} from '../view-common/note-request';
-import {Annotation} from '../view-common/annotation';
+import {ParaLiveContent} from '../chap-types/para-live-content';
+import {DictRequest} from '../chap-types/dict-request';
+import {NoteRequest} from '../chap-types/note-request';
+import {Annotation} from '../anno/annotation';
 
 @Component({
   selector: 'para-content',
@@ -33,7 +33,7 @@ export class ParaContentComponent implements OnChanges {
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
   @Output() noteRequest = new EventEmitter<NoteRequest>();
-  _annotator: SelectionAnnotator;
+  _annotator: Annotator;
   beenChanged = false;
   contentChanged = false;
   transChanged = false;
@@ -53,14 +53,14 @@ export class ParaContentComponent implements OnChanges {
   get annotator() {
     if (!this._annotator) {
       let contentEl = this.paraText.element.nativeElement;
-      this._annotator = new SelectionAnnotator(contentEl);
+      this._annotator = new Annotator(contentEl);
     }
     this._annotator.switchAnnotation(this.annotation);
     return this._annotator;
   }
 
   private removeTagIfDummy(el) {
-    if (el.tagName !== SelectionAnnotator.annotationTagName.toUpperCase()) {
+    if (el.tagName !== Annotator.annotationTagName.toUpperCase()) {
       return false;
     }
     let changed = false;

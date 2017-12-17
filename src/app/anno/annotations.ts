@@ -1,5 +1,5 @@
-import {AnnotationGroup} from '../view-common/annotation-group';
-import {Annotation} from '../view-common/annotation';
+import {AnnotationGroup} from './annotation-group';
+import {Annotation} from './annotation';
 
 
 export class Annotations {

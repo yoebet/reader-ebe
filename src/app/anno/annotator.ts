@@ -1,6 +1,6 @@
-import {Annotation} from '../view-common/annotation';
+import {Annotation} from './annotation';
 
-export class SelectionAnnotator {
+export class Annotator {
   static annotationTagName = 'y-o';
 
   charPattern = /[-a-zA-Z']/;
@@ -80,7 +80,7 @@ export class SelectionAnnotator {
     if (ann.tagName) {
       wrapping = document.createElement(ann.tagName);
     } else {
-      wrapping = document.createElement(SelectionAnnotator.annotationTagName);
+      wrapping = document.createElement(Annotator.annotationTagName);
       if (ann.cssClass) {
         wrapping.className = ann.cssClass;
       }
@@ -152,7 +152,7 @@ export class SelectionAnnotator {
   }
 
   private removeTagIfDummy(element) {
-    if (element.tagName !== SelectionAnnotator.annotationTagName.toUpperCase()) {
+    if (element.tagName !== Annotator.annotationTagName.toUpperCase()) {
       return false;
     }
     if (element.classList.length === 0) {
@@ -189,7 +189,7 @@ export class SelectionAnnotator {
       }
       element.classList.remove(ann.cssClass);
       if (element.tagName === ann.tagName && element.hasAttributes()) {
-        let wrapping = document.createElement(SelectionAnnotator.annotationTagName);
+        let wrapping = document.createElement(Annotator.annotationTagName);
         wrapping.className = element.className;
 
         //for (let item of element.childNodes)
