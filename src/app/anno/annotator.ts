@@ -1,4 +1,5 @@
 import {Annotation} from './annotation';
+import {AnnotateResult} from './annotate-result'
 
 export class Annotator {
   static annotationTagName = 'y-o';
@@ -226,24 +227,35 @@ export class Annotator {
     });
   }
 
-  private doInOneTextNode(textNode: Text, offset1, offset2): Element {
+  private lookupAndProcess(element) {
+    let selector = this.annotationSelector();
+    let annotatedNode = this.lookupElement(element, selector);
+    if (!annotatedNode) {
+      return null;
+    }
+    let ar = new AnnotateResult();
+    ar.wordEl = annotatedNode;
+    let ann = this.current;
+    let editAttrOutside = ann.dataName && typeof ann.dataValue === 'undefined';
+    if (editAttrOutside) {
+      return ar;
+    } else {
+      this.resetAnnotation(annotatedNode, 'remove');
+      ar.operation = 'remove';
+      return ar;
+    }
+  }
+
+  private doInOneTextNode(textNode: Text, offset1, offset2): AnnotateResult {
 
     let nodeText = textNode.textContent;
     if (offset1 > offset2) {
       [offset1, offset2] = [offset2, offset1];
     }
 
-    let selector = this.annotationSelector();
-    let annotatedNode = this.lookupElement(textNode.parentNode, selector);
-    if (annotatedNode) {
-      let ann = this.current;
-      let editAttrOutside = ann.dataName && typeof ann.dataValue === 'undefined';
-      if (editAttrOutside) {
-        return annotatedNode;
-      } else {
-        this.resetAnnotation(annotatedNode, 'remove');
-        return null;
-      }
+    let ar0 = this.lookupAndProcess(textNode.parentNode);
+    if (ar0) {
+      return ar0;
     }
 
     let [wordStart, wordEnd] = [offset1, offset2];
@@ -254,15 +266,18 @@ export class Annotator {
       return null;
     }
 
+    let ar = new AnnotateResult();
+    ar.operation = 'add';
     let selectedText = nodeText.substring(wordStart, wordEnd);
 
     if (selectedText === nodeText) {
-      if (textNode.previousSibling === null && textNode.nextSibling === null) {
-        // the only one TextNode
-        let exactNode = textNode.parentNode as Element;
-        this.resetAnnotation(exactNode, 'toggle');//add
-        return exactNode;
-      }
+      // if (textNode.previousSibling === null && textNode.nextSibling === null) {
+      // the only one TextNode
+      let exactNode = textNode.parentNode as Element;
+      this.resetAnnotation(exactNode, 'add');
+      ar.wordEl = exactNode;
+      return ar;
+      // }
     }
 
     let wordsNode = textNode;
@@ -278,10 +293,12 @@ export class Annotator {
     parent.replaceChild(wrapping, wordsNode);
     wrapping.appendChild(wordsNode);
 
-    return wrapping;
+    ar.wordEl = wrapping;
+    ar.elCreated = true;
+    return ar;
   }
 
-  private doInSameParent(parent: Node, textNode1: Text, offset1, textNode2: Text, offset2): Element {
+  private doInSameParent(parent: Element, textNode1: Text, offset1, textNode2: Text, offset2): AnnotateResult {
 
     let cns = Array.from(parent.childNodes);
     let nodeIndex1 = cns.indexOf(textNode1);
@@ -289,6 +306,11 @@ export class Annotator {
     if (nodeIndex1 > nodeIndex2) {
       [textNode1, textNode2] = [textNode2, textNode1];
       [offset1, offset2] = [offset2, offset1];
+    }
+
+    let ar0 = this.lookupAndProcess(parent);
+    if (ar0) {
+      return ar0;
     }
 
     let interNodes = [];
@@ -343,20 +365,24 @@ export class Annotator {
     wrapping.appendChild(endingNode);
     this.removeInnerAnnotations(wrapping);
 
-    return wrapping;
+    let ar = new AnnotateResult();
+    ar.operation = 'add';
+    ar.wordEl = wrapping;
+    ar.elCreated = true;
+    return ar;
   }
 
-  annotate(): Element {
+  annotate(): AnnotateResult {
     if (!this.current) {
       return null;
     }
     let selection = window.getSelection();
-    let el = this.doAnnotate(selection);
+    let ar = this.doAnnotate(selection);
     selection.removeAllRanges();
-    return el;
+    return ar;
   }
 
-  private doAnnotate(selection: Selection): Element {
+  private doAnnotate(selection: Selection): AnnotateResult {
     let node1 = selection.anchorNode;
     let node2 = selection.focusNode;
 
@@ -395,7 +421,7 @@ export class Annotator {
 
     // textNode1 !== textNode2
     // textNode1.parentNode === textNode2.parentNode
-    let parent = textNode1.parentNode;
+    let parent = textNode1.parentNode as Element;
     return this.doInSameParent(parent, textNode1, offset1, textNode2, offset2);
   }
 

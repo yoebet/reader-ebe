@@ -43,6 +43,7 @@ export class ChapParasComponent implements OnInit {
   annotateOnly = false;
   editInplace = false;
   highlightSentence = false;
+  annotatedWordsHover = true;
 
   annotationGroups: AnnotationGroup[] = Annotations.annotationGroups;
   specialAnnotations: Annotation[] = Annotations.specialAnnotations;
@@ -180,6 +181,16 @@ export class ChapParasComponent implements OnInit {
       this.currentAnnotation = annotation;
     }
     this.stopEvent($event);
+  }
+
+  onAnnotatedWordsHoverChange() {
+    let bodyClasses = document.body.classList;
+    let className = 'drop-anno-disabled';
+    if (this.annotatedWordsHover) {
+      bodyClasses.remove(className);
+    } else {
+      bodyClasses.add(className);
+    }
   }
 
   remove(para: Para): void {

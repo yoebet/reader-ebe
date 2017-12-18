@@ -39,6 +39,7 @@ div(*ngIf='chap')
       .ui.right.floated.header
         .ui.mini.basic.button(*ngFor='let ann of specialAnnotations', [ngClass]='{active: ann===currentAnnotation}',
         (click)='switchSpecialAnnotation(ann,$event)') {{ann.name||ann.nameEn}}
+        sui-checkbox([(ngModel)]='annotatedWordsHover', (ngModelChange)='onAnnotatedWordsHoverChange()') 鼠标悬停
         sui-checkbox([(ngModel)]='annotateOnly') 仅标注
       .title
         i.text.cursor.icon
@@ -83,6 +84,7 @@ div(*ngIf='chap')
         [gotFocus]='para===selectedPara',
         [editable]='para===selectedPara && editInplace',
         [highlightSentence]='para===selectedPara && highlightSentence',
+        [annotatedWordsHover]='para===selectedPara && annotatedWordsHover',
         [annotating]='para===selectedPara && annotating',
         [annotation]='(para===selectedPara)? currentAnnotation : null',
         [ngClass]='{"selected": para===selectedPara}',

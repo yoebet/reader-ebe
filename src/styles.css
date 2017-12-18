@@ -29,6 +29,7 @@
 /*@import url('assets/semantic/table.css');*/
 /*@import url('assets/semantic/message.css');*/
 /*@import url('assets/semantic/sidebar.css');*/
+@import url('assets/annos-popup.css');
 @import url('assets/para-split.css');
 @import url('assets/sentence-align.css');
 @import url('assets/dict-popup.css');
@@ -51,6 +52,22 @@
   font-size: 0.6em;
   vertical-align: super;
   color: indianred;
+}
+
+.drop-target.drop-enabled {
+  background: lightgoldenrodyellow;
+}
+
+body.drop-anno-disabled .drop-target.drop-enabled {
+  background: inherit;
+}
+
+body.drop-anno-disabled .drop-element.drop-anno {
+  display: none;
+}
+
+.drop-element {
+  z-index: 1000;
 }
 
 .ui.toggle.checkbox {
@@ -94,11 +111,6 @@ sui-multi-select i.list.icon {
   z-index: 1000;
 }
 
-/*#dictPopup .ui.accordion .content {*/
-/*margin: 0;*/
-/*padding: 0.2em 0;*/
-/*}*/
-
 .dict-entry .ui.accordion .pos-meanings:not(:first-child) .title {
   border-top: 1px dashed silver;
   /*background: whitesmoke;*/
@@ -111,10 +123,6 @@ sui-multi-select i.list.icon {
 .clearing {
   clear: both;
 }
-
-/*.ui.modal {*/
-/*z-index: 2001;*/
-/*}*/
 
 .para-text s-st.highlight {
   /*background: lightblue;*/

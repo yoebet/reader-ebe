@@ -160,6 +160,7 @@
         a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)', href='javascript:')
           | {{phrase}}
 
+  .ui.clearing.divider
   .ui.fields(*ngIf='selectMeaningItem')
     .ui.right.floated.mini.buttons
       button.ui.button((click)='cancelSelect()') 取消

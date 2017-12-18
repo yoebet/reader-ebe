@@ -211,17 +211,17 @@ export class Annotations {
       let {name, nameEn, cssClass, tagName, dataName} = group;
       styles.push(`\n/* *** ${name} ${nameEn} *** */\n`);
       let selector = '.' + cssClass;
-      let before = selector + ':before';
-      let after = selector + ':after';
+      // let before = selector + ':before';
+      // let after = selector + ':after';
       if (tagName) {
         tagName = tagName.toLowerCase();
         selector = tagName + ', ' + selector;
-        before = tagName + ':before' + ', ' + before;
-        after = tagName + ':after' + ', ' + after;
+        // before = tagName + ':before' + ', ' + before;
+        // after = tagName + ':after' + ', ' + after;
       }
       styles.push(`${selector} {\n  border-bottom: 1px dashed grey;\n}\n`);
-      styles.push(`${before} {\n}\n`);
-      styles.push(`${after} {\n}\n`);
+      // styles.push(`${before} {\n}\n`);
+      // styles.push(`${after} {\n}\n`);
       // for (let annotation: Annotation of group.annotations) {
       //   let {name, nameEn, dataValue} = annotation;
       //   styles.push(`/* ${nameEn} ${nameEn} */`);
