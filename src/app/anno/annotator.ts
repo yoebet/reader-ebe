@@ -170,15 +170,16 @@ export class Annotator {
     }
   }
 
-  private resetAnnotation(element, type) {
+  private resetAnnotation(element, type, match?) {
     //type: add, remove, toggle
     if (element.nodeType !== Node.ELEMENT_NODE) {
       return;
     }
 
     let ann = this.current;
-    let selector = this.annotationSelector();
-    let match = element.matches(selector);
+    if (typeof match === 'undefined') {
+      match = element.matches(this.annotationSelector());
+    }
     if (match) {
       if (type === 'add') {
         this.setDataAttribute(element);
@@ -223,7 +224,7 @@ export class Annotator {
     let selector = this.annotationSelector();
     let annotated = element.querySelectorAll(selector);
     annotated.forEach(ae => {
-      this.resetAnnotation(ae, 'remove');
+      this.resetAnnotation(ae, 'remove', true);
     });
   }
 
@@ -240,7 +241,7 @@ export class Annotator {
     if (editAttrOutside) {
       return ar;
     } else {
-      this.resetAnnotation(annotatedNode, 'remove');
+      this.resetAnnotation(annotatedNode, 'remove', true);
       ar.operation = 'remove';
       return ar;
     }
@@ -274,7 +275,7 @@ export class Annotator {
       // if (textNode.previousSibling === null && textNode.nextSibling === null) {
       // the only one TextNode
       let exactNode = textNode.parentNode as Element;
-      this.resetAnnotation(exactNode, 'add');
+      this.resetAnnotation(exactNode, 'add', true);
       ar.wordEl = exactNode;
       return ar;
       // }

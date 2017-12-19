@@ -121,9 +121,9 @@ export class Annotations {
         ['Infinitive Phrases', '不定式短语', 'hi'],
         ['Phrasal Verbs', '成语动词', 'hp'],
         ['Prepositional Phrases', '介词短语', 'hr'],
-        ['phrases1', '组1', 'g1'],
-        ['phrases2', '组2', 'g2'],
-        ['phrases3', '组3', 'g3'],
+        ['phrases1', '词组1', 'g1'],
+        ['phrases2', '词组2', 'g2'],
+        ['phrases3', '词组3', 'g3'],
       ]
     }, {
       name: '其他',
@@ -150,10 +150,13 @@ export class Annotations {
 
   private static _annotationGroups: AnnotationGroup[] = null;
 
+  private static _annotationsMap: Map<string, Annotation> = null;
+
   private static _specialAnnotations: Annotation[] = null;
 
-  private static init() {
+  static init() {
     let groups: AnnotationGroup[] = Annotations._annotationGroups = [];
+    let annMap = Annotations._annotationsMap = new Map();
 
     for (let compactGroup of Annotations.compact) {
       let group = new AnnotationGroup();
@@ -177,6 +180,10 @@ export class Annotations {
         ann.nameEn = nameEn;
         ann.dataValue = dataValue;
         annotations.push(ann);
+        if (dataName && dataValue) {
+          let annKey = `${dataName}.${dataValue}`;
+          annMap.set(annKey, ann);
+        }
       }
     }
 
@@ -231,20 +238,41 @@ export class Annotations {
   }
 
   static get annotationGroups(): AnnotationGroup[] {
-    if (Annotations._annotationGroups == null) {
-      Annotations.init();
-    }
     return Annotations._annotationGroups;
   }
 
   static get specialAnnotations(): Annotation[] {
-    if (Annotations._specialAnnotations == null) {
-      Annotations.init();
-    }
     return Annotations._specialAnnotations;
   }
 
+  static get annotationsMap(): Map<string, Annotation> {
+    return Annotations._annotationsMap;
+  }
+
+  static findAnnotation(dataName: string, dataValue: string): Annotation {
+    let annKey = `${dataName}.${dataValue}`;
+    return Annotations._annotationsMap.get(annKey);
+  }
+
+  static annotationOutput(dataName: string, dataValue: string) {
+    if (dataName === 'phra' && /^g\d$/.test(dataValue)) {
+      return null;
+    }
+    if (dataName === 'clau') {
+      if (dataValue === 'cc' || dataValue === 'cr') {
+        return null;
+      }
+    }
+    let annKey = `${dataName}.${dataValue}`;
+    let ann = Annotations._annotationsMap.get(annKey);
+    if (!ann) {
+      return null;
+    }
+    return ann.name;
+  }
 }
+
+Annotations.init();
 
 
 export class HighlightGroups {

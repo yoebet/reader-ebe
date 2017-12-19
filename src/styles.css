@@ -54,22 +54,6 @@
   color: indianred;
 }
 
-.drop-target.drop-enabled {
-  background: lightgoldenrodyellow;
-}
-
-body.drop-anno-disabled .drop-target.drop-enabled {
-  background: inherit;
-}
-
-body.drop-anno-disabled .drop-element.drop-anno {
-  display: none;
-}
-
-.drop-element {
-  z-index: 1000;
-}
-
 .ui.toggle.checkbox {
   padding-right: 0.5rem;
 }

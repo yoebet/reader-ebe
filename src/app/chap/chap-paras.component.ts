@@ -77,10 +77,14 @@ export class ChapParasComponent implements OnInit {
     }
     let ag: AnnotationGroup = this.annotationGroups[0];
     if (ag) {
-      let size = Math.min(ag.annotations.length, 3);
+      let size = Math.min(ag.annotations.length, 2);
       for (let i = 0; i < size; i++) {
         this.latestAnnotations.push(ag.annotations[i]);
       }
+    }
+    let phraG1 = Annotations.findAnnotation('phra', 'g1');
+    if (phraG1) {
+      this.latestAnnotations.push(phraG1);
     }
   }
 
@@ -119,14 +123,14 @@ export class ChapParasComponent implements OnInit {
   selectAnnotationGroup(group) {
     this.annotationGroup = group;
     if (this.agPopupHiddenTimer) {
-      clearInterval(this.agPopupHiddenTimer);
+      clearTimeout(this.agPopupHiddenTimer);
       this.agPopupHiddenTimer = null;
     }
   }
 
   agPopupMouseover(group) {
     if (this.agPopupHiddenTimer) {
-      clearInterval(this.agPopupHiddenTimer);
+      clearTimeout(this.agPopupHiddenTimer);
       this.agPopupHiddenTimer = null;
     }
     if (this.annotationGroup !== null) {
@@ -143,7 +147,7 @@ export class ChapParasComponent implements OnInit {
       return;
     }
     if (this.agPopupTimer) {
-      clearInterval(this.agPopupTimer);
+      clearTimeout(this.agPopupTimer);
       this.agPopupTimer = null;
     }
     this.agPopupHiddenTimer = setTimeout(() => {

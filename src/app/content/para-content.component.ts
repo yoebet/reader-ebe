@@ -7,7 +7,7 @@ import Drop from 'tether-drop'
 
 import {Annotator} from '../anno/annotator';
 import {AnnotateResult} from '../anno/annotate-result'
-import {HighlightGroups} from '../anno/annotations';
+import {Annotations, HighlightGroups} from '../anno/annotations';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -52,6 +52,7 @@ export class ParaContentComponent implements OnChanges {
   static sentenceTagName = 's-st';
   static highlightClass = 'highlight';
   static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
+  static dropClassPrefix = 'drop-';
 
   constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
   }
@@ -82,9 +83,8 @@ export class ParaContentComponent implements OnChanges {
       el.removeAttribute('class');
       result.changed = true;
     } else if (el.attributes.length === 1 && el.hasAttributes('class')) {
-      // only drop-*
       let cns = el.className.split(' ')
-        .filter(n => !n.startsWith('drop-'));
+        .filter(n => !n.startsWith(ParaContentComponent.dropClassPrefix) && n !== ParaContentComponent.highlightClass);
       if (cns.length === 0) {
         el.removeAttribute('class');
         result.changed = true;
@@ -106,6 +106,25 @@ export class ParaContentComponent implements OnChanges {
     }
     return result;
   };
+
+  private currentPhrase(wordEl) {
+    let stEl = this.closest(wordEl, ParaContentComponent.sentenceTagName);
+    if (!stEl) {
+      stEl = this.contentText.element.nativeElement;
+    }
+    let ds = wordEl.dataset;
+    let group = ds.phra;
+    if (!group) {
+      return null;
+    }
+    if (!/^g\d$/.test(group)) {
+      return null;
+    }
+    let groupSelector = `[data-phra=${group}]`;
+    let groupEls = stEl.querySelectorAll(groupSelector);
+    let els = Array.from(groupEls);
+    return els.map((el: Element) => el.textContent).join(' ');
+  }
 
   selectWordMeaning() {
     let ar: AnnotateResult = this.annotator.annotate();
@@ -183,6 +202,14 @@ export class ParaContentComponent implements OnChanges {
         dr.meaningItemCallback = meaningItemCallback;
         if (oriForWord !== word) {
           dr.relatedWords = [word];
+        }
+        let phrase = this.currentPhrase(element);
+        if (phrase && phrase !== word && phrase !== oriForWord) {
+          if (dr.relatedWords === null) {
+            dr.relatedWords = [phrase];
+          } else {
+            dr.relatedWords.push(phrase);
+          }
         }
         this.dictRequest.emit(dr);
       });
@@ -302,39 +329,33 @@ export class ParaContentComponent implements OnChanges {
     paraTextEl = paraTextEl.cloneNode(true);
 
     if (side === 'content') {
-      let dropEls = paraTextEl.querySelectorAll('.drop-target');
+      let dcp = ParaContentComponent.dropClassPrefix;
+      let dropEls = paraTextEl.querySelectorAll(`.${dcp}target`);
       for (let el of dropEls) {
         el.className = el.className.split(' ')
-          .filter(n => !n.startsWith('drop-')).join(' ');
+          .filter(n => !n.startsWith(dcp)).join(' ');
         this.removeTagIfDummy(el);
       }
     }
+    let hlEls = paraTextEl.querySelectorAll('.' + ParaContentComponent.highlightClass);
+    for (let hlEl of hlEls) {
+      hlEl.classList.remove(ParaContentComponent.highlightClass);
+      this.removeTagIfDummy(hlEl);
+    }
+    let toStripEls = paraTextEl.querySelectorAll('br');
+    for (let toStrip of toStripEls) {
+      let pn = toStrip.parentNode;
+      if (pn) {
+        pn.removeChild(toStrip);
+      }
+    }
 
-    let contents = [];
-    //:scope > .part
     let textEls = paraTextEl.querySelectorAll('.para-text > .part');
+    textEls = Array.from(textEls);
     if (textEls.length === 0) {
       textEls = [paraTextEl];
     }
-    for (let textEl of textEls) {
-      let toStripEls = textEl.querySelectorAll('br');
-      for (let toStrip of toStripEls) {
-        let pn = toStrip.parentNode;
-        if (pn) {
-          pn.removeChild(toStrip);
-        }
-      }
-      let hlEls = textEl.querySelectorAll('.' + ParaContentComponent.highlightClass);
-      for (let hlEl of hlEls) {
-        hlEl.classList.remove(ParaContentComponent.highlightClass);
-        if (hlEl.classList.length === 0) {
-          hlEl.removeAttribute('class');
-          this.removeTagIfDummy(hlEl);
-        }
-      }
-      contents.push(textEl.innerHTML);
-    }
-    return contents.join('\n');
+    return textEls.map(el => el.innerHTML).join('\n');
   }
 
 
@@ -516,25 +537,61 @@ export class ParaContentComponent implements OnChanges {
     if (this.annotatedWordsPopup.has(wordEl)) {
       return;
     }
+    let component = this;
     let content = function () {
-      let words = wordEl.textContent;
-      if (words.length > 15) {
-        words = words.substring(0, 15) + '...';
-      }
-      let text = words + '<br>';
-      for (let attr of wordEl.attributes) {
-        let {name, value} = attr;
-        if (name === 'class') {
-          value = value.replace(/ ?drop-[a-z-]+/g, '');
+      let word = wordEl.textContent;
+      let phrase = null;
+      let note = null;
+      let annItems = [];
+      for (let {name, value} of wordEl.attributes) {
+        if (!name.startsWith('data-')) {
+          continue;
         }
-        text += name + ' ' + value + '<br>';
+        name = name.substr(5);
+        if (name === 'mid') {
+          let mid = parseInt(value);
+          //data-word
+          //TODO:
+        } else if (name === 'note') {
+          note = '注：' + value + '<br>';
+        } else if (name === 'phra' && /^g\d$/.test(value)) {
+          let stEl = component.closest(wordEl, ParaContentComponent.sentenceTagName);
+          if (!stEl) {
+            stEl = component.contentText.element.nativeElement;
+          }
+          let groupSelector = `[data-phra=${value}]`;
+          let groupEls = stEl.querySelectorAll(groupSelector);
+          let els = Array.from(groupEls);
+          phrase = els.map((el: Element) => el.textContent).join(' ');
+        }
+        let output = Annotations.annotationOutput(name, value);
+        if (output) {
+          annItems.push(output);
+        }
+      }
+      let head;
+      if (phrase) {
+        head = phrase;
+      } else {
+        if (word.length > 15) {
+          word = word.substring(0, 15) + '...';
+        }
+        head = word;
+      }
+      let text = head + '<br>';
+      if (annItems.length > 0) {
+        text += annItems.join('<br>');
+        text += '<br>'
+      }
+      if (note) {
+        text += note + '<br>';
       }
       return text;
     };
     let drop = new Drop({
       target: wordEl,
       content: content,
-      classes: 'drop-anno',
+      classes: `${ParaContentComponent.dropClassPrefix}anno`,
       position: 'bottom center',
       constrainToScrollParent: false,
       remove: true,
