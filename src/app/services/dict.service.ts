@@ -69,10 +69,6 @@ export class DictService extends BaseService<DictEntry> {
     this.entryCache.set(entry.word, entry);
   }
 
-  private isId(idOrWord): boolean {
-    return /^[0-9a-z]{24}$/.test(idOrWord);
-  }
-
   private cacheOne(obs: Observable<DictEntry>): Observable<DictEntry> {
     obs = obs.share();
     obs.subscribe(entry => {
@@ -101,7 +97,7 @@ export class DictService extends BaseService<DictEntry> {
       return Observable.of(cachedEntry);
     }
     let url = `${this.baseUrl}/${idOrWord}`;
-    if (!this.isId(idOrWord)) {
+    if (!DictEntry.isId(idOrWord)) {
       let switches = ['lotf', 'base', 'stem'].filter(name => options[name]);
       if (switches.length > 0) {
         url += '?';

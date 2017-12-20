@@ -22,6 +22,7 @@ import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
 import {SentenceAlignComponent} from './content/sentence-align.component';
 import {ParaContentComponent} from './content/para-content.component';
+import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
@@ -45,12 +46,13 @@ import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
     ParaSplitComponent,
     SentenceAlignComponent,
     ParaContentComponent,
+    WordAnnosComponent,
     DictComponent,
     DictEntryComponent,
     DictEntrySmiComponent
   ],
   providers: [BookService, ChapService, ParaService, DictService],
-  entryComponents: [ParaSplitComponent, SentenceAlignComponent],
+  entryComponents: [ParaSplitComponent, SentenceAlignComponent, WordAnnosComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

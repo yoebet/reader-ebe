@@ -1,0 +1,13 @@
+.ui.small.header {{head}}
+.ui.list
+  //ng-template(ngIf='items&&items.length>0')
+  .item(*ngFor='let item of items')
+    span.yo([ngClass]='item.dataName') {{item.text}}
+  .item(*ngIf='meaning')
+    .meaning-head 释义：
+    .meaning-text
+      ng-template([ngIf]='word!==meaning.word') ({{meaning.word}}) &nbsp;
+      | {{meaning.text}}
+  .item(*ngIf='note')
+    .note-head 注：
+    .note-text.pre-wrap {{note}}

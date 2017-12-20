@@ -62,11 +62,10 @@ export class ChapParasComponent implements OnInit {
   noteTether = null;
   noteRequestNote = '';
 
-  // {
-  //   para: {},
-  //   pullContent: fn
-  // }
   lastChanged: ContentChangedNotification = null;
+
+  private tetherClassPrefix = 'dp';
+
 
   constructor(private paraService: ParaService, public modalService: SuiModalService) {
   }
@@ -498,8 +497,6 @@ export class ChapParasComponent implements OnInit {
     this.mergeContent(para, targetPara, targetPara);
     this.saveMerge(targetPara, para);
   }
-
-  private tetherClassPrefix = 'dp';
 
   private removeTetherClass(el) {
     el.className = el.className.split(' ')

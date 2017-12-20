@@ -36,6 +36,10 @@ export class DictEntry extends Model {
   updatedAt?: string;
 
 
+  static isId(idOrWord): boolean {
+    return /^[0-9a-z]{24}$/.test(idOrWord);
+  }
+
   static EvaluateCategoryTags(categories): string[] {
     let tags = [];
     if (!categories) {

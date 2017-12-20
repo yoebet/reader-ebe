@@ -1,13 +1,14 @@
 import {
   OnChanges, Input, Output, EventEmitter, SimpleChanges,
-  Component, ViewChild, ViewContainerRef, ChangeDetectorRef
+  Component, ViewChild, ViewContainerRef, ChangeDetectorRef,
+  ComponentFactoryResolver, ComponentFactory, ComponentRef, TemplateRef, EmbeddedViewRef
 } from '@angular/core';
 
 import Drop from 'tether-drop'
 
 import {Annotator} from '../anno/annotator';
 import {AnnotateResult} from '../anno/annotate-result'
-import {Annotations, HighlightGroups} from '../anno/annotations';
+import {HighlightGroups} from '../anno/annotations';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -15,6 +16,7 @@ import {ParaLiveContent} from '../chap-types/para-live-content';
 import {DictRequest} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {Annotation} from '../anno/annotation';
+import {WordAnnosComponent} from './word-annos.component'
 
 @Component({
   selector: 'para-content',
@@ -24,6 +26,7 @@ import {Annotation} from '../anno/annotation';
 export class ParaContentComponent implements OnChanges {
   @ViewChild('contentText', {read: ViewContainerRef}) contentText: ViewContainerRef;
   @ViewChild('paraTrans', {read: ViewContainerRef}) paraTrans: ViewContainerRef;
+  @ViewChild('wordAnnos', {read: ViewContainerRef}) wordAnnos: ViewContainerRef;
   @Input() content: string;
   @Input() trans: string;
   @Input() showTrans: boolean;
@@ -45,16 +48,20 @@ export class ParaContentComponent implements OnChanges {
   sentenceHoverSetup = false;
   associatedWordsHoverSetup = false;
   annotatedWordsHoverSetup = false;
-  highlightedSentences: Element[] = [];
-  highlightedWords: Element[] = [];
-  annotatedWordsPopup = new Map<Element, Drop>();
+  highlightedSentences: Element[];
+  highlightedWords: Element[];
+  wordsPopupMap = new Map<Element, Drop>();
+  wordAnnosComponentRef: ComponentRef<WordAnnosComponent>;
 
   static sentenceTagName = 's-st';
   static highlightClass = 'highlight';
-  static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
   static dropClassPrefix = 'drop-';
+  static tetherClassPrefix = 'dp-';
+  static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
 
-  constructor(private dictService: DictService, private cdr: ChangeDetectorRef) {
+  constructor(private resolver: ComponentFactoryResolver,
+              private cdr: ChangeDetectorRef,
+              private dictService: DictService) {
   }
 
   get annotator() {
@@ -67,10 +74,10 @@ export class ParaContentComponent implements OnChanges {
   }
 
   private destroyAnnotatedWordsPopup(element) {
-    let drop: any = this.annotatedWordsPopup.get(element);
+    let drop: any = this.wordsPopupMap.get(element);
     if (drop) {
       drop.destroy();
-      this.annotatedWordsPopup.delete(element);
+      this.wordsPopupMap.delete(element);
     }
   }
 
@@ -84,7 +91,9 @@ export class ParaContentComponent implements OnChanges {
       result.changed = true;
     } else if (el.attributes.length === 1 && el.hasAttributes('class')) {
       let cns = el.className.split(' ')
-        .filter(n => !n.startsWith(ParaContentComponent.dropClassPrefix) && n !== ParaContentComponent.highlightClass);
+        .filter(n => !n.startsWith(ParaContentComponent.dropClassPrefix)
+          && n !== ParaContentComponent.tetherClassPrefix
+          && n !== ParaContentComponent.highlightClass);
       if (cns.length === 0) {
         el.removeAttribute('class');
         result.changed = true;
@@ -108,7 +117,7 @@ export class ParaContentComponent implements OnChanges {
   };
 
   private currentPhrase(wordEl) {
-    let stEl = this.closest(wordEl, ParaContentComponent.sentenceTagName);
+    let stEl = this.findSentence(wordEl);
     if (!stEl) {
       stEl = this.contentText.element.nativeElement;
     }
@@ -330,10 +339,11 @@ export class ParaContentComponent implements OnChanges {
 
     if (side === 'content') {
       let dcp = ParaContentComponent.dropClassPrefix;
-      let dropEls = paraTextEl.querySelectorAll(`.${dcp}target`);
+      let tcp = ParaContentComponent.tetherClassPrefix;
+      let dropEls = paraTextEl.querySelectorAll(`.${dcp}target, .${tcp}target`);
       for (let el of dropEls) {
         el.className = el.className.split(' ')
-          .filter(n => !n.startsWith(dcp)).join(' ');
+          .filter(n => !n.startsWith(dcp) && !n.startsWith(tcp)).join(' ');
         this.removeTagIfDummy(el);
       }
     }
@@ -395,18 +405,26 @@ export class ParaContentComponent implements OnChanges {
 
   private clearSentenceHighlights() {
     let hls = this.highlightedSentences;
+    if (!hls) {
+      return;
+    }
     while (hls.length > 0) {
       let hl = hls.pop();
       hl.classList.remove(ParaContentComponent.highlightClass);
     }
+    this.highlightedSentences = null;
   }
 
   private clearWordHighlights() {
     let hls = this.highlightedWords;
+    if (!hls) {
+      return;
+    }
     while (hls.length > 0) {
       let hl = hls.pop();
       hl.classList.remove(ParaContentComponent.highlightClass);
     }
+    this.highlightedWords = null;
   }
 
   private setupSentenceHover() {
@@ -452,6 +470,9 @@ export class ParaContentComponent implements OnChanges {
         let tsEl = selMap.get(sid);
         if (tsEl) {
           tsEl.classList.add(ParaContentComponent.highlightClass);
+          if (!component.highlightedSentences) {
+            component.highlightedSentences = [];
+          }
           component.highlightedSentences.push(tsEl);
         }
       }
@@ -467,14 +488,16 @@ export class ParaContentComponent implements OnChanges {
     this.sentenceHoverSetup = true;
   }
 
-  private closest(node, selector): any {
+  private findSentence(node): any {
+    let contentTextEl = this.contentText.element.nativeElement;
+    let sentenceSelector = ParaContentComponent.sentenceTagName;
     do {
       if (node instanceof Element) {
         let el = node as Element;
-        if (el.matches('.para-text')) {
+        if (el === contentTextEl) {
           return null;
         }
-        if (el.matches(selector)) {
+        if (el.matches(sentenceSelector)) {
           return el;
         }
       }
@@ -492,13 +515,10 @@ export class ParaContentComponent implements OnChanges {
     };
 
     let wordsMouseover = function (event) {
-      if (!component.gotFocus) {
-        return;
-      }
       component.clearWordHighlights();
 
       let el = this;
-      let stEl = component.closest(el, ParaContentComponent.sentenceTagName);
+      let stEl = component.findSentence(el);
       if (!stEl) {
         stEl = component.contentText.element.nativeElement;
       }
@@ -510,6 +530,9 @@ export class ParaContentComponent implements OnChanges {
       let annEls = stEl.querySelectorAll(groupSelector);
       for (let annEl of annEls) {
         annEl.classList.add(ParaContentComponent.highlightClass);
+        if (!component.highlightedWords) {
+          component.highlightedWords = [];
+        }
         component.highlightedWords.push(annEl);
       }
     };
@@ -533,60 +556,25 @@ export class ParaContentComponent implements OnChanges {
     this.associatedWordsHoverSetup = true;
   }
 
+
   private showAnnotationsHover(wordEl) {
-    if (this.annotatedWordsPopup.has(wordEl)) {
+    if (this.wordsPopupMap.has(wordEl)) {
       return;
     }
+
+    if (!this.wordAnnosComponentRef) {
+      let factory: ComponentFactory<WordAnnosComponent> = this.resolver.resolveComponentFactory(WordAnnosComponent);
+      this.wordAnnos.clear();
+      this.wordAnnosComponentRef = this.wordAnnos.createComponent(factory);
+    }
+    let wacr = this.wordAnnosComponentRef;
+    wacr.instance.paraTextEl = this.contentText.element.nativeElement;
     let component = this;
+
     let content = function () {
-      let word = wordEl.textContent;
-      let phrase = null;
-      let note = null;
-      let annItems = [];
-      for (let {name, value} of wordEl.attributes) {
-        if (!name.startsWith('data-')) {
-          continue;
-        }
-        name = name.substr(5);
-        if (name === 'mid') {
-          let mid = parseInt(value);
-          //data-word
-          //TODO:
-        } else if (name === 'note') {
-          note = '注：' + value + '<br>';
-        } else if (name === 'phra' && /^g\d$/.test(value)) {
-          let stEl = component.closest(wordEl, ParaContentComponent.sentenceTagName);
-          if (!stEl) {
-            stEl = component.contentText.element.nativeElement;
-          }
-          let groupSelector = `[data-phra=${value}]`;
-          let groupEls = stEl.querySelectorAll(groupSelector);
-          let els = Array.from(groupEls);
-          phrase = els.map((el: Element) => el.textContent).join(' ');
-        }
-        let output = Annotations.annotationOutput(name, value);
-        if (output) {
-          annItems.push(output);
-        }
-      }
-      let head;
-      if (phrase) {
-        head = phrase;
-      } else {
-        if (word.length > 15) {
-          word = word.substring(0, 15) + '...';
-        }
-        head = word;
-      }
-      let text = head + '<br>';
-      if (annItems.length > 0) {
-        text += annItems.join('<br>');
-        text += '<br>'
-      }
-      if (note) {
-        text += note + '<br>';
-      }
-      return text;
+      wacr.instance.enabled = component.annotatedWordsHover;
+      wacr.instance.wordEl = wordEl;
+      return wacr.location.nativeElement;
     };
     let drop = new Drop({
       target: wordEl,
@@ -599,7 +587,7 @@ export class ParaContentComponent implements OnChanges {
       openOn: 'hover'//click,hover,always
     });
 
-    this.annotatedWordsPopup.set(wordEl, drop);
+    this.wordsPopupMap.set(wordEl, drop);
   }
 
 
@@ -609,7 +597,7 @@ export class ParaContentComponent implements OnChanges {
       return;
     }
 
-    this.annotatedWordsPopup.clear();
+    this.wordsPopupMap.clear();
 
     let contentEl = this.contentText.element.nativeElement;
     let annEls = contentEl.querySelectorAll(Annotator.annotationTagName);
@@ -634,49 +622,18 @@ export class ParaContentComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let needClearSentenceHighlights = false;
-    let maySetupSentenceHover = false;
-    let needClearWordsHighlights = false;
-    let maySetupAssociatedWordsHover = false;
-    let maySetupAnnotatedWordsHover = false;
-    if (changes.gotFocus) {
-      if (this.gotFocus) {
-        maySetupSentenceHover = true;
-        maySetupAssociatedWordsHover = true;
-        maySetupAnnotatedWordsHover = true;
-      } else {
-        needClearSentenceHighlights = true;
-        needClearWordsHighlights = true;
-      }
-    }
-    if (changes.highlightSentence) {
-      if (this.highlightSentence) {
-        maySetupSentenceHover = true;
-      } else {
-        needClearSentenceHighlights = true;
-      }
-    }
-    if (changes.annotatedWordsHover) {
-      if (this.annotatedWordsHover) {
-        maySetupAnnotatedWordsHover = true;
-      }
-    }
     if (changes.trans) {
       this.transRendered = false;
     }
     if (this.showTrans && !this.transRendered) {
       this.refreshTrans();
       this.sentenceHoverSetup = false;
-      maySetupSentenceHover = true;
     }
     if (changes.content) {
       this.refreshContent();
       this.sentenceHoverSetup = false;
       this.associatedWordsHoverSetup = false;
       this.annotatedWordsHoverSetup = false;
-      maySetupSentenceHover = true;
-      maySetupAssociatedWordsHover = true;
-      maySetupAnnotatedWordsHover = true;
     } else if (changes.annotation) {
       if (this.gotFocus && this.annotating && this.annotation) {
         let annotator = this.annotator;
@@ -687,31 +644,17 @@ export class ParaContentComponent implements OnChanges {
       }
     }
 
-    if (needClearSentenceHighlights || maySetupSentenceHover) {
+    if (this.highlightedSentences && (!this.gotFocus || !this.sentenceHoverSetup || !this.highlightSentence)) {
       this.clearSentenceHighlights();
     }
-    if (maySetupSentenceHover) {
-      this.setupSentenceHover();
-    }
-
-    if (needClearWordsHighlights || maySetupAssociatedWordsHover) {
+    if (this.highlightedWords && (!this.gotFocus || changes.content)) {
       this.clearWordHighlights();
     }
-    if (maySetupAssociatedWordsHover) {
+
+    if (this.gotFocus) {
+      this.setupSentenceHover();
       this.setupAssociatedWordsHover();
-    }
-    if (maySetupAnnotatedWordsHover) {
       this.setupAnnotatedWordsHover();
     }
-
-    // if (changes.gotFocus) {
-    //   if (this.gotFocus) {
-    //     this.cdr.reattach();
-    //   } else {
-    //     setTimeout(() => {
-    //       this.cdr.detach();
-    //     }, 0);
-    //   }
-    // }
   }
 }

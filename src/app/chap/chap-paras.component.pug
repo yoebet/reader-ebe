@@ -84,7 +84,7 @@ div(*ngIf='chap')
         [gotFocus]='para===selectedPara',
         [editable]='para===selectedPara && editInplace',
         [highlightSentence]='para===selectedPara && highlightSentence',
-        [annotatedWordsHover]='para===selectedPara && annotatedWordsHover',
+        [annotatedWordsHover]='annotatedWordsHover',
         [annotating]='para===selectedPara && annotating',
         [annotation]='(para===selectedPara)? currentAnnotation : null',
         [ngClass]='{"selected": para===selectedPara}',

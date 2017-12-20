@@ -34,6 +34,7 @@
 @import url('assets/sentence-align.css');
 @import url('assets/dict-popup.css');
 @import url('assets/annotations.css');
+@import url('assets/para-text.css');
 
 .pre-wrap {
   white-space: pre-wrap;
@@ -41,17 +42,6 @@
 
 [hidden] {
   display: none !important;
-}
-
-.para-text.content-text [data-mid] {
-  border-bottom: 1px dashed cadetblue;
-}
-
-.para-text.content-text [data-note]:after {
-  content: '注';
-  font-size: 0.6em;
-  vertical-align: super;
-  color: indianred;
 }
 
 .ui.toggle.checkbox {
@@ -69,14 +59,6 @@
 .ui.form textarea {
   line-height: 1.4;
 }
-
-/*.ui.toggle.checkbox label {*/
-/*padding-left: 4.0rem;*/
-/*}*/
-
-/*para-form.ui.form .fields {*/
-/*margin: 1em -0.5em;*/
-/*}*/
 
 sui-multi-select i.list.icon {
   margin: 0em 0.25rem 0em 0em !important;
@@ -106,13 +88,4 @@ sui-multi-select i.list.icon {
 
 .clearing {
   clear: both;
-}
-
-.para-text s-st.highlight {
-  /*background: lightblue;*/
-  background: rgba(173, 216, 230, 0.4)
-}
-
-.para-text y-o.highlight {
-  border-bottom-width: 3px;
 }

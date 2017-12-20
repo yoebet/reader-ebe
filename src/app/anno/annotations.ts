@@ -256,13 +256,13 @@ export class Annotations {
 
   static annotationOutput(dataName: string, dataValue: string) {
     if (dataName === 'phra' && /^g\d$/.test(dataValue)) {
-      return null;
+      return '词组';
     }
-    if (dataName === 'clau') {
-      if (dataValue === 'cc' || dataValue === 'cr') {
-        return null;
-      }
-    }
+    // if (dataName === 'clau') {
+    //   if (dataValue === 'cc' || dataValue === 'cr') {
+    //     return null;
+    //   }
+    // }
     let annKey = `${dataName}.${dataValue}`;
     let ann = Annotations._annotationsMap.get(annKey);
     if (!ann) {

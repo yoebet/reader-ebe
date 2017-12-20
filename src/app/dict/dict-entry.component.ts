@@ -1,6 +1,6 @@
 import {
-  Component, Input, Output, OnInit, OnChanges,
-  SimpleChanges, EventEmitter, ChangeDetectorRef, OnDestroy
+  Component, Input, OnInit, OnChanges,
+  SimpleChanges, ChangeDetectorRef, OnDestroy
 } from '@angular/core';
 import {max, union, last} from 'lodash';
 
