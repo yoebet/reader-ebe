@@ -83,4 +83,8 @@ export class DictComponent {
     this.loadAdjacentOne('previous');
   }
 
+  clearHistory() {
+    this.dictService.clearCache();
+  }
+
 }

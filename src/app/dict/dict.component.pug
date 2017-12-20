@@ -3,6 +3,8 @@
     .ui.list.words-history
       a.item(*ngFor='let entry of entryHistory', (click)='selectHistoryEntry(entry)', href='javascript:')
         | {{entry.word}}
+      .item(*ngIf='entryHistory.length>0')
+        a.ui.right.floated((click)='clearHistory()', href='javascript:') 清空
   .thirteen.wide.column
     .ui.segment
       sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",

@@ -65,7 +65,7 @@ export class WordAnnosComponent implements OnInit {
         this.meaning = {mid, word: forWord, text: ''};
 
         let theWordEl = this._wordEl;
-        this.dictService.getEntry(forWord)
+        this.dictService.getEntry(forWord, {noref: true})
           .subscribe((entry: DictEntry) => {
               if (!entry) {
                 return;

@@ -15,11 +15,18 @@ export class DictService extends BaseService<DictEntry> {
 
   private _entryHistory: DictEntry[] = [];
   private entryCache: Map<string, DictEntry> = new Map();
+  private norefEntryCache: Map<string, DictEntry> = new Map();
 
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}dict`;
+  }
+
+  clearCache() {
+    this.entryCache.clear();
+    this.norefEntryCache.clear();
+    this._entryHistory = [];
   }
 
   search(key: string, options?): Observable<DictEntry[]> {
@@ -64,28 +71,33 @@ export class DictService extends BaseService<DictEntry> {
     }
   }
 
-  private updateCache(entry) {
-    this.entryCache.set(entry._id, entry);
-    this.entryCache.set(entry.word, entry);
+  private updateCache(entry, withRefFields = true) {
+    let cache = withRefFields ? this.entryCache : this.norefEntryCache;
+    cache.set(entry._id, entry);
+    cache.set(entry.word, entry);
   }
 
-  private cacheOne(obs: Observable<DictEntry>): Observable<DictEntry> {
+  private cacheOne(obs: Observable<DictEntry>, withRefFields): Observable<DictEntry> {
     obs = obs.share();
     obs.subscribe(entry => {
       if (entry) {
-        this.pushHistory(entry);
-        this.updateCache(entry);
+        if (withRefFields) {
+          this.pushHistory(entry);
+        }
+        this.updateCache(entry, withRefFields);
       }
     });
     return obs;
   }
 
-  private cacheList(obs: Observable<DictEntry[]>): Observable<DictEntry[]> {
+  private cacheList(obs: Observable<DictEntry[]>, withRefFields = true): Observable<DictEntry[]> {
     obs = obs.share();
     obs.subscribe(entries => {
       for (let entry of entries) {
-        this.pushHistory(entry);
-        this.updateCache(entry);
+        if (withRefFields) {
+          this.pushHistory(entry);
+        }
+        this.updateCache(entry, withRefFields);
       }
     });
     return obs;
@@ -93,25 +105,36 @@ export class DictService extends BaseService<DictEntry> {
 
   getEntry(idOrWord: string, options: any = {}): Observable<DictEntry> {
     let cachedEntry = this.entryCache.get(idOrWord);
+    if (!cachedEntry && options.noref) {
+      cachedEntry = this.norefEntryCache.get(idOrWord);
+    }
     if (cachedEntry) {
       return Observable.of(cachedEntry);
     }
     let url = `${this.baseUrl}/${idOrWord}`;
+    let addedParam = false;
     if (!DictEntry.isId(idOrWord)) {
       let switches = ['lotf', 'base', 'stem'].filter(name => options[name]);
       if (switches.length > 0) {
         url += '?';
         url += switches.join('&');
+        addedParam = true;
       }
     }
+    if (options.noref) {
+      url += addedParam ? '&' : '?';
+      url += 'noref';
+    }
 
-    return this.cacheOne(this.getOneByUrl(url));
+    return this.cacheOne(this.getOneByUrl(url), !options.noref);
   }
 
 
   update(entry: DictEntry): Observable<OpResult> {
     this.entryCache.delete(entry._id);
     this.entryCache.delete(entry.word);
+    this.norefEntryCache.delete(entry._id);
+    this.norefEntryCache.delete(entry.word);
     return super.update(entry);
   }
 
