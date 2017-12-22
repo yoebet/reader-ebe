@@ -21,19 +21,19 @@ export class Model {
     return new Date(seconds * 1000);
   }
 
-  static createdTimeString(model: Model): string {
+  static createdTimeString(model: Model, precise: string = 'date'): string {
     if (!model) {
       return '';
     }
     let createdAt = Model.timestampOfObjectId(model._id);
-    return Model.timeString(createdAt);
+    return Model.timeString(createdAt, precise);
   }
 
-  static updatedTimeString(model: Model): string {
+  static updatedTimeString(model: Model, precise: string = 'date'): string {
     if (!model) {
       return '';
     }
-    return Model.timeString(model.updatedAt);
+    return Model.timeString(model.updatedAt, precise);
   }
 
   static timeString(date: Date | string, precise: string = 'date'): string {
@@ -41,7 +41,7 @@ export class Model {
       return '';
     }
     let format = 'YYYY-M-D';
-    if (precise === 'minute') {
+    if (precise === 'minute' || precise === 'time') {
       format += ' kk:mm';
     } else if (precise === 'second') {
       format += ' kk:mm:ss';

@@ -1,0 +1,59 @@
+.ui.header
+  | User List
+
+.ui.small.form
+  .fields
+    .sixteen.wide.inline.field
+      input([(ngModel)]='searchName', placeholder='Name')
+      sui-checkbox([(ngModel)]='manager') 管理人员
+      button.ui.tiny.button((click)="search()") 查找
+      button.ui.tiny.button((click)="searchReset()") 全部
+
+table.ui.small.celled.table
+  thead
+    tr
+      th Login Name
+      th Create Date
+      th Role
+      th
+  tbody
+    tr(*ngFor='let user of users; trackBy: userTracker')
+      td
+        a((click)='gotoDetail(user)', [routerLink]="['/users', user._id]") {{user.name}}
+      td {{user | createdDate | date:'yyyy-MM-dd HH:mm'}}
+      td
+        ng-template([ngIf]='!editing(user)') {{user.role}}
+        ng-template([ngIf]='editing(user)')
+          sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
+            sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
+      td
+        ng-template([ngIf]='!editing(user)')
+          .ui.mini.button((click)='edit(user)') 修改
+        ng-template([ngIf]='editing(user)')
+          .ui.mini.button((click)='editingUser=null') 取消
+          .ui.mini.primary.button((click)='save()') 保存
+    tr(*ngIf='!users||users.length===0')
+      td(colspan='4') No Results.
+  tfoot
+    tr
+      th(colspan='4')
+        .ui.right.floated.small.pagination.menu
+          a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+            i.left.chevron.icon
+          a.item.disabled {{page}}
+          a.icon.item([ngClass]='{disabled:!users||users.length<pageSize}', (click)='nextPage()')
+            i.right.chevron.icon
+
+button.ui.tiny.basic.button([hidden]='newUser', (click)='editNew()') 创建用户
+.ui.tiny.form(*ngIf='newUser')
+  .field
+    label New:
+  .inline.field
+    input([(ngModel)]='newUser.name', placeholder='User Name')
+    input([(ngModel)]='newUser.pass', type='password', placeholder='Password')
+    sui-select.selection.user-role([(ngModel)]='newUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
+      sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
+  .field
+    button.ui.tiny.button((click)="newUser=null") 取消
+    button.ui.tiny.primary.button((click)="add()") 保存
+  .ui.hidden.clearing.divider

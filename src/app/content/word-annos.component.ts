@@ -23,6 +23,10 @@ export class WordAnnosComponent implements OnInit {
   constructor(private dictService: DictService) {
   }
 
+  ngOnInit() {
+    this.initialized = true;
+  }
+
   set wordEl(_wordEl: Element) {
     this._wordEl = _wordEl;
     if (this.initialized && this.enabled) {
@@ -118,11 +122,6 @@ export class WordAnnosComponent implements OnInit {
     if (this.head.length > 20) {
       this.head = this.head.substring(0, 20) + '...';
     }
-  }
-
-
-  ngOnInit() {
-    this.initialized = true;
   }
 
   private findSentence(node): any {

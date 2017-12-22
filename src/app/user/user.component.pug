@@ -1,0 +1,46 @@
+.ui.header 用户
+div(*ngIf='user')
+  h4 {{user.name}}
+  .ui.list
+    .item 创建于 {{user | createdDateString:'minute'}}
+
+  .ui.hidden.divider
+  h4.ui.header Books
+  table.ui.small.celled.table
+    thead
+      tr
+        th Book Name
+        th Role
+        th Add Date
+        th Chaps
+        th
+    tbody
+      tr(*ngFor='let ub of userBooks')
+        td {{ub.book? ub.book.name:''}}
+        td {{ub.role}}
+        td {{ub | createdDateString}}
+        td {{ub.isAllChaps? 'ALL': ub.chapsCount||''}}
+        td
+          .ui.mini.button((click)='removeUserBook(ub)') 移除
+      tr(*ngIf='!userBooks||userBooks.length===0')
+        td(colspan='5') No Results.
+
+  .ui.small.form(*ngIf='newUserBook')
+    .field
+      label Add a Book:
+    .eight.wide.field
+      sui-select.selection([(ngModel)]='newUserBook.book', [options]='candidateBooks', labelField='name', #bookSelect='')
+        sui-select-option(*ngFor='let option of bookSelect.filteredOptions', [value]='option')
+    .inline.fields
+      .field
+        sui-select.selection.book-role([(ngModel)]='newUserBook.role', [options]='bookRoleOptions', placeholder='Role For Book', #bookRoleSelect='')
+          sui-select-option(*ngFor='let option of bookRoleSelect.filteredOptions', [value]='option')
+      .field
+        sui-checkbox([(ngModel)]='newUserBook.isAllChaps') 全部章节
+      .field
+        .ui.mini.button((click)='cancelNewUserBook()') 取消
+        .ui.mini.primary.button((click)='addUserBook()') 增加
+  .ui.right.floated.small.basic.button(*ngIf='!newUserBook', (click)='selectBook()') 增加
+
+.ui.hidden.clearing.divider
+button.ui.tiny.button((click)='goBack()') 返回

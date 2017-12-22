@@ -29,13 +29,15 @@ export class BooksComponent implements OnInit {
     if (!name) {
       return;
     }
-    author = author.trim();
-    zhName = zhName.trim();
-    zhAuthor = zhAuthor.trim();
-    let model = {name, author, zhName, zhAuthor} as Book;
-    this.bookService.create(model)
-      .subscribe(book => {
-        this.books.push(book);
+    let book = new Book();
+    delete book.chaps;
+    book.name = name;
+    book.author = author.trim();
+    book.zhName = zhName.trim();
+    book.zhAuthor = zhAuthor.trim();
+    this.bookService.create(book)
+      .subscribe(newBook => {
+        this.books.push(newBook);
         this.editNew = false;
       });
   }

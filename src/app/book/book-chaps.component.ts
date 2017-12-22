@@ -33,11 +33,13 @@ export class BookChapsComponent implements OnInit {
     if (!name) {
       return;
     }
-    let model = {name} as Chap;
-    model.bookId = this.book._id;
-    this.chapService.create(model)
-      .subscribe(chap => {
-        this.book.chaps.push(chap);
+    let chap = new Chap();
+    delete chap.paras;
+    chap.name = name;
+    chap.bookId = this.book._id;
+    this.chapService.create(chap)
+      .subscribe(newChap => {
+        this.book.chaps.push(newChap);
         this.editNew = false;
       });
   }

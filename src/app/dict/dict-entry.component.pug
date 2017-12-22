@@ -37,35 +37,35 @@
       .ui.clearing.divider
 
       sui-accordion.ui.small.form(*ngIf='editing&&editingCompleteMeanings', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of editingCompleteMeanings; first as firstPos; last as lastPos', [isOpen]='true')
+        sui-accordion-panel.pos-meanings(*ngFor='let pm of editingCompleteMeanings; first as firstPos; last as lastPos', [isOpen]='true')
           .pos-header(title='')
             .ui.right.floated.sub.header
-              .ui.mini.button(*ngIf='sortMeaningItems && !firstPos', (click)='moveUpPos(posMeanings,$event)')
+              .ui.mini.button(*ngIf='sortMeaningItems && !firstPos', (click)='moveUpPos(pm,$event)')
                 i.angle.arrow.up.icon
                 | 上移
-              .ui.mini.button(*ngIf='sortMeaningItems && !lastPos', (click)='moveDownPos(posMeanings,$event)')
+              .ui.mini.button(*ngIf='sortMeaningItems && !lastPos', (click)='moveDownPos(pm,$event)')
                 i.angle.arrow.down.icon
                 | 下移
-              .ui.mini.button((click)='newMeaningItem(posMeanings,$event)')
+              .ui.mini.button((click)='newMeaningItem(pm,$event)')
                 i.add.icon
                 | 义项
             i.dropdown.icon
-            | {{posMeanings.pos}}
+            | {{pm.pos}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items; first as firstItem; last as lastItem',
+            .ui.item(*ngFor='let item of pm.items; first as firstItem; last as lastItem',
             [ngClass]='{"editing-item":item===editingMeaningItem, "selected-item":item.id===selectedItemId}',
             (click)='clickMeaningItem(item)')
               .ui.right.floated.sub.header
-                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(posMeanings,item,$event)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !firstItem', (click)='moveUpMeaningItem(pm,item,$event)')
                   i.angle.arrow.up.icon
                   | 上移
-                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(posMeanings,item,$event)')
+                .ui.basic.compact.mini.button(*ngIf='sortMeaningItems && !lastItem', (click)='moveDownMeaningItem(pm,item,$event)')
                   i.angle.arrow.down.icon
                   | 下移
-                .ui.basic.compact.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(posMeanings,item,$event)')
+                .ui.basic.compact.mini.button(*ngIf='item!==editingMeaningItem', (click)='editMeaningItem(pm,item,$event)')
                   i.edit.icon
                   | 编辑
-                .ui.basic.compact.mini.button(*ngIf='deleteItems&&item!==editingMeaningItem', (click)='removeMeaningItem(posMeanings,item,$event)')
+                .ui.basic.compact.mini.button(*ngIf='deleteItems&&item!==editingMeaningItem', (click)='removeMeaningItem(pm,item,$event)')
                   i.remove.icon
                   | 删除
               .fields(*ngIf='item===editingMeaningItem')
@@ -83,7 +83,7 @@
               span.meaning-item([hidden]='item===editingMeaningItem')
                 span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 span {{item.exp}}
-            .fields(*ngIf='posMeanings===editingPosMeanings && newItem')
+            .fields(*ngIf='pm===editingPosMeanings && newItem')
               .field
                 sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
                 labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
@@ -112,12 +112,12 @@
           .clearing
 
       sui-accordion(*ngIf='!editing', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of entry.complete||[]', [isOpen]='true')
+        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.complete||[]', [isOpen]='true')
           .pos-header(title='')
             i.dropdown.icon
-            | {{posMeanings.pos}}
+            | {{pm.pos}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items',
+            .ui.item(*ngFor='let item of pm.items',
             [ngClass]='{"selected-item":item.id===selectedItemId}',
             (click)='clickMeaningItem(item)')
               span.meaning-item
@@ -128,14 +128,14 @@
         .ui.item(*ngFor='let item of entry.simpleYd')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeYd', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of entry.completeYd')
+        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.completeYd')
           .pos-header(title='')
             i.dropdown.icon
-            | {{posMeanings.pos}}
-            | {{posMeanings.exp}}
+            | {{pm.pos}}
+            | {{pm.exp}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items')
-              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(posMeanings.pos,item)')
+            .ui.item(*ngFor='let item of pm.items')
+              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(pm.pos,item)')
                 i.add.icon
                 | 加入
               span.meaning-item {{item}}
@@ -144,14 +144,14 @@
         .ui.item(*ngFor='let item of entry.simpleHc')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let posMeanings of entry.completeHc')
+        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.completeHc')
           .pos-header(title='')
             i.dropdown.icon
-            | {{posMeanings.pos}}
-            | {{posMeanings.exp}}
+            | {{pm.pos}}
+            | {{pm.exp}}
           .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of posMeanings.items')
-              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(posMeanings.pos,item)')
+            .ui.item(*ngFor='let item of pm.items')
+              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(pm.pos,item)')
                 i.add.icon
                 | 加入
               span.meaning-item {{item}}
