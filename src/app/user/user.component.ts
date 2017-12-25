@@ -23,6 +23,7 @@ export class UserComponent implements OnInit {
   candidateBooks: Book[];
   newUserBook: UserBook;
   bookRoleOptions = UserBook.roles;
+  editingUserBook: UserBook;
 
   constructor(private userService: UserService,
               private bookService: BookService,
@@ -65,6 +66,10 @@ export class UserComponent implements OnInit {
       });
   }
 
+  editUserBook(ub) {
+    this.editingUserBook = ub;
+  }
+
   selectBook() {
     let ecb = () => {
       this.candidateBooks = this.allBooks
@@ -92,6 +97,7 @@ export class UserComponent implements OnInit {
     }
     nub.userId = this.user._id;
     nub.bookId = nub.book._id;
+    nub.chapsCount = 0;
     let book = nub.book;
     delete nub.book;
     this.userBookService.create(nub).subscribe(ub => {
@@ -120,7 +126,20 @@ export class UserComponent implements OnInit {
     this.newUserBook = null;
   }
 
+  updateUserBook(userBook) {
+    if (userBook && this.editingUserBook) {
+      this.editingUserBook.role = userBook.role;
+      this.editingUserBook.isAllChaps = userBook.isAllChaps;
+      this.editingUserBook.chapsCount = userBook.chapsCount;
+    }
+    this.editingUserBook = null;
+  }
+
   goBack(): void {
+    if (this.editingUserBook) {
+      this.editingUserBook = null;
+      return;
+    }
     this.location.back();
   }
 }

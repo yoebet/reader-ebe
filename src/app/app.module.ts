@@ -33,6 +33,7 @@ import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {UsersComponent} from './user/users.component';
 import {UserComponent} from './user/user.component';
+import {UserBookComponent} from './user/user-book.component';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import {UserComponent} from './user/user.component';
     DictEntrySmiComponent,
     UsersComponent,
     UserComponent,
+    UserBookComponent,
     CreatedDatePipe,
     CreatedDateStringPipe
   ],

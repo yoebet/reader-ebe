@@ -5,28 +5,28 @@
   .fields
     .sixteen.wide.inline.field
       input([(ngModel)]='searchName', placeholder='Name')
-      sui-checkbox([(ngModel)]='manager') 管理人员
+      sui-checkbox([(ngModel)]='manager') 管理维护人员
       button.ui.tiny.button((click)="search()") 查找
       button.ui.tiny.button((click)="searchReset()") 全部
 
-table.ui.small.celled.table
+table.ui.small.striped.table
   thead
     tr
       th Login Name
-      th Create Date
+      th Created On
       th Role
       th
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
         a((click)='gotoDetail(user)', [routerLink]="['/users', user._id]") {{user.name}}
-      td {{user | createdDate | date:'yyyy-MM-dd HH:mm'}}
+      td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
         ng-template([ngIf]='!editing(user)') {{user.role}}
         ng-template([ngIf]='editing(user)')
           sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
             sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
-      td
+      td.right.aligned
         ng-template([ngIf]='!editing(user)')
           .ui.mini.button((click)='edit(user)') 修改
         ng-template([ngIf]='editing(user)')

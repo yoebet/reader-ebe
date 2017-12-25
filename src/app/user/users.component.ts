@@ -72,11 +72,6 @@ export class UsersComponent implements OnInit {
     this.getUsers();
   }
 
-  createdDate(user) {
-    // console.log(Model.createdTimeString(user, 'time'));
-    return Model.timestampOfObjectId(user._id);
-  }
-
   edit(user) {
     this.editingUser = Object.assign({}, user);
   }

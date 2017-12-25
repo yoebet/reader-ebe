@@ -5,5 +5,6 @@ export class Chap extends Model {
   name: string;
   zhName: string = '';
   bookId: string;
+  no: number;
   paras: Para[];
 }

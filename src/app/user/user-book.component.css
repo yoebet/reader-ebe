@@ -1,0 +1,24 @@
+
+dt {
+  display: inline-block;
+  min-width: 6em;
+  font-weight: bold;
+}
+
+dd {
+  display: inline-block;
+  margin-left: 0.5em;
+}
+
+td.selectable {
+  cursor: pointer;
+}
+
+table.new-chaps {
+  color: rgba(0,0,0,0.5);
+}
+
+
+table.new-chaps tr.selected {
+  color: rgba(0,0,0,1);
+}
