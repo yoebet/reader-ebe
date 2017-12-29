@@ -1,4 +1,4 @@
-import {Component, ChangeDetectorRef} from '@angular/core';
+import {Component} from '@angular/core';
 
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
@@ -49,7 +49,6 @@ export class DictComponent {
 
   selectHistoryEntry(entry) {
     this.entry = entry;
-    // this.cdr.detectChanges();
   }
 
 

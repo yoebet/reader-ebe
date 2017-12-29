@@ -9,7 +9,6 @@ import {UsersComponent} from './user/users.component';
 import {UserComponent} from './user/user.component';
 
 const routes: Routes = [
-  // {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'books', component: BooksComponent},
   {path: 'books/:id', component: BookComponent},
   {path: 'chaps/:id', component: ChapComponent},

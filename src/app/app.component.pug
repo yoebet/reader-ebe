@@ -4,7 +4,23 @@
     a.item(routerLink='/dict', routerLinkActive='active') Dict
     a.item(routerLink='/users', routerLinkActive='active') Users
     .right.menu
-      a.item(href='javascript:') Logout
+      a.item(*ngIf='!currentUser', href='javascript:', (click)='gotoLogin()') Login
+      .item(*ngIf='currentUser')
+        | {{currentUser.name}} &nbsp;&nbsp;
+        a(href='javascript:', (click)='logout()') Logout
+
+  .ui.small.form.login(*ngIf='loginForm')
+    h3 Login
+    p(*ngIf='loginMessage')
+      | {{loginMessage}}
+    .field
+      input(type="text", #name="", placeholder="Username")
+    .field
+      input(type="password", #pass="", placeholder="Password")
+    .field
+      .ui.small.button((click)='cancelLogin()') 取消
+      .ui.small.primary.button((click)='login(name.value, pass.value)') 登录
+    .ui.hidden.clearing.divider
 
   router-outlet
 

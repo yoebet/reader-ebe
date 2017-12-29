@@ -1,7 +1,7 @@
 import {
   OnChanges, Input, Output, EventEmitter, SimpleChanges,
-  Component, ViewChild, ViewContainerRef, ChangeDetectorRef,
-  ComponentFactoryResolver, ComponentFactory, ComponentRef, TemplateRef, EmbeddedViewRef
+  Component, ViewChild, ViewContainerRef,
+  ComponentFactoryResolver, ComponentFactory, ComponentRef
 } from '@angular/core';
 
 import Drop from 'tether-drop'
@@ -60,7 +60,6 @@ export class ParaContentComponent implements OnChanges {
   static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
 
   constructor(private resolver: ComponentFactoryResolver,
-              private cdr: ChangeDetectorRef,
               private dictService: DictService) {
   }
 
@@ -114,7 +113,7 @@ export class ParaContentComponent implements OnChanges {
       result.removed = true;
     }
     return result;
-  };
+  }
 
   private currentPhrase(wordEl) {
     let stEl = this.findSentence(wordEl);

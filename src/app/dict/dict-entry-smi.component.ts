@@ -1,9 +1,8 @@
 import {
-  Component, Input, Output, EventEmitter,
+  Component, Output, EventEmitter,
   AfterViewChecked, ChangeDetectorRef
 } from '@angular/core';
 
-import {DictEntry, PosMeanings, MeaningItem} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {DictEntryComponent} from './dict-entry.component';
 

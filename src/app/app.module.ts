@@ -7,6 +7,7 @@ import {SuiModule} from 'ng2-semantic-ui';
 
 import {AppRoutingModule} from './app-routing.module';
 
+import {AppService} from './services/app.service';
 import {BookService} from './services/book.service';
 import {ChapService} from './services/chap.service';
 import {ParaService} from './services/para.service';
@@ -65,6 +66,7 @@ import {UserBookComponent} from './user/user-book.component';
     CreatedDateStringPipe
   ],
   providers: [
+    AppService,
     BookService,
     ChapService,
     ParaService,
