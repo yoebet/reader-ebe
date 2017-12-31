@@ -16,8 +16,8 @@ export class ChapService extends SorterService<Chap> {
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.bookBaseUrl = `${apiBase}books`;
-    this.baseUrl = `${apiBase}chaps`;
+    this.bookBaseUrl = `${apiBase}/books`;
+    this.baseUrl = `${apiBase}/chaps`;
   }
 
   create(chap: Chap): Observable<Chap> {

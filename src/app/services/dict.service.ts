@@ -20,7 +20,7 @@ export class DictService extends BaseService<DictEntry> {
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}dict`;
+    this.baseUrl = `${apiBase}/dict`;
   }
 
   clearCache() {

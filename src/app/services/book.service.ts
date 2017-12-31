@@ -11,7 +11,7 @@ export class BookService extends SorterService<Book> {
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}books`;
+    this.baseUrl = `${apiBase}/books`;
   }
 
 }

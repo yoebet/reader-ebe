@@ -16,7 +16,7 @@ export class UserService extends BaseService<User> {
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}users`;
+    this.baseUrl = `${apiBase}/users`;
   }
 
 

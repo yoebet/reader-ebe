@@ -17,8 +17,8 @@ export class ParaService extends SorterService<Para> {
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.chapBaseUrl = `${apiBase}chaps`;
-    this.baseUrl = `${apiBase}paras`;
+    this.chapBaseUrl = `${apiBase}/chaps`;
+    this.baseUrl = `${apiBase}/paras`;
   }
 
   create(para: Para): Observable<Para> {
