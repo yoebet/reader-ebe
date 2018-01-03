@@ -4,10 +4,10 @@
     a.item(routerLink='/dict', routerLinkActive='active') Dict
     a.item(routerLink='/users', routerLinkActive='active') Users
     .right.menu
-      a.item(*ngIf='!currentUser', href='javascript:', (click)='gotoLogin()') Login
+      a.item(*ngIf='!currentUser', (click)='gotoLogin()') Login
       .item(*ngIf='currentUser')
         | {{currentUser.name}} &nbsp;&nbsp;
-        a(href='javascript:', (click)='logout()') Logout
+        a((click)='logout()') Logout
 
   .ui.small.form.login(*ngIf='loginForm')
     h3 Login

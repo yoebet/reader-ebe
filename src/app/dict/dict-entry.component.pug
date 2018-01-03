@@ -12,10 +12,10 @@
   .clearing
 
   .ui.horizontal.list.base-forms(*ngIf='refWords||entryStack.length > 0')
-    a.ui.item(*ngIf='entryStack.length > 0', (click)='goback()', href='javascript:')
+    a.ui.item(*ngIf='entryStack.length > 0', (click)='goback()')
       i.left.arrow.icon
       | {{entryStack[entryStack.length-1].word}}
-    a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)', href='javascript:')
+    a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)')
       | {{word}}
 
   .ui.clearing.divider
@@ -157,7 +157,7 @@
               span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items
-        a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)', href='javascript:')
+        a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)')
           | {{phrase}}
 
   .ui.fields(*ngIf='selectMeaningItem')

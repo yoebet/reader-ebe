@@ -3,6 +3,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import 'rxjs/add/operator/switchMap';
 import Tether from 'tether';
 
+import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
 import {ParaService} from '../services/para.service';
@@ -29,6 +30,7 @@ interface ContentChangedNotification {
   styleUrls: ['./chap-paras.component.css']
 })
 export class ChapParasComponent implements OnInit {
+  @Input() book: Book;
   @Input() chap: Chap;
   @ViewChild(ParaFormComponent)
   private paraFormComponent: ParaFormComponent;
@@ -303,6 +305,7 @@ export class ChapParasComponent implements OnInit {
     para.trans = transs[0] || '';
     for (let index = 1; index < size; index++) {
       let np = new Para();
+      np.bookId = para.bookId;
       np.chapId = para.chapId;
       np.content = contents[index] || '';
       np.trans = transs[index] || '';
@@ -373,7 +376,6 @@ export class ChapParasComponent implements OnInit {
   }
 
   private createMany(paras) {
-
     let obs;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
@@ -401,6 +403,7 @@ export class ChapParasComponent implements OnInit {
     if (this.insertPos == null) {
       return;
     }
+    para.bookId = this.book._id;
     para.chapId = this.chap._id;
 
     let paras = this.splitIfNeeded(para);

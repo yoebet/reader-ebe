@@ -82,7 +82,7 @@ export class ParaContentComponent implements OnChanges {
 
   private removeTagIfDummy(el) {
     let result = {changed: false, removed: false};
-    if (el.tagName !== Annotator.annotationTagName.toUpperCase()) {
+    if (el.tagName !== Annotator.annotationTagName.toUpperCase() && el.tagName !== 'SPAN') {
       return result;
     }
     if (el.className === '') {
@@ -356,6 +356,13 @@ export class ParaContentComponent implements OnChanges {
       let pn = toStrip.parentNode;
       if (pn) {
         pn.removeChild(toStrip);
+      }
+    }
+    let spanEls = paraTextEl.querySelectorAll('span');
+    for (let spanEl of spanEls) {
+      if (spanEl.hasAttribute('style')) {
+        spanEl.removeAttribute('style');
+        this.removeTagIfDummy(spanEl);
       }
     }
 
