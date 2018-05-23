@@ -1,0 +1,33 @@
+.ui.header
+  | Book List
+.ui.celled.list
+  .item(*ngFor='let book of books; trackBy: bookTracker')
+    button.ui.tiny.button.right.floated((click)='remove(book)') 删除
+    a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
+      .enname {{book.name}}
+      .zhname(*ngIf='book.zhName') {{book.zhName}}
+
+.ui.hidden.clearing.divider
+button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
+.ui.form(*ngIf='newBook')
+  .field
+    label New:
+    .fields
+      .four.wide.field
+        sui-select.selection([(ngModel)]="newBook.langType", [options]="langOptions",
+        valueField="value", labelField="label", placeholder='语言', #langSelect='')
+          sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+  .fields
+    .twelve.wide.field
+      input([(ngModel)]="newBook.name", placeholder='Book Name')
+    .four.wide.field
+      input([(ngModel)]="newBook.author", placeholder='Author')
+  .fields
+    .twelve.wide.field
+      input([(ngModel)]="newBook.zhName", placeholder='中文版书名')
+    .four.wide.field
+      input([(ngModel)]="newBook.zhAuthor", placeholder='中文版作者')
+  .field.ui.right.floated.header
+    button.ui.tiny.button((click)="cancelEdit()") 取消
+    button.ui.tiny.primary.button((click)="add()") 保存
+  .ui.hidden.clearing.divider

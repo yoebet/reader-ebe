@@ -12,7 +12,8 @@ import {OpResult} from '../models/op-result';
 })
 export class BooksComponent implements OnInit {
   books: Book[];
-  editNew = false;
+  newBook: Book = null;
+  langOptions = Book.LangTypes;
 
   constructor(private bookService: BookService,
               private router: Router) {
@@ -24,21 +25,27 @@ export class BooksComponent implements OnInit {
       .subscribe(books => this.books = books);
   }
 
-  add(name: string, author: string, zhName: string, zhAuthor: string): void {
-    name = name.trim();
-    if (!name) {
+  editNew() {
+    this.newBook = new Book();
+  }
+
+  cancelEdit() {
+    this.newBook = null;
+  }
+
+  add(): void {
+    let book = this.newBook;
+    book.name = book.name.trim();
+    if (!book.name) {
       return;
     }
-    let book = new Book();
-    delete book.chaps;
-    book.name = name;
-    book.author = author.trim();
-    book.zhName = zhName.trim();
-    book.zhAuthor = zhAuthor.trim();
+    book.author = book.author.trim();
+    book.zhName = book.zhName.trim();
+    book.zhAuthor = book.zhAuthor.trim();
     this.bookService.create(book)
       .subscribe(newBook => {
         this.books.push(newBook);
-        this.editNew = false;
+        this.newBook = null;
       });
   }
 

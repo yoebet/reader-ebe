@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit {
   searchName: string;
   page = 1;
   pageSize = 10;
-  roleOptions = User.roles;
+  roleOptions = User.Roles;
 
   constructor(private userService: UserService,
               private router: Router) {
