@@ -13,13 +13,13 @@ import {ChapService} from './services/chap.service';
 import {ParaService} from './services/para.service';
 import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
-import {UserBookService} from './services/user_book.service';
+import {UserBookService} from './services/user-book.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
 
 import {AppComponent} from './app.component';
-import {BooksComponent} from './book/books.component';
+import {BookListComponent} from './book/book-list.component';
 import {BookComponent} from './book/book.component';
 import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
@@ -32,7 +32,7 @@ import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
-import {UsersComponent} from './user/users.component';
+import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
 
@@ -46,7 +46,7 @@ import {UserBookComponent} from './user/user-book.component';
   ],
   declarations: [
     AppComponent,
-    BooksComponent,
+    BookListComponent,
     BookComponent,
     BookChapsComponent,
     ChapComponent,
@@ -59,7 +59,7 @@ import {UserBookComponent} from './user/user-book.component';
     DictComponent,
     DictEntryComponent,
     DictEntrySmiComponent,
-    UsersComponent,
+    UserListComponent,
     UserComponent,
     UserBookComponent,
     CreatedDatePipe,

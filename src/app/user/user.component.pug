@@ -5,7 +5,7 @@ div(*ngIf='user')
       .item 创建于 {{user | createdDateString:'minute'}}
 
     h4.ui.header Books
-    table.ui.small.striped.table
+    table.ui.striped.table
       thead
         tr
           th Book Name
@@ -25,7 +25,7 @@ div(*ngIf='user')
         tr(*ngIf='!userBooks||userBooks.length===0')
           td(colspan='5') No Results.
 
-    .ui.small.form(*ngIf='newUserBook')
+    .ui.form(*ngIf='newUserBook')
       .field
         label Add a Book:
       .eight.wide.field

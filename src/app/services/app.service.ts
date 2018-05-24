@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
@@ -21,6 +21,8 @@ export class AppService {
 
   currentUser: User;
 
+  onCurrentUserChanged = new EventEmitter<{ from, to }>();
+
   constructor(private http: HttpClient) {
     let apiBase = environment.apiBase || '';
     this.loginUrl = `${apiBase}/login`;
@@ -32,8 +34,13 @@ export class AppService {
     obs = obs.share();
     obs.subscribe((opr: OpResult) => {
       if (opr && opr.ok === 1) {
+        let from = this.currentUser ? this.currentUser.name : null;
         this.currentUser = new User();
         this.currentUser.name = name;
+        this.currentUser.role = (opr as any).role;
+        if (from !== name) {
+          this.onCurrentUserChanged.emit({from, to: name});
+        }
       }
     });
     return obs;
@@ -45,7 +52,11 @@ export class AppService {
     obs = obs.share();
     obs.subscribe((opr: OpResult) => {
       if (opr && opr.ok === 1) {
+        let from = this.currentUser ? this.currentUser.name : null;
         this.currentUser = null;
+        if (from !== null) {
+          this.onCurrentUserChanged.emit({from, to: null});
+        }
       }
     });
     return obs;
@@ -57,11 +68,17 @@ export class AppService {
       .catch(this.handleError);
     obs = obs.share();
     obs.subscribe(userinfo => {
+      let from = this.currentUser ? this.currentUser.name : null;
       if (userinfo && userinfo.login) {
         this.currentUser = new User();
         this.currentUser.name = userinfo.name;
+        this.currentUser.role = userinfo.role;
       } else {
         this.currentUser = null;
+      }
+      let to = this.currentUser ? this.currentUser.name : null;
+      if (from !== to) {
+        this.onCurrentUserChanged.emit({from, to});
       }
     });
     return obs;

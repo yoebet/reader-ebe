@@ -11,28 +11,68 @@ div(*ngIf='book')
       .sub.header.zhauthor(*ngIf='book.zhAuthor')
         span.author-by by
         | {{book.zhAuthor}}
+    .prop-name Lang
+    | {{book.langType}}
+    .prop-name Status
+    | {{book.status}}
+    .prop-name Tags
+    | {{book.tags}}
+    .prop-name Memo
+    | {{book.memo}}
+
   .ui.small.form(*ngIf='editing')
     .fields
-      .twelve.wide.field
-        input([value]='book.name', placeholder='Book Name', #bookName='')
       .four.wide.field
-        input([value]='book.author', placeholder='Author', #bookAuthor='')
+        label Language
+        sui-select.selection([(ngModel)]="editing.langType", [options]="langOptions",
+        valueField="value", labelField="label", placeholder='语言', #langSelect='')
+          sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+      //.four.wide.field
+        label Status
+        sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
+        valueField="value", labelField="label", placeholder='状态', #statusSelect='')
+          sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
+      //.four.wide.field
+        label Visibility
+        sui-select.selection([(ngModel)]="editing.visibility", [options]="visibilityOptions",
+        valueField="value", labelField="label", placeholder='可见', #visibilitySelect='')
+          sui-select-option(*ngFor="let option of visibilitySelect.filteredOptions", [value]="option")
+      .four.wide.field
+        label Pricing
+        sui-checkbox([(ngModel)]='editing.isFree') Free
     .fields
       .twelve.wide.field
-        input([value]='book.zhName', placeholder='Chinese Book Name', #zhName='')
+        label Book Name
+        input([(ngModel)]='editing.name', placeholder='Book Name')
       .four.wide.field
-        input([value]='book.zhAuthor', placeholder='Chinese Author', #zhAuthor='')
+        label Author
+        input([(ngModel)]='editing.author', placeholder='Author')
+    .fields
+      .twelve.wide.field
+        label Chinese Name
+        input([(ngModel)]='editing.zhName', placeholder='Chinese Name')
+      .four.wide.field
+        label Chinese Author
+        input([(ngModel)]='editing.zhAuthor', placeholder='Chinese Author')
+    .fields
+      .eight.wide.field
+        label Tags
+        input([(ngModel)]='editing.tags', placeholder='Tags')
+      .eight.wide.field
+        label Memo
+        input([(ngModel)]='editing.memo', placeholder='Memo')
     .field.ui.right.floated.header
       button.ui.tiny.button((click)='editing=false') 取消
-      button.ui.tiny.primary.button((click)='save(bookName.value,bookAuthor.value,zhName.value,zhAuthor.value)') 保存
+      button.ui.tiny.primary.button((click)='save()') 保存
     .clearing
   .ui.hidden.clearing.divider
   .ui.header
     | Chapters
     .ui.right.floated.header
+      sui-checkbox([(ngModel)]='showZh') 中文
       sui-checkbox([(ngModel)]='chapsTuneOrder') Sort
       sui-checkbox([(ngModel)]='chapOperations') Remove
-  book-chaps([book]='book', [tuneOrder]='chapsTuneOrder', [operations]='chapOperations')
+  book-chaps([book]='book', [showZh]='showZh', [tuneOrder]='chapsTuneOrder', [operations]='chapOperations')
 
 .ui.hidden.clearing.divider
 button.ui.tiny.button((click)='goBack()') 返回

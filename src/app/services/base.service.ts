@@ -43,13 +43,11 @@ export class BaseService<M extends Model> {
   }
 
   create(model: M): Observable<M> {
-
     return this.http.post<M>(this.baseUrl, model, this.httpOptions)
       .catch(this.handleError);
   }
 
   remove(model: M | string): Observable<OpResult> {
-
     const id = this.modelId(model);
     const url = `${this.baseUrl}/${id}`;
     return this.http.delete<OpResult>(url, this.httpOptions)

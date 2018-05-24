@@ -15,6 +15,7 @@ export class BookChapsComponent implements OnInit {
   @Input() book: Book;
   @Input() tuneOrder: boolean;
   @Input() operations: boolean;
+  @Input() showZh: boolean;
   editingChap: Chap;
   editNew = false;
 

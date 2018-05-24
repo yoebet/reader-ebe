@@ -2,6 +2,7 @@
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     div([hidden]="chap===editingChap")
       .right.floated.header
+        label {{chap.status}}
         ng-template([ngIf]="tuneOrder")
           button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
             i.angle.arrow.up.icon
@@ -21,13 +22,14 @@
 
       a([routerLink]="['/chaps', chap._id]")
         .pre-wrap {{chap.name}}
-        .zhname.pre-wrap(*ngIf="chap.zhName") {{chap.zhName}}
+        .zhname.pre-wrap(*ngIf="showZh && chap.zhName") {{chap.zhName}}
 
     .ui.form(*ngIf="chap===editingChap")
       .fields
-        .eight.wide.field
-          textarea(rows='2', [value]='chap.name', placeholder='Title', #chapName='')
-        .eight.wide.field
+        .sixteen.wide.field
+          textarea(rows='3', [value]='chap.name', placeholder='Title', #chapName='')
+      .fields
+        .sixteen.wide.field
           textarea(rows='2', [value]='chap.zhName||""', placeholder='标题', #chapZhName='')
       .right.floated.field
         button.ui.tiny.button((click)="editingChap=null")
@@ -41,9 +43,10 @@
     .field
       label 新章节
     .fields
-      .eight.wide.field
-        textarea(rows='2', #newChapName='', placeholder='Title')
-      .eight.wide.field
+      .sixteen.wide.field
+        textarea(rows='3', #newChapName='', placeholder='Title')
+    .fields
+      .sixteen.wide.field
         textarea(rows='2', #newZhName='', placeholder='标题')
     .field.ui.right.floated.header
       button.ui.tiny.button((click)="editNew=false") 取消

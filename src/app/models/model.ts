@@ -3,6 +3,7 @@ import * as moment from 'moment';
 export class Model {
   _id: string;
   updatedAt?: string;
+  version: number;
 
 
   static sequenceNo(_id: string, bytes: number = 3): number {

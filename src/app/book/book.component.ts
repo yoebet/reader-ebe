@@ -14,9 +14,13 @@ import {OpResult} from '../models/op-result';
 })
 export class BookComponent implements OnInit {
   book: Book;
-  editing = false;
+  editing: Book = null;
   chapsTuneOrder = false;
   chapOperations = false;
+  showZh = false;
+  langOptions = Book.LangTypes;
+  statusOptions = Book.Statuses;
+  visibilityOptions = Book.Visibilities;
 
   constructor(private bookService: BookService,
               private route: ActivatedRoute,
@@ -40,27 +44,28 @@ export class BookComponent implements OnInit {
     });
   }
 
-  save(name, author, zhName, zhAuthor): void {
-    name = name.trim();
-    if (!name) {
+  save(): void {
+    this.editing.name = this.editing.name.trim();
+    if (!this.editing.name) {
       return;
     }
-    this.book.name = name;
-    this.book.author = author.trim();
-    this.book.zhName = zhName.trim();
-    this.book.zhAuthor = zhAuthor.trim();
-    this.bookService.update(this.book)
+    this.bookService.update(this.editing)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
           return;
         }
-        this.editing = false;
+        Object.assign(this.book, this.editing);
+        this.editing = null;
       });
   }
 
   edit(): void {
-    this.editing = true;
+    let editing = new Book();
+    Object.assign(editing, this.book);
+    delete editing.chaps;
+    delete editing.updatedAt;
+    this.editing = editing;
   }
 
   goBack(): void {

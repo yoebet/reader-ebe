@@ -1,22 +1,50 @@
 .ui.header
   | Book List
-.ui.celled.list
-  .item(*ngFor='let book of books; trackBy: bookTracker')
-    button.ui.tiny.button.right.floated((click)='remove(book)') 删除
-    a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
-      .enname {{book.name}}
-      .zhname(*ngIf='book.zhName') {{book.zhName}}
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='showZh') 中文
+    sui-checkbox([(ngModel)]='operations') Operations
+
+table.ui.striped.table
+  thead
+    tr
+      th Name
+      th Status
+      th Version
+      th Pricing
+      th Memo
+      th
+  tbody
+    tr(*ngFor='let book of books; trackBy: bookTracker')
+      td
+        a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
+          .enname {{book.name}}
+          .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
+      td
+        | {{book.status}}
+        ng-template([ngIf]="book.status=='R'") {{book.visibility}}
+      td {{book.version}}
+      td {{book.isFree? 'Free':book.price}}
+      td {{book.memo}}
+      td.right.aligned
+        ng-template([ngIf]="operations")
+          button.ui.tiny.button((click)='backup(book)') 备份
+          button.ui.tiny.button((click)='remove(book)') 删除
+    tr(*ngIf='!books||books.length===0')
+      td(colspan='6') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
 .ui.form(*ngIf='newBook')
   .field
-    label New:
+    h3.ui.header New Book:
     .fields
       .four.wide.field
         sui-select.selection([(ngModel)]="newBook.langType", [options]="langOptions",
         valueField="value", labelField="label", placeholder='语言', #langSelect='')
           sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+      .four.wide.field
+        label Pricing
+        sui-checkbox([(ngModel)]='newBook.isFree') Free
   .fields
     .twelve.wide.field
       input([(ngModel)]="newBook.name", placeholder='Book Name')
@@ -24,9 +52,14 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
       input([(ngModel)]="newBook.author", placeholder='Author')
   .fields
     .twelve.wide.field
-      input([(ngModel)]="newBook.zhName", placeholder='中文版书名')
+      input([(ngModel)]="newBook.zhName", placeholder='中文书名')
     .four.wide.field
-      input([(ngModel)]="newBook.zhAuthor", placeholder='中文版作者')
+      input([(ngModel)]="newBook.zhAuthor", placeholder='中文作者')
+  .fields
+    .eight.wide.field
+      input([(ngModel)]='newBook.tags', placeholder='Tags')
+    .eight.wide.field
+      input([(ngModel)]='newBook.memo', placeholder='Memo')
   .field.ui.right.floated.header
     button.ui.tiny.button((click)="cancelEdit()") 取消
     button.ui.tiny.primary.button((click)="add()") 保存

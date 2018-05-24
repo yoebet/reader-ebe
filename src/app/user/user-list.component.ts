@@ -1,19 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
-import {Model} from '../models/model';
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
-import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'user-list',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UserListComponent implements OnInit {
   users: User[];
   newUser: User;
   editingUser: User;

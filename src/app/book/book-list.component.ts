@@ -7,13 +7,15 @@ import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'book-list',
-  templateUrl: './books.component.html',
-  styleUrls: ['./books.component.css']
+  templateUrl: './book-list.component.html',
+  styleUrls: ['./book-list.component.css']
 })
-export class BooksComponent implements OnInit {
+export class BookListComponent implements OnInit {
   books: Book[];
   newBook: Book = null;
   langOptions = Book.LangTypes;
+  operations: boolean;
+  showZh: boolean;
 
   constructor(private bookService: BookService,
               private router: Router) {
@@ -62,6 +64,20 @@ export class BooksComponent implements OnInit {
         }
         this.books = this.books.filter(b => b !== book);
       });
+  }
+
+  backup(book: Book): void {
+    if (!confirm('... To Backup The Book?')) {
+      return;
+    }
+    this.bookService.backup(book._id).subscribe(clonedBook => {
+      if (!clonedBook) {
+        alert('Fail To Backup.');
+        return;
+      }
+      let index = this.books.indexOf(book);
+      this.books.splice(index + 1, 0, clonedBook);
+    });
   }
 
   ngOnInit(): void {

@@ -6,5 +6,5 @@ export class User extends Model {
   role: string;
   status: string;
 
-  static roles = ['', 'Admin', 'Editor'];
+  static Roles = ['', 'Admin', 'Editor'];
 }

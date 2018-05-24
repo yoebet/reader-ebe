@@ -10,5 +10,5 @@ export class UserBook extends Model {
   chapsCount: number;
   book: Book;
 
-  static roles = ['', 'Admin', 'Editor'];
+  static Roles = ['', 'Owner', 'Editor'];
 }

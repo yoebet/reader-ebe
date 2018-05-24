@@ -3,14 +3,15 @@ h4.ui.gray.header(*ngIf='book')
   .book-zhname(*ngIf='book.zhName') {{book.zhName}}
 div(*ngIf='chap')
   h5.ui.blue.header([hidden]='editing')
-    button.ui.right.floated.tiny.button((click)='edit()') 修改标题
+    button.ui.right.floated.tiny.button((click)='edit()') 修改
     .chap-name.pre-wrap {{chap.name}}
     .chap-zhname.pre-wrap(*ngIf='chap.zhName') {{chap.zhName}}
   .ui.form(*ngIf='editing')
     .fields
-      .eight.wide.field
-        textarea(rows='2', [value]='chap.name', #chapName='')
-      .eight.wide.field
+      .sixteen.wide.field
+        textarea(rows='3', [value]='chap.name', #chapName='')
+    .fields
+      .sixteen.wide.field
         textarea(rows='2', [value]='chap.zhName', #chapZhName='')
     .field.ui.right.floated.header
       button.ui.tiny.button((click)='editing=false') 取消

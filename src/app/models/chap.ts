@@ -6,5 +6,11 @@ export class Chap extends Model {
   zhName: string = '';
   bookId: string;
   no: number;
+  originalId: string;
+  isFree: boolean;
+  price: number;
+  status: string = 'E';
+  memo: string;
+
   paras: Para[];
 }

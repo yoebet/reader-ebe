@@ -18,8 +18,8 @@ export class Annotations {
       ['Adverb', '副词', 'pd'],
       ['Interjection', '感叹词', 'pi'],
       ['Preposition', '介词', 'pp'],
-      ['Conjunction', '连词', 'pc'],
       // ['Pronoun', '代词', 'pr'],
+      ['Conjunction', '连词', 'pc']
     ]
   }, {
     name: '名词',
@@ -36,7 +36,7 @@ export class Annotations {
       ['Uncountable Nouns', '不可数', 'nu'],
       ['Singular Form', '单数', 'ns'],
       ['Plural Form', '复数', 'np'],
-      ['Gerund', '动名词', 'ng'],
+      ['Gerund', '动名词', 'ng']
     ]
   }, {
     name: '动词',
@@ -52,7 +52,7 @@ export class Annotations {
       ['Modal Verbs', '情态动词', 'vm'],
       ['Irregular Verbs', '不规则', 'vr'],
       ['Ditransitive Verbs', '双宾动词', 'vd'],
-      ['Instantaneous Verbs', '短暂动词', 'vs'],
+      ['Instantaneous Verbs', '短暂动词', 'vs']
     ]
   }, {
     name: '成分',
@@ -71,9 +71,7 @@ export class Annotations {
       ['Adverbial', '状语', 'mv'],
       ['Appositive', '同位语', 'mt'],
       ['Parenthesis', '插入语', 'mr'],
-      ['Participial Phrases', '分词小句', 'mc'],
-      // ['Complex Object', '复合宾语', 'mc'],
-      // ['Cognate Object', '同源宾语', 'mg'],
+      ['Participial Phrases', '分词小句', 'mc']
     ]
   }, {
     name: '从句',
@@ -89,7 +87,7 @@ export class Annotations {
       ['Appositive Clauses', '同位语从句', 'ct'],
       ['Adverbial Clauses', '状语从句', 'cd'],
       ['Antecedent', '先行词', 'cc'],
-      ['Relative', '引导词', 'cr'],
+      ['Relative', '引导词', 'cr']
     ]
   },
     {
@@ -108,7 +106,7 @@ export class Annotations {
         ['Past Continuous', '过去进行时', 'ts'],
         ['Past Perfect', '过去完成时', 'tt'],
         ['Future Indefinite', '将来时', 'tu'],
-        ['Future Perfect', '将来完成时', 'tz'],
+        ['Future Perfect', '将来完成时', 'tz']
       ]
     },
     {
@@ -123,7 +121,7 @@ export class Annotations {
         ['Prepositional Phrases', '介词短语', 'hr'],
         ['phrases1', '词组1', 'g1'],
         ['phrases2', '词组2', 'g2'],
-        ['phrases3', '词组3', 'g3'],
+        ['phrases3', '词组3', 'g3']
       ]
     }, {
       name: '其他',
@@ -143,7 +141,7 @@ export class Annotations {
         ['Footnote', '脚注', 'sf'],
         ['Careful', '注意', 'sc'],
         ['Inversion', '倒装', 'sv'],
-        ['Ellipsis', '省略', 'se'],
+        ['Ellipsis', '省略', 'se']
       ]
     }
   ];

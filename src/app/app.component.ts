@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {AppService} from './services/app.service'
+import {AppService} from './services/app.service';
+import {User} from './models/user';
 import {OpResult} from './models/op-result';
 
 @Component({
@@ -13,11 +14,14 @@ export class AppComponent implements OnInit {
   loginForm = false;
   loginMessage: string;
 
-  get currentUser() {
+  get currentUser(): User {
     return this.appService.currentUser;
   }
 
   constructor(private appService: AppService) {
+    // appService.onCurrentUserChanged.subscribe(change => {
+    //   console.log('User Changed: ' + change.from + ' -> ' + change.to);
+    // });
   }
 
   ngOnInit() {

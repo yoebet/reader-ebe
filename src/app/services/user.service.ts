@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
 import {User} from '../models/user';
-import {UserBook} from '../models/user_book';
+import {UserBook} from '../models/user-book';
 import {BaseService} from './base.service';
 
 @Injectable()

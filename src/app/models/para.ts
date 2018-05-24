@@ -5,4 +5,5 @@ export class Para extends Model {
   trans: string = '';
   chapId: string;
   bookId: string;
+  originalId: string;
 }

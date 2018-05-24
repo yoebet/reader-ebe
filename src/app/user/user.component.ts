@@ -5,10 +5,10 @@ import 'rxjs/add/operator/switchMap';
 
 import {User} from '../models/user';
 import {Book} from '../models/book';
-import {UserBook} from '../models/user_book';
+import {UserBook} from '../models/user-book';
 import {UserService} from '../services/user.service';
 import {BookService} from '../services/book.service';
-import {UserBookService} from '../services/user_book.service';
+import {UserBookService} from '../services/user-book.service';
 import {OpResult} from '../models/op-result';
 
 @Component({
@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
   allBooks: Book[];
   candidateBooks: Book[];
   newUserBook: UserBook;
-  bookRoleOptions = UserBook.roles;
+  bookRoleOptions = UserBook.Roles;
   editingUserBook: UserBook;
 
   constructor(private userService: UserService,

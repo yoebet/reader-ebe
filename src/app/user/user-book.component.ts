@@ -6,9 +6,9 @@ import 'rxjs/add/observable/combineLatest';
 
 import {Chap} from '../models/chap';
 import {Book} from '../models/book';
-import {UserBook} from '../models/user_book';
+import {UserBook} from '../models/user-book';
 import {BookService} from '../services/book.service';
-import {UserBookService} from '../services/user_book.service';
+import {UserBookService} from '../services/user-book.service';
 
 @Component({
   selector: 'user-book',
@@ -25,7 +25,7 @@ export class UserBookComponent implements OnInit {
   edited = false;
   editing = false;
   newChaps: any[];
-  bookRoleOptions = UserBook.roles;
+  bookRoleOptions = UserBook.Roles;
 
   constructor(private bookService: BookService,
               private ubService: UserBookService) {
