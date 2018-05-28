@@ -14,6 +14,7 @@ export class Book extends Model {
   price: number;
   memo: string;
   tags: string;
+  annotationFamilyId: string;
 
   chaps: Chap[];
 

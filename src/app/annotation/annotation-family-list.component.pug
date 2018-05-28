@@ -1,0 +1,21 @@
+.ui.header
+  | Annotation Family List
+
+table.ui.small.striped.table
+  thead
+    tr
+      th Name
+      th Description
+      th Status
+      th Default
+      th
+  tbody
+    tr(*ngFor='let family of families')
+      td
+        a((click)='gotoDetail(family)', [routerLink]="['/annotation-families', family._id]") {{family.name}}
+      td {{family.description}}
+      td {{family.status}}
+      td.center.aligned
+        i.ui.checkmark.icon(*ngIf='family.isDefault')
+      td.right.aligned
+        button.ui.tiny.button((click)='clone(family)') 复制

@@ -1,0 +1,15 @@
+.ui.header
+  | {{family? family.name:'Annotations'}}
+
+.ui.divider
+
+.ui.divided.list(*ngIf='family')
+  .item(*ngFor='let group of family.groups')
+    .content
+      .header {{group.name}} {{group.nameEn}}
+      .description
+        ng-template([ngIf]='group.tagName') <{{group.tagName}}>
+        ng-template([ngIf]='group.cssClass') .{{group.cssClass}}
+        ng-template([ngIf]='group.dataName') [data-{{group.dataName}}]
+    .ui.list.annotation-group
+      .item(*ngFor='let ann of group.annotations') {{ann.name}} {{ann.nameEn}} ({{ann.dataValue}})

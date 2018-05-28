@@ -9,6 +9,8 @@ import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
+import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
+import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
 
 const routes: Routes = [
   {path: 'books', component: BookListComponent},
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'users', component: UserListComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'word-categories', component: CategoryListComponent},
-  {path: 'word-categories/:id', component: CategoryComponent}
+  {path: 'word-categories/:id', component: CategoryComponent},
+  {path: 'annotation-families', component: AnnotationFamilyListComponent},
+  {path: 'annotation-families/:id', component: AnnotationFamilyComponent}
 ];
 
 @NgModule({

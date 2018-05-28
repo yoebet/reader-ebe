@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {Location} from "@angular/common";
 
 import 'rxjs/add/operator/switchMap';
 import {WordCategory} from '../models/word-category';
 import {WordCategoryService} from "../services/word-category.service";
-import {Location} from "@angular/common";
 
 @Component({
   selector: 'category',

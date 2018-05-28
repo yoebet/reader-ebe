@@ -15,6 +15,8 @@ import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
 import {UserBookService} from './services/user-book.service';
 import {WordCategoryService} from './services/word-category.service';
+import {AnnotationFamilyService} from './services/annotation-family.service';
+import {AnnotationGroupService} from './services/annotation-group.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
@@ -38,6 +40,8 @@ import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
+import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
+import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
 
 @NgModule({
   imports: [
@@ -68,7 +72,9 @@ import {CategoryComponent} from './word-category/category.component';
     CreatedDatePipe,
     CreatedDateStringPipe,
     CategoryListComponent,
-    CategoryComponent
+    CategoryComponent,
+    AnnotationFamilyListComponent,
+    AnnotationFamilyComponent
   ],
   providers: [
     AppService,
@@ -78,7 +84,9 @@ import {CategoryComponent} from './word-category/category.component';
     DictService,
     UserService,
     UserBookService,
-    WordCategoryService
+    WordCategoryService,
+    AnnotationFamilyService,
+    AnnotationGroupService
   ],
   entryComponents: [
     ParaSplitComponent,
