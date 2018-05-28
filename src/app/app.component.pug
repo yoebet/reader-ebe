@@ -2,7 +2,9 @@
   .ui.secondary.pointing.menu
     a.item(routerLink='/books', routerLinkActive='active') Books
     a.item(routerLink='/dict', routerLinkActive='active') Dict
-    a.item(*ngIf='currentUser && currentUser.role==="Admin"', routerLink='/users', routerLinkActive='active') Users
+    ng-template([ngIf]='currentUser && currentUser.role==="Admin"')
+      a.item(routerLink='/word-categories', routerLinkActive='active') Word Categories
+      a.item(routerLink='/users', routerLinkActive='active') Users
     .right.menu
       a.item(*ngIf='!currentUser', (click)='gotoLogin()') Login
       .item(*ngIf='currentUser')

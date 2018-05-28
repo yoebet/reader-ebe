@@ -14,6 +14,7 @@ import {ParaService} from './services/para.service';
 import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
 import {UserBookService} from './services/user-book.service';
+import {WordCategoryService} from './services/word-category.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
@@ -35,6 +36,8 @@ import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
+import {CategoryListComponent} from './word-category/category-list.component';
+import {CategoryComponent} from './word-category/category.component';
 
 @NgModule({
   imports: [
@@ -63,7 +66,9 @@ import {UserBookComponent} from './user/user-book.component';
     UserComponent,
     UserBookComponent,
     CreatedDatePipe,
-    CreatedDateStringPipe
+    CreatedDateStringPipe,
+    CategoryListComponent,
+    CategoryComponent
   ],
   providers: [
     AppService,
@@ -72,7 +77,8 @@ import {UserBookComponent} from './user/user-book.component';
     ParaService,
     DictService,
     UserService,
-    UserBookService
+    UserBookService,
+    WordCategoryService
   ],
   entryComponents: [
     ParaSplitComponent,

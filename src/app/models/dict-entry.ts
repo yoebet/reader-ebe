@@ -3,6 +3,7 @@ import {Model} from './model';
 export class DictEntry extends Model {
   word: string;
 
+  simple: SimpleMeaning[];
   // simple: [
   //   { pos: 'n.', exp: '' },
   //   { pos: 'v.', exp: '' }

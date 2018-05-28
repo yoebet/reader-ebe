@@ -1,0 +1,29 @@
+.ui.header
+  | Word Category List
+
+table.ui.small.striped.table
+  thead
+    tr
+      th Name
+      th Code
+      th 词典筛选
+      th 基于
+      th 增加词汇
+      th 总词汇量
+      th 词频
+      th 基础候选
+  tbody
+    tr(*ngFor='let cat of categories; trackBy: categoryTracker')
+      td
+        a((click)='gotoDetail(cat)', [routerLink]="['/word-categories', cat._id]") {{cat.name}}
+      td {{cat.code}}
+      td {{ '{'+cat.dictCategoryKey + ': '+ (cat.isFrequency ? '1,2,...':cat.dictCategoryValue)+'}' }}
+      td {{cat.extend? cat.extend.name:''}}
+      td.right.aligned
+        ng-template([ngIf]='!cat.isFrequency') + {{cat.wordCount}}
+      td.right.aligned
+        ng-template([ngIf]='!cat.isFrequency') {{cat.extendedWordCount}}
+      td.center.aligned
+        i.ui.checkmark.icon(*ngIf='cat.isFrequency')
+      td.center.aligned
+        i.ui.checkmark.icon(*ngIf='cat.useAsUserBase')

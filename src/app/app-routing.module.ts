@@ -7,6 +7,8 @@ import {ChapComponent} from './chap/chap.component';
 import {DictComponent} from './dict/dict.component';
 import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
+import {CategoryListComponent} from './word-category/category-list.component';
+import {CategoryComponent} from './word-category/category.component';
 
 const routes: Routes = [
   {path: 'books', component: BookListComponent},
@@ -14,7 +16,9 @@ const routes: Routes = [
   {path: 'chaps/:id', component: ChapComponent},
   {path: 'dict', component: DictComponent},
   {path: 'users', component: UserListComponent},
-  {path: 'users/:id', component: UserComponent}
+  {path: 'users/:id', component: UserComponent},
+  {path: 'word-categories', component: CategoryListComponent},
+  {path: 'word-categories/:id', component: CategoryComponent}
 ];
 
 @NgModule({

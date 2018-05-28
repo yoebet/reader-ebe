@@ -50,21 +50,6 @@ export class UserComponent implements OnInit {
     });
   }
 
-  removeUser(): void {
-    //check...
-    if (!confirm('Are You Sure?')) {
-      return;
-    }
-    this.userService
-      .remove(this.user)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        this.goBack();
-      });
-  }
 
   editUserBook(ub) {
     this.editingUserBook = ub;

@@ -1,0 +1,34 @@
+
+.ui.header
+  | Word Category
+
+div(*ngIf='category')
+  .prop-name Name
+  | {{category.name}}
+  .prop-name Code
+  | {{category.code}}
+  .prop-name Condition
+  | {{ '{'+category.dictCategoryKey + ': '+ category.dictCategoryValue+'}' }}
+  .prop-name wordCount
+  | {{category.wordCount}}
+  .prop-name extendTo
+  | {{category.extendTo}}
+  .prop-name extendedWordCount
+  | {{category.extendedWordCount}}
+  .prop-name isFrequency
+  | {{category.isFrequency}}
+  .prop-name useAsUserBase
+  | {{category.useAsUserBase}}
+
+  .ui.hidden.clearing.divider
+
+  .ui.sub.header
+    | Sample Words
+    .ui.tiny.basic.button((click)='fetchSamples()') {{sampleWords? 'Change':'Show'}}
+  .ui.segment(*ngIf='sampleWords')
+    .ui.horizontal.list
+      a.item(*ngFor='let word of sampleWords', (click)='onClickAWord(word,$event)') {{word}}
+
+.ui.hidden.clearing.divider
+
+button.ui.tiny.button((click)='goBack()') 返回
