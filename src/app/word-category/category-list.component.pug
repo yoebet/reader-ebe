@@ -1,29 +1,103 @@
 .ui.header
   | Word Category List
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='tuneOrder') Sort
+    sui-checkbox([(ngModel)]='recountOperation') re-Count
+    sui-checkbox([(ngModel)]='removeOperation') Remove
 
-table.ui.small.striped.table
+table.ui.small.striped.table.form
   thead
     tr
-      th Name
-      th Code
+      th Name/Code
       th 词典筛选
       th 基于
       th 增加词汇
       th 总词汇量
       th 词频
       th 基础候选
+      th
   tbody
-    tr(*ngFor='let cat of categories; trackBy: categoryTracker')
+    tr(*ngFor='let cat of categories; trackBy: categoryTracker; first as first; last as last')
       td
-        a((click)='gotoDetail(cat)', [routerLink]="['/word-categories', cat._id]") {{cat.name}}
-      td {{cat.code}}
-      td {{ '{'+cat.dictCategoryKey + ': '+ (cat.isFrequency ? '1,2,...':cat.dictCategoryValue)+'}' }}
+        ng-template([ngIf]='!editing(cat)')
+          a((click)='gotoDetail(cat)', [routerLink]="['/word-categories', cat._id]") {{cat.name}}
+        .field.category-name(*ngIf='editing(cat)')
+          input([(ngModel)]="editingCat.name", placeholder='Name')
+        | ({{cat.code}})
+      td
+        .inline.fields.category(*ngIf='editing(cat)')
+          input([(ngModel)]="editingCat.dictKey", placeholder='dictKey')
+          sui-select.selection.normal-width([(ngModel)]="editingCat.dictOperator", [options]="dictOperators",
+          valueField="value", labelField="label", placeholder='操作', #operatorSelect1='')
+            sui-select-option(*ngFor="let option of operatorSelect1.filteredOptions", [value]="option")
+          input([(ngModel)]="editingCat.dictValue", placeholder='dictValue')
+        ng-template([ngIf]='!editing(cat)')
+          | {{ filterStr(cat) }}
       td {{cat.extend? cat.extend.name:''}}
       td.right.aligned
         ng-template([ngIf]='!cat.isFrequency') + {{cat.wordCount}}
       td.right.aligned
         ng-template([ngIf]='!cat.isFrequency') {{cat.extendedWordCount}}
       td.center.aligned
-        i.ui.checkmark.icon(*ngIf='cat.isFrequency')
+        ng-template([ngIf]='editing(cat)')
+          sui-checkbox([(ngModel)]='editingCat.isFrequency') Frequency
+        ng-template([ngIf]='!editing(cat)')
+          i.ui.checkmark.icon(*ngIf='cat.isFrequency')
       td.center.aligned
-        i.ui.checkmark.icon(*ngIf='cat.useAsUserBase')
+        ng-template([ngIf]='editing(cat)')
+          sui-checkbox([(ngModel)]='editingCat.useAsUserBase') User Base
+        ng-template([ngIf]='!editing(cat)')
+          i.ui.checkmark.icon(*ngIf='cat.useAsUserBase')
+      td.right.aligned
+        ng-template([ngIf]='editing(cat)')
+          .ui.mini.button((click)='editingCat=null') 取消
+          .ui.mini.primary.button((click)='save()') 保存
+        ng-template([ngIf]='!editing(cat)')
+          ng-template([ngIf]="tuneOrder")
+            button.ui.tiny.button(*ngIf='!first', (click)='moveUp(cat)')
+              i.angle.arrow.up.icon
+              | up
+            button.ui.tiny.button(*ngIf='!last', (click)='moveDown(cat)')
+              i.angle.arrow.down.icon
+              | down
+            button.ui.tiny.button(*ngIf='!first', (click)='moveTop(cat)')
+              i.angle.double.up.icon
+              | top
+            button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(cat)')
+              i.angle.double.down.icon
+              | bottom
+          ng-template([ngIf]="!tuneOrder")
+            button.ui.tiny.button((click)='edit(cat)') 修改
+            button.ui.tiny.button(*ngIf='recountOperation&&!cat.isFrequency', (click)='recount(cat)') 统计
+            button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
+
+.ui.hidden.clearing.divider
+button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click)='editNew()') 新增
+.ui.small.form(*ngIf='newCategory')
+  .field
+    h3.ui.header New Category:
+    .fields
+      .four.wide.field
+        input([(ngModel)]="newCategory.name", placeholder='Name')
+      .two.wide.field
+        input([(ngModel)]="newCategory.code", placeholder='Code')
+      .two.wide.field
+        input([(ngModel)]="newCategory.dictKey", placeholder='dictKey')
+      .two.wide.field
+        sui-select.selection.normal-width([(ngModel)]="newCategory.dictOperator", [options]="dictOperators",
+        valueField="value", labelField="label", placeholder='操作', #operatorSelect2='')
+          sui-select-option(*ngFor="let option of operatorSelect2.filteredOptions", [value]="option")
+      .two.wide.field
+        input([(ngModel)]="newCategory.dictValue", placeholder='dictValue')
+    .fields
+      .four.wide.field
+        input([(ngModel)]="newCategory.extendTo", placeholder='Extend To')
+      .two.wide.field
+        sui-checkbox([(ngModel)]='newCategory.isFrequency') Frequency
+      .two.wide.field
+        sui-checkbox([(ngModel)]='newCategory.useAsUserBase') User Base
+  .field.ui.right.floated.header
+    button.ui.tiny.button((click)="cancelEditNew()") 取消
+    button.ui.tiny.primary.button((click)="add()") 保存
+
+.ui.hidden.clearing.divider

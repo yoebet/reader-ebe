@@ -5,13 +5,14 @@ import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
+import {SortableListComponent} from "../sortable-list.component";
 
 @Component({
   selector: 'book-chaps',
   templateUrl: './book-chaps.component.html',
   styleUrls: ['./book-chaps.component.css']
 })
-export class BookChapsComponent implements OnInit {
+export class BookChapsComponent extends SortableListComponent implements OnInit {
   @Input() book: Book;
   @Input() tuneOrder: boolean;
   @Input() operations: boolean;
@@ -21,6 +22,15 @@ export class BookChapsComponent implements OnInit {
 
   constructor(private chapService: ChapService,
               private router: Router) {
+    super();
+  }
+
+  get modelList() {
+    return this.book.chaps;
+  }
+
+  get sortableService() {
+    return this.chapService;
   }
 
   ngOnInit(): void {
@@ -78,70 +88,6 @@ export class BookChapsComponent implements OnInit {
       }
       this.editingChap = null;
     });
-  }
-
-  protected move(chap: Chap, dir: string) {
-    let chaps = this.book.chaps;
-    let thisPos = chaps.indexOf(chap);
-    if (thisPos === 0) {
-      if (dir === 'moveUp' || dir === 'moveTop') {
-        return;
-      }
-    }
-    if (thisPos === chaps.length - 1) {
-      if (dir === 'moveDown' || dir === 'moveBottom') {
-        return;
-      }
-    }
-    let targetPos = null;
-    switch (dir) {
-      case 'moveUp':
-        targetPos = thisPos - 1;
-        break;
-      case 'moveDown':
-        targetPos = thisPos + 1;
-        break;
-      case 'moveTop':
-        targetPos = 0;
-        break;
-      case 'moveBottom':
-        targetPos = chaps.length - 1;
-        break;
-    }
-    this.chapService[dir](chap)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        if (dir === 'moveTop' || dir === 'moveBottom') {
-          chaps.splice(thisPos, 1);
-          if (dir === 'moveTop') {
-            chaps.unshift(chap);
-          } else {
-            chaps.push(chap);
-          }
-        } else {
-          chaps[thisPos] = chaps[targetPos];
-          chaps[targetPos] = chap;
-        }
-      });
-  }
-
-  moveUp(chap: Chap) {
-    this.move(chap, 'moveUp');
-  }
-
-  moveDown(chap: Chap) {
-    this.move(chap, 'moveDown');
-  }
-
-  moveTop(chap: Chap) {
-    this.move(chap, 'moveTop');
-  }
-
-  moveBottom(chap: Chap) {
-    this.move(chap, 'moveBottom');
   }
 
   gotoDetail(chap: Chap): void {

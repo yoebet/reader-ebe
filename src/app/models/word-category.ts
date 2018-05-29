@@ -3,8 +3,9 @@ import {Model} from './model';
 export class WordCategory extends Model {
   code: string;
   name: string;
-  dictCategoryKey: string;
-  dictCategoryValue: number;
+  dictKey: string;
+  dictOperator: string;
+  dictValue: number;
   description: string;
   wordCount: number;
   extendTo: string;
@@ -13,4 +14,15 @@ export class WordCategory extends Model {
   useAsUserBase: boolean;
 
   extend: WordCategory;
+
+  static DictOperators = [
+    {value: '', label: '='},
+    {value: 'gt', label: '>'},
+    {value: 'gte', label: '>='},
+    {value: 'lt', label: '<'},
+    {value: 'lte', label: '<='},
+    {value: 'ne', label: '<>'},
+    {value: 'exist', label: 'Exist'},
+    {value: 'not-exist', label: 'Not Exist'}
+  ];
 }

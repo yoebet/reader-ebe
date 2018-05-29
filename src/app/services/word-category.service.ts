@@ -7,11 +7,11 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
-import {BaseService} from './base.service';
+import {SorterService} from './sorter.service';
 import {WordCategory} from "../models/word-category";
 
 @Injectable()
-export class WordCategoryService extends BaseService<WordCategory> {
+export class WordCategoryService extends SorterService<WordCategory> {
 
   constructor(protected http: HttpClient) {
     super(http);

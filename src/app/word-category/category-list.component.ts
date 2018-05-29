@@ -3,18 +3,42 @@ import {Router} from '@angular/router';
 
 import {WordCategory} from '../models/word-category';
 import {WordCategoryService} from "../services/word-category.service";
+import {OpResult} from "../models/op-result";
+import {SortableListComponent} from "../sortable-list.component";
 
 @Component({
   selector: 'category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css']
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent extends SortableListComponent implements OnInit {
 
   categories: WordCategory[];
+  newCategory: WordCategory;
+  editingCat: WordCategory;
+
+  dictOperators = WordCategory.DictOperators;
+  operatorsMap;
+
+  recountOperation = false;
+  removeOperation = false;
+  tuneOrder = false;
 
   constructor(private wordCategoryService: WordCategoryService,
               private router: Router) {
+    super();
+    this.operatorsMap = new Map();
+    for (let op of this.dictOperators) {
+      this.operatorsMap.set(op.value, op.label);
+    }
+  }
+
+  get modelList() {
+    return this.categories;
+  }
+
+  get sortableService() {
+    return this.wordCategoryService;
   }
 
   getCategories() {
@@ -37,10 +61,73 @@ export class CategoryListComponent implements OnInit {
     this.getCategories();
   }
 
+  filterStr(cat) {
+    let opLabel = this.operatorsMap.get(cat.dictOperator);
+    let opStr = cat.dictOperator ? opLabel : ':';
+    let val = cat.isFrequency ? '1,2,...' : cat.dictValue;
+    return cat.dictKey + ' ' + opStr + ' ' + val
+  }
 
   gotoDetail(category: WordCategory): void {
     this.router.navigate(['/word-categories', category._id]);
   }
+
+  editNew() {
+    this.newCategory = new WordCategory();
+  }
+
+  cancelEditNew() {
+    this.newCategory = null;
+  }
+
+  add() {
+    this.wordCategoryService.create(this.newCategory)
+      .subscribe(nc => {
+        this.categories.push(nc);
+        this.newCategory = null;
+      });
+  }
+
+  remove(cat) {
+    if (!confirm('Are You Sure?')) {
+      return;
+    }
+    this.wordCategoryService
+      .remove(cat._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        this.categories = this.categories.filter(c => c !== cat);
+      });
+  }
+
+  edit(cat) {
+    this.editingCat = Object.assign({}, cat);
+  }
+
+  editing(cat) {
+    return this.editingCat && this.editingCat._id === cat._id;
+  }
+
+  save() {
+    this.wordCategoryService.update(this.editingCat)
+      .subscribe(opr => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        let category = this.categories.find(u => u._id === this.editingCat._id);
+        Object.assign(category, this.editingCat);
+        this.editingCat = null;
+      });
+  }
+
+  recount(cat) {
+
+  }
+
 
   categoryTracker(index, category) {
     return category._id;
