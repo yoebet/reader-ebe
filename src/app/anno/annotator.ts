@@ -1,4 +1,4 @@
-import {Annotation} from './annotation';
+import {Annotation} from '../models/annotation';
 import {AnnotateResult} from './annotate-result'
 
 export class Annotator {

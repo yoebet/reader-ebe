@@ -8,14 +8,16 @@ import Drop from 'tether-drop'
 
 import {Annotator} from '../anno/annotator';
 import {AnnotateResult} from '../anno/annotate-result'
-import {HighlightGroups} from '../anno/annotations';
+import {HighlightGroups} from '../anno/annotation-set';
 
 import {DictEntry} from '../models/dict-entry';
+import {Annotation} from '../models/annotation';
+import {AnnotationSet} from '../anno/annotation-set';
+
 import {DictService} from '../services/dict.service';
 import {ParaLiveContent} from '../chap-types/para-live-content';
 import {DictRequest} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
-import {Annotation} from '../anno/annotation';
 import {WordAnnosComponent} from './word-annos.component'
 
 @Component({
@@ -36,6 +38,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotatedWordsHover: boolean;
   @Input() annotating: boolean;
   @Input() annotation: Annotation;
+  @Input() annotationSet: AnnotationSet;
   @Output() contentChange = new EventEmitter<ParaLiveContent>();
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
@@ -580,6 +583,7 @@ export class ParaContentComponent implements OnChanges {
     let content = function () {
       wacr.instance.enabled = component.annotatedWordsHover;
       wacr.instance.wordEl = wordEl;
+      wacr.instance.annotationSet = component.annotationSet;
       return wacr.location.nativeElement;
     };
     let drop = new Drop({

@@ -19,7 +19,7 @@ div(*ngIf='chap')
     .clearing
 
   //.ui.hidden.divider
-  chap-paras([chap]='chap')
+  chap-paras([book]='book', [chap]='chap')
 
 .ui.hidden.clearing.divider
 button.ui.tiny.button((click)='goBack()') 返回

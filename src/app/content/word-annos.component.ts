@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {Annotations} from '../anno/annotations';
 import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
+import {AnnotationSet} from "../anno/annotation-set";
 
 @Component({
   selector: 'word-annos',
@@ -13,6 +13,7 @@ export class WordAnnosComponent implements OnInit {
   @Input() _wordEl: Element;
   @Input() paraTextEl: Element;
   @Input() enabled: boolean;
+  @Input() annotationSet: AnnotationSet;
   word: string;
   head: string;
   items: any[];
@@ -101,7 +102,7 @@ export class WordAnnosComponent implements OnInit {
         phraseGroup = value;
         continue;
       }
-      let text = Annotations.annotationOutput(name, value);
+      let text = this.annotationSet.annotationOutput(name, value);
       if (!text) {
         continue;
       }

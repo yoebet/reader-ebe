@@ -29,6 +29,7 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='clickToEdit') 选中即编辑
       sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
       sui-checkbox([(ngModel)]='showTrans') 中文
+      sui-checkbox([(ngModel)]='leftRight', [isDisabled]='!showTrans') 左右对照
       button.ui.tiny.button((click)='alignSentences()')
         i.align.left.icon
         | 分句对齐
@@ -36,8 +37,8 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')
-      .ui.right.floated.header
-        .ui.mini.basic.button(*ngFor='let ann of specialAnnotations', [ngClass]='{active: ann===currentAnnotation}',
+      .ui.right.floated.header(*ngIf='annotationSet')
+        .ui.mini.basic.button(*ngFor='let ann of annotationSet.specialAnnotations', [ngClass]='{active: ann===currentAnnotation}',
         (click)='switchSpecialAnnotation(ann,$event)') {{ann.name||ann.nameEn}}
         sui-checkbox([(ngModel)]='annotatedWordsHover', (ngModelChange)='onAnnotatedWordsHoverChange()') 鼠标悬停
         sui-checkbox([(ngModel)]='annotateOnly') 仅标注
@@ -49,8 +50,8 @@ div(*ngIf='chap')
       (click)='switchAnnotation(ann,$event)',
       (contextmenu)='removeFromLatest(ann,$event)')
         span.yo(class='{{ann.cssClass}}') {{ann.name||ann.nameEn}}
-      .ui.text.menu
-        ng-template(ngFor='', let-agroup='', [ngForOf]="annotationGroups")
+      .ui.text.menu(*ngIf='annotationSet')
+        ng-template(ngFor='', let-agroup='', [ngForOf]="annotationSet.groups")
           a.item([ngClass]='{active: agroup===annotationGroup}',
           (click)='clickAnnotationGroup(agroup,$event)',
           (mouseover)='agPopupMouseover(agroup)',
@@ -73,7 +74,8 @@ div(*ngIf='chap')
       .item.paragraph(*ngIf='index===insertPos')
         .ui.left.floated.mini.statistic.para-no
           .value +
-        para-form.ui.form.content((onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
+        para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+        (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
@@ -87,20 +89,23 @@ div(*ngIf='chap')
         [annotatedWordsHover]='annotatedWordsHover',
         [annotating]='para===selectedPara && annotating',
         [annotation]='(para===selectedPara)? currentAnnotation : null',
-        [ngClass]='{"selected": para===selectedPara}',
+        [annotationSet]='annotationSet',
+        [ngClass]='{"selected": para===selectedPara, "left-right": leftRight, "up-down": !leftRight}',
         (click)='selectPara(para)',
         (contentChange)="onContentChange(para,$event)",
         (contentCommand)="onContentCommand(para,$event)",
         (dictRequest)="onDictRequest($event)",
         (noteRequest)="onNoteRequest($event)")
 
-        para-form.ui.form.content(*ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
+        para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+        *ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
         (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
     .item.paragraph(*ngIf='insertPos===chap.paras.length')
       .ui.left.floated.mini.statistic.para-no
         .value +
-      para-form.ui.form.content((onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
+      para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+      (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
   .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')

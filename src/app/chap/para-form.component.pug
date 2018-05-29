@@ -1,9 +1,9 @@
-.fields
-  .wide.field([ngClass]='showTrans? "eight":"sixteen"')
+.para-form
+  .para-textarea.content-textarea
     textarea([(ngModel)]="para.content", #content='', spellcheck='false')
-  .eight.wide.field(*ngIf='showTrans')
+  .para-textarea.trans-textarea(*ngIf='showTrans')
     textarea([(ngModel)]="para.trans", #trans='', spellcheck='false')
-.field
+.field.operations
   button.ui.tiny.button((click)='splitParas()')
     i.paragraph.icon
     | 分段

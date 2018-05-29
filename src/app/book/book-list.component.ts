@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {Book} from '../models/book';
+import {AnnotationFamily} from "../models/annotation-family";
 import {BookService} from '../services/book.service';
+import {AnnotationFamilyService} from '../services/annotation-family.service';
 import {OpResult} from '../models/op-result';
 
 @Component({
@@ -17,15 +19,22 @@ export class BookListComponent implements OnInit {
   operations: boolean;
   showZh: boolean;
 
+  annOptions: AnnotationFamily[];
+
   constructor(private bookService: BookService,
-              private router: Router) {
+              private router: Router,
+              private annotationFamilyService: AnnotationFamilyService) {
   }
 
-  getBooks(): void {
+  ngOnInit(): void {
     this.bookService
       .list()
       .subscribe(books => this.books = books);
+    this.annotationFamilyService
+      .getCandidates()
+      .subscribe(afs => this.annOptions = afs);
   }
+
 
   editNew() {
     this.newBook = new Book();
@@ -78,10 +87,6 @@ export class BookListComponent implements OnInit {
       let index = this.books.indexOf(book);
       this.books.splice(index + 1, 0, clonedBook);
     });
-  }
-
-  ngOnInit(): void {
-    this.getBooks();
   }
 
   gotoDetail(book: Book): void {

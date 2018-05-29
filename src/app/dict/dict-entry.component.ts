@@ -99,9 +99,9 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   private onEntryChanged() {
     let entry = this.entry;
-    console.log('word: ' + entry.word);
-    console.log('created at: ' + Model.createdTimeString(entry));
-    console.log('updated at: ' + Model.updatedTimeString(entry));
+    // console.log('word: ' + entry.word);
+    // console.log('created at: ' + Model.createdTimeString(entry));
+    // console.log('updated at: ' + Model.updatedTimeString(entry));
 
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.refWords = null;
@@ -282,7 +282,6 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
   addPosMeanings() {
     let newPos = this.newPos;
-    console.log(newPos);
     if (!newPos || !newPos.pos) {
       return;
     }

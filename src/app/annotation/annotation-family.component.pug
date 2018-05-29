@@ -10,6 +10,6 @@
       .description
         ng-template([ngIf]='group.tagName') <{{group.tagName}}>
         ng-template([ngIf]='group.cssClass') .{{group.cssClass}}
-        ng-template([ngIf]='group.dataName') [data-{{group.dataName}}]
+        ng-template([ngIf]='group.dataName') [data-{{group.dataName}}
     .ui.list.annotation-group
-      .item(*ngFor='let ann of group.annotations') {{ann.name}} {{ann.nameEn}} ({{ann.dataValue}})
+      .item(*ngFor='let ann of group.annotations') {{ann.name}} {{ann.nameEn}} (data-{{group.dataName}}={{ann.dataValue}})

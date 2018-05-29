@@ -10,9 +10,10 @@ import {OpResult} from '../models/op-result';
 export class BaseService<M extends Model> {
 
   protected httpOptions = {
-    // headers: new HttpHeaders({
-    //   'Content-Type': 'application/json',
-    // }),
+    headers: new HttpHeaders({
+      // 'Content-Type': 'application/json',
+      'X-Cli': 'PC-A'
+    }),
     withCredentials: true
   };
 

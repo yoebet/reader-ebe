@@ -2,8 +2,6 @@ import {Model} from './model';
 import {Annotation} from './annotation';
 
 export class AnnotationGroup extends Model {
-
-  familyId: string;
   name: string;
   nameEn: string;
   dataName: string;
@@ -11,5 +9,4 @@ export class AnnotationGroup extends Model {
   cssClass: string;
 
   annotations: Annotation[];
-
 }

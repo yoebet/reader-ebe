@@ -43,6 +43,10 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
         valueField="value", labelField="label", placeholder='语言', #langSelect='')
           sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
       .four.wide.field
+        sui-select.selection([(ngModel)]="newBook.annotationFamilyId", [options]="annOptions",
+        valueField="_id", labelField="name", placeholder='标注', #annSelect='')
+          sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
+      .four.wide.field
         label Pricing
         sui-checkbox([(ngModel)]='newBook.isFree') Free
   .fields

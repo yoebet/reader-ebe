@@ -37,6 +37,9 @@
       .ui.clearing.divider
 
       sui-accordion.ui.small.form(*ngIf='editing&&editingCompleteMeanings', [closeOthers]='false')
+        .ui.list(*ngIf='entry.simple')
+          .ui.item(*ngFor='let item of entry.simple')
+            | {{item.pos}} {{item.exp}}
         sui-accordion-panel.pos-meanings(*ngFor='let pm of editingCompleteMeanings; first as firstPos; last as lastPos', [isOpen]='true')
           .pos-header(title='')
             .ui.right.floated.sub.header
@@ -112,6 +115,9 @@
           .clearing
 
       sui-accordion(*ngIf='!editing', [closeOthers]='false')
+        .ui.list(*ngIf='entry.simple')
+          .ui.item(*ngFor='let item of entry.simple')
+            | {{item.pos}} {{item.exp}}
         sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.complete||[]', [isOpen]='false')
           .pos-header(title='')
             i.dropdown.icon
@@ -124,7 +130,7 @@
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 | {{item.exp}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
-      .ui.list.simple-explain(*ngIf='!entry.completeYd')
+      .ui.list(*ngIf='!entry.completeYd')
         .ui.item(*ngFor='let item of entry.simpleYd')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeYd', [closeOthers]='false')
@@ -140,7 +146,7 @@
                 | 加入
               span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.simpleHc', suiTabContent='hc')
-      .ui.list.simple-explain(*ngIf='!entry.completeHc')
+      .ui.list(*ngIf='!entry.completeHc')
         .ui.item(*ngFor='let item of entry.simpleHc')
           | {{item.pos}} {{item.exp}}
       sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')

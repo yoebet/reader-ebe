@@ -10,13 +10,14 @@ import {ParaService} from '../services/para.service';
 import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
-import {Annotations} from '../anno/annotations';
+import {AnnotationSet} from '../anno/annotation-set';
 import {ParaLiveContent} from '../chap-types/para-live-content';
 import {DictRequest} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
-import {AnnotationGroup} from '../anno/annotation-group';
-import {Annotation} from '../anno/annotation';
+import {AnnotationGroup} from '../models/annotation-group';
+import {Annotation} from '../models/annotation';
 import {SentenceAlignModal} from '../content/sentence-align.component';
+import {AnnotationFamilyService} from "../services/annotation-family.service";
 
 
 interface ContentChangedNotification {
@@ -30,7 +31,19 @@ interface ContentChangedNotification {
   styleUrls: ['./chap-paras.component.css']
 })
 export class ChapParasComponent implements OnInit {
-  @Input() book: Book;
+  private _book: Book;
+  @Input() set book(book: Book) {
+    this._book = book;
+    if (!book) {
+      return;
+    }
+    this.loadAnnotations();
+  }
+
+  get book(): Book {
+    return this._book;
+  }
+
   @Input() chap: Chap;
   @ViewChild(ParaFormComponent)
   private paraFormComponent: ParaFormComponent;
@@ -38,20 +51,21 @@ export class ChapParasComponent implements OnInit {
   selectedPara: Para;
   insertPos: number;
   showTrans = false;
+  leftRight = false;
   clickToEdit = false;
   continuousEditing = false;
   splitMode = false;
-  annotating = true;
+  annotating = false;
   annotateOnly = false;
   editInplace = false;
   highlightSentence = false;
   annotatedWordsHover = true;
 
-  annotationGroups: AnnotationGroup[] = Annotations.annotationGroups;
-  specialAnnotations: Annotation[] = Annotations.specialAnnotations;
+  annotationSet: AnnotationSet;
+
   annotationGroup: AnnotationGroup = null;
   currentAnnotation: Annotation = null;
-  latestAnnotations: Annotation[] = [];
+  latestAnnotations: Annotation[] = null;
 
   keepAgPopup = false;
   agPopupHiddenTimer = null;
@@ -69,24 +83,44 @@ export class ChapParasComponent implements OnInit {
   private tetherClassPrefix = 'dp';
 
 
-  constructor(private paraService: ParaService, public modalService: SuiModalService) {
+  constructor(private paraService: ParaService,
+              private annoService: AnnotationFamilyService,
+              public modalService: SuiModalService) {
   }
 
   ngOnInit(): void {
     if (!this.chap.paras) {
       this.chap.paras = [];
     }
-    let ag: AnnotationGroup = this.annotationGroups[0];
-    if (ag) {
-      let size = Math.min(ag.annotations.length, 2);
-      for (let i = 0; i < size; i++) {
-        this.latestAnnotations.push(ag.annotations[i]);
-      }
+  }
+
+  private loadAnnotations() {
+    let afId = this._book.annotationFamilyId;
+    if (!afId) {
+      return;
     }
-    let phraG1 = Annotations.findAnnotation('phra', 'g1');
-    if (phraG1) {
-      this.latestAnnotations.push(phraG1);
-    }
+    this.annoService.getAnnotationSet(afId)
+      .subscribe((annotationSet: AnnotationSet) => {
+        if (!annotationSet) {
+          return;
+        }
+        this.annotationSet = annotationSet;
+        this.latestAnnotations = [];
+
+        let ag: AnnotationGroup = annotationSet.groups[0];
+        if (ag) {
+          let size = Math.min(ag.annotations.length, 2);
+          for (let i = 0; i < size; i++) {
+            this.latestAnnotations.push(ag.annotations[i]);
+          }
+        }
+        let phraG1 = annotationSet.findAnnotation('phra', 'g1');
+        if (phraG1) {
+          this.latestAnnotations.push(phraG1);
+        }
+
+        this.annotating = true;
+      });
   }
 
   selectPara(para): void {
