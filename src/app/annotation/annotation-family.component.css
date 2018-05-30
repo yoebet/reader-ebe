@@ -1,3 +1,12 @@
 .ui.list.annotation-group {
   margin-left: 2em;
 }
+
+.group-fields input, .ann-fields input {
+  max-width: 10em;
+  margin: 0em 0.5em;
+}
+
+.group-fields, .ann-fields {
+  margin: 0.5em 0em !important;
+}

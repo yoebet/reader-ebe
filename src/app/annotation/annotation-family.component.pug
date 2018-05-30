@@ -3,13 +3,54 @@
 
 .ui.divider
 
-.ui.divided.list(*ngIf='family')
-  .item(*ngFor='let group of family.groups')
+.ui.divided.list.small.form(*ngIf='family')
+  .item(*ngFor='let group of family.groups; trackBy: groupTracker')
     .content
-      .header {{group.name}} {{group.nameEn}}
-      .description
+      .header
+        .ui.right.floated.header
+          ng-template([ngIf]='editing(group)')
+            .ui.mini.button((click)='cancelEdit()') Cancel
+            .ui.mini.button((click)='saveGroup()') Save
+          ng-template([ngIf]='!editing(group)')
+            .ui.mini.button((click)='editGroup(group)') Edit
+            .ui.mini.button((click)='removeGroup(group)') Remove
+        ng-template([ngIf]='!editing(group)')
+          | {{group.name}} {{group.nameEn}}
+        .inline.fields.group-fields(*ngIf='editing(group)')
+          input([(ngModel)]='editingGroup.name', placeholder='Name')
+          input([(ngModel)]='editingGroup.nameEn', placeholder='En Name')
+          //input([(ngModel)]='editingGroup.tagName', placeholder='Tag Name')
+          input([(ngModel)]='editingGroup.cssClass', placeholder='css Class')
+          input([(ngModel)]='editingGroup.dataName', placeholder='Data Attr Name')
+      .description(*ngIf='!editing(group)')
         ng-template([ngIf]='group.tagName') <{{group.tagName}}>
         ng-template([ngIf]='group.cssClass') .{{group.cssClass}}
-        ng-template([ngIf]='group.dataName') [data-{{group.dataName}}
-    .ui.list.annotation-group
-      .item(*ngFor='let ann of group.annotations') {{ann.name}} {{ann.nameEn}} (data-{{group.dataName}}={{ann.dataValue}})
+        ng-template([ngIf]='group.dataName') [data-{{group.dataName}}]
+    .ui.ordered.selection.divided.list.annotation-group
+      ng-template([ngIf]='!editing(group)')
+        .item(*ngFor='let ann1 of group.annotations')
+          | {{ann1.name}} {{ann1.nameEn}} (data-{{group.dataName}}={{ann1.dataValue}})
+      ng-template([ngIf]='editing(group)')
+        .item(*ngFor='let ann of editingGroup.annotations')
+          .ui.right.floated.sub.header
+            ng-template([ngIf]='ann===editingAnnotation')
+              .ui.basic.compact.mini.button((click)='doneEditAnnotation()')
+                | 完成
+            ng-template([ngIf]='ann!==editingAnnotation')
+              .ui.basic.compact.mini.button((click)='editAnnotation(ann)')
+                | 修改
+              .ui.basic.compact.mini.button((click)='removeAnnotation(ann)')
+                | 删除
+              .ui.basic.compact.mini.button((click)='annMoveUp(ann)')
+                i.angle.arrow.up.icon
+                | 上移
+              .ui.basic.compact.mini.button((click)='annMoveDown(ann)')
+                i.angle.arrow.down.icon
+                | 下移
+          ng-template([ngIf]='ann===editingAnnotation')
+            .inline.fields.ann-fields
+              input([(ngModel)]='ann.name', placeholder='Name')
+              input([(ngModel)]='ann.nameEn', placeholder='En Name')
+              input([(ngModel)]='ann.dataValue', placeholder='Data Value')
+          ng-template([ngIf]='ann!==editingAnnotation')
+            | {{ann.name}} {{ann.nameEn}} (data-{{editingGroup.dataName}}={{ann.dataValue}})

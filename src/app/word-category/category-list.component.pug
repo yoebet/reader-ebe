@@ -17,10 +17,9 @@ table.ui.small.striped.table.form
       th 基础候选
       th
   tbody
-    tr(*ngFor='let cat of categories; trackBy: categoryTracker; first as first; last as last')
+    tr(*ngFor='let cat of categories; trackBy: tracker; first as first; last as last')
       td
-        ng-template([ngIf]='!editing(cat)')
-          a((click)='gotoDetail(cat)', [routerLink]="['/word-categories', cat._id]") {{cat.name}}
+        a(*ngIf='!editing(cat)', (click)='gotoDetail(cat)', [routerLink]="['/word-categories', cat._id]") {{cat.name}}
         .field.category-name(*ngIf='editing(cat)')
           input([(ngModel)]="editingCat.name", placeholder='Name')
         | ({{cat.code}})
@@ -30,7 +29,7 @@ table.ui.small.striped.table.form
           sui-select.selection.normal-width([(ngModel)]="editingCat.dictOperator", [options]="dictOperators",
           valueField="value", labelField="label", placeholder='操作', #operatorSelect1='')
             sui-select-option(*ngFor="let option of operatorSelect1.filteredOptions", [value]="option")
-          input([(ngModel)]="editingCat.dictValue", placeholder='dictValue')
+          input([(ngModel)]="editingCat.dictValue", type='number', placeholder='dictValue')
         ng-template([ngIf]='!editing(cat)')
           | {{ filterStr(cat) }}
       td {{cat.extend? cat.extend.name:''}}
@@ -88,7 +87,7 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click
         valueField="value", labelField="label", placeholder='操作', #operatorSelect2='')
           sui-select-option(*ngFor="let option of operatorSelect2.filteredOptions", [value]="option")
       .two.wide.field
-        input([(ngModel)]="newCategory.dictValue", placeholder='dictValue')
+        input([(ngModel)]="newCategory.dictValue", type='number', placeholder='dictValue')
     .fields
       .four.wide.field
         input([(ngModel)]="newCategory.extendTo", placeholder='Extend To')

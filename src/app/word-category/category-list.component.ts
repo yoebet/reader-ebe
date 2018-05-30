@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {WordCategory} from '../models/word-category';
 import {WordCategoryService} from "../services/word-category.service";
 import {OpResult} from "../models/op-result";
-import {SortableListComponent} from "../sortable-list.component";
+import {SortableListComponent} from "../common/sortable-list.component";
 
 @Component({
   selector: 'category-list',
@@ -81,7 +81,11 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   }
 
   add() {
-    this.wordCategoryService.create(this.newCategory)
+    let newCategory = this.newCategory;
+    /*if (newCategory.dictValue && typeof newCategory.dictValue !== 'number') {
+      newCategory.dictValue = +newCategory.dictValue;
+    }*/
+    this.wordCategoryService.create(newCategory)
       .subscribe(nc => {
         this.categories.push(nc);
         this.newCategory = null;
@@ -104,7 +108,7 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   }
 
   edit(cat) {
-    this.editingCat = Object.assign({}, cat);
+    this.editingCat = Object.assign(new WordCategory(), cat);
   }
 
   editing(cat) {
@@ -112,14 +116,18 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   }
 
   save() {
-    this.wordCategoryService.update(this.editingCat)
+    let editingCat = this.editingCat;
+    /*if (editingCat.dictValue && typeof editingCat.dictValue !== 'number') {
+      editingCat.dictValue = +editingCat.dictValue;
+    }*/
+    this.wordCategoryService.update(editingCat)
       .subscribe(opr => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
           return;
         }
-        let category = this.categories.find(u => u._id === this.editingCat._id);
-        Object.assign(category, this.editingCat);
+        let category = this.categories.find(u => u._id === editingCat._id);
+        Object.assign(category, editingCat);
         this.editingCat = null;
       });
   }
@@ -128,8 +136,7 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
 
   }
 
-
-  categoryTracker(index, category) {
+  tracker(index, category) {
     return category._id;
   }
 

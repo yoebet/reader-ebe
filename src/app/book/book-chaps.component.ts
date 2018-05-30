@@ -5,7 +5,7 @@ import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
-import {SortableListComponent} from "../sortable-list.component";
+import {SortableListComponent} from "../common/sortable-list.component";
 
 @Component({
   selector: 'book-chaps',

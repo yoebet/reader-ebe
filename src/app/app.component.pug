@@ -11,7 +11,7 @@
       a.item(*ngIf='!currentUser', (click)='gotoLogin()') Login
       .item(*ngIf='currentUser')
         | {{currentUser.name}} &nbsp;&nbsp;
-        a((click)='logout()') Logout
+        a((click)='logout()', href='#') Logout
 
   .ui.small.form.login(*ngIf='loginForm')
     h3 Login

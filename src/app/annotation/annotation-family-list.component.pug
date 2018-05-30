@@ -1,21 +1,35 @@
 .ui.header
   | Annotation Family List
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='cloneOperation') Clone
+    sui-checkbox([(ngModel)]='removeOperation') Remove
 
-table.ui.small.striped.table
+table.ui.small.striped.table.form
   thead
     tr
       th Name
       th Description
-      th Status
-      th Default
+      //th Status
+      //th Default
       th
   tbody
-    tr(*ngFor='let family of families')
+    tr(*ngFor='let family of families; trackBy: tracker')
       td
-        a((click)='gotoDetail(family)', [routerLink]="['/annotation-families', family._id]") {{family.name}}
-      td {{family.description}}
-      td {{family.status}}
-      td.center.aligned
+        a(*ngIf='!editing(family)', (click)='gotoDetail(family)', [routerLink]="['/annotation-families', family._id]") {{family.name}}
+        .field(*ngIf='editing(family)')
+          input([(ngModel)]="editingFamily.name")
+      td
+        ng-template([ngIf]='!editing(family)') {{family.description}}
+        .field(*ngIf='editing(family)')
+          textarea([(ngModel)]="editingFamily.description", rows='2')
+      //td {{family.status}}
+      //td.center.aligned
         i.ui.checkmark.icon(*ngIf='family.isDefault')
       td.right.aligned
-        button.ui.tiny.button((click)='clone(family)') 复制
+        ng-template([ngIf]='editing(family)')
+          .ui.mini.button((click)='editingFamily=null') 取消
+          .ui.mini.primary.button((click)='save()') 保存
+        ng-template([ngIf]='!editing(family)')
+          button.ui.tiny.button((click)='edit(family)') 修改
+          button.ui.tiny.button(*ngIf='cloneOperation', (click)='clone(family)') 复制
+          button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(family)') 删除

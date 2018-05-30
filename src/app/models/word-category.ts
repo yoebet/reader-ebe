@@ -21,8 +21,6 @@ export class WordCategory extends Model {
     {value: 'gte', label: '>='},
     {value: 'lt', label: '<'},
     {value: 'lte', label: '<='},
-    {value: 'ne', label: '<>'},
-    {value: 'exist', label: 'Exist'},
-    {value: 'not-exist', label: 'Not Exist'}
+    {value: 'ne', label: '<>'}
   ];
 }
