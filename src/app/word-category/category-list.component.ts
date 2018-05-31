@@ -18,7 +18,7 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   editingCat: WordCategory;
 
   dictOperators = WordCategory.DictOperators;
-  operatorsMap;
+  operatorsMap: Map<string, string>;
 
   recountOperation = false;
   removeOperation = false;
@@ -64,8 +64,7 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   filterStr(cat) {
     let opLabel = this.operatorsMap.get(cat.dictOperator);
     let opStr = cat.dictOperator ? opLabel : ':';
-    let val = cat.isFrequency ? '1,2,...' : cat.dictValue;
-    return cat.dictKey + ' ' + opStr + ' ' + val
+    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue
   }
 
   gotoDetail(category: WordCategory): void {

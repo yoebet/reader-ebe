@@ -10,11 +10,10 @@ table.ui.small.striped.table.form
     tr
       th Name/Code
       th 词典筛选
+      th 说明
       th 基于
       th 增加词汇
       th 总词汇量
-      th 词频
-      th 基础候选
       th
   tbody
     tr(*ngFor='let cat of categories; trackBy: tracker; first as first; last as last')
@@ -32,21 +31,15 @@ table.ui.small.striped.table.form
           input([(ngModel)]="editingCat.dictValue", type='number', placeholder='dictValue')
         ng-template([ngIf]='!editing(cat)')
           | {{ filterStr(cat) }}
+      td
+        ng-template([ngIf]='!editing(cat)') {{cat.description}}
+        .field.category-description(*ngIf='editing(cat)')
+          textarea([(ngModel)]="editingCat.description", rows='2', placeholder='Description')
       td {{cat.extend? cat.extend.name:''}}
       td.right.aligned
         ng-template([ngIf]='!cat.isFrequency') + {{cat.wordCount}}
       td.right.aligned
         ng-template([ngIf]='!cat.isFrequency') {{cat.extendedWordCount}}
-      td.center.aligned
-        ng-template([ngIf]='editing(cat)')
-          sui-checkbox([(ngModel)]='editingCat.isFrequency') Frequency
-        ng-template([ngIf]='!editing(cat)')
-          i.ui.checkmark.icon(*ngIf='cat.isFrequency')
-      td.center.aligned
-        ng-template([ngIf]='editing(cat)')
-          sui-checkbox([(ngModel)]='editingCat.useAsUserBase') User Base
-        ng-template([ngIf]='!editing(cat)')
-          i.ui.checkmark.icon(*ngIf='cat.useAsUserBase')
       td.right.aligned
         ng-template([ngIf]='editing(cat)')
           .ui.mini.button((click)='editingCat=null') 取消
@@ -80,6 +73,11 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click
         input([(ngModel)]="newCategory.name", placeholder='Name')
       .two.wide.field
         input([(ngModel)]="newCategory.code", placeholder='Code')
+      .eight.wide.field
+        input([(ngModel)]="newCategory.description", placeholder='Description')
+    .fields
+      .four.wide.field
+        input([(ngModel)]="newCategory.extendTo", placeholder='Extend To')
       .two.wide.field
         input([(ngModel)]="newCategory.dictKey", placeholder='dictKey')
       .two.wide.field
@@ -88,13 +86,6 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click
           sui-select-option(*ngFor="let option of operatorSelect2.filteredOptions", [value]="option")
       .two.wide.field
         input([(ngModel)]="newCategory.dictValue", type='number', placeholder='dictValue')
-    .fields
-      .four.wide.field
-        input([(ngModel)]="newCategory.extendTo", placeholder='Extend To')
-      .two.wide.field
-        sui-checkbox([(ngModel)]='newCategory.isFrequency') Frequency
-      .two.wide.field
-        sui-checkbox([(ngModel)]='newCategory.useAsUserBase') User Base
   .field.ui.right.floated.header
     button.ui.tiny.button((click)="cancelEditNew()") 取消
     button.ui.tiny.primary.button((click)="add()") 保存

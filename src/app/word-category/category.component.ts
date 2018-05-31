@@ -15,11 +15,16 @@ export class CategoryComponent implements OnInit {
 
   category: WordCategory;
   sampleWords: string[];
+  operatorsMap: Map<string, string>;
 
   constructor(private wordCategoryService: WordCategoryService,
               private router: Router,
               private route: ActivatedRoute,
               private location: Location) {
+    this.operatorsMap = new Map();
+    for (let op of WordCategory.DictOperators) {
+      this.operatorsMap.set(op.value, op.label);
+    }
   }
 
   ngOnInit() {
@@ -28,6 +33,12 @@ export class CategoryComponent implements OnInit {
     ).subscribe(category => {
       this.category = category;
     });
+  }
+
+  filterStr(cat) {
+    let opLabel = this.operatorsMap.get(cat.dictOperator);
+    let opStr = cat.dictOperator ? opLabel : ':';
+    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue
   }
 
   fetchSamples() {

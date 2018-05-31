@@ -8,17 +8,15 @@ div(*ngIf='category')
   .prop-name Code
   | {{category.code}}
   .prop-name Condition
-  | {{ '{'+category.dictKey + ': '+ category.dictValue+'}' }}
+  | {{ filterStr(cat) }}
+  .prop-name Description
+  | {{category.description}}
   .prop-name wordCount
   | {{category.wordCount}}
   .prop-name extendTo
   | {{category.extendTo}}
   .prop-name extendedWordCount
   | {{category.extendedWordCount}}
-  .prop-name isFrequency
-  | {{category.isFrequency}}
-  .prop-name useAsUserBase
-  | {{category.useAsUserBase}}
 
   .ui.hidden.clearing.divider
 
