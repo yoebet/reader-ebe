@@ -8,6 +8,7 @@ table.ui.striped.table
   thead
     tr
       th Name
+      th Code
       th Status
       th Version
       th Pricing
@@ -19,6 +20,7 @@ table.ui.striped.table
         a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
+      td {{book.code}}
       td
         | {{book.status}}
         ng-template([ngIf]="book.status=='R'") {{book.visibility}}
@@ -30,7 +32,7 @@ table.ui.striped.table
           button.ui.tiny.button((click)='backup(book)') 备份
           button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
-      td(colspan='6') No Results.
+      td(colspan='7') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
@@ -60,7 +62,9 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
     .four.wide.field
       input([(ngModel)]="newBook.zhAuthor", placeholder='中文作者')
   .fields
-    .eight.wide.field
+    .two.wide.field
+      input([(ngModel)]='newBook.code', placeholder='Code')
+    .six.wide.field
       input([(ngModel)]='newBook.tags', placeholder='Tags')
     .eight.wide.field
       input([(ngModel)]='newBook.memo', placeholder='Memo')

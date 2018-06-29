@@ -1,5 +1,5 @@
 h4.ui.gray.header(*ngIf='book')
-  .book-name {{book.name}}
+  .book-name ({{book.code}}) {{book.name}}
   .book-zhname(*ngIf='book.zhName') {{book.zhName}}
 div(*ngIf='chap')
   h5.ui.blue.header([hidden]='editing')

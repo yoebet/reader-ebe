@@ -2,6 +2,7 @@ import {Model} from './model';
 import {Chap} from './chap';
 
 export class Book extends Model {
+  code: string;
   name: string;
   zhName: string = '';
   author: string = '';

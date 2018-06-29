@@ -7,7 +7,7 @@ export class AnnotationGroup extends Model {
   dataName: string;
   tagName: string;
   cssClass: string;
-  status: string;
+  // status: string;
 
   annotations: Annotation[];
 }

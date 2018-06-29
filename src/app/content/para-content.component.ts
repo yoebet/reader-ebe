@@ -94,7 +94,7 @@ export class ParaContentComponent implements OnChanges {
     } else if (el.attributes.length === 1 && el.hasAttributes('class')) {
       let cns = el.className.split(' ')
         .filter(n => !n.startsWith(ParaContentComponent.dropClassPrefix)
-          && n !== ParaContentComponent.tetherClassPrefix
+          && !n.startsWith(ParaContentComponent.tetherClassPrefix)
           && n !== ParaContentComponent.highlightClass);
       if (cns.length === 0) {
         el.removeAttribute('class');
