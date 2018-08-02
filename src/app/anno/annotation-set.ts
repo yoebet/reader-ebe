@@ -18,20 +18,18 @@ export class AnnotationSet {
     });
     this.specialAnnotations = specialAnnotations;
 
-    for (let group of groups) {
+    for (let group of this.groups) {
       group.annotations = group.annotations.map(oa => {
         let ann = new Annotation();
         Object.assign(ann, oa);
-        return ann;
-      });
-
-      for (let ann of group.annotations) {
         ann.group = group;
         if (ann.dataName && ann.dataValue) {
           let annKey = `${ann.dataName}.${ann.dataValue}`;
           this.annotationsMap.set(annKey, ann);
         }
-      }
+        return ann;
+      });
+
     }
 
     // this.printStyles();

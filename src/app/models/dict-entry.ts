@@ -32,7 +32,7 @@ export class DictEntry extends Model {
   categories: any = {};
   phonetics?: any;
   forms?: any;
-  baseForms?: any;
+  baseForm?: string;
   phrases?: string[];
 
 

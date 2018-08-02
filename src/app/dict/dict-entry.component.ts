@@ -105,7 +105,7 @@ export class DictEntryComponent implements OnInit, OnChanges, OnDestroy {
 
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.refWords = null;
-    let refWords = union(entry.baseForms, this.relatedWords);
+    let refWords = union(entry.baseForm ? [entry.baseForm] : null, this.relatedWords);
     if (refWords.length > 0) {
       let previous = last(this.entryStack);
       if (previous) {

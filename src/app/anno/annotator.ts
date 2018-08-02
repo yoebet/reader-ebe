@@ -105,6 +105,9 @@ export class Annotator {
   }
 
   private lookupElement(element, selector) {
+    if(!selector){
+      return null;
+    }
     while (element) {
       if (element.nodeType !== Node.ELEMENT_NODE) {
         return null;
