@@ -30,6 +30,9 @@
             button.ui.mini.basic.button([ngClass]='{disabled: row.fix}', (click)='split(index,"right", $event)')
               i.resize.vertical.icon
               | 拆分
+            button.ui.mini.basic.button([ngClass]='{disabled: row.fix}', (click)='split(index,"right", $event, true)')
+              i.resize.vertical.icon
+              | 按逗号
 .actions
   button.ui.tiny.button((click)="cancel()") 取消
   button.ui.tiny.primary.button((click)="completeAndSave()", autofocus='') 完成并保存

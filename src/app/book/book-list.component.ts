@@ -13,7 +13,7 @@ import {OpResult} from '../models/op-result';
   styleUrls: ['./book-list.component.css']
 })
 export class BookListComponent implements OnInit {
-  books: Book[];
+  books: Book[] = [];
   newBook: Book = null;
   langOptions = Book.LangTypes;
   operations: boolean;

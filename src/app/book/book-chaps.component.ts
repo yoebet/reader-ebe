@@ -39,7 +39,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
     }
   }
 
-  add(name: string): void {
+  add(name: string, zhName: string): void {
     name = name.trim();
     if (!name) {
       return;
@@ -47,6 +47,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
     let chap = new Chap();
     delete chap.paras;
     chap.name = name;
+    chap.zhName = zhName.trim();
     chap.bookId = this.book._id;
     this.chapService.create(chap)
       .subscribe(newChap => {

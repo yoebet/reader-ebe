@@ -475,7 +475,7 @@ export class ChapParasComponent implements OnInit {
     let {content: content1, trans: trans1} = p1;
     let {content: content2, trans: trans2} = p2;
     let content = content1 + '\n' + content2;
-    let trans;
+    let trans = trans1;
     if (trans1 || trans2) {
       if (!trans1) {
         trans = trans2;

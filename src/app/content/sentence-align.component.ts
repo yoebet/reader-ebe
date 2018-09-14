@@ -19,8 +19,9 @@ class SentenceRow extends Row {
 export class SentenceAlignComponent {
   rows: SentenceRow[];
   para: Para;
-  endingPatternEn = /[.?!\n]+['"’\n]?/g;
-  endingPatternZh = /[.?!。？！\n]+['"＇＂’”\n]?/g;
+  endingPatternEn = /[.．?!\n]+['"’\n]?/g;
+  endingPatternZh = /[.?!。？！；\n]+['"＇＂’”\n]?/g;
+  endingPatternZh2 = /[，,\n]+['"＇＂’”\n]?/g;
   splitMark = '-=SPL=-';
 
   constructor(private modal: SuiModal<Para, Para, string>, private sanitizer: DomSanitizer) {
@@ -173,13 +174,13 @@ export class SentenceAlignComponent {
   }
 
 
-  split(index, part, $event) {
+  split(index, part, $event, finner = false) {
     let row = this.rows[index];
     if (row.fix) {
       return;
     }
     let text = row[part];
-    let ep = (part === 'left') ? this.endingPatternEn : this.endingPatternZh;
+    let ep = (part === 'left') ? this.endingPatternEn : (finner ? this.endingPatternZh2 : this.endingPatternZh);
     let sts = this.splitText(text, ep);
     if (sts.length === 1) {
       return;

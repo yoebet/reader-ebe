@@ -7,8 +7,8 @@ div(*ngIf='chap')
         | 段落
       button.ui.mini.button(*ngIf='!first', (click)='mergeUp()')
         i.chevron.up.icon
-        | 向上合并
-      button.ui.mini.button(*ngIf='!last', (click)='mergeDown()')
+        | 合并
+      //button.ui.mini.button(*ngIf='!last', (click)='mergeDown()')
         i.chevron.down.icon
         | 向下合并
       button.ui.mini.button((click)='remove()')
@@ -19,6 +19,7 @@ div(*ngIf='chap')
         | 插入
       sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
       sui-checkbox([(ngModel)]='splitMode') 空行分段
+      sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
     .operations([hidden]='annotateOnly')
       .title
         i.write.icon
@@ -27,13 +28,12 @@ div(*ngIf='chap')
         i.edit.icon
         | 编辑
       sui-checkbox([(ngModel)]='clickToEdit') 选中即编辑
-      sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
+      //sui-checkbox([(ngModel)]='editInplace', [isDisabled]='clickToEdit') 原地编辑
       sui-checkbox([(ngModel)]='showTrans') 中文
       sui-checkbox([(ngModel)]='leftRight', [isDisabled]='!showTrans') 左右对照
       button.ui.tiny.button((click)='alignSentences()')
         i.align.left.icon
         | 分句对齐
-      sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')

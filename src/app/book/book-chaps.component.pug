@@ -2,7 +2,7 @@
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     div([hidden]="chap===editingChap")
       .right.floated.header
-        label {{chap.status}}
+        // label {{chap.status}}
         ng-template([ngIf]="tuneOrder")
           button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
             i.angle.arrow.up.icon
