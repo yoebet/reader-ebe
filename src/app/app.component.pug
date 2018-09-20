@@ -1,30 +1,17 @@
 .ui.container
   .ui.stackable.secondary.pointing.menu
     a.item(routerLink='/') Home
-    a.item(routerLink='/books', routerLinkActive='active') Books
-    a.item(routerLink='/annotation-families', routerLinkActive='active') Annotations
-    a.item(routerLink='/dict', routerLinkActive='active') Dict
+    a.item(routerLink='/books', routerLinkActive='active') 图书
+    a.item(routerLink='/annotation-families', routerLinkActive='active') 标注
+    a.item(routerLink='/dict', routerLinkActive='active') 词典
     ng-template([ngIf]='currentUser && currentUser.role==="Admin"')
-      a.item(routerLink='/word-categories', routerLinkActive='active') Word Categories
-      a.item(routerLink='/users', routerLinkActive='active') Users
+      a.item(routerLink='/word-categories', routerLinkActive='active') 词频
+      a.item(routerLink='/users', routerLinkActive='active') 用户
     .right.menu
-      a.item(*ngIf='!currentUser', (click)='gotoLogin()') Login
+      a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
       .item(*ngIf='currentUser')
         | {{currentUser.name}} &nbsp;&nbsp;
         a((click)='logout()', href='#') Logout
-
-  .ui.small.form.login(*ngIf='loginForm')
-    h3 Login
-    p(*ngIf='loginMessage')
-      | {{loginMessage}}
-    .field
-      input(type="text", #name="", placeholder="Username")
-    .field
-      input(type="password", #pass="", placeholder="Password")
-    .field
-      .ui.small.button((click)='cancelLogin()') 取消
-      .ui.small.primary.button((click)='login(name.value, pass.value)') 登录
-    .ui.hidden.clearing.divider
 
   router-outlet
 

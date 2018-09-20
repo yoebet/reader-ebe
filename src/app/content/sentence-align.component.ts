@@ -19,9 +19,8 @@ class SentenceRow extends Row {
 export class SentenceAlignComponent {
   rows: SentenceRow[];
   para: Para;
-  endingPatternEn = /[.．?!\n]+['"’\n]?/g;
-  endingPatternZh = /[.?!。？！；\n]+['"＇＂’”\n]?/g;
-  endingPatternZh2 = /[，,\n]+['"＇＂’”\n]?/g;
+  endingPattern = /[.?!:;。．？！：；\n]+['"＇＂’”\n]?/g;
+  endingPattern2 = /[，,\n]+['"＇＂’”\n]?/g;
   splitMark = '-=SPL=-';
 
   constructor(private modal: SuiModal<Para, Para, string>, private sanitizer: DomSanitizer) {
@@ -31,8 +30,8 @@ export class SentenceAlignComponent {
   }
 
   setup() {
-    let contentSents = this.splitSentences(this.para.content, this.endingPatternEn);
-    let transSents = this.splitSentences(this.para.trans, this.endingPatternZh);
+    let contentSents = this.splitSentences(this.para.content || '', this.endingPattern);
+    let transSents = this.splitSentences(this.para.trans || '', this.endingPattern);
 
     let css = contentSents.filter(s => s.sid);
     let tss = transSents.filter(s => s.sid);
@@ -98,7 +97,7 @@ export class SentenceAlignComponent {
 
     let cns = Array.from(holder.childNodes);
     for (let node of cns) {
-      if (node.nodeType === Node.TEXT_NODE) {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent) {
         node.textContent =
           node.textContent.replace(endingPattern, punt => punt + this.splitMark);
       }
@@ -108,7 +107,7 @@ export class SentenceAlignComponent {
     let sts = text.split(this.splitMark);
     sts = sts.filter(f => f.trim() !== '');
 
-    if (endingPattern === this.endingPatternEn) {
+    if (endingPattern === this.endingPattern) {
       for (let i = 1; i < sts.length; i++) {
         let lastText = sts[i - 1];
         let thisText = sts[i];
@@ -180,7 +179,7 @@ export class SentenceAlignComponent {
       return;
     }
     let text = row[part];
-    let ep = (part === 'left') ? this.endingPatternEn : (finner ? this.endingPatternZh2 : this.endingPatternZh);
+    let ep = finner ? this.endingPattern2 : this.endingPattern;
     let sts = this.splitText(text, ep);
     if (sts.length === 1) {
       return;

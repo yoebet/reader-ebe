@@ -17,7 +17,7 @@ import {NoteRequest} from '../chap-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
 import {SentenceAlignModal} from '../content/sentence-align.component';
-import {AnnotationFamilyService} from "../services/annotation-family.service";
+import {AnnoFamilyService} from "../services/anno-family.service";
 
 
 interface ContentChangedNotification {
@@ -84,7 +84,7 @@ export class ChapParasComponent implements OnInit {
 
 
   constructor(private paraService: ParaService,
-              private annoService: AnnotationFamilyService,
+              private annoService: AnnoFamilyService,
               public modalService: SuiModalService) {
   }
 

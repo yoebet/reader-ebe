@@ -15,7 +15,7 @@ import {Annotation} from "../models/annotation";
 import {AnnotationSet} from "../anno/annotation-set";
 
 @Injectable()
-export class AnnotationFamilyService extends BaseService<AnnotationFamily> {
+export class AnnoFamilyService extends BaseService<AnnotationFamily> {
 
   annotationsMap: Map<string, AnnotationSet> = new Map<string, AnnotationSet>();
 

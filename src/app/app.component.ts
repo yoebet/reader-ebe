@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
 
-import {AppService} from './services/app.service';
 import {User} from './models/user';
-import {OpResult} from './models/op-result';
+import {AppService} from './services/app.service';
+import {SessionService} from "./services/session.service";
 
 @Component({
   selector: 'app-root',
@@ -11,45 +12,21 @@ import {OpResult} from './models/op-result';
 })
 export class AppComponent implements OnInit {
 
-  loginForm = false;
-  loginMessage: string;
-
   get currentUser(): User {
-    return this.appService.currentUser;
+    return this.sessionService.currentUser;
   }
 
-  constructor(private appService: AppService) {
-    // appService.onCurrentUserChanged.subscribe(change => {
-    //   console.log('User Changed: ' + change.from + ' -> ' + change.to);
-    // });
+  constructor(private appService: AppService,
+              private sessionService: SessionService,
+              private router: Router) {
   }
 
   ngOnInit() {
-    this.appService.checkLogin();
-  }
-
-  gotoLogin() {
-    this.loginMessage = null;
-    this.loginForm = true;
-  }
-
-  cancelLogin() {
-    this.loginMessage = null;
-    this.loginForm = false;
-  }
-
-  login(name, pass) {
-    this.appService.login(name, pass).subscribe((opr: OpResult) => {
-      if (opr && opr.ok === 1) {
-        this.loginMessage = null;
-        this.loginForm = false;
-      } else {
-        this.loginMessage = '用户名/密码错误';
-      }
-    });
+    this.sessionService.checkLogin();
   }
 
   logout() {
-    this.appService.logout();
+    this.sessionService.logout();
+    this.router.navigate(['/']);
   }
 }

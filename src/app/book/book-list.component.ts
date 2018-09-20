@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {Book} from '../models/book';
 import {AnnotationFamily} from "../models/annotation-family";
 import {BookService} from '../services/book.service';
-import {AnnotationFamilyService} from '../services/annotation-family.service';
+import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
 
 @Component({
@@ -23,7 +23,7 @@ export class BookListComponent implements OnInit {
 
   constructor(private bookService: BookService,
               private router: Router,
-              private annotationFamilyService: AnnotationFamilyService) {
+              private annotationFamilyService: AnnoFamilyService) {
   }
 
   ngOnInit(): void {

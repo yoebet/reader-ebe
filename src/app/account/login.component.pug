@@ -1,0 +1,11 @@
+.ui.small.form.login
+  h3 Login
+  p(*ngIf='loginMessage')
+    | {{loginMessage}}
+  .field
+    input(type="text", #name="", placeholder="Username")
+  .field
+    input(type="password", #pass="", placeholder="Password")
+  .field
+    .ui.small.button((click)='cancel()') 取消
+    .ui.small.primary.button((click)='login(name.value, pass.value)') 登录

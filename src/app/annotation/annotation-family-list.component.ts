@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AnnotationFamily} from '../models/annotation-family';
-import {AnnotationFamilyService} from "../services/annotation-family.service";
+import {AnnoFamilyService} from "../services/anno-family.service";
 import {OpResult} from "../models/op-result";
 
 @Component({
@@ -18,7 +18,7 @@ export class AnnotationFamilyListComponent implements OnInit {
   cloneOperation = false;
   removeOperation = false;
 
-  constructor(private annotationFamilyService: AnnotationFamilyService,
+  constructor(private annotationFamilyService: AnnoFamilyService,
               private router: Router) {
   }
 

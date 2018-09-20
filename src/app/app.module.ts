@@ -13,10 +13,11 @@ import {ChapService} from './services/chap.service';
 import {ParaService} from './services/para.service';
 import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
+import {SessionService} from './services/session.service';
 import {UserBookService} from './services/user-book.service';
 import {WordCategoryService} from './services/word-category.service';
-import {AnnotationFamilyService} from './services/annotation-family.service';
-import {AnnotationGroupService} from './services/annotation-group.service';
+import {AnnoFamilyService} from './services/anno-family.service';
+import {AnnoGroupService} from './services/anno-group.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
@@ -42,6 +43,7 @@ import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
 import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
 import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
+import {LoginComponent} from './account/login.component';
 
 @NgModule({
   imports: [
@@ -74,7 +76,8 @@ import {AnnotationFamilyComponent} from './annotation/annotation-family.componen
     CategoryListComponent,
     CategoryComponent,
     AnnotationFamilyListComponent,
-    AnnotationFamilyComponent
+    AnnotationFamilyComponent,
+    LoginComponent
   ],
   providers: [
     AppService,
@@ -83,10 +86,11 @@ import {AnnotationFamilyComponent} from './annotation/annotation-family.componen
     ParaService,
     DictService,
     UserService,
+    SessionService,
     UserBookService,
     WordCategoryService,
-    AnnotationFamilyService,
-    AnnotationGroupService
+    AnnoFamilyService,
+    AnnoGroupService
   ],
   entryComponents: [
     ParaSplitComponent,

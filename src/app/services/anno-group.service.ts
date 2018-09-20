@@ -7,7 +7,7 @@ import {BaseService} from './base.service';
 import {AnnotationGroup} from "../models/annotation-group";
 
 @Injectable()
-export class AnnotationGroupService extends BaseService<AnnotationGroup> {
+export class AnnoGroupService extends BaseService<AnnotationGroup> {
 
   constructor(protected http: HttpClient) {
     super(http);

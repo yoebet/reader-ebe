@@ -4,8 +4,8 @@ import {Location} from "@angular/common";
 
 import 'rxjs/add/operator/switchMap';
 import {AnnotationFamily} from '../models/annotation-family';
-import {AnnotationFamilyService} from "../services/annotation-family.service";
-import {AnnotationGroupService} from "../services/annotation-group.service";
+import {AnnoFamilyService} from "../services/anno-family.service";
+import {AnnoGroupService} from "../services/anno-group.service";
 import {AnnotationGroup} from "../models/annotation-group";
 import {Annotation} from "../models/annotation";
 import {OpResult} from "../models/op-result";
@@ -21,8 +21,8 @@ export class AnnotationFamilyComponent implements OnInit {
   editingGroup: AnnotationGroup;
   editingAnnotation: Annotation;
 
-  constructor(private annotationFamilyService: AnnotationFamilyService,
-              private annotationGroupService: AnnotationGroupService,
+  constructor(private annotationFamilyService: AnnoFamilyService,
+              private annotationGroupService: AnnoGroupService,
               private router: Router,
               private route: ActivatedRoute,
               private location: Location) {
