@@ -95,10 +95,11 @@ export class UserListComponent implements OnInit {
   add() {
     let user = this.newUser;
     user.name = user.name.trim();
-    if (!user.name) {
+    user.nickName = user.nickName.trim();
+    user.pass = user.pass.trim();
+    if (!user.name || !user.nickName || !user.pass) {
       return;
     }
-    user.pass = user.pass.trim();
     this.userService.create(user)
       .subscribe(u => {
         if (!u) {

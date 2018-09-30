@@ -13,6 +13,7 @@ table.ui.small.striped.table
   thead
     tr
       th Login Name
+      th Nick Name
       th Created On
       th Role
       th
@@ -20,6 +21,7 @@ table.ui.small.striped.table
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
         a((click)='gotoDetail(user)', [routerLink]="['/users', user._id]") {{user.name}}
+      td {{user.nickName}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
         ng-template([ngIf]='!editing(user)') {{user.role}}
@@ -33,10 +35,10 @@ table.ui.small.striped.table
           .ui.mini.button((click)='editingUser=null') 取消
           .ui.mini.primary.button((click)='save()') 保存
     tr(*ngIf='!users||users.length===0')
-      td(colspan='4') No Results.
+      td(colspan='5') No Results.
   tfoot
     tr
-      th(colspan='4')
+      th(colspan='5')
         .ui.right.floated.small.pagination.menu
           a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
             i.left.chevron.icon
@@ -49,7 +51,8 @@ button.ui.tiny.basic.button([hidden]='newUser', (click)='editNew()') 创建用�
   .field
     label New:
   .inline.field
-    input([(ngModel)]='newUser.name', placeholder='User Name')
+    input([(ngModel)]='newUser.name', placeholder='Login Name')
+    input([(ngModel)]='newUser.nickName', placeholder='Nick Name')
     input([(ngModel)]='newUser.pass', type='password', placeholder='Password')
     sui-select.selection.user-role([(ngModel)]='newUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
       sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')

@@ -11,8 +11,7 @@ export class BaseService<M extends Model> {
 
   protected httpOptions = {
     headers: new HttpHeaders({
-      // 'Content-Type': 'application/json',
-      'X-Cli': 'PC-A'
+      // 'Content-Type': 'application/json'
     }),
     withCredentials: true
   };
@@ -67,6 +66,7 @@ export class BaseService<M extends Model> {
   }
 
   protected handleError(error: any): Observable<any> {
+    // HttpErrorResponse?
     console.error(error);
     return Observable.throw(error);
   }

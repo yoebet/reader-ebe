@@ -36,6 +36,7 @@ export class SessionService {
         let from = this.currentUser ? this.currentUser.name : null;
         this.currentUser = new User();
         this.currentUser.name = name;
+        this.currentUser.nickName = (opr as any).nickName;
         this.currentUser.role = (opr as any).role;
         if (from !== name) {
           this.onCurrentUserChanged.emit({from, to: name});
@@ -71,6 +72,7 @@ export class SessionService {
       if (userinfo && userinfo.login) {
         this.currentUser = new User();
         this.currentUser.name = userinfo.name;
+        this.currentUser.nickName = userinfo.nickName;
         this.currentUser.role = userinfo.role;
       } else {
         this.currentUser = null;
