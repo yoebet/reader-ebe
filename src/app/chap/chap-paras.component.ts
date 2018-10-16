@@ -50,7 +50,7 @@ export class ChapParasComponent implements OnInit {
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
-  showTrans = false;
+  showTrans = true;
   leftRight = false;
   clickToEdit = false;
   continuousEditing = false;
@@ -58,7 +58,7 @@ export class ChapParasComponent implements OnInit {
   annotating = false;
   annotateOnly = false;
   editInplace = false;
-  highlightSentence = false;
+  highlightSentence = true;
   annotatedWordsHover = true;
 
   annotationSet: AnnotationSet;

@@ -22,6 +22,8 @@ export class SentenceAlignComponent {
   endingPattern = /[.?!:;。．？！：；\n]+['"＇＂’”\n]?/g;
   endingPattern2 = /[，,\n]+['"＇＂’”\n]?/g;
   splitMark = '-=SPL=-';
+  editingRow = null;
+  editingPart = null;
 
   constructor(private modal: SuiModal<Para, Para, string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
@@ -153,6 +155,13 @@ export class SentenceAlignComponent {
       return;
     }
 
+    if (this.editingRow !== null && this.editingPart === part) {
+      let editingIndex = this.rows.findIndex(row => row === this.editingRow);
+      if (editingIndex >= index - 1) {
+        this.endEdit(index, part);
+      }
+    }
+
     preRow[part] = preRow[part] + thisRow[part];
 
     let lastIndex = index;
@@ -178,6 +187,14 @@ export class SentenceAlignComponent {
     if (row.fix) {
       return;
     }
+
+    if (this.editingRow !== null && this.editingPart === part) {
+      let editingIndex = this.rows.findIndex(row => row === this.editingRow);
+      if (editingIndex >= index) {
+        this.endEdit(index, part);
+      }
+    }
+
     let text = row[part];
     let ep = finner ? this.endingPattern2 : this.endingPattern;
     let sts = this.splitText(text, ep);
@@ -220,6 +237,16 @@ export class SentenceAlignComponent {
       r[part] = st;
       ri++;
     }
+  }
+
+  edit(row, part, $event) {
+    this.editingRow = row;
+    this.editingPart = part;
+  }
+
+  endEdit(index, part) {
+    this.editingRow = null;
+    this.editingPart = null;
   }
 
   cancel() {

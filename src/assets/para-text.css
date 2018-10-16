@@ -15,6 +15,10 @@
   flex: 1;
 }
 
+.para-text.content-text {
+  flex-grow: 1.5;
+}
+
 .para-content.left-right {
   /*flex-direction: row;*/
 }
