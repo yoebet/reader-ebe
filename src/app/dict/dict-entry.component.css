@@ -36,14 +36,10 @@
   margin-right: 0.2rem;
 }
 
-.pos-meanings {
-  margin-top: 0.5em;
-}
-
 .ui.list.meaning-items {
   margin-top: 0;
   margin-left: 3em;
-  max-height: 300px;
+  /*max-height: 300px;*/
   overflow: auto;
 }
 
@@ -55,12 +51,16 @@
   font-weight: bold;
 }
 
-.clearing {
-  clear: both;
+.pos-meanings {
+  margin-top: 0.5em;
 }
 
 .pos-meanings .pos-header .header .ui.mini.button {
   margin-top: -0.4em;
+}
+
+.new-pos {
+  margin-top: 1em;
 }
 
 input.ui.mini.input {

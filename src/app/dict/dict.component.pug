@@ -6,19 +6,37 @@
       .item(*ngIf='entryHistory.length>0')
         a.ui.right.floated((click)='clearHistory()') 清空
   .thirteen.wide.column
-    .ui.segment
-      sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
-      (resultSelected)="selectEntry($event)", [retainSelectedResult]="false", placeholder='单词、短语...')
-      .ui.right.floated.header(*ngIf='entry')
-        button.ui.compact.mini.button((click)='loadPreviousEntry()')
-          i.left.arrow.icon
-        span {{entry.word}}
-        button.ui.compact.mini.button((click)='loadNextEntry()')
-          i.right.arrow.icon
-      span.search-options
-        sui-checkbox([(ngModel)]='phrase', [isDisabled]='phraseOnly') 短语
-        sui-checkbox([(ngModel)]='phraseOnly') 仅短语
-        sui-checkbox([(ngModel)]='junior') 基础词汇
-        sui-checkbox([(ngModel)]='cet', [isDisabled]='junior') CET词汇
+    .ui.segment.small.form.filter-group
+      .field
+        .ui.right.floated.header(*ngIf='entry')
+          button.ui.compact.mini.button((click)='loadPreviousEntry()')
+            i.left.arrow.icon
+          span {{entry.word}}
+          button.ui.compact.mini.button((click)='loadNextEntry()')
+            i.right.arrow.icon
+        .grouped.fields.search
+          sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
+          (resultSelected)="selectSearchResult($event)",
+          (keyup)='onSearchInputKeyup($event)',
+          [retainSelectedResult]="false",
+          placeholder='单词、短语...',
+          #searchInput='')
+        .grouped.fields
+          sui-checkbox([(ngModel)]='phrase', [isDisabled]='phraseOnly', (click)='resetSearch()') 短语
+          sui-checkbox([(ngModel)]='phraseOnly', (click)='resetSearch()') 仅短语
+        .grouped.fields
+          label.title 范围
+          sui-radio-button(name="wordScope", value="All", [(ngModel)]="wordScope", [isDisabled]='phraseOnly', (click)='resetSearch()') 不限
+          sui-radio-button(name="wordScope", value="basic", [(ngModel)]="wordScope", [isDisabled]='phraseOnly', (click)='resetSearch()') 基础
+          sui-radio-button(name="wordScope", value="cet", [(ngModel)]="wordScope", [isDisabled]='phraseOnly', (click)='resetSearch()') CET
+          sui-radio-button(name="wordScope", value="gre", [(ngModel)]="wordScope", [isDisabled]='phraseOnly', (click)='resetSearch()') GRE
+        .grouped.fields
+          label.title 释义维护
+          sui-radio-button(name="simpleEdited", value="All", [(ngModel)]="simpleEdited", (click)='resetSearch()') 不限
+          sui-radio-button(name="simpleEdited", value="y", [(ngModel)]="simpleEdited", (click)='resetSearch()') 已维护
+          sui-radio-button(name="simpleEdited", value="n", [(ngModel)]="simpleEdited", (click)='resetSearch()') 未维护
+
       .clearing
-    dict-entry.ui.segment(*ngIf='entry', [entry]='entry')
+    ng-template([ngIf]='entry')
+      dict-simple.ui.segment(*ngIf='editSimple', [entry]='entry')
+      dict-entry.ui.segment(*ngIf='!editSimple', [entry]='entry')

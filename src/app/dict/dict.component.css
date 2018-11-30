@@ -6,7 +6,36 @@ span.search-options {
   margin-left: 1em;
 }
 
-dict-entry {
+dict-entry, dict-simple {
   display: block;
   margin-top: 1em;
+}
+
+.form.filter-group .field {
+  margin-bottom: 0.5em;
+}
+
+.form.filter-group .field:last-child {
+  margin-bottom: 0;
+}
+
+.form.filter-group .field > * {
+  display: inline-block;
+}
+
+.form.filter-group .field > label.title {
+  margin-right: 0.8em;
+  border-bottom-style: double;
+  border-bottom-color: silver;
+}
+
+.form.filter-group .field .label.field-name {
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-right: 0.4em;
+  color: dimgrey;
+}
+
+.grouped.fields.search {
+  padding-right: 1em;
 }

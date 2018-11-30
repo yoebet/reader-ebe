@@ -34,6 +34,7 @@ export class DictEntry extends Model {
   forms?: any;
   baseForm?: string;
   phrases?: string[];
+  simpleEdited: string;
 
 
   static isId(idOrWord): boolean {
@@ -66,9 +67,9 @@ export class DictEntry extends Model {
           }
         }
       }
-      if (categories.haici) {
+      /*if (categories.haici) {
         tags.push(`海词 ${categories.haici}星`);
-      }
+      }*/
       let wordFreqs = ['coca', 'bnc', 'anc'];
       for (let freqName of wordFreqs) {
         let rank = categories[freqName];
@@ -83,6 +84,7 @@ export class DictEntry extends Model {
   }
 
   static POS = [
+    {abbr: '', name: '（无）'},
     {abbr: 'n.', name: 'n. 名词'},
     {abbr: 'v.', name: 'v. 动词'},
     {abbr: 'vt.', name: 'vt. 及物'},
@@ -92,8 +94,7 @@ export class DictEntry extends Model {
     {abbr: 'prep.', name: 'prep. 介词'},
     {abbr: 'pron.', name: 'pron. 代词'},
     {abbr: 'conj.', name: 'conj. 连词'},
-    {abbr: 'int.', name: 'int. 感叹词'},
-    {abbr: 'other', name: 'Other'},
+    {abbr: 'int.', name: 'int. 感叹词'}
   ];
 
 }
@@ -121,6 +122,11 @@ export class MeaningItem {
   exp: string;
 }
 
+export const DictFields = {
+  WORD_ONLY: 'word',
+  SIMPLE: 'simple',
+  COMPLETE: 'complete'
+};
 
 export const PosTags = {
   common: [

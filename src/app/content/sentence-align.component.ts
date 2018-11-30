@@ -19,8 +19,8 @@ class SentenceRow extends Row {
 export class SentenceAlignComponent {
   rows: SentenceRow[];
   para: Para;
-  endingPattern = /[.?!:;。．？！：；\n]+['"＇＂’”\n]?/g;
-  endingPattern2 = /[，,\n]+['"＇＂’”\n]?/g;
+  endingPattern = /[.?!:;。．？！：；]+['"＇＂’”\n ]*/g;
+  endingPattern2 = /[，,]+['"＇＂’”\n ]*/g;
   splitMark = '-=SPL=-';
   editingRow = null;
   editingPart = null;
@@ -272,7 +272,7 @@ export class SentenceAlignComponent {
     let nextSid = maxSid + 1;
     if (nextSid === 1) {
       let seq = Model.sequenceNo(this.para._id, 1);
-      nextSid = seq * 10 + 1;
+      nextSid = (seq << 5) + 1;
     }
     for (let row of this.rows) {
       let {left, right, sid} = row;

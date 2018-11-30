@@ -1,9 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 
-import {DictEntry} from '../models/dict-entry';
+import {DictEntry, DictFields} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
+import {SuiSearch} from "ng2-semantic-ui/dist/modules/search/components/search";
 
 import 'rxjs/add/operator/toPromise';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'dict-main',
@@ -11,40 +13,83 @@ import 'rxjs/add/operator/toPromise';
   styleUrls: ['./dict.component.css']
 })
 export class DictComponent {
+  @ViewChild('searchInput', {read: SuiSearch}) searchInput: SuiSearch<any>;
   entry: DictEntry;
+  editSimple = true;
+
   phrase = false;
   phraseOnly = false;
-  cet = false;
-  junior = false;
+  simpleEdited = 'All';
+  wordScope = 'All';
 
   get searchOptions(): any {
-    return {
-      phrase: this.phrase,
-      phraseOnly: this.phraseOnly,
-      junior: this.junior,
-      cet: !this.junior && this.cet
+    let options: any = {
+      phrase: this.phrase && !this.phraseOnly,
+      phraseOnly: this.phraseOnly
     };
+    if (!this.phraseOnly) {
+      for (let category of ['basic', 'cet', 'gre']) {
+        if (this.wordScope === category) {
+          options[category] = true;
+          break;
+        }
+      }
+    }
+    let se = this.simpleEdited;
+    if (se === 'y' || se === 'n') {
+      options.simpleEdited = se;
+    }
+    return options;
   }
 
   dictSearch = (key: string) => {
-    key = key.trim();
-    let o = this.dictService.search(key, this.searchOptions);
+    let o = this.dictService.search(key.trim(), this.searchOptions);
     return o.toPromise();
   };
 
-  constructor(private dictService: DictService) {
+  constructor(private dictService: DictService,
+              private route: ActivatedRoute) {
+    route.data.subscribe(data => {
+      let es = data['editSimple'];
+      if (typeof es === 'boolean') {
+        this.editSimple = es;
+      }
+    });
   }
 
   get entryHistory(): DictEntry[] {
     return this.dictService.entryHistory;
   }
 
-  selectEntry(entrySimple) {
-    this.dictService.getEntry(entrySimple.word)
+  selectSearchResult(entrySimple) {
+    let options: any = {};
+    if (this.editSimple) {
+      options.fields = DictFields.SIMPLE;
+    }
+    this.dictService.getEntry(entrySimple.word, options)
       .subscribe(e => {
           this.entry = e;
         }
       );
+  }
+
+  resetSearch() {
+    this.searchInput.optionsLookup = this.dictSearch;
+  }
+
+  onSearchInputKeyup($event) {
+    if ($event.which !== 13) {
+      return;
+    }
+    let searchInput = this.searchInput;
+    let results = searchInput.results;
+    let query = searchInput.query;
+    for (let entry of results) {
+      if (entry.word === query) {
+        searchInput.select(entry);
+        break;
+      }
+    }
   }
 
   selectHistoryEntry(entry) {
@@ -63,7 +108,7 @@ export class DictComponent {
       so.previous = true;
     }
     so.limit = 1;
-    so.allFields = true;
+    so.fields = this.editSimple ? DictFields.SIMPLE : DictFields.COMPLETE;
     let key = this.entry.word;
     this.dictService.search(key, so)
       .subscribe(es => {

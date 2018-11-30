@@ -35,6 +35,7 @@ import {ParaContentComponent} from './content/para-content.component';
 import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
+import {DictSimpleComponent} from './dict/dict-simple.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
@@ -68,6 +69,7 @@ import {LoginComponent} from './account/login.component';
     DictComponent,
     DictEntryComponent,
     DictEntrySmiComponent,
+    DictSimpleComponent,
     UserListComponent,
     UserComponent,
     UserBookComponent,

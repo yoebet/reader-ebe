@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/share';
 
-import {DictEntry} from '../models/dict-entry';
+import {DictEntry, DictFields} from '../models/dict-entry';
 import {BaseService} from './base.service';
 import {OpResult} from '../models/op-result';
 
@@ -30,7 +30,7 @@ export class DictService extends BaseService<DictEntry> {
   }
 
   search(key: string, options?): Observable<DictEntry[]> {
-    let {limit, previous, next, allFields} = options;
+    let {limit, previous, next, fields, simpleEdited} = options;
     if (next === true) {
       key = key + '_';
     } else if (previous === true) {
@@ -41,15 +41,21 @@ export class DictService extends BaseService<DictEntry> {
     }
     let url = `${this.baseUrl}/search/${key}?limit=${limit}`;
 
-    let switches = ['phrase', 'phraseOnly', 'cet', 'junior', 'allFields']
+    let switches = ['phrase', 'phraseOnly', 'basic', 'cet', 'gre']
       .filter(name => options[name]);
     if (switches.length > 0) {
       url += '&';
       url += switches.join('&');
     }
+    if (fields) {
+      url += '&fields=' + fields;
+    }
+    if (simpleEdited) {
+      url += '&simpleEdited=' + simpleEdited;
+    }
 
     let obs = this.list(url);
-    if (allFields !== true) {
+    if (fields !== DictFields.COMPLETE) {
       return obs;
     }
 
@@ -124,9 +130,20 @@ export class DictService extends BaseService<DictEntry> {
     if (options.noref) {
       url += addedParam ? '&' : '?';
       url += 'noref';
+      addedParam = true;
+    }
+    if (options.fields) {
+      url += addedParam ? '&' : '?';
+      url += 'fields=' + options.fields;
+      addedParam = true;
     }
 
-    return this.cacheOne(this.getOneByUrl(url), !options.noref);
+    let obs = this.getOneByUrl(url);
+    if (options.fields && options.fields !== DictFields.COMPLETE) {
+      return obs;
+    }
+
+    return this.cacheOne(obs, !options.noref);
   }
 
 
