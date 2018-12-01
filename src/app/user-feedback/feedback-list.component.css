@@ -1,0 +1,8 @@
+.feedbacks .subject {
+  font-weight: bold;
+}
+
+.feedbacks .footer {
+  font-size: 0.8em;
+  color: gray;
+}

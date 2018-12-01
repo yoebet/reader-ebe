@@ -15,6 +15,7 @@ import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
 import {SessionService} from './services/session.service';
 import {UserBookService} from './services/user-book.service';
+import {FeedbackService} from './services/feedback.service';
 import {WordCategoryService} from './services/word-category.service';
 import {AnnoFamilyService} from './services/anno-family.service';
 import {AnnoGroupService} from './services/anno-group.service';
@@ -38,6 +39,7 @@ import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictSimpleComponent} from './dict/dict-simple.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {UserListComponent} from './user/user-list.component';
+import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
 import {CategoryListComponent} from './word-category/category-list.component';
@@ -71,6 +73,7 @@ import {LoginComponent} from './account/login.component';
     DictEntrySmiComponent,
     DictSimpleComponent,
     UserListComponent,
+    FeedbackListComponent,
     UserComponent,
     UserBookComponent,
     CreatedDatePipe,
@@ -90,6 +93,7 @@ import {LoginComponent} from './account/login.component';
     UserService,
     SessionService,
     UserBookService,
+    FeedbackService,
     WordCategoryService,
     AnnoFamilyService,
     AnnoGroupService

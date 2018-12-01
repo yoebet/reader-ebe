@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
 import {User} from '../models/user';

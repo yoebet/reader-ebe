@@ -1,0 +1,23 @@
+.ui.header
+  | Feedback List
+
+.ui.divided.list.feedbacks(*ngIf='feedbacks')
+  .ui.item(*ngFor='let feedback of feedbacks')
+
+    .subject(*ngIf='feedback.subject') {{feedback.subject}}
+    pre.content {{feedback.content}}
+    .footer
+      | {{feedback.userNickName}}（{{feedback.userName}}）
+      | {{feedback | createdDateString:'minute'}}
+      //| {{feedback.client}}
+      .ui.right.floated.sub.header
+        | reply
+
+.ui.right.floated.small.pagination.menu
+  a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+    i.left.chevron.icon
+  a.item.disabled {{page}}
+  a.icon.item([ngClass]='{disabled:!feedbacks||feedbacks.length<pageSize}', (click)='nextPage()')
+    i.right.chevron.icon
+
+.ui.hidden.clearing.divider

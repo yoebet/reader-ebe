@@ -1,12 +1,16 @@
 .ui.container
   .ui.stackable.secondary.pointing.menu
     a.item(routerLink='/') Home
-    ng-template([ngIf]='currentUser && currentUser.role==="A"')
-      a.item(routerLink='/books', routerLinkActive='active') 图书
-      a.item(routerLink='/dict-simple', routerLinkActive='active') 词典
-      a.item(routerLink='/annotation-families', routerLinkActive='active') 标注
-      a.item(routerLink='/word-categories', routerLinkActive='active') 词频
-      a.item(routerLink='/users', routerLinkActive='active') 用户
+    ng-template([ngIf]='currentUser')
+      ng-template([ngIf]='currentUser.role==="A"')
+        a.item(routerLink='/books', routerLinkActive='active') 图书
+      ng-template([ngIf]='currentUser.role==="R"')
+        a.item(routerLink='/dict-simple', routerLinkActive='active') 词典
+        a.item(routerLink='/dict-complete', routerLinkActive='active') 词典Complete
+        a.item(routerLink='/annotations', routerLinkActive='active') 标注
+        a.item(routerLink='/word-categories', routerLinkActive='active') 词频
+        a.item(routerLink='/users', routerLinkActive='active') 用户
+        a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
     .right.menu
       a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
       .item(*ngIf='currentUser')

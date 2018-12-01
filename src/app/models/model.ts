@@ -2,7 +2,8 @@ import * as moment from 'moment';
 
 export class Model {
   _id: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
   version: number;
 
 
@@ -22,12 +23,22 @@ export class Model {
     return new Date(seconds * 1000);
   }
 
-  static createdTimeString(model: Model, precise: string = 'date'): string {
+  static createdTime(model: Model): Date {
     if (!model) {
+      return null;
+    }
+    if (model.createdAt) {
+      return new Date(model.createdAt);
+    }
+    return Model.timestampOfObjectId(model._id);
+  }
+
+  static createdTimeString(model: Model, precise: string = 'date'): string {
+    let ct = Model.createdTime(model);
+    if (!ct) {
       return '';
     }
-    let createdAt = Model.timestampOfObjectId(model._id);
-    return Model.timeString(createdAt, precise);
+    return Model.timeString(ct, precise);
   }
 
   static updatedTimeString(model: Model, precise: string = 'date'): string {

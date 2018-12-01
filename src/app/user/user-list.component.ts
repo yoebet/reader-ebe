@@ -100,6 +100,9 @@ export class UserListComponent implements OnInit {
     if (!user.name || !user.nickName || !user.pass) {
       return;
     }
+
+    // TODO: validate
+    
     this.userService.create(user)
       .subscribe(u => {
         if (!u) {

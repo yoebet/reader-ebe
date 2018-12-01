@@ -6,6 +6,7 @@ import {BookComponent} from './book/book.component';
 import {ChapComponent} from './chap/chap.component';
 import {DictComponent} from './dict/dict.component';
 import {UserListComponent} from './user/user-list.component';
+import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {UserComponent} from './user/user.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
@@ -17,14 +18,15 @@ const routes: Routes = [
   {path: 'books', component: BookListComponent},
   {path: 'books/:id', component: BookComponent},
   {path: 'chaps/:id', component: ChapComponent},
-  {path: 'dict', component: DictComponent, data: {editSimple: false}},
   {path: 'dict-simple', component: DictComponent, data: {editSimple: true}},
+  {path: 'dict-complete', component: DictComponent, data: {editSimple: false}},
   {path: 'users', component: UserListComponent},
   {path: 'users/:id', component: UserComponent},
+  {path: 'feedbacks', component: FeedbackListComponent},
   {path: 'word-categories', component: CategoryListComponent},
   {path: 'word-categories/:id', component: CategoryComponent},
-  {path: 'annotation-families', component: AnnotationFamilyListComponent},
-  {path: 'annotation-families/:id', component: AnnotationFamilyComponent},
+  {path: 'annotations', component: AnnotationFamilyListComponent},
+  {path: 'annotations/:id', component: AnnotationFamilyComponent},
   {path: 'login', component: LoginComponent}
 ];
 
