@@ -3,33 +3,30 @@ import {Router} from '@angular/router';
 
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
+import {PageableListComponent} from '../common/pageable-list.component';
 
 @Component({
   selector: 'user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent extends PageableListComponent implements OnInit {
   users: User[];
   newUser: User;
   editingUser: User;
   manager: false;
   searchName: string;
-  page = 1;
-  pageSize = 10;
+
   roleOptions = User.Roles;
 
   constructor(private userService: UserService,
               private router: Router) {
+    super();
   }
 
-  getUsers() {
-    let options: any = {limit: this.pageSize};
+  doList(options: any) {
     if (this.manager) {
       options.manager = true;
-    }
-    if (this.page > 1) {
-      options.from = (this.page - 1) * this.pageSize + 1;
     }
     if (this.searchName) {
       options.name = this.searchName;
@@ -40,32 +37,19 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getUsers();
-  }
-
-  nextPage() {
-    this.page++;
-    this.getUsers();
-  }
-
-  previousPage() {
-    if (this.page == 1) {
-      return;
-    }
-    this.page--;
-    this.getUsers();
+    this.list();
   }
 
   search() {
     this.page = 1;
-    this.getUsers();
+    this.list();
   }
 
   searchReset() {
     this.page = 1;
     this.searchName = null;
     this.manager = false;
-    this.getUsers();
+    this.list();
   }
 
   edit(user) {
@@ -102,7 +86,7 @@ export class UserListComponent implements OnInit {
     }
 
     // TODO: validate
-    
+
     this.userService.create(user)
       .subscribe(u => {
         if (!u) {

@@ -1,0 +1,20 @@
+.ui.segment.para-quote
+  .ui.right.floated.header(*ngIf='para&&showContent')
+    sui-checkbox([(ngModel)]='showTitle') 标题
+    sui-checkbox([(ngModel)]='textTrans') 中文
+  a((click)='toggleContent()')
+    i.left.quote.icon
+  .clearing
+  a.load-text(*ngIf='!para', (click)='toggleContent()') ......
+  .texts([suiCollapse]='!showContent', *ngIf='para')
+    .para-quote-text
+      .content-text([innerHTML]='sanitizedContent')
+      div([suiCollapse]='!textTrans')
+        .ui.small.clearing.hidden.divider
+        .trans-text([innerHTML]='sanitizedTrans')
+    .ui.right.floated.text-title([suiCollapse]='!showTitle')
+      .chap-titles(*ngIf='para.chap')
+        .chap-title.pre-wrap {{para.chap.name}}
+        .chap-title-zh.pre-wrap([suiCollapse]='!textTrans') {{para.chap.zhName}}
+      .ui.clearing.right.book-title(*ngIf='para.book') ({{para.book.code}}) {{para.book.name}}
+    .clearing

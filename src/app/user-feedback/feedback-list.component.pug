@@ -1,5 +1,5 @@
 .ui.header
-  | Feedback List
+  | 用户反馈
 
 .ui.divided.list.feedbacks(*ngIf='feedbacks')
   .ui.item(*ngFor='let feedback of feedbacks')
@@ -11,7 +11,7 @@
       | {{feedback | createdDateString:'minute'}}
       //| {{feedback.client}}
       .ui.right.floated.sub.header
-        | reply
+        a((click)='reply(feedback)') reply
 
 .ui.right.floated.small.pagination.menu
   a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')

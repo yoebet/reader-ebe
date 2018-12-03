@@ -1,48 +1,35 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 
-import {Feedback} from '../models/feedback';
+import {UserFeedback} from '../models/user-feedback';
 import {FeedbackService} from '../services/feedback.service';
+import {UserMessageService} from '../services/user-message.service';
+import {PageableListComponent} from '../common/pageable-list.component';
 
 @Component({
   selector: 'feedback-list',
   templateUrl: './feedback-list.component.html',
   styleUrls: ['./feedback-list.component.css']
 })
-export class FeedbackListComponent implements OnInit {
-  feedbacks: Feedback[];
-  page = 1;
-  pageSize = 10;
+export class FeedbackListComponent extends PageableListComponent implements OnInit {
+  feedbacks: UserFeedback[];
 
   constructor(private feedbackService: FeedbackService,
-              private router: Router) {
+              private userMessageService: UserMessageService) {
+    super();
   }
 
-  getFeedbacks() {
-    let options: any = {limit: this.pageSize};
-    if (this.page > 1) {
-      options.from = (this.page - 1) * this.pageSize + 1;
-    }
+  doList(options: any) {
     this.feedbackService
       .list(options)
       .subscribe(feedbacks => this.feedbacks = feedbacks);
   }
 
   ngOnInit() {
-    this.getFeedbacks();
+    this.list();
   }
 
-  nextPage() {
-    this.page++;
-    this.getFeedbacks();
-  }
-
-  previousPage() {
-    if (this.page == 1) {
-      return;
-    }
-    this.page--;
-    this.getFeedbacks();
+  reply(feedback:UserFeedback){
+    // this.userMessageService.
   }
 
 }

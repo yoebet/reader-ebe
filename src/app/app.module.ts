@@ -15,7 +15,9 @@ import {DictService} from './services/dict.service';
 import {UserService} from './services/user.service';
 import {SessionService} from './services/session.service';
 import {UserBookService} from './services/user-book.service';
+import {UserMessageService} from './services/user-message.service';
 import {FeedbackService} from './services/feedback.service';
+import {ParaIssueService} from './services/para-issue.service';
 import {WordCategoryService} from './services/word-category.service';
 import {AnnoFamilyService} from './services/anno-family.service';
 import {AnnoGroupService} from './services/anno-group.service';
@@ -33,6 +35,7 @@ import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
 import {SentenceAlignComponent} from './content/sentence-align.component';
 import {ParaContentComponent} from './content/para-content.component';
+import {QuotedTextComponent} from './para-text/quoted-text.component';
 import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
@@ -40,6 +43,7 @@ import {DictSimpleComponent} from './dict/dict-simple.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {UserListComponent} from './user/user-list.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
+import {IssueListComponent} from './para-issue/issue-list.component';
 import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
 import {CategoryListComponent} from './word-category/category-list.component';
@@ -67,6 +71,7 @@ import {LoginComponent} from './account/login.component';
     ParaSplitComponent,
     SentenceAlignComponent,
     ParaContentComponent,
+    QuotedTextComponent,
     WordAnnosComponent,
     DictComponent,
     DictEntryComponent,
@@ -74,6 +79,7 @@ import {LoginComponent} from './account/login.component';
     DictSimpleComponent,
     UserListComponent,
     FeedbackListComponent,
+    IssueListComponent,
     UserComponent,
     UserBookComponent,
     CreatedDatePipe,
@@ -93,7 +99,9 @@ import {LoginComponent} from './account/login.component';
     UserService,
     SessionService,
     UserBookService,
+    UserMessageService,
     FeedbackService,
+    ParaIssueService,
     WordCategoryService,
     AnnoFamilyService,
     AnnoGroupService

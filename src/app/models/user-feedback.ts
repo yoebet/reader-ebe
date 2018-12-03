@@ -1,6 +1,6 @@
 import {Model} from './model';
 
-export class Feedback extends Model {
+export class UserFeedback extends Model {
   subject: string;
   content: string;
   userId: string;
@@ -13,5 +13,6 @@ export class Feedback extends Model {
     osVersion: 26
   }*/
   client: any;
+  replied: boolean;
 
 }

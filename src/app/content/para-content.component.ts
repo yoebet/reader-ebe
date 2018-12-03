@@ -10,6 +10,7 @@ import {Annotator} from '../anno/annotator';
 import {AnnotateResult} from '../anno/annotate-result'
 import {HighlightGroups} from '../anno/annotation-set';
 
+import {UIConstants} from '../config';
 import {DictEntry} from '../models/dict-entry';
 import {Annotation} from '../models/annotation';
 import {AnnotationSet} from '../anno/annotation-set';
@@ -43,6 +44,7 @@ export class ParaContentComponent implements OnChanges {
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
   @Output() noteRequest = new EventEmitter<NoteRequest>();
+
   _annotator: Annotator;
   beenChanged = false;
   contentChanged = false;
@@ -56,11 +58,8 @@ export class ParaContentComponent implements OnChanges {
   wordsPopupMap = new Map<Element, Drop>();
   wordAnnosComponentRef: ComponentRef<WordAnnosComponent>;
 
-  static sentenceTagName = 's-st';
-  static highlightClass = 'highlight';
-  static dropClassPrefix = 'drop-';
-  static tetherClassPrefix = 'dp-';
   static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
+
 
   constructor(private resolver: ComponentFactoryResolver,
               private dictService: DictService) {
@@ -93,9 +92,9 @@ export class ParaContentComponent implements OnChanges {
       result.changed = true;
     } else if (el.attributes.length === 1 && el.hasAttributes('class')) {
       let cns = el.className.split(' ')
-        .filter(n => !n.startsWith(ParaContentComponent.dropClassPrefix)
-          && !n.startsWith(ParaContentComponent.tetherClassPrefix)
-          && n !== ParaContentComponent.highlightClass);
+        .filter(n => !n.startsWith(UIConstants.dropClassPrefix)
+          && !n.startsWith(UIConstants.tetherClassPrefix)
+          && n !== UIConstants.highlightClass);
       if (cns.length === 0) {
         el.removeAttribute('class');
         result.changed = true;
@@ -340,8 +339,8 @@ export class ParaContentComponent implements OnChanges {
     paraTextEl = paraTextEl.cloneNode(true);
 
     if (side === 'content') {
-      let dcp = ParaContentComponent.dropClassPrefix;
-      let tcp = ParaContentComponent.tetherClassPrefix;
+      let dcp = UIConstants.dropClassPrefix;
+      let tcp = UIConstants.tetherClassPrefix;
       let dropEls = paraTextEl.querySelectorAll(`.${dcp}target, .${tcp}target`);
       for (let el of dropEls) {
         el.className = el.className.split(' ')
@@ -349,9 +348,9 @@ export class ParaContentComponent implements OnChanges {
         this.removeTagIfDummy(el);
       }
     }
-    let hlEls = paraTextEl.querySelectorAll('.' + ParaContentComponent.highlightClass);
+    let hlEls = paraTextEl.querySelectorAll('.' + UIConstants.highlightClass);
     for (let hlEl of hlEls) {
-      hlEl.classList.remove(ParaContentComponent.highlightClass);
+      hlEl.classList.remove(UIConstants.highlightClass);
       this.removeTagIfDummy(hlEl);
     }
     let toStripEls = paraTextEl.querySelectorAll('br');
@@ -419,7 +418,7 @@ export class ParaContentComponent implements OnChanges {
     }
     while (hls.length > 0) {
       let hl = hls.pop();
-      hl.classList.remove(ParaContentComponent.highlightClass);
+      hl.classList.remove(UIConstants.highlightClass);
     }
     this.highlightedSentences = null;
   }
@@ -431,7 +430,7 @@ export class ParaContentComponent implements OnChanges {
     }
     while (hls.length > 0) {
       let hl = hls.pop();
-      hl.classList.remove(ParaContentComponent.highlightClass);
+      hl.classList.remove(UIConstants.highlightClass);
     }
     this.highlightedWords = null;
   }
@@ -447,7 +446,7 @@ export class ParaContentComponent implements OnChanges {
     let contentMap = new Map<string, Element>();
     let transMap = new Map<string, Element>();
     for (let [textEl, selMap] of [[contentEl, contentMap], [transEl, transMap]]) {
-      let sentenceEls = textEl.querySelectorAll(ParaContentComponent.sentenceTagName);
+      let sentenceEls = textEl.querySelectorAll(UIConstants.sentenceTagName);
       for (let stEl of sentenceEls) {
         if (!stEl.dataset) {
           continue;
@@ -478,7 +477,7 @@ export class ParaContentComponent implements OnChanges {
       for (let selMap of [contentMap, transMap]) {
         let tsEl = selMap.get(sid);
         if (tsEl) {
-          tsEl.classList.add(ParaContentComponent.highlightClass);
+          tsEl.classList.add(UIConstants.highlightClass);
           if (!component.highlightedSentences) {
             component.highlightedSentences = [];
           }
@@ -488,7 +487,7 @@ export class ParaContentComponent implements OnChanges {
     };
 
     for (let textEl of [contentEl, transEl]) {
-      let sentenceEls = textEl.querySelectorAll(ParaContentComponent.sentenceTagName);
+      let sentenceEls = textEl.querySelectorAll(UIConstants.sentenceTagName);
       for (let sentenceEl of sentenceEls) {
         sentenceEl.addEventListener('mouseover', sentenceMouseover);
       }
@@ -499,7 +498,7 @@ export class ParaContentComponent implements OnChanges {
 
   private findSentence(node): any {
     let contentTextEl = this.contentText.element.nativeElement;
-    let sentenceSelector = ParaContentComponent.sentenceTagName;
+    let sentenceSelector = UIConstants.sentenceTagName;
     do {
       if (node instanceof Element) {
         let el = node as Element;
@@ -538,7 +537,7 @@ export class ParaContentComponent implements OnChanges {
       }
       let annEls = stEl.querySelectorAll(groupSelector);
       for (let annEl of annEls) {
-        annEl.classList.add(ParaContentComponent.highlightClass);
+        annEl.classList.add(UIConstants.highlightClass);
         if (!component.highlightedWords) {
           component.highlightedWords = [];
         }
@@ -589,7 +588,7 @@ export class ParaContentComponent implements OnChanges {
     let drop = new Drop({
       target: wordEl,
       content: content,
-      classes: `${ParaContentComponent.dropClassPrefix}anno`,
+      classes: `${UIConstants.dropClassPrefix}anno`,
       position: 'bottom center',
       constrainToScrollParent: false,
       remove: true,

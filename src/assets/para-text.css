@@ -75,7 +75,7 @@
   color: indianred;
 }
 
-.para-text s-st.highlight {
+.para-text s-st.highlight, .para-quote s-st.highlight {
   /*background: lightblue;*/
   background: rgba(173, 216, 230, 0.4)
 }

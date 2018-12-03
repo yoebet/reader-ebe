@@ -11,6 +11,7 @@
         a.item(routerLink='/word-categories', routerLinkActive='active') 词频
         a.item(routerLink='/users', routerLinkActive='active') 用户
         a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
+        a.item(routerLink='/issues', routerLinkActive='active') 纠错
     .right.menu
       a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
       .item(*ngIf='currentUser')

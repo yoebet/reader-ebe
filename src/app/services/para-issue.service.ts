@@ -4,26 +4,26 @@ import {environment} from '../../environments/environment';
 
 import {Observable} from 'rxjs/Observable';
 
-import {UserFeedback} from '../models/user-feedback';
+import {ParaIssue} from '../models/para-issue';
 import {BaseService} from './base.service';
 
 @Injectable()
-export class FeedbackService extends BaseService<UserFeedback> {
+export class ParaIssueService extends BaseService<ParaIssue> {
 
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/user_feedbacks`;
+    this.baseUrl = `${apiBase}/para_issues`;
   }
 
 
-  list(options): Observable<UserFeedback[]> {
+  list(options): Observable<ParaIssue[]> {
     let {from, limit} = options;
     let url = `${this.baseUrl}?limit=${limit || 20}`;
     if (from) {
       url += `&from=${from}`;
     }
-    return super.list(url) as Observable<UserFeedback[]>;
+    return super.list(url) as Observable<ParaIssue[]>;
   }
 
 }

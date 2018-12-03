@@ -3,6 +3,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import 'rxjs/add/operator/switchMap';
 import Tether from 'tether';
 
+import {UIConstants} from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
@@ -79,8 +80,6 @@ export class ChapParasComponent implements OnInit {
   noteRequestNote = '';
 
   lastChanged: ContentChangedNotification = null;
-
-  private tetherClassPrefix = 'dp';
 
 
   constructor(private paraService: ParaService,
@@ -537,7 +536,7 @@ export class ChapParasComponent implements OnInit {
 
   private removeTetherClass(el) {
     el.className = el.className.split(' ')
-      .filter(n => !n.startsWith(this.tetherClassPrefix + '-')).join(' ');
+      .filter(n => !n.startsWith(UIConstants.tetherClassPrefixNoHyphen + '-')).join(' ');
     if (el.className === '') {
       el.removeAttribute('class');
     }
@@ -587,7 +586,7 @@ export class ChapParasComponent implements OnInit {
             attachment: 'together'
           }
         ],
-        classPrefix: this.tetherClassPrefix
+        classPrefix: UIConstants.tetherClassPrefixNoHyphen
       });
     }
   }
@@ -634,7 +633,7 @@ export class ChapParasComponent implements OnInit {
           attachment: 'together'
         }
       ],
-      classPrefix: this.tetherClassPrefix
+      classPrefix: UIConstants.tetherClassPrefixNoHyphen
     });
   }
 

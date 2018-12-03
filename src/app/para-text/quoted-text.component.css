@@ -1,0 +1,37 @@
+.para-quote {
+  color: rgba(0, 0, 0, 0.8);
+  margin-left: 2em;
+}
+
+i.left.quote.icon, a.load-text {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+a.load-text {
+  margin-left: 1.5em;
+}
+
+.para-quote-text {
+  margin-left: 1.5em;
+  margin-bottom: 0.5rem;
+}
+
+.book-title {
+  /* font-size: 0.9em; */
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.book-code {
+  color: rgba(0, 0, 0, 0.6);
+  display: inline;
+  padding-right: 1em;
+}
+
+.chap-title, .chap-title-zh {
+  margin-bottom: 0.5rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.text-title {
+  margin-left: 2em;
+}
