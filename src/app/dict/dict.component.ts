@@ -16,6 +16,8 @@ export class DictComponent {
   @ViewChild('searchInput', {read: SuiSearch}) searchInput: SuiSearch<any>;
   entry: DictEntry;
   editSimple = true;
+  autoEnterEditing = false;
+  autoSaveOnLeave = true;
 
   phrase = false;
   phraseOnly = false;

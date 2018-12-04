@@ -6,6 +6,10 @@
       .item(*ngIf='entryHistory.length>0')
         a.ui.right.floated((click)='clearHistory()') 清空
   .thirteen.wide.column
+    .ui.right.floated.small.compact.menu
+      a.item((click)='editSimple=true', [ngClass]='{active:editSimple}') 简单释义
+      a.item((click)='editSimple=false', [ngClass]='{active:!editSimple}') 详尽释义
+    .ui.clearing.hidden.divider
     .ui.segment.small.form.filter-group
       .field
         .ui.right.floated.header(*ngIf='entry')
@@ -35,8 +39,14 @@
           sui-radio-button(name="simpleEdited", value="All", [(ngModel)]="simpleEdited", (click)='resetSearch()') 不限
           sui-radio-button(name="simpleEdited", value="y", [(ngModel)]="simpleEdited", (click)='resetSearch()') 已维护
           sui-radio-button(name="simpleEdited", value="n", [(ngModel)]="simpleEdited", (click)='resetSearch()') 未维护
+        .grouped.fields
+          label.title 词义编辑
+          sui-checkbox([(ngModel)]='autoEnterEditing') 自动进入编辑
+          sui-checkbox([(ngModel)]='autoSaveOnLeave') 自动保存
 
       .clearing
     ng-template([ngIf]='entry')
-      dict-simple.ui.segment(*ngIf='editSimple', [entry]='entry')
-      dict-entry.ui.segment(*ngIf='!editSimple', [entry]='entry')
+      dict-simple.ui.segment(*ngIf='editSimple', [entry]='entry',
+      [autoEnterEditing]='autoEnterEditing', [autoSaveOnLeave]='autoSaveOnLeave')
+      dict-entry.ui.segment(*ngIf='!editSimple', [entry]='entry',
+      [autoEnterEditing]='autoEnterEditing', [autoSaveOnLeave]='autoSaveOnLeave')
