@@ -19,7 +19,7 @@ export class ParaIssueService extends BaseService<ParaIssue> {
 
   list(options): Observable<ParaIssue[]> {
     let {from, limit} = options;
-    let url = `${this.baseUrl}?limit=${limit || 20}`;
+    let url = `${this.baseUrl}?limit=${limit}`;
     if (from) {
       url += `&from=${from}`;
     }

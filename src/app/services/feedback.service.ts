@@ -19,7 +19,7 @@ export class FeedbackService extends BaseService<UserFeedback> {
 
   list(options): Observable<UserFeedback[]> {
     let {from, limit} = options;
-    let url = `${this.baseUrl}?limit=${limit || 20}`;
+    let url = `${this.baseUrl}?limit=${limit}`;
     if (from) {
       url += `&from=${from}`;
     }

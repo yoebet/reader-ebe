@@ -1,19 +1,17 @@
 .ui.header
   | 纠错
 
-//.ui.right.floated.header
-  sui-checkbox([(ngModel)]='showTitle') 标题
-  sui-checkbox([(ngModel)]='textTrans') 中文
 .ui.divided.list.issues(*ngIf='issues')
   .ui.item(*ngFor='let issue of issues')
     quoted-text([paraQuote]='{paraId: issue.paraId, sentenceId: issue.sentenceId}',
-    [textTrans] = 'textTrans', [showTitle]='showTitle')
+    [textTrans] = 'false', [showTitle]='false')
     pre.content {{issue.content}}
     .footer
       | {{issue.userNickName}}（{{issue.userName}}）
       | {{issue | createdDateString:'minute'}}
       .ui.right.floated.sub.header
-        a((click)='reply(issue)') reply
+        | {{IssueStatusNames[issue.status]}} &nbsp;&nbsp;
+        a((click)='reply(issue)') {{issue.replied? '已回复':'未回复'}}
 
 .ui.right.floated.small.pagination.menu
   a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')

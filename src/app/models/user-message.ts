@@ -11,7 +11,7 @@ export class UserMessage extends Model {
   senderName: string;
   senderNickName: string;
 
-  readFlag: string;
+  readFlag: boolean;
   sendAsRole: string;
   replyTargetId: string;
 

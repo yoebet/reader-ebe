@@ -1,0 +1,9 @@
+
+.messages .subject {
+  font-weight: bold;
+}
+
+.messages .footer {
+  font-size: 0.8em;
+  color: gray;
+}

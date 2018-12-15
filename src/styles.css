@@ -98,3 +98,7 @@ sui-multi-select i.list.icon {
 .ui.selection.dropdown.normal-width {
   min-width: initial;
 }
+
+.para-quote .ui.checkbox label {
+  color: rgba(0, 0, 0, 0.6);
+}

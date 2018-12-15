@@ -15,3 +15,15 @@ export class ParaIssue extends Model {
   solverId: string;
   replied: boolean;
 }
+
+export const IssueStatuses = {
+  Todo: 'T',
+  Solved: 'S',
+  Ignored: 'I'
+};
+
+export const IssueStatusNames = {
+  T: '未解决',
+  S: '已解决',
+  I: '忽略'
+};

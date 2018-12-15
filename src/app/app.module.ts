@@ -51,6 +51,7 @@ import {CategoryComponent} from './word-category/category.component';
 import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
 import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
 import {LoginComponent} from './account/login.component';
+import {MyMessagesComponent} from './account/my-messages.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import {LoginComponent} from './account/login.component';
     CategoryComponent,
     AnnotationFamilyListComponent,
     AnnotationFamilyComponent,
-    LoginComponent
+    LoginComponent,
+    MyMessagesComponent
   ],
   providers: [
     AppService,

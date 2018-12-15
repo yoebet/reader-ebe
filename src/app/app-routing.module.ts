@@ -14,13 +14,14 @@ import {CategoryComponent} from './word-category/category.component';
 import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
 import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
 import {LoginComponent} from './account/login.component';
+import {MyMessagesComponent} from './account/my-messages.component';
 
 const routes: Routes = [
   {path: 'books', component: BookListComponent},
   {path: 'books/:id', component: BookComponent},
   {path: 'chaps/:id', component: ChapComponent},
-  {path: 'dict-simple', component: DictComponent, data: {editSimple: true}},
-  {path: 'dict-complete', component: DictComponent, data: {editSimple: false}},
+  {path: 'dict', component: DictComponent},
+  {path: 'dict-c', component: DictComponent, data: {editSimple: false}},
   {path: 'users', component: UserListComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'feedbacks', component: FeedbackListComponent},
@@ -29,7 +30,8 @@ const routes: Routes = [
   {path: 'word-categories/:id', component: CategoryComponent},
   {path: 'annotations', component: AnnotationFamilyListComponent},
   {path: 'annotations/:id', component: AnnotationFamilyComponent},
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'my-messages', component: MyMessagesComponent}
 ];
 
 @NgModule({

@@ -3,7 +3,6 @@
 
 .ui.divided.list.feedbacks(*ngIf='feedbacks')
   .ui.item(*ngFor='let feedback of feedbacks')
-
     .subject(*ngIf='feedback.subject') {{feedback.subject}}
     pre.content {{feedback.content}}
     .footer

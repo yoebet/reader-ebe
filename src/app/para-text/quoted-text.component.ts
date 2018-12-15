@@ -17,7 +17,7 @@ export class QuotedTextComponent implements OnChanges {
   @Input() showTitle: boolean;
 
   para: Para;
-  showContent: boolean;
+  showText: boolean;
 
   sanitizedContent: SafeHtml;
   sanitizedTrans: SafeHtml;
@@ -33,9 +33,9 @@ export class QuotedTextComponent implements OnChanges {
     }
   }
 
-  toggleContent() {
-    this.showContent = !this.showContent;
-    if (this.showContent && !this.para) {
+  toggleText() {
+    this.showText = !this.showText;
+    if (this.showText && !this.para) {
       this.loadText();
     }
   }
@@ -63,7 +63,7 @@ export class QuotedTextComponent implements OnChanges {
     }
     let holder = document.createElement('div');
     holder.innerHTML = html;
-    let selector = UIConstants.sentenceTagName + '[data-sid="' + sentenceId + '"' + ']';
+    let selector = UIConstants.sentenceTagName + '[data-sid="' + sentenceId + '"]';
     let sentenceEl = holder.querySelector(selector);
     if (sentenceEl) {
       sentenceEl.classList.add(UIConstants.highlightClass);

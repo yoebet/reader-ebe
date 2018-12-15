@@ -1,12 +1,12 @@
-.ui.segment.para-quote
+.para-quote
   .ui.right.floated.header(*ngIf='para&&showContent')
     sui-checkbox([(ngModel)]='showTitle') 标题
     sui-checkbox([(ngModel)]='textTrans') 中文
-  a((click)='toggleContent()')
+  a((click)='toggleText()')
     i.left.quote.icon
   .clearing
-  a.load-text(*ngIf='!para', (click)='toggleContent()') ......
-  .texts([suiCollapse]='!showContent', *ngIf='para')
+  a.load-text(*ngIf='!para', (click)='toggleText()') ......
+  .texts([suiCollapse]='!showText', *ngIf='para')
     .para-quote-text
       .content-text([innerHTML]='sanitizedContent')
       div([suiCollapse]='!textTrans')

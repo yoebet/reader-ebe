@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {ParaIssue} from '../models/para-issue';
+import {ParaIssue, IssueStatusNames} from '../models/para-issue';
 import {ParaIssueService} from '../services/para-issue.service';
 import {UserMessageService} from '../services/user-message.service';
 import {PageableListComponent} from '../common/pageable-list.component';
@@ -13,8 +13,7 @@ import {PageableListComponent} from '../common/pageable-list.component';
 export class IssueListComponent extends PageableListComponent implements OnInit {
   issues: ParaIssue[];
 
-  textTrans: boolean;
-  showTitle: boolean;
+  IssueStatusNames = IssueStatusNames;
 
   constructor(private paraIssueService: ParaIssueService,
               private userMessageService: UserMessageService) {

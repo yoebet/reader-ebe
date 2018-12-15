@@ -2,11 +2,10 @@
   .ui.stackable.secondary.pointing.menu
     a.item(routerLink='/') Home
     ng-template([ngIf]='currentUser')
-      ng-template([ngIf]='currentUser.role==="A"')
+      ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
         a.item(routerLink='/books', routerLinkActive='active') 图书
       ng-template([ngIf]='currentUser.role==="R"')
-        a.item(routerLink='/dict-simple', routerLinkActive='active') 词典
-        a.item(routerLink='/dict-complete', routerLinkActive='active') 词典Complete
+        a.item(routerLink='/dict', routerLinkActive='active') 词典
         a.item(routerLink='/annotations', routerLinkActive='active') 标注
         a.item(routerLink='/word-categories', routerLinkActive='active') 词频
         a.item(routerLink='/users', routerLinkActive='active') 用户

@@ -13,24 +13,44 @@ import {OpResult} from "../models/op-result";
 @Injectable()
 export class UserMessageService extends BaseService<UserMessage> {
 
+  adminBaseUrl: string;
+
   constructor(protected http: HttpClient) {
     super(http);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/user_messages`;
+    this.adminBaseUrl = `${apiBase}/messages`;
+  }
+
+
+  list(options): Observable<UserMessage[]> {
+    let {from, limit} = options;
+    let url = `${this.baseUrl}?limit=${limit}`;
+    if (from) {
+      url += `&from=${from}`;
+    }
+    return super.list(url) as Observable<UserMessage[]>;
+  }
+
+  markAsRead(messageId: string): Observable<OpResult> {
+    let url = this.baseUrl + '/markAsRead/' + messageId;
+    return this.http.post<OpResult>(url, null, this.httpOptions)
+      .catch(this.handleError);
   }
 
   protected sessionMessages(sessionId: string): Observable<UserMessage[]> {
-    return super.list('sessionId/' + sessionId) as Observable<UserMessage[]>;
+    let url = this.adminBaseUrl + '/sessionId/' + sessionId;
+    return super.list(url) as Observable<UserMessage[]>;
   }
 
   replyIssue(issueId: string, message: any): Observable<UserMessage[]> {
-    let url = this.baseUrl + '/replyIssue/' + issueId;
+    let url = this.adminBaseUrl + '/replyIssue/' + issueId;
     return this.http.post<OpResult>(url, message, this.httpOptions)
       .catch(this.handleError);
   }
 
   replyFeedback(feedbackId: string, message: any): Observable<UserMessage[]> {
-    let url = this.baseUrl + '/replyFeedback/' + feedbackId;
+    let url = this.adminBaseUrl + '/replyFeedback/' + feedbackId;
     return this.http.post<OpResult>(url, message, this.httpOptions)
       .catch(this.handleError);
   }
