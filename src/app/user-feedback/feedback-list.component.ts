@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 
+import {SuiModalService} from "ng2-semantic-ui";
+
 import {UserFeedback} from '../models/user-feedback';
 import {FeedbackService} from '../services/feedback.service';
-import {UserMessageService} from '../services/user-message.service';
 import {PageableListComponent} from '../common/pageable-list.component';
+import {MessagesModal} from "../message/messages-popup.component";
+import {MessageScope} from "../message/message-scope";
+import {User} from "../models/user";
 
 @Component({
   selector: 'feedback-list',
@@ -14,7 +18,7 @@ export class FeedbackListComponent extends PageableListComponent implements OnIn
   feedbacks: UserFeedback[];
 
   constructor(private feedbackService: FeedbackService,
-              private userMessageService: UserMessageService) {
+              public modalService: SuiModalService) {
     super();
   }
 
@@ -28,8 +32,20 @@ export class FeedbackListComponent extends PageableListComponent implements OnIn
     this.list();
   }
 
-  reply(feedback:UserFeedback){
-    // this.userMessageService.
+  messagesForFeedback(feedback: UserFeedback) {
+    let scope = new MessageScope();
+    scope.sessionId = feedback._id;
+    scope.replyForType = 'UserFeedback';
+    scope.replyFor = feedback;
+    let receiver = new User();
+    receiver._id = feedback.userId;
+    receiver.name = feedback.userName;
+    receiver.nickName = feedback.userNickName;
+    scope.receiver = receiver;
+    this.modalService.open(new MessagesModal(scope))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
   }
 
 }

@@ -1,0 +1,36 @@
+.ui.header
+  | 消息
+
+.ui.content
+  .ui.divided.list.messages(*ngIf='currentUser&&messages')
+    .ui.item(*ngFor='let message of messages')
+      .ui([ngClass]='message.senderName===currentUser.name? "right floated":""')
+        .subject(*ngIf='message.subject') {{message.subject}}
+        pre.content {{message.content}}
+        .footer
+          | {{message.senderName===currentUser.name? "我":message.senderNickName}}
+          | &nbsp; -> &nbsp;
+          | {{message.receiverName===currentUser.name? "我":message.receiverNickName}}
+          | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
+          | &nbsp; | &nbsp;{{message.receiverName===currentUser.name? '':'对方'}}{{message.readFlag? '已读':'未读'}}
+          a(*ngIf='message.receiverName===currentUser.name&&!message.readFlag', (click)='markRed(message)') &nbsp; 标记为已读
+      .clearing
+  .ui.hidden.clearing.divider(*ngIf='currentUser&&messages')
+
+  button.ui.right.floated.tiny.basic.primary.button(*ngIf='!newMessage&&scope.receiver', (click)='editNew()') 发消息
+  .clearing(*ngIf='!newMessage&&scope.receiver')
+
+  .ui.small.form(*ngIf='newMessage')
+    .field
+      input([(ngModel)]='newMessage.subject', placeholder='主题（可为空）')
+    .field
+      textarea([(ngModel)]='newMessage.content', rows='4', placeholder='内容')
+    .field
+      .ui.right.floated.small.buttons
+        button.ui.small.button((click)='cancel()') 取消
+        .or
+        button.ui.small.primary.button((click)='send()') 发送
+      .clearing
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

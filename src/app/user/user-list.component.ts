@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
+import {SuiModalService} from 'ng2-semantic-ui';
+
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
 import {PageableListComponent} from '../common/pageable-list.component';
+import {MessagesModal} from "../message/messages-popup.component";
+import {MessageScope} from "../message/message-scope";
 
 @Component({
   selector: 'user-list',
@@ -20,7 +24,8 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   roleOptions = User.Roles;
 
   constructor(private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              public modalService: SuiModalService) {
     super();
   }
 
@@ -98,6 +103,16 @@ export class UserListComponent extends PageableListComponent implements OnInit {
         }
         this.users.push(u);
         this.newUser = null;
+      });
+  }
+
+  messages(user: User) {
+    let scope = new MessageScope();
+    scope.receiver = user;
+    this.modalService
+      .open(new MessagesModal(scope))
+      // .onDeny((d) => {})
+      .onApprove((r) => {
       });
   }
 

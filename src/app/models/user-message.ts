@@ -12,9 +12,10 @@ export class UserMessage extends Model {
   senderNickName: string;
 
   readFlag: boolean;
+  sessionId: string;
   sendAsRole: string;
   replyTargetId: string;
-
+  replied: boolean;
 }
 
 

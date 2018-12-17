@@ -10,7 +10,7 @@
       | {{feedback | createdDateString:'minute'}}
       //| {{feedback.client}}
       .ui.right.floated.sub.header
-        a((click)='reply(feedback)') reply
+        a((click)='messagesForFeedback(feedback)') {{feedback.replied? '已回复':'未回复'}}
 
 .ui.right.floated.small.pagination.menu
   a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')

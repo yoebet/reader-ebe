@@ -29,6 +29,7 @@ table.ui.small.striped.table
           sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
             sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
       td.right.aligned
+        .ui.mini.button((click)='messages(user)') 消息
         ng-template([ngIf]='!editing(user)')
           .ui.mini.button((click)='edit(user)') 修改
         ng-template([ngIf]='editing(user)')

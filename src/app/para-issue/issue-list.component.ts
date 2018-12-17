@@ -2,8 +2,11 @@ import {Component, OnInit} from '@angular/core';
 
 import {ParaIssue, IssueStatusNames} from '../models/para-issue';
 import {ParaIssueService} from '../services/para-issue.service';
-import {UserMessageService} from '../services/user-message.service';
 import {PageableListComponent} from '../common/pageable-list.component';
+import {User} from "../models/user";
+import {MessagesModal} from "../message/messages-popup.component";
+import {MessageScope} from "../message/message-scope";
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Component({
   selector: 'issue-list',
@@ -16,7 +19,7 @@ export class IssueListComponent extends PageableListComponent implements OnInit 
   IssueStatusNames = IssueStatusNames;
 
   constructor(private paraIssueService: ParaIssueService,
-              private userMessageService: UserMessageService) {
+              public modalService: SuiModalService) {
     super();
   }
 
@@ -30,8 +33,20 @@ export class IssueListComponent extends PageableListComponent implements OnInit 
     this.list();
   }
 
-  reply(issue: ParaIssue) {
-
+  messagesForIssue(issue: ParaIssue) {
+    let scope = new MessageScope();
+    scope.sessionId = issue._id;
+    scope.replyForType = 'ParaIssue';
+    scope.replyFor = issue;
+    let receiver = new User();
+    receiver._id = issue.userId;
+    receiver.name = issue.userName;
+    receiver.nickName = issue.userNickName;
+    scope.receiver = receiver;
+    this.modalService.open(new MessagesModal(scope))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
   }
 
 }

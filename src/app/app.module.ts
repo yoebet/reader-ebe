@@ -52,6 +52,7 @@ import {AnnotationFamilyListComponent} from './annotation/annotation-family-list
 import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
 import {LoginComponent} from './account/login.component';
 import {MyMessagesComponent} from './account/my-messages.component';
+import {MessagesPopupComponent} from './message/messages-popup.component';
 
 @NgModule({
   imports: [
@@ -90,7 +91,8 @@ import {MyMessagesComponent} from './account/my-messages.component';
     AnnotationFamilyListComponent,
     AnnotationFamilyComponent,
     LoginComponent,
-    MyMessagesComponent
+    MyMessagesComponent,
+    MessagesPopupComponent
   ],
   providers: [
     AppService,
@@ -111,7 +113,8 @@ import {MyMessagesComponent} from './account/my-messages.component';
   entryComponents: [
     ParaSplitComponent,
     SentenceAlignComponent,
-    WordAnnosComponent
+    WordAnnosComponent,
+    MessagesPopupComponent
   ],
   bootstrap: [AppComponent]
 })
