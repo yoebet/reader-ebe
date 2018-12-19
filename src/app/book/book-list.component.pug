@@ -1,38 +1,38 @@
 .ui.header
-  | Book List
+  | 图书
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='showZh') 中文
-    sui-checkbox([(ngModel)]='operations') Operations
+    //sui-checkbox([(ngModel)]='operations') 操作
 
 table.ui.striped.table
   thead
     tr
-      th Name
-      th Code
-      th Status
-      th Version
-      th Pricing
-      th Memo
+      th 代号
+      th 书名
+      th 作者
+      th 状态
       th
   tbody
     tr(*ngFor='let book of books; trackBy: bookTracker')
+      td {{book.code}}
       td
         a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
-      td {{book.code}}
+      td
+        .enname {{book.author}}
+        .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
       td
         | {{book.status}}
-        ng-template([ngIf]="book.status=='R'") {{book.visibility}}
-      td {{book.version}}
-      td {{book.isFree? 'Free':book.price}}
-      td {{book.memo}}
       td.right.aligned
+        a((click)='showDetail(book)', href='javascript:') 详情
+        | &nbsp;&nbsp;
+        a((click)='showForm(book)', href='javascript:') 修改
         ng-template([ngIf]="operations")
           button.ui.tiny.button((click)='backup(book)') 备份
           button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
-      td(colspan='7') No Results.
+      td(colspan='5') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
@@ -40,7 +40,9 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
   .field
     h3.ui.header New Book:
     .fields
-      .four.wide.field
+      .two.wide.field
+        input([(ngModel)]='newBook.code', placeholder='Code')
+      //.four.wide.field
         sui-select.selection([(ngModel)]="newBook.langType", [options]="langOptions",
         valueField="value", labelField="label", placeholder='语言', #langSelect='')
           sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
@@ -48,7 +50,7 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
         sui-select.selection([(ngModel)]="newBook.annotationFamilyId", [options]="annOptions",
         valueField="_id", labelField="name", placeholder='标注', #annSelect='')
           sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
-      .four.wide.field
+      //.four.wide.field
         label Pricing
         sui-checkbox([(ngModel)]='newBook.isFree') Free
   .fields
@@ -61,13 +63,6 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
       input([(ngModel)]="newBook.zhName", placeholder='中文书名')
     .four.wide.field
       input([(ngModel)]="newBook.zhAuthor", placeholder='中文作者')
-  .fields
-    .two.wide.field
-      input([(ngModel)]='newBook.code', placeholder='Code')
-    .six.wide.field
-      input([(ngModel)]='newBook.tags', placeholder='Tags')
-    .eight.wide.field
-      input([(ngModel)]='newBook.memo', placeholder='Memo')
   .field.ui.right.floated.header
     button.ui.tiny.button((click)="cancelEdit()") 取消
     button.ui.tiny.primary.button((click)="add()") 保存

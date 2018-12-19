@@ -1,0 +1,53 @@
+.ui.small.header
+  | 修改 - {{book.code}}
+
+.ui.content.small.form(*ngIf='editing')
+  .fields
+    //.four.wide.field
+      label Language
+      sui-select.selection([(ngModel)]="editing.langType", [options]="langOptions",
+      valueField="value", labelField="label", placeholder='语言', #langSelect='')
+        sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+    .four.wide.field
+      label Status
+      sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
+      valueField="value", labelField="label", placeholder='状态', #statusSelect='')
+        sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
+    //.four.wide.field
+      label Visibility
+      sui-select.selection([(ngModel)]="editing.visibility", [options]="visibilityOptions",
+      valueField="value", labelField="label", placeholder='可见', #visibilitySelect='')
+        sui-select-option(*ngFor="let option of visibilitySelect.filteredOptions", [value]="option")
+    .four.wide.field
+      label Pricing
+      sui-checkbox([(ngModel)]='editing.isFree') Free
+  .fields
+    .twelve.wide.field
+      label Book Name
+      input([(ngModel)]='editing.name', placeholder='Book Name')
+    .four.wide.field
+      label Author
+      input([(ngModel)]='editing.author', placeholder='Author')
+  .fields
+    .twelve.wide.field
+      label Chinese Name
+      input([(ngModel)]='editing.zhName', placeholder='Chinese Name')
+    .four.wide.field
+      label Chinese Author
+      input([(ngModel)]='editing.zhAuthor', placeholder='Chinese Author')
+  .fields
+    .two.wide.field
+      label Code
+      input([(ngModel)]='editing.code', placeholder='Code')
+    .six.wide.field
+      label Tags
+      input([(ngModel)]='editing.tags', placeholder='Tags')
+    //.eight.wide.field
+      label Memo
+      input([(ngModel)]='editing.memo', placeholder='Memo')
+  .field.ui.right.floated.header
+  .clearing
+
+.actions
+  button.ui.tiny.button((click)='close()') 取消
+  button.ui.tiny.primary.button((click)='save()', autofocus='') 保存并关闭

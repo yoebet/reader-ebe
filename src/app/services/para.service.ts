@@ -27,7 +27,7 @@ export class ParaService extends SorterService<Para> {
     this.baseUrl = `${apiBase}/paras`;
   }
 
-  loadPara(id: string) {
+  loadPara(id: string): Observable<Para> {
     return Observable.create(observer => {
       this.getOne(id).subscribe((para: Para) => {
         if (!para) {

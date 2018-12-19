@@ -24,10 +24,13 @@ import {AnnoGroupService} from './services/anno-group.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
+import {ClientInfoPipe} from './pipes/client-info.pipe';
 
 import {AppComponent} from './app.component';
 import {BookListComponent} from './book/book-list.component';
 import {BookComponent} from './book/book.component';
+import {BookInfoComponent} from './book/book-info.component';
+import {BookFormComponent} from './book/book-form.component';
 import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
@@ -66,6 +69,8 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     AppComponent,
     BookListComponent,
     BookComponent,
+    BookInfoComponent,
+    BookFormComponent,
     BookChapsComponent,
     ChapComponent,
     ChapParasComponent,
@@ -86,6 +91,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     UserBookComponent,
     CreatedDatePipe,
     CreatedDateStringPipe,
+    ClientInfoPipe,
     CategoryListComponent,
     CategoryComponent,
     AnnotationFamilyListComponent,
@@ -111,6 +117,8 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     AnnoGroupService
   ],
   entryComponents: [
+    BookInfoComponent,
+    BookFormComponent,
     ParaSplitComponent,
     SentenceAlignComponent,
     WordAnnosComponent,

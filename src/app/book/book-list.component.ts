@@ -1,11 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
+import {SuiModalService} from "ng2-semantic-ui";
+
 import {Book} from '../models/book';
 import {AnnotationFamily} from "../models/annotation-family";
 import {BookService} from '../services/book.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
+import {BookInfoModal} from "./book-info.component";
+import {BookFormModal} from "./book-form.component";
 
 @Component({
   selector: 'book-list',
@@ -22,8 +26,9 @@ export class BookListComponent implements OnInit {
   annOptions: AnnotationFamily[];
 
   constructor(private bookService: BookService,
+              private annotationFamilyService: AnnoFamilyService,
               private router: Router,
-              private annotationFamilyService: AnnoFamilyService) {
+              public modalService: SuiModalService) {
   }
 
   ngOnInit(): void {
@@ -35,6 +40,20 @@ export class BookListComponent implements OnInit {
       .subscribe(afs => this.annOptions = afs);
   }
 
+
+  showDetail(book: Book) {
+    this.modalService.open(new BookInfoModal(book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
+  }
+
+  showForm(book: Book) {
+    this.modalService.open(new BookFormModal(book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
+  }
 
   editNew() {
     this.newBook = new Book();

@@ -8,7 +8,7 @@
     .footer
       | {{feedback.userNickName}}（{{feedback.userName}}）
       | {{feedback | createdDateString:'minute'}}
-      //| {{feedback.client}}
+      | &nbsp; | &nbsp; {{feedback.client | clientInfo}}
       .ui.right.floated.sub.header
         a((click)='messagesForFeedback(feedback)') {{feedback.replied? '已回复':'未回复'}}
 

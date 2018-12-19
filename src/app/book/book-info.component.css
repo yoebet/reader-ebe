@@ -1,7 +1,3 @@
-.zh-name-author, .props {
-  /*margin-top: 0.5em;*/
-}
-
 .book-name, .author {
   display: inline-block;
 }
@@ -10,15 +6,16 @@
   font-weight: bold;
 }
 
-.author-by {
-  font-size: 0.9em;
-  color: rgba(158, 158, 158, 0.8);
-  padding-right: 0.3em;
-}
-
 .author {
   margin-left: 0.6em;
   display: inline-block;
+  float: right;
+}
+
+.author .author-by {
+  font-size: 0.9em;
+  color: rgba(158, 158, 158, 0.8);
+  padding-right: 0.3em;
 }
 
 .prop {
@@ -30,9 +27,4 @@
   font-size: 0.9em;
   color: rgba(128, 128, 128, 0.9);
   margin-right: 0.3em;
-}
-
-
-.zhname.pre-wrap {
-  margin-top: 0.3em;
 }

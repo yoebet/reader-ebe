@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {ParaIssue, IssueStatusNames} from '../models/para-issue';
+import {ParaIssue, IssueStatuses, IssueStatusNames} from '../models/para-issue';
 import {ParaIssueService} from '../services/para-issue.service';
 import {PageableListComponent} from '../common/pageable-list.component';
 import {User} from "../models/user";
@@ -16,6 +16,7 @@ import {SuiModalService} from "ng2-semantic-ui";
 export class IssueListComponent extends PageableListComponent implements OnInit {
   issues: ParaIssue[];
 
+  IssueStatuses = IssueStatuses;
   IssueStatusNames = IssueStatusNames;
 
   constructor(private paraIssueService: ParaIssueService,
@@ -31,6 +32,17 @@ export class IssueListComponent extends PageableListComponent implements OnInit 
 
   ngOnInit() {
     this.list();
+  }
+
+  updateStatus(issue: ParaIssue, status: string) {
+    this.paraIssueService.updateStatus(issue._id, status)
+      .subscribe(opr => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        issue.status = status;
+      });
   }
 
   messagesForIssue(issue: ParaIssue) {

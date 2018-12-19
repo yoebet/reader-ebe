@@ -1,3 +1,10 @@
+.ui.small.header
+  .ui.right.floated.small.header
+    sui-checkbox([(ngModel)]='showZh') 中文
+    sui-checkbox([(ngModel)]='tuneOrder') 排序
+    sui-checkbox([(ngModel)]='operations') 删除
+  | 章节
+
 .ui.celled.list(*ngIf='book')
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     div([hidden]="chap===editingChap")

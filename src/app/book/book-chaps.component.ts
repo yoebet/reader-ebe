@@ -14,9 +14,9 @@ import {SortableListComponent} from "../common/sortable-list.component";
 })
 export class BookChapsComponent extends SortableListComponent implements OnInit {
   @Input() book: Book;
-  @Input() tuneOrder: boolean;
-  @Input() operations: boolean;
-  @Input() showZh: boolean;
+  tuneOrder = false;
+  operations = false;
+  showZh = false;
   editingChap: Chap;
   editNew = false;
 

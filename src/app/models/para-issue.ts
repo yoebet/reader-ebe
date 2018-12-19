@@ -12,7 +12,6 @@ export class ParaIssue extends Model {
   userNickName: string;
 
   status: string;
-  solverId: string;
   replied: boolean;
 }
 
@@ -23,7 +22,7 @@ export const IssueStatuses = {
 };
 
 export const IssueStatusNames = {
-  T: '未解决',
+  T: '未处理',
   S: '已解决',
   I: '忽略'
 };

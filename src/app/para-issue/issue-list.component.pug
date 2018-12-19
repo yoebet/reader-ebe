@@ -10,7 +10,13 @@
       | {{issue.userNickName}}（{{issue.userName}}）
       | {{issue | createdDateString:'minute'}}
       .ui.right.floated.sub.header
-        | {{IssueStatusNames[issue.status]}} &nbsp;&nbsp;
+        .ui.dropdown(suiDropdown='')
+          .text {{IssueStatusNames[issue.status]}}
+          i.dropdown.icon
+          .menu(suiDropdownMenu='')
+            ng-template(ngFor='', let-status='', [ngForOf]='[IssueStatuses.Todo,IssueStatuses.Solved,IssueStatuses.Ignored]')
+              .item(*ngIf='issue.status!==status', (click)='updateStatus(issue,status)') {{IssueStatusNames[status]}}
+        | &nbsp;&nbsp;&nbsp;&nbsp;
         a((click)='messagesForIssue(issue)') {{issue.replied? '已回复':'未回复'}}
 
 .ui.right.floated.small.pagination.menu

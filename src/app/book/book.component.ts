@@ -5,7 +5,9 @@ import 'rxjs/add/operator/switchMap';
 
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
-import {OpResult} from '../models/op-result';
+import {BookFormModal} from "./book-form.component";
+import {BookInfoModal} from "./book-info.component";
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Component({
   selector: 'book-detail',
@@ -14,58 +16,33 @@ import {OpResult} from '../models/op-result';
 })
 export class BookComponent implements OnInit {
   book: Book;
-  editing: Book = null;
-  chapsTuneOrder = false;
-  chapOperations = false;
-  showZh = false;
-  langOptions = Book.LangTypes;
-  statusOptions = Book.Statuses;
-  visibilityOptions = Book.Visibilities;
 
   constructor(private bookService: BookService,
               private route: ActivatedRoute,
-              private location: Location) {
+              private location: Location,
+              public modalService: SuiModalService) {
   }
 
   ngOnInit(): void {
     this.route.paramMap.switchMap((params: ParamMap) =>
       this.bookService.getDetail(params.get('id'))
     ).subscribe(book => {
-      if (book.author == null) {
-        book.author = '';
-      }
-      if (book.zhName == null) {
-        book.zhName = '';
-      }
-      if (book.zhAuthor == null) {
-        book.zhAuthor = '';
-      }
       this.book = book;
     });
   }
 
-  save(): void {
-    this.editing.name = this.editing.name.trim();
-    if (!this.editing.name) {
-      return;
-    }
-    this.bookService.update(this.editing)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        Object.assign(this.book, this.editing);
-        this.editing = null;
-      });
+  showDetail() {
+    this.modalService.open(new BookInfoModal(this.book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
   }
 
-  edit(): void {
-    let editing = new Book();
-    Object.assign(editing, this.book);
-    delete editing.chaps;
-    delete editing.updatedAt;
-    this.editing = editing;
+  showForm() {
+    this.modalService.open(new BookFormModal(this.book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
   }
 
   goBack(): void {

@@ -7,14 +7,26 @@ export class Book extends Model {
   zhName: string = '';
   author: string = '';
   zhAuthor: string = '';
-  status: string = 'E';
-  visibility: string = 'E';
+
+  category: string;
   langType: string = 'EZ';
-  originalId: string;
+  description: string;
+
+  status: string = 'E';
+  // visibility: string = 'E';
+
+  editorId: string;
+  editorName: string;
+
   isFree: boolean;
-  price: number;
-  memo: string;
+  price: number; // cents
+
+  slogan: string;
+  statusText: string;
+  pricingText: string;
+  introduction: string;
   tags: string;
+
   annotationFamilyId: string;
 
   chaps: Chap[];
@@ -26,18 +38,24 @@ export class Book extends Model {
     {value: 'CZ', label: '文言文/诗词 - 现代文/注释/解析'}*/
   ];
 
-  static Statuses = [
-    {value: 'E', label: '编辑'},
-    {value: 'C', label: '校对'},
-    {value: 'P', label: '上线审核'},
-    {value: 'R', label: '上线'},
-    {value: 'B', label: '备份'}
-  ];
 
-  static Visibilities = [
+  static StatusNames = {
+    E: '编辑中',
+    C: '校对',
+    P: '上线审核',
+    R: '已上线',
+    B: '备份'
+  };
+
+
+  static Statuses = ['E', 'C', 'P', 'R'].map(k => {
+    return {value: k, label: Book.StatusNames[k]}
+  });
+
+  /*static Visibilities = [
     {value: 'P', label: '公开'},
-    {value: 'E', label: '编辑人员'}/*,
-    {value: 'H', label: '仅管理员'}*/
-  ];
+    {value: 'E', label: '仅编辑人员可见'}/!*,
+    {value: 'H', label: '仅管理员'}*!/
+  ];*/
 
 }
