@@ -1,52 +1,66 @@
-.ui.small.header
-  | 修改 - {{book.code}}
+.ui.small.blue.header
+  | 修改 （{{book.code}}）
 
-.ui.content.small.form(*ngIf='editing')
-  .fields
-    //.four.wide.field
-      label Language
-      sui-select.selection([(ngModel)]="editing.langType", [options]="langOptions",
-      valueField="value", labelField="label", placeholder='语言', #langSelect='')
-        sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
-    .four.wide.field
-      label Status
-      sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
-      valueField="value", labelField="label", placeholder='状态', #statusSelect='')
-        sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
-    //.four.wide.field
-      label Visibility
-      sui-select.selection([(ngModel)]="editing.visibility", [options]="visibilityOptions",
-      valueField="value", labelField="label", placeholder='可见', #visibilitySelect='')
-        sui-select-option(*ngFor="let option of visibilitySelect.filteredOptions", [value]="option")
-    .four.wide.field
-      label Pricing
-      sui-checkbox([(ngModel)]='editing.isFree') Free
-  .fields
-    .twelve.wide.field
-      label Book Name
-      input([(ngModel)]='editing.name', placeholder='Book Name')
-    .four.wide.field
-      label Author
-      input([(ngModel)]='editing.author', placeholder='Author')
-  .fields
-    .twelve.wide.field
-      label Chinese Name
-      input([(ngModel)]='editing.zhName', placeholder='Chinese Name')
-    .four.wide.field
-      label Chinese Author
-      input([(ngModel)]='editing.zhAuthor', placeholder='Chinese Author')
-  .fields
-    .two.wide.field
-      label Code
-      input([(ngModel)]='editing.code', placeholder='Code')
-    .six.wide.field
-      label Tags
-      input([(ngModel)]='editing.tags', placeholder='Tags')
-    //.eight.wide.field
-      label Memo
-      input([(ngModel)]='editing.memo', placeholder='Memo')
-  .field.ui.right.floated.header
-  .clearing
+.ui.content
+
+  .ui.tiny.form(*ngIf='editing')
+    h4.ui.dividing.grey.header 书名作者
+    .field
+      label 英文
+      .two.fields
+        .twelve.wide.field
+          input([(ngModel)]='editing.name', placeholder='Book Name')
+        .four.wide.field
+          input([(ngModel)]='editing.author', placeholder='Author')
+    .field
+      label 中文
+      .two.fields
+        .twelve.wide.field
+          input([(ngModel)]='editing.zhName', placeholder='书名')
+        .four.wide.field
+          input([(ngModel)]='editing.zhAuthor', placeholder='作者')
+
+    h4.ui.dividing.grey.header 基本信息
+    .fields
+      .four.wide.field
+        label 代号
+        input([(ngModel)]='editing.code', placeholder='Code')
+      .four.wide.field
+        label 类别
+        sui-select.selection([(ngModel)]="editing.category", [options]="categoryOptions",
+        valueField="value", labelField="label", placeholder='类别', #categorySelect='')
+          sui-select-option(*ngFor="let option of categorySelect.filteredOptions", [value]="option")
+      .four.wide.field
+        label 状态
+        sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
+        valueField="value", labelField="label", placeholder='状态', #statusSelect='')
+          sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
+    .field
+      label 简短介绍
+      input([(ngModel)]='editing.introduction')
+    .field
+      label 详细介绍
+      textarea(rows='3', [(ngModel)]='editing.description')
+
+    h4.ui.dividing.grey.header 定价
+    .fields
+      .four.wide.field
+        label 免费?
+        sui-checkbox([(ngModel)]='editing.isFree') 免费
+      .four.wide.field
+        label 价格（分）
+        input([(ngModel)]='editing.price', type='number', min='0')
+
+    h4.ui.dividing.grey.header 其他
+    .field
+      label 标签
+      input([(ngModel)]='editing.tags')
+    .field
+      label 推荐语
+      input([(ngModel)]='editing.slogan')
+    .field
+      label 编辑人员
+      | {{book.chiefEditorName}} ...
 
 .actions
   button.ui.tiny.button((click)='close()') 取消

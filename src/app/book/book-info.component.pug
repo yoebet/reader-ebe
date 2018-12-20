@@ -1,6 +1,3 @@
-//.ui.small.header
-  | 详情 - {{book.code}}
-
 .ui.content(*ngIf='book')
   .ui.unstackable.definition.table
     tr
@@ -12,11 +9,12 @@
           | {{book.author}}
     tr
       td 中文
-      td(*ngIf='book.zhName')
-        .book-name {{book.zhName}}
-        .author(*ngIf='book.zhAuthor')
-          span.author-by by
-          | {{book.zhAuthor}}
+      td
+        ng-template([ngIf]='book.zhName')
+          .book-name {{book.zhName}}
+          .author(*ngIf='book.zhAuthor')
+            span.author-by by
+            | {{book.zhAuthor}}
     tr
       td 基本
       td.props
@@ -25,25 +23,28 @@
           | {{book.code}}
         .prop
           span.prop-name 分类
-          | {{book.category}}
+          | {{categoryNames[book.category]}}
         .prop
           span.prop-name 状态
-          | {{book.status}}
+          | {{statusNames[book.status]}}
     tr
-      td 说明
+      td 简短说明
+      td {{book.introduction}}
+    tr
+      td 详细说明
       td {{book.description}}
     tr
-      td.two.wide.column 定价
+      td 定价
       td {{book.isFree? '免费':book.price}}
     tr
-      td.two.wide.column 标签
+      td 标签
       td {{book.tags}}
     tr
-      td.two.wide.column 推荐语
+      td 推荐语
       td {{book.slogan}}
     tr
-      td.two.wide.column 编辑人员
-      td {{book.editorName}}
+      td 编辑人员
+      td {{book.chiefEditorName}}
 
 .actions
   button.ui.tiny.button((click)="close()", autofocus='') 关闭

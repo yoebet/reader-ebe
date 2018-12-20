@@ -13,6 +13,9 @@ import {BookService} from '../services/book.service';
 })
 export class BookInfoComponent implements OnInit {
   @Input() book: Book;
+  // langOptions = Book.LangTypes;
+  statusNames = Book.StatusNames;
+  categoryNames = Book.CategoryNames;
 
   constructor(private bookService: BookService,
               private modal: SuiModal<Book, string, string>) {

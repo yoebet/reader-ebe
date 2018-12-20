@@ -13,17 +13,14 @@ export class Book extends Model {
   description: string;
 
   status: string = 'E';
-  // visibility: string = 'E';
 
-  editorId: string;
-  editorName: string;
+  chiefEditorId: string;
+  chiefEditorName: string;
 
   isFree: boolean;
   price: number; // cents
 
   slogan: string;
-  statusText: string;
-  pricingText: string;
   introduction: string;
   tags: string;
 
@@ -31,6 +28,20 @@ export class Book extends Model {
 
   chaps: Chap[];
 
+
+
+  static CategoryNames = {
+    Nov: '小说',
+    Tex: '教材',
+    His: '历史',
+    Poe: '诗歌',
+    Oth: '其他'
+  };
+
+
+  static Categories = ['Nov', 'Tex', 'His', 'Oth'].map(k => {
+    return {value: k, label: Book.CategoryNames[k]}
+  });
 
   static LangTypes = [
     {value: 'EZ', label: '英文原著 - 中文译文'},

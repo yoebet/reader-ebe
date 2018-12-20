@@ -15,8 +15,9 @@ import {OpResult} from "../models/op-result";
 export class BookFormComponent implements OnInit {
   @Input() book: Book;
   editing: Book;
-  langOptions = Book.LangTypes;
+  // langOptions = Book.LangTypes;
   statusOptions = Book.Statuses;
+  categoryOptions = Book.Categories;
 
   constructor(private bookService: BookService,
               private modal: SuiModal<Book, string, string>) {
@@ -70,7 +71,7 @@ export class BookFormComponent implements OnInit {
 export class BookFormModal extends ComponentModalConfig<Book> {
   constructor(book: Book) {
     super(BookFormComponent, book, false);
-    this.size = ModalSize.Normal;
+    this.size = ModalSize.Small;
     // this.isFullScreen = true;
     this.mustScroll = true;
   }
