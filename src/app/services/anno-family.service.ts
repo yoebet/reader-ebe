@@ -13,14 +13,16 @@ import {AnnotationFamily} from "../models/annotation-family";
 import {AnnotationGroup} from "../models/annotation-group";
 import {Annotation} from "../models/annotation";
 import {AnnotationSet} from "../anno/annotation-set";
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class AnnoFamilyService extends BaseService<AnnotationFamily> {
 
   annotationsMap: Map<string, AnnotationSet> = new Map<string, AnnotationSet>();
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/annotation_families`;
   }

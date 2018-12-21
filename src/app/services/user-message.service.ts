@@ -9,14 +9,16 @@ import 'rxjs/add/operator/catch';
 import {UserMessage} from '../models/user-message';
 import {BaseService} from './base.service';
 import {OpResult} from "../models/op-result";
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class UserMessageService extends BaseService<UserMessage> {
 
   adminBaseUrl: string;
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/user_messages`;
     this.adminBaseUrl = `${apiBase}/messages`;

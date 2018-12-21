@@ -15,7 +15,7 @@ table.ui.small.striped.table.form
   tbody
     tr(*ngFor='let family of families; trackBy: tracker')
       td
-        a(*ngIf='!editing(family)', (click)='gotoDetail(family)', [routerLink]="['/annotations', family._id]") {{family.name}}
+        a(*ngIf='!editing(family)', [routerLink]="['/annotations', family._id]") {{family.name}}
         .field(*ngIf='editing(family)')
           input([(ngModel)]="editingFamily.name")
       td

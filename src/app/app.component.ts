@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
+import {SuiModalService} from "ng2-semantic-ui";
+
 import {User} from './models/user';
 import {AppService} from './services/app.service';
 import {SessionService} from "./services/session.service";
+import {LoginModal} from "./account/login-popup.component";
 
 @Component({
   selector: 'app-root',
@@ -18,11 +21,19 @@ export class AppComponent implements OnInit {
 
   constructor(private appService: AppService,
               private sessionService: SessionService,
-              private router: Router) {
+              private router: Router,
+              public modalService: SuiModalService) {
   }
 
   ngOnInit() {
     this.sessionService.checkLogin();
+  }
+
+  loginPopup() {
+    this.modalService.open(new LoginModal(null))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
   }
 
   logout() {

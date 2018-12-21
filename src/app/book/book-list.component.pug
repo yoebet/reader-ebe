@@ -1,7 +1,8 @@
 .ui.header
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='showZh') 中文
-    //sui-checkbox([(ngModel)]='operations') 操作
+    //ng-template([ngIf]='currentUser.role==="R"')
+      sui-checkbox([(ngModel)]='operations') 操作
   | 图书
 
 table.ui.striped.table
@@ -16,7 +17,7 @@ table.ui.striped.table
     tr(*ngFor='let book of books; trackBy: bookTracker')
       td {{book.code}}
       td
-        a((click)='gotoDetail(book)', [routerLink]="['/books', book._id]")
+        a([routerLink]="['/books', book._id]")
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
       td
@@ -38,9 +39,9 @@ table.ui.striped.table
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
 .ui.form(*ngIf='newBook')
   .field
-    h3.ui.header New Book:
+    h3.ui.header 新书：
     .fields
-      .two.wide.field
+      .four.wide.field
         input([(ngModel)]='newBook.code', placeholder='Code')
       //.four.wide.field
         sui-select.selection([(ngModel)]="newBook.langType", [options]="langOptions",
@@ -50,9 +51,6 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
         sui-select.selection([(ngModel)]="newBook.annotationFamilyId", [options]="annOptions",
         valueField="_id", labelField="name", placeholder='标注', #annSelect='')
           sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
-      //.four.wide.field
-        label Pricing
-        sui-checkbox([(ngModel)]='newBook.isFree') Free
   .fields
     .twelve.wide.field
       input([(ngModel)]="newBook.name", placeholder='Book Name')

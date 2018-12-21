@@ -9,6 +9,7 @@ import 'rxjs/add/operator/share';
 import {DictEntry, DictFields} from '../models/dict-entry';
 import {BaseService} from './base.service';
 import {OpResult} from '../models/op-result';
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class DictService extends BaseService<DictEntry> {
@@ -17,8 +18,9 @@ export class DictService extends BaseService<DictEntry> {
   private entryCache: Map<string, DictEntry> = new Map();
   private norefEntryCache: Map<string, DictEntry> = new Map();
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/dict`;
   }

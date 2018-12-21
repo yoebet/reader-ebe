@@ -11,8 +11,8 @@ import {IssueListComponent} from './para-issue/issue-list.component';
 import {UserComponent} from './user/user.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
-import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
-import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
+import {AnnoFamilyListComponent} from './annotation/anno-family-list.component';
+import {AnnoFamilyComponent} from './annotation/anno-family.component';
 import {LoginComponent} from './account/login.component';
 import {MyMessagesComponent} from './account/my-messages.component';
 
@@ -28,8 +28,8 @@ const routes: Routes = [
   {path: 'issues', component: IssueListComponent},
   {path: 'word-categories', component: CategoryListComponent},
   {path: 'word-categories/:id', component: CategoryComponent},
-  {path: 'annotations', component: AnnotationFamilyListComponent},
-  {path: 'annotations/:id', component: AnnotationFamilyComponent},
+  {path: 'annotations', component: AnnoFamilyListComponent},
+  {path: 'annotations/:id', component: AnnoFamilyComponent},
   {path: 'login', component: LoginComponent},
   {path: 'my-messages', component: MyMessagesComponent}
 ];

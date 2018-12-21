@@ -2,10 +2,15 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/catch';
+
+import {SuiModalService} from "ng2-semantic-ui";
+import {ActiveModal} from "ng2-semantic-ui/dist/modules/modal/classes/active-modal";
 
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
+import {LoginModal} from "../account/login-popup.component";
 
 export class BaseService<M extends Model> {
 
@@ -18,7 +23,8 @@ export class BaseService<M extends Model> {
 
   protected baseUrl: string;
 
-  constructor(protected http: HttpClient) {
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
   }
 
   list(url: string = null): Observable<M[]> {
@@ -65,11 +71,35 @@ export class BaseService<M extends Model> {
     return typeof model === 'string' ? model : model._id;
   }
 
-  protected handleError(error: any): Observable<any> {
-    // HttpErrorResponse?
-    console.error(error);
+  protected handleError = this._handleError.bind(this);
+
+  private static loginModal: ActiveModal<string, string, string> = null;
+
+  protected handleError401(error: any/*, caught*/): Observable<any> {
+    if (BaseService.loginModal == null) {
+      BaseService.loginModal = this.modalService.open(new LoginModal('请重新登录'))
+        .onDeny(d => BaseService.loginModal = null)
+        .onApprove(r => BaseService.loginModal = null);
+    }
+    return Observable.empty();
+  }
+
+  private _handleError(error: any/*, caught*/): Observable<any> {
+    /*
+    error : {
+      name: "HttpErrorResponse"
+      ok: false
+      status: 401/0
+      statusText: "Unauthorized"/"Unknown Error"
+      url: '...'/null
+    }
+    */
+    if (error.status === 401) {
+      return this.handleError401(error);
+    }
+
+    // console.error(error);
     return Observable.throw(error);
   }
 
 }
-

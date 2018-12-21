@@ -6,11 +6,13 @@ import 'rxjs/add/operator/catch';
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 import {BaseService} from './base.service';
+import {SuiModalService} from "ng2-semantic-ui";
 
 export class SorterService<M extends Model> extends BaseService<M> {
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
   }
 
   protected createBeforeOrAfter(target: M | string, model: M, pos: string): Observable<M> {

@@ -5,12 +5,14 @@ import {environment} from '../../environments/environment';
 import {Book} from '../models/book';
 import {SorterService} from './sorter.service';
 import {Observable} from "rxjs/Observable";
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class BookService extends SorterService<Book> {
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/books`;
   }

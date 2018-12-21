@@ -42,9 +42,10 @@ export class CategoryComponent implements OnInit {
   }
 
   fetchSamples() {
-    this.wordCategoryService.fetchSampleWords(this.category.code).subscribe(words => {
-      this.sampleWords = words ? words : [];
-    });
+    this.wordCategoryService.fetchSampleWords(this.category.code)
+      .subscribe(words => {
+        this.sampleWords = words ? words : [];
+      });
   }
 
   onClickAWord(word, $event) {

@@ -25,16 +25,21 @@ export class LoginComponent {
   }
 
   login(name, pass) {
-    this.sessionService.login(name, pass).subscribe((opr: OpResult) => {
-      if (opr && opr.ok === 1) {
-        this.loginMessage = null;
-        this.router.navigate(['/']);
-      } else {
-        this.loginMessage = '用户名/密码错误';
-      }
-    }, (err) => {
-      this.loginMessage = '发生错误了';
-    });
+    this.sessionService.login(name, pass)
+      .subscribe((opr: OpResult) => {
+        if (opr && opr.ok === 1) {
+          this.loginMessage = null;
+          this.router.navigate(['/']);
+        } else {
+          this.loginMessage = '用户名/密码错误';
+        }
+      }, (err) => {
+        this.loginMessage = '发生错误了';
+      });
+  }
+
+  loginPopup(){
+
   }
 
 }

@@ -1,29 +1,26 @@
-.ui.grid
-  .three.wide.column
-  .thirteen.wide.column
-    .ui.header
-      | 我的消息
+.ui.header
+  | 我的消息
 
-    .ui.divided.list.messages(*ngIf='currentUser&&messages')
-      .ui.item(*ngFor='let message of messages')
-        .ui([ngClass]='message.senderName===currentUser.name? "right floated":""')
-          .subject(*ngIf='message.subject') {{message.subject}}
-          pre.content {{message.content}}
-          .footer
-            | {{message.senderName===currentUser.name? "我":message.senderNickName}}
-            | &nbsp; -> &nbsp;
-            | {{message.receiverName===currentUser.name? "我":message.receiverNickName}}
-            | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
-            | &nbsp; | &nbsp;{{message.receiverName===currentUser.name? '':'对方'}}{{message.readFlag? '已读':'未读'}}
-            a(*ngIf='message.receiverName===currentUser.name&&!message.readFlag', (click)='markRed(message)') &nbsp; 标记为已读
-            a((click)='sessionMessages(message)') &nbsp; 会话
-        .clearing
+.ui.divided.list.messages(*ngIf='currentUser&&messages')
+  .ui.item(*ngFor='let message of messages')
+    .ui([ngClass]='message.senderName===currentUser.name? "right floated":""')
+      .subject(*ngIf='message.subject') {{message.subject}}
+      pre.content {{message.content}}
+      .footer
+        | {{message.senderName===currentUser.name? "我":message.senderNickName}}
+        | &nbsp; -> &nbsp;
+        | {{message.receiverName===currentUser.name? "我":message.receiverNickName}}
+        | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
+        | &nbsp; | &nbsp;{{message.receiverName===currentUser.name? '':'对方'}}{{message.readFlag? '已读':'未读'}}
+        a(*ngIf='message.receiverName===currentUser.name&&!message.readFlag', (click)='markRed(message)') &nbsp; 标记为已读
+        a((click)='sessionMessages(message)') &nbsp; 会话
+    .clearing
 
-    .ui.right.floated.small.pagination.menu
-      a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
-        i.left.chevron.icon
-      a.item.disabled {{page}}
-      a.icon.item([ngClass]='{disabled:!messages||messages.length<pageSize}', (click)='nextPage()')
-        i.right.chevron.icon
+.ui.right.floated.small.pagination.menu
+  a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+    i.left.chevron.icon
+  a.item.disabled {{page}}
+  a.icon.item([ngClass]='{disabled:!messages||messages.length<pageSize}', (click)='nextPage()')
+    i.right.chevron.icon
 
-    .ui.hidden.clearing.divider
+.ui.hidden.clearing.divider

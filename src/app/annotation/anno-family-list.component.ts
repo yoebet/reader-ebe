@@ -7,10 +7,10 @@ import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'annotation-family-list',
-  templateUrl: './annotation-family-list.component.html',
-  styleUrls: ['./annotation-family-list.component.css']
+  templateUrl: './anno-family-list.component.html',
+  styleUrls: ['./anno-family-list.component.css']
 })
-export class AnnotationFamilyListComponent implements OnInit {
+export class AnnoFamilyListComponent implements OnInit {
 
   families: AnnotationFamily[];
   editingFamily: AnnotationFamily;
@@ -28,11 +28,6 @@ export class AnnotationFamilyListComponent implements OnInit {
         this.families = families;
       });
   }
-
-  gotoDetail(family: AnnotationFamily): void {
-    this.router.navigate(['/annotation-families', family._id]);
-  }
-
 
   edit(af) {
     this.editingFamily = Object.assign({}, af);

@@ -51,9 +51,10 @@ import {UserComponent} from './user/user.component';
 import {UserBookComponent} from './user/user-book.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
-import {AnnotationFamilyListComponent} from './annotation/annotation-family-list.component';
-import {AnnotationFamilyComponent} from './annotation/annotation-family.component';
+import {AnnoFamilyListComponent} from './annotation/anno-family-list.component';
+import {AnnoFamilyComponent} from './annotation/anno-family.component';
 import {LoginComponent} from './account/login.component';
+import {LoginPopupComponent} from './account/login-popup.component';
 import {MyMessagesComponent} from './account/my-messages.component';
 import {MessagesPopupComponent} from './message/messages-popup.component';
 
@@ -94,9 +95,10 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     ClientInfoPipe,
     CategoryListComponent,
     CategoryComponent,
-    AnnotationFamilyListComponent,
-    AnnotationFamilyComponent,
+    AnnoFamilyListComponent,
+    AnnoFamilyComponent,
     LoginComponent,
+    LoginPopupComponent,
     MyMessagesComponent,
     MessagesPopupComponent
   ],
@@ -117,6 +119,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     AnnoGroupService
   ],
   entryComponents: [
+    LoginPopupComponent,
     BookInfoComponent,
     BookFormComponent,
     ParaSplitComponent,

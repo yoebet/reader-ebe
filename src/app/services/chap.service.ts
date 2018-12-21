@@ -7,14 +7,16 @@ import 'rxjs/add/operator/catch';
 
 import {Chap} from '../models/chap';
 import {SorterService} from './sorter.service';
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class ChapService extends SorterService<Chap> {
 
   protected bookBaseUrl: string;
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.bookBaseUrl = `${apiBase}/books`;
     this.baseUrl = `${apiBase}/chaps`;

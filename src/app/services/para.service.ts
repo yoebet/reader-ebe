@@ -12,6 +12,7 @@ import {Para} from '../models/para';
 import {SorterService} from './sorter.service';
 import {ChapService} from './chap.service';
 import {BookService} from './book.service';
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class ParaService extends SorterService<Para> {
@@ -19,9 +20,10 @@ export class ParaService extends SorterService<Para> {
   protected chapBaseUrl: string;
 
   constructor(protected http: HttpClient,
+              protected modalService: SuiModalService,
               private bookService: BookService,
               private chapService: ChapService) {
-    super(http);
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.chapBaseUrl = `${apiBase}/chaps`;
     this.baseUrl = `${apiBase}/paras`;

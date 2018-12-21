@@ -1,10 +1,13 @@
-.ui.small.form.login
-  h3 请登录
+.ui.small.blue.header
+  | 登录
+
+.ui.content.tiny.form.login
   .ui.small.message(*ngIf='loginMessage') {{loginMessage}}
   .field
     input(type="text", #name="", placeholder="账号")
   .field
     input(type="password", #pass="", placeholder="密码")
-  .field
-    .ui.small.button((click)='cancel()') 取消
-    .ui.small.primary.button((click)='login(name.value, pass.value)') 登录
+
+.actions
+  .ui.tiny.button((click)='cancel()') 取消
+  .ui.tiny.primary.button((click)='login(name.value, pass.value)') 登录

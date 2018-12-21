@@ -8,12 +8,14 @@ import 'rxjs/add/operator/catch';
 import {User} from '../models/user';
 import {UserBook} from '../models/user-book';
 import {BaseService} from './base.service';
+import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class UserService extends BaseService<User> {
 
-  constructor(protected http: HttpClient) {
-    super(http);
+  constructor(protected http: HttpClient,
+              protected modalService: SuiModalService) {
+    super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/users`;
   }

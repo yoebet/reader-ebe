@@ -12,10 +12,10 @@ import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'annotation-family',
-  templateUrl: './annotation-family.component.html',
-  styleUrls: ['./annotation-family.component.css']
+  templateUrl: './anno-family.component.html',
+  styleUrls: ['./anno-family.component.css']
 })
-export class AnnotationFamilyComponent implements OnInit {
+export class AnnoFamilyComponent implements OnInit {
 
   family: AnnotationFamily;
   editingGroup: AnnotationGroup;

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 
 import {SuiModalService} from "ng2-semantic-ui";
 
@@ -27,8 +26,7 @@ export class BookListComponent implements OnInit {
 
   constructor(private bookService: BookService,
               private annotationFamilyService: AnnoFamilyService,
-              private router: Router,
-              public modalService: SuiModalService) {
+              private modalService: SuiModalService) {
   }
 
   ngOnInit(): void {
@@ -106,10 +104,6 @@ export class BookListComponent implements OnInit {
       let index = this.books.indexOf(book);
       this.books.splice(index + 1, 0, clonedBook);
     });
-  }
-
-  gotoDetail(book: Book): void {
-    this.router.navigate(['/books', book._id]);
   }
 
   bookTracker(index, book) {
