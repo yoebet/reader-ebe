@@ -23,7 +23,6 @@ export class ChapService extends SorterService<Chap> {
   }
 
   create(chap: Chap): Observable<Chap> {
-
     let bookId = chap.bookId;
     const url = `${this.bookBaseUrl}/${bookId}/chaps`;
     return this.http.post<Chap>(url, chap, this.httpOptions)

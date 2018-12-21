@@ -10,3 +10,7 @@
 .group-fields, .ann-fields {
   margin: 0.5em 0em !important;
 }
+
+.group.description {
+  margin: 0.5em 0em !important;
+}

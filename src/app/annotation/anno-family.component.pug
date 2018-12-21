@@ -1,17 +1,28 @@
 .ui.header
   | {{family? family.name:'Annotations'}}
 
-.ui.divider
+.description {{family? family.description:''}}
 
-.ui.divided.list.small.form(*ngIf='family')
-  .item(*ngFor='let group of family.groups; trackBy: groupTracker')
-    .content
+.ui.small.form(*ngIf='family')
+  .ui.right.floated.small.header
+    sui-checkbox([(ngModel)]='sortGroups') 排序
+  .ui.clearing.divider
+
+  .ui.divided.list
+    .item(*ngFor='let group of family.groups; trackBy: groupTracker; first as first1; last as last1')
       .header
         .ui.right.floated.header
           ng-template([ngIf]='editing(group)')
             .ui.mini.button((click)='cancelEdit()') Cancel
-            .ui.mini.button((click)='saveGroup()') Save
+            .ui.mini.button((click)='newAnnotation()') New Annotation
+            .ui.primary.mini.button((click)='saveGroup()') Save
           ng-template([ngIf]='!editing(group)')
+            .ui.mini.button(*ngIf='sortGroups&&!first1', (click)='moveUp(group)')
+              i.angle.arrow.up.icon
+              | 上移
+            .ui.mini.button(*ngIf='sortGroups&&!last1', (click)='moveDown(group)')
+              i.angle.arrow.down.icon
+              | 下移
             .ui.mini.button((click)='editGroup(group)') Edit
             .ui.mini.button((click)='removeGroup(group)') Remove
         ng-template([ngIf]='!editing(group)')
@@ -22,35 +33,54 @@
           //input([(ngModel)]='editingGroup.tagName', placeholder='Tag Name')
           input([(ngModel)]='editingGroup.cssClass', placeholder='css Class')
           input([(ngModel)]='editingGroup.dataName', placeholder='Data Attr Name')
-      .description(*ngIf='!editing(group)')
+      .group.description(*ngIf='!editing(group)')
         ng-template([ngIf]='group.tagName') <{{group.tagName}}>
         ng-template([ngIf]='group.cssClass') .{{group.cssClass}}
         ng-template([ngIf]='group.dataName') [data-{{group.dataName}}]
-    .ui.ordered.selection.divided.list.annotation-group
-      ng-template([ngIf]='!editing(group)')
-        .item(*ngFor='let ann1 of group.annotations')
-          | {{ann1.name}} {{ann1.nameEn}} (data-{{group.dataName}}={{ann1.dataValue}})
-      ng-template([ngIf]='editing(group)')
-        .item(*ngFor='let ann of editingGroup.annotations')
-          .ui.right.floated.sub.header
+      .ui.ordered.selection.divided.list.annotation-group
+        ng-template([ngIf]='!editing(group)')
+          .item(*ngFor='let ann1 of group.annotations')
+            | {{ann1.name}} {{ann1.nameEn}} (data-{{group.dataName}}={{ann1.dataValue}})
+        ng-template([ngIf]='editing(group)')
+          .item(*ngFor='let ann of editingGroup.annotations; first as first2; last as last2')
+            .ui.right.floated.sub.header
+              ng-template([ngIf]='ann===editingAnnotation')
+                .ui.basic.compact.mini.button((click)='doneEditAnnotation()')
+                  | 完成
+              ng-template([ngIf]='ann!==editingAnnotation')
+                .ui.basic.compact.mini.button(*ngIf='!first2', (click)='annMoveUp(ann)')
+                  i.angle.arrow.up.icon
+                  | 上移
+                .ui.basic.compact.mini.button(*ngIf='!last2', (click)='annMoveDown(ann)')
+                  i.angle.arrow.down.icon
+                  | 下移
+                .ui.basic.compact.mini.button((click)='editAnnotation(ann)')
+                  | 修改
+                .ui.basic.compact.mini.button((click)='removeAnnotation(ann)')
+                  | 删除
             ng-template([ngIf]='ann===editingAnnotation')
-              .ui.basic.compact.mini.button((click)='doneEditAnnotation()')
-                | 完成
+              .inline.fields.ann-fields
+                input([(ngModel)]='ann.name', placeholder='Name')
+                input([(ngModel)]='ann.nameEn', placeholder='En Name')
+                input([(ngModel)]='ann.dataValue', placeholder='Data Value')
             ng-template([ngIf]='ann!==editingAnnotation')
-              .ui.basic.compact.mini.button((click)='editAnnotation(ann)')
-                | 修改
-              .ui.basic.compact.mini.button((click)='removeAnnotation(ann)')
-                | 删除
-              .ui.basic.compact.mini.button((click)='annMoveUp(ann)')
-                i.angle.arrow.up.icon
-                | 上移
-              .ui.basic.compact.mini.button((click)='annMoveDown(ann)')
-                i.angle.arrow.down.icon
-                | 下移
-          ng-template([ngIf]='ann===editingAnnotation')
-            .inline.fields.ann-fields
-              input([(ngModel)]='ann.name', placeholder='Name')
-              input([(ngModel)]='ann.nameEn', placeholder='En Name')
-              input([(ngModel)]='ann.dataValue', placeholder='Data Value')
-          ng-template([ngIf]='ann!==editingAnnotation')
-            | {{ann.name}} {{ann.nameEn}} (data-{{editingGroup.dataName}}={{ann.dataValue}})
+              | {{ann.name}} {{ann.nameEn}} (data-{{editingGroup.dataName}}={{ann.dataValue}})
+    .item
+      .header
+        .ui.right.floated.header
+          ng-template([ngIf]='newGroup')
+            .ui.mini.button((click)='newGroup=null') Cancel
+            .ui.primary.mini.button((click)='saveNewGroup()') Add
+          ng-template([ngIf]='!newGroup')
+            .ui.tiny.button((click)='editNewGroup()')
+              i.add.icon
+              | New Group
+      .inline.fields.group-fields(*ngIf='newGroup')
+        input([(ngModel)]='newGroup.name', placeholder='Name')
+        input([(ngModel)]='newGroup.nameEn', placeholder='En Name')
+        //input([(ngModel)]='newGroup.tagName', placeholder='Tag Name')
+        input([(ngModel)]='newGroup.cssClass', placeholder='css Class')
+        input([(ngModel)]='newGroup.dataName', placeholder='Data Attr Name')
+
+  .ui.clearing.divider
+  p &nbsp;

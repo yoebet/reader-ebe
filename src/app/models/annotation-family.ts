@@ -3,8 +3,8 @@ import {AnnotationGroup} from "./annotation-group";
 
 export class AnnotationFamily extends Model {
   name: string;
-  // isDefault: boolean;
-  // status: string;
+  description: string;
+  status: string;
 
   groups: AnnotationGroup[];
 }

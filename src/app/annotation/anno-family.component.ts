@@ -9,31 +9,44 @@ import {AnnoGroupService} from "../services/anno-group.service";
 import {AnnotationGroup} from "../models/annotation-group";
 import {Annotation} from "../models/annotation";
 import {OpResult} from "../models/op-result";
+import {SortableListComponent} from "../common/sortable-list.component";
 
 @Component({
   selector: 'annotation-family',
   templateUrl: './anno-family.component.html',
   styleUrls: ['./anno-family.component.css']
 })
-export class AnnoFamilyComponent implements OnInit {
+export class AnnoFamilyComponent extends SortableListComponent implements OnInit {
 
   family: AnnotationFamily;
   editingGroup: AnnotationGroup;
   editingAnnotation: Annotation;
+  sortGroups: false;
 
-  constructor(private annotationFamilyService: AnnoFamilyService,
-              private annotationGroupService: AnnoGroupService,
+  newGroup: AnnotationGroup;
+
+  constructor(private familyService: AnnoFamilyService,
+              private groupService: AnnoGroupService,
               private router: Router,
               private route: ActivatedRoute,
               private location: Location) {
+    super();
   }
 
   ngOnInit() {
     this.route.paramMap.switchMap((params: ParamMap) =>
-      this.annotationFamilyService.getDetail(params.get('id'))
+      this.familyService.getDetail(params.get('id'))
     ).subscribe(family => {
       this.family = family;
     });
+  }
+
+  get modelList() {
+    return this.family.groups;
+  }
+
+  get sortableService() {
+    return this.groupService;
   }
 
   editGroup(group) {
@@ -124,7 +137,7 @@ export class AnnoFamilyComponent implements OnInit {
 
   saveGroup() {
     let editingGroup = this.editingGroup;
-    this.annotationGroupService.update(editingGroup)
+    this.groupService.update(editingGroup)
       .subscribe(opr => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
@@ -136,18 +149,47 @@ export class AnnoFamilyComponent implements OnInit {
       });
   }
 
-  removeGroup(af) {
+  removeGroup(group) {
     if (!confirm('Are You Sure?')) {
       return;
     }
-    this.annotationGroupService
-      .remove(af._id)
+    this.groupService
+      .remove(group._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
           return;
         }
-        this.family.groups = this.family.groups.filter(c => c !== af);
+        this.family.groups = this.family.groups.filter(c => c !== group);
+      });
+  }
+
+  newAnnotation() {
+    let newAnno = new Annotation();
+    let eg = this.editingGroup;
+    if (!eg.annotations) {
+      eg.annotations = [];
+    }
+    eg.annotations.push(newAnno);
+    this.editingAnnotation = newAnno;
+  }
+
+  editNewGroup() {
+    let newGroup = new AnnotationGroup();
+    newGroup.familyId = this.family._id;
+    newGroup.annotations = [];
+    this.newGroup = newGroup;
+  }
+
+  saveNewGroup() {
+    this.groupService.create(this.newGroup)
+      .subscribe(group => {
+        if (group['ok'] === 0) {
+          alert(group['message'] || 'Fail');
+          return;
+        }
+        this.family.groups.push(group);
+        this.newGroup = null;
       });
   }
 

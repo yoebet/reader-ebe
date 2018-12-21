@@ -1,16 +1,14 @@
 .ui.header
   | 标注
   .ui.right.floated.header
-    sui-checkbox([(ngModel)]='cloneOperation') Clone
-    sui-checkbox([(ngModel)]='removeOperation') Remove
+    sui-checkbox([(ngModel)]='operations') 复制/删除
 
 table.ui.small.striped.table.form
   thead
     tr
-      th Name
-      th Description
-      //th Status
-      //th Default
+      th 名称
+      th 说明
+      th 状态
       th
   tbody
     tr(*ngFor='let family of families; trackBy: tracker')
@@ -22,14 +20,13 @@ table.ui.small.striped.table.form
         ng-template([ngIf]='!editing(family)') {{family.description}}
         .field(*ngIf='editing(family)')
           textarea([(ngModel)]="editingFamily.description", rows='2')
-      //td {{family.status}}
-      //td.center.aligned
-        i.ui.checkmark.icon(*ngIf='family.isDefault')
+      td {{family.status}}
       td.right.aligned
         ng-template([ngIf]='editing(family)')
           .ui.mini.button((click)='editingFamily=null') 取消
           .ui.mini.primary.button((click)='save()') 保存
         ng-template([ngIf]='!editing(family)')
+          ng-template([ngIf]='operations')
+            button.ui.tiny.button((click)='clone(family)') 复制
+            button.ui.tiny.button((click)='remove(family)') 删除
           button.ui.tiny.button((click)='edit(family)') 修改
-          button.ui.tiny.button(*ngIf='cloneOperation', (click)='clone(family)') 复制
-          button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(family)') 删除

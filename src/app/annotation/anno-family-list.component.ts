@@ -15,8 +15,7 @@ export class AnnoFamilyListComponent implements OnInit {
   families: AnnotationFamily[];
   editingFamily: AnnotationFamily;
 
-  cloneOperation = false;
-  removeOperation = false;
+  operations = false;
 
   constructor(private annotationFamilyService: AnnoFamilyService,
               private router: Router) {
