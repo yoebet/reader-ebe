@@ -2,14 +2,18 @@
   .ui.right.floated.small.header
     sui-checkbox([(ngModel)]='showZh') 中文
     sui-checkbox([(ngModel)]='tuneOrder') 排序
-    sui-checkbox([(ngModel)]='operations') 删除
+    sui-checkbox([(ngModel)]='showRemove') 删除
+    .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
+      | 设置状态
+      i.dropdown.icon
+      .menu(suiDropdownMenu='')
+        .item(*ngFor='let so of statusOptions', (click)='setAllStatus(so.value,so.label)') {{so.label}}
   | 章节
 
 .ui.celled.list(*ngIf='book')
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     div([hidden]="chap===editingChap")
       .right.floated.header
-        // label {{chap.status}}
         ng-template([ngIf]="tuneOrder")
           button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
             i.angle.arrow.up.icon
@@ -23,7 +27,9 @@
           button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
             i.angle.double.down.icon
             | bottom
-        ng-template([ngIf]="operations")
+        ng-template([ngIf]="!tuneOrder")
+          .ui.small.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
+        ng-template([ngIf]="showRemove")
           button.ui.tiny.button((click)='remove(chap)') Remove
         button.ui.tiny.button((click)='edit(chap)') Edit
 
@@ -38,6 +44,12 @@
       .fields
         .sixteen.wide.field
           textarea(rows='2', [value]='chap.zhName||""', placeholder='标题', #chapZhName='')
+      .fields
+        .inline.field
+          label 状态
+          sui-select.selection([(ngModel)]="chap.status", [options]="statusOptions",
+          valueField="value", labelField="label", placeholder='状态', #statusSelect='')
+            sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
       .right.floated.field
         button.ui.tiny.button((click)="editingChap=null")
           | 取消

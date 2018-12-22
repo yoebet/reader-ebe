@@ -6,6 +6,7 @@ import {Book} from '../models/book';
 import {SorterService} from './sorter.service';
 import {Observable} from "rxjs/Observable";
 import {SuiModalService} from "ng2-semantic-ui";
+import {OpResult} from "../models/op-result";
 
 @Injectable()
 export class BookService extends SorterService<Book> {
@@ -21,6 +22,12 @@ export class BookService extends SorterService<Book> {
   backup(bookId: string): Observable<Book> {
     let url = `${this.baseUrl}/${bookId}/backup`;
     return this.http.post<Book>(url, null, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  setALLChapsStatus(bookId: string, status: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/setALLChapsStatus/${status}`;
+    return this.http.post<OpResult>(url, null, this.httpOptions)
       .catch(this.handleError);
   }
 

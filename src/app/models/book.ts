@@ -13,12 +13,14 @@ export class Book extends Model {
   description: string;
 
   status: string = 'E';
+  isPrivate: boolean;
 
   chiefEditorId: string;
   chiefEditorName: string;
 
   isFree: boolean;
   price: number; // cents
+  priceLabel: string;
 
   slogan: string;
   introduction: string;
@@ -27,7 +29,6 @@ export class Book extends Model {
   annotationFamilyId: string;
 
   chaps: Chap[];
-
 
 
   static CategoryNames = {
@@ -51,15 +52,14 @@ export class Book extends Model {
 
 
   static StatusNames = {
-    E: '编辑中',
+    E: '编辑',
     C: '校对',
-    P: '上线审核',
-    R: '已上线',
+    R: '上线',
     B: '备份'
   };
 
 
-  static Statuses = ['E', 'C', 'P', 'R'].map(k => {
+  static Statuses = ['E', 'C', 'R'].map(k => {
     return {value: k, label: Book.StatusNames[k]}
   });
 

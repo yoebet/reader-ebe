@@ -72,7 +72,7 @@
             .ui.mini.button((click)='newGroup=null') Cancel
             .ui.primary.mini.button((click)='saveNewGroup()') Add
           ng-template([ngIf]='!newGroup')
-            .ui.tiny.button((click)='editNewGroup()')
+            .ui.tiny.primary.basic.button((click)='editNewGroup()')
               i.add.icon
               | New Group
       .inline.fields.group-fields(*ngIf='newGroup')

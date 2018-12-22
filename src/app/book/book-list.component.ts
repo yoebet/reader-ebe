@@ -18,9 +18,12 @@ import {BookFormModal} from "./book-form.component";
 export class BookListComponent implements OnInit {
   books: Book[] = [];
   newBook: Book = null;
-  langOptions = Book.LangTypes;
   operations: boolean;
   showZh: boolean;
+
+  langOptions = Book.LangTypes;
+  statusNames = Book.StatusNames;
+  categoryNames = Book.CategoryNames;
 
   annOptions: AnnotationFamily[];
 

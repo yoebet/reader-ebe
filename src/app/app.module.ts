@@ -25,6 +25,7 @@ import {AnnoGroupService} from './services/anno-group.service';
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
 import {ClientInfoPipe} from './pipes/client-info.pipe';
+import {PriceLabelPipe} from './pipes/price-label.pipe';
 
 import {AppComponent} from './app.component';
 import {BookListComponent} from './book/book-list.component';
@@ -93,6 +94,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     CreatedDatePipe,
     CreatedDateStringPipe,
     ClientInfoPipe,
+    PriceLabelPipe,
     CategoryListComponent,
     CategoryComponent,
     AnnoFamilyListComponent,
@@ -116,7 +118,8 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     ParaIssueService,
     WordCategoryService,
     AnnoFamilyService,
-    AnnoGroupService
+    AnnoGroupService,
+    PriceLabelPipe
   ],
   entryComponents: [
     LoginPopupComponent,

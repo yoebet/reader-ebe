@@ -6,6 +6,7 @@ import {Chap} from '../models/chap';
 import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
 import {SortableListComponent} from "../common/sortable-list.component";
+import {BookService} from "../services/book.service";
 
 @Component({
   selector: 'book-chaps',
@@ -15,12 +16,15 @@ import {SortableListComponent} from "../common/sortable-list.component";
 export class BookChapsComponent extends SortableListComponent implements OnInit {
   @Input() book: Book;
   tuneOrder = false;
-  operations = false;
+  showRemove = false;
   showZh = false;
   editingChap: Chap;
   editNew = false;
+  statusNames = Book.StatusNames;
+  statusOptions = Book.Statuses;
 
-  constructor(private chapService: ChapService,
+  constructor(private bookService: BookService,
+              private chapService: ChapService,
               private router: Router) {
     super();
   }
@@ -89,6 +93,22 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
       }
       this.editingChap = null;
     });
+  }
+
+  setAllStatus(status: string, label: string) {
+    if (!confirm('要把所有章节的状态都设置为 [' + label + '] 吗?')) {
+      return;
+    }
+    this.bookService.setALLChapsStatus(this.book._id, status)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        for (let chap of this.book.chaps) {
+          chap.status = status;
+        }
+      });
   }
 
   gotoDetail(chap: Chap): void {

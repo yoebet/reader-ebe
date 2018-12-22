@@ -7,10 +7,12 @@ export class Chap extends Model {
   bookId: string;
   no: number;
   originalId: string;
-  isFree: boolean;
-  price: number;
+
   status: string = 'E';
-  memo: string;
+
+  isFree: boolean;
+  price: number; // cents
+  priceLabel: string;
 
   paras: Para[];
 }

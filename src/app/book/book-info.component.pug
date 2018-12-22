@@ -22,7 +22,7 @@
           span.prop-name 代号
           | {{book.code}}
         .prop
-          span.prop-name 分类
+          span.prop-name 类别
           | {{categoryNames[book.category]}}
         .prop
           span.prop-name 状态
@@ -35,7 +35,10 @@
       td {{book.description}}
     tr
       td 定价
-      td {{book.isFree? '免费':book.price}}
+      td
+        //| {{book.isFree? '免费':book.price}}
+        //label 标签
+        | {{book.priceLabel}}
     tr
       td 标签
       td {{book.tags}}

@@ -11,6 +11,7 @@ table.ui.striped.table
       th 代号
       th 书名
       th 作者
+      th 类别
       th 状态
       th
   tbody
@@ -23,8 +24,8 @@ table.ui.striped.table
       td
         .enname {{book.author}}
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
-      td
-        | {{book.status}}
+      td {{categoryNames[book.category]}}
+      td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td.right.aligned
         a((click)='showDetail(book)', href='javascript:') 详情
         | &nbsp;&nbsp;

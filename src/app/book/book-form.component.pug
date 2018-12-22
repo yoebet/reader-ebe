@@ -21,16 +21,16 @@
           input([(ngModel)]='editing.zhAuthor', placeholder='作者')
 
     h4.ui.dividing.grey.header 基本信息
-    .fields
-      .four.wide.field
+    .equal.width.fields
+      .field
         label 代号
         input([(ngModel)]='editing.code', placeholder='Code')
-      .four.wide.field
+      .field
         label 类别
         sui-select.selection([(ngModel)]="editing.category", [options]="categoryOptions",
         valueField="value", labelField="label", placeholder='类别', #categorySelect='')
           sui-select-option(*ngFor="let option of categorySelect.filteredOptions", [value]="option")
-      .four.wide.field
+      .field
         label 状态
         sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
         valueField="value", labelField="label", placeholder='状态', #statusSelect='')
@@ -44,12 +44,19 @@
 
     h4.ui.dividing.grey.header 定价
     .fields
-      .four.wide.field
+      .two.wide.field
         label 免费?
-        sui-checkbox([(ngModel)]='editing.isFree') 免费
-      .four.wide.field
+        sui-checkbox([(ngModel)]='editing.isFree') 是
+      .seven.wide.field
         label 价格（分）
-        input([(ngModel)]='editing.price', type='number', min='0')
+        .inline.field
+          input([(ngModel)]='editing.price', type='number', min='0', max='19900', step='10')
+          | &nbsp; {{{price:editing.price} | priceLabel}}
+      .seven.wide.field
+        label 标签
+        .inline.field
+          input([(ngModel)]='editing.priceLabel', size='12')
+          a((click)='updatePriceLabel()', href='javascript:') 更新
 
     h4.ui.dividing.grey.header 其他
     .field

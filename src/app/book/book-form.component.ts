@@ -6,6 +6,7 @@ import {ModalSize} from "ng2-semantic-ui/dist/modules/modal/classes/modal-config
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 import {OpResult} from "../models/op-result";
+import {PriceLabelPipe} from "../pipes/price-label.pipe";
 
 @Component({
   selector: 'book-form',
@@ -20,6 +21,7 @@ export class BookFormComponent implements OnInit {
   categoryOptions = Book.Categories;
 
   constructor(private bookService: BookService,
+              private priceLabelPipe: PriceLabelPipe,
               private modal: SuiModal<Book, string, string>) {
     this.book = modal.context;
   }
@@ -62,6 +64,11 @@ export class BookFormComponent implements OnInit {
     this.editing = editing;
   }
 
+  updatePriceLabel() {
+    let book = this.editing;
+    book.priceLabel = this.priceLabelPipe.transform(book);
+  }
+
   close() {
     this.modal.approve('');
   }
@@ -71,7 +78,7 @@ export class BookFormComponent implements OnInit {
 export class BookFormModal extends ComponentModalConfig<Book> {
   constructor(book: Book) {
     super(BookFormComponent, book, false);
-    this.size = ModalSize.Small;
+    this.size = ModalSize.Tiny;
     // this.isFullScreen = true;
     this.mustScroll = true;
   }

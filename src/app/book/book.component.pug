@@ -20,10 +20,10 @@ div(*ngIf='book')
         | {{book.code}}
       .prop
         span.prop-name 分类
-        | {{book.category}}
+        | {{categoryNames[book.category]}}
       .prop
         span.prop-name 状态
-        | {{book.status}}
+        | {{statusNames[book.status]}}
 
   .ui.hidden.clearing.divider
 

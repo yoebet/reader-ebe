@@ -16,6 +16,8 @@ import {SuiModalService} from "ng2-semantic-ui";
 })
 export class BookComponent implements OnInit {
   book: Book;
+  statusNames = Book.StatusNames;
+  categoryNames = Book.CategoryNames;
 
   constructor(private bookService: BookService,
               private route: ActivatedRoute,
