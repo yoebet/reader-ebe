@@ -43,7 +43,7 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
     h3.ui.header 新书：
     .fields
       .four.wide.field
-        input([(ngModel)]='newBook.code', placeholder='Code')
+        input([(ngModel)]='newBook.code', #newBookCode='', placeholder='Code')
       //.four.wide.field
         sui-select.selection([(ngModel)]="newBook.langType", [options]="langOptions",
         valueField="value", labelField="label", placeholder='语言', #langSelect='')
@@ -54,7 +54,7 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
           sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
   .fields
     .twelve.wide.field
-      input([(ngModel)]="newBook.name", placeholder='Book Name')
+      input([(ngModel)]="newBook.name", #newBookName='', placeholder='Book Name')
     .four.wide.field
       input([(ngModel)]="newBook.author", placeholder='Author')
   .fields

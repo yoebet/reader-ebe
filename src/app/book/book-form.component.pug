@@ -36,10 +36,10 @@
         valueField="value", labelField="label", placeholder='状态', #statusSelect='')
           sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
     .field
-      label 简短介绍
+      label 简绍
       input([(ngModel)]='editing.introduction')
     .field
-      label 详细介绍
+      label 详情
       textarea(rows='3', [(ngModel)]='editing.description')
 
     h4.ui.dividing.grey.header 定价

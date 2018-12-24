@@ -75,7 +75,7 @@ export class BaseService<M extends Model> {
 
   private static loginModal: ActiveModal<string, string, string> = null;
 
-  protected handleError401(error: any/*, caught*/): Observable<any> {
+  protected handleError401(error: any): Observable<any> {
     if (BaseService.loginModal == null) {
       BaseService.loginModal = this.modalService.open(new LoginModal('请重新登录'))
         .onDeny(d => BaseService.loginModal = null)
@@ -84,18 +84,56 @@ export class BaseService<M extends Model> {
     return Observable.empty();
   }
 
+  protected handleError400(error: any): Observable<any> {
+    let message = this.extractErrorMessage(error);
+    if (message) {
+      alert(message);
+    } else {
+      alert('输入错误');
+    }
+    return Observable.empty();
+  }
+
+  protected handleError500(error: any): Observable<any> {
+    alert('服务器内部错误');
+    return Observable.empty();
+  }
+
+  protected extractErrorMessage(error: any): string {
+    let errorString = error.error;
+    if (typeof errorString !== 'string') {
+      return null;
+    }
+    try {
+      let eo = JSON.parse(errorString);
+      if (eo && typeof eo.message === 'string') {
+        return eo.message;
+      }
+    } catch (e) {
+      console.error('>> ' + errorString);
+    }
+    return null;
+  }
+
   private _handleError(error: any/*, caught*/): Observable<any> {
     /*
     error : {
+      error: `{"ok":0,"message":"code is Required"}`
       name: "HttpErrorResponse"
       ok: false
-      status: 401/0
+      status: 400/401/500/0
       statusText: "Unauthorized"/"Unknown Error"
       url: '...'/null
     }
     */
-    if (error.status === 401) {
+    if (error.status === 400) {
+      return this.handleError400(error);
+    } else if (error.status === 401) {
       return this.handleError401(error);
+    } else if (error.status === 500) {
+      return this.handleError500(error);
+    } else if (error.status === 0) {
+      alert('未知错误，请检查网络连接');
     }
 
     // console.error(error);

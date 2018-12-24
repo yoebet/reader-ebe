@@ -1,15 +1,15 @@
 .ui.header
-  | Word Category List
+  | 词书/词频
   .ui.right.floated.header
-    sui-checkbox([(ngModel)]='tuneOrder') Sort
-    sui-checkbox([(ngModel)]='recountOperation') re-Count
-    sui-checkbox([(ngModel)]='removeOperation') Remove
+    sui-checkbox([(ngModel)]='tuneOrder') 排序
+    sui-checkbox([(ngModel)]='recountOperation') 重新统计
+    sui-checkbox([(ngModel)]='removeOperation') 删除
 
 table.ui.small.striped.table.form
   thead
     tr
-      th Name/Code
-      th 词典筛选
+      th Name(Code)
+      th 筛选
       th 说明
       th 基于
       th 增加词汇
@@ -67,17 +67,17 @@ table.ui.small.striped.table.form
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click)='editNew()') 新增
 .ui.small.form(*ngIf='newCategory')
   .field
-    h3.ui.header New Category:
+    h3.ui.header 新词书/词频
     .fields
       .four.wide.field
         input([(ngModel)]="newCategory.name", placeholder='Name')
       .two.wide.field
         input([(ngModel)]="newCategory.code", placeholder='Code')
       .eight.wide.field
-        input([(ngModel)]="newCategory.description", placeholder='Description')
+        input([(ngModel)]="newCategory.description", placeholder='说明')
     .fields
       .four.wide.field
-        input([(ngModel)]="newCategory.extendTo", placeholder='Extend To')
+        input([(ngModel)]="newCategory.extendTo", placeholder='基于(Code)')
       .two.wide.field
         input([(ngModel)]="newCategory.dictKey", placeholder='dictKey')
       .two.wide.field

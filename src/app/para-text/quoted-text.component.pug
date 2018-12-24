@@ -1,5 +1,5 @@
 .para-quote
-  .ui.right.floated.header(*ngIf='para&&showContent')
+  .ui.right.floated.header(*ngIf='para&&showText')
     sui-checkbox([(ngModel)]='showTitle') 标题
     sui-checkbox([(ngModel)]='textTrans') 中文
   a((click)='toggleText()')

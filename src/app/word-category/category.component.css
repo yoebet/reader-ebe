@@ -1,7 +1,15 @@
+.prop {
+  margin-right: 0.8em;
+  display: inline-block;
+}
+
 .prop-name {
   font-size: 0.9em;
   color: rgba(128, 128, 128, 0.9);
-  margin-left: 0.8em;
   margin-right: 0.3em;
+  display: inline-block;
+}
+
+.prop-value {
   display: inline-block;
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import {SuiModalService} from "ng2-semantic-ui";
 
@@ -16,6 +16,8 @@ import {BookFormModal} from "./book-form.component";
   styleUrls: ['./book-list.component.css']
 })
 export class BookListComponent implements OnInit {
+  @ViewChild('newBookCode') newBookCodeEl: ElementRef;
+  @ViewChild('newBookName') newBookNameEl: ElementRef;
   books: Book[] = [];
   newBook: Book = null;
   operations: boolean;
@@ -28,7 +30,7 @@ export class BookListComponent implements OnInit {
   annOptions: AnnotationFamily[];
 
   constructor(private bookService: BookService,
-              private annotationFamilyService: AnnoFamilyService,
+              private annoFamilyService: AnnoFamilyService,
               private modalService: SuiModalService) {
   }
 
@@ -36,7 +38,7 @@ export class BookListComponent implements OnInit {
     this.bookService
       .list()
       .subscribe(books => this.books = books);
-    this.annotationFamilyService
+    this.annoFamilyService
       .getCandidates()
       .subscribe(afs => this.annOptions = afs);
   }
@@ -66,8 +68,18 @@ export class BookListComponent implements OnInit {
 
   add(): void {
     let book = this.newBook;
-    book.name = book.name.trim();
+    /*if (book.code) {
+      book.code = book.code.trim();
+    }
+    if (!book.code) {
+      this.newBookCodeEl.nativeElement.focus();
+      return;
+    }*/
+    if (book.name) {
+      book.name = book.name.trim();
+    }
     if (!book.name) {
+      this.newBookNameEl.nativeElement.focus();
       return;
     }
     book.author = book.author.trim();

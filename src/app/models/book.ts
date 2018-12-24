@@ -63,10 +63,4 @@ export class Book extends Model {
     return {value: k, label: Book.StatusNames[k]}
   });
 
-  /*static Visibilities = [
-    {value: 'P', label: '公开'},
-    {value: 'E', label: '仅编辑人员可见'}/!*,
-    {value: 'H', label: '仅管理员'}*!/
-  ];*/
-
 }

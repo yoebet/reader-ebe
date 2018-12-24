@@ -1,22 +1,24 @@
-
-.ui.header
-  | Word Category
+.ui.header(*ngIf='category')
+  | {{category.name}}
+  .ui.hidden.divider
+  .sub.header {{category.description}}
 
 div(*ngIf='category')
-  .prop-name Name
-  | {{category.name}}
-  .prop-name Code
-  | {{category.code}}
-  .prop-name Condition
-  | {{ filterStr(category) }}
-  .prop-name Description
-  | {{category.description}}
-  .prop-name wordCount
-  | {{category.wordCount}}
-  .prop-name extendTo
-  | {{category.extendTo}}
-  .prop-name extendedWordCount
-  | {{category.extendedWordCount}}
+  .prop
+    .prop-name Code
+    .prop-value {{category.code}}
+  .prop
+    .prop-name 筛选
+    .prop-value {{ filterStr(category) }}
+  .prop
+    .prop-name 基于
+    .prop-value {{category.extendTo}}
+  .prop
+    .prop-name 增加词汇
+    .prop-value {{category.wordCount}}
+  .prop
+    .prop-name 总词汇量
+    .prop-value {{category.extendedWordCount}}
 
   .ui.hidden.clearing.divider
 
