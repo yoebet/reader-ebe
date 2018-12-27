@@ -70,6 +70,9 @@ export class UserComponent implements OnInit {
     this.bookService.list()
       .subscribe(books => {
         this.allBooks = books;
+        for (let book of books) {
+          book.label = `(${book.code}) ${book.name}`;
+        }
         ecb();
         this.newUserBook = new UserBook();
       });

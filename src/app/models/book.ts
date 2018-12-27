@@ -8,6 +8,8 @@ export class Book extends Model {
   author: string = '';
   zhAuthor: string = '';
 
+  label: string;
+
   category: string;
   langType: string = 'EZ';
   description: string;
@@ -52,9 +54,9 @@ export class Book extends Model {
 
 
   static StatusNames = {
-    E: '编辑',
-    C: '校对',
-    R: '上线',
+    E: '编辑中',
+    C: '校对中',
+    R: '已上线',
     B: '备份'
   };
 

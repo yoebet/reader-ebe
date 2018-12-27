@@ -28,7 +28,7 @@
             i.angle.double.down.icon
             | bottom
         ng-template([ngIf]="!tuneOrder")
-          .ui.small.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
+          .ui.mini.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
         ng-template([ngIf]="showRemove")
           button.ui.tiny.button((click)='remove(chap)') Remove
         button.ui.tiny.button((click)='edit(chap)') Edit

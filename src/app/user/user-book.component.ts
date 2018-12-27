@@ -36,6 +36,9 @@ export class UserBookComponent implements OnInit {
     let obsUserBook = this.ubService.getOne(this.userBook._id);
     Observable.combineLatest(obsBook, obsUserBook)
       .subscribe(([book, ub]) => {
+        if (!book) {
+          return;
+        }
         this.book = book;
         this.allChaps = book.chaps || [];
         this.allChapsMap = new Map();
@@ -47,6 +50,7 @@ export class UserBookComponent implements OnInit {
         }
         this.savedUserBook = JSON.parse(JSON.stringify(ub));
         this.userBook = ub;
+        this.edit();
       });
   }
 

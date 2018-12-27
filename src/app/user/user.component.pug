@@ -2,20 +2,20 @@ div(*ngIf='user')
   .ui.header 用户： {{user.name}}
   ng-template([ngIf]='!editingUserBook')
     .ui.list
-      .item 创建于 {{user | createdDateString:'minute'}}
+      .item 注册于 {{user | createdDateString:'minute'}}
 
-    h4.ui.header Books
+    h4.ui.header 用户图书
     table.ui.striped.table
       thead
         tr
-          th Book Name
-          th Added On
-          th Role
-          th Chaps
+          th 书名
+          th 加入于
+          th 角色
+          th 章节数
           th
       tbody
         tr(*ngFor='let ub of userBooks')
-          td {{ub.book? ub.book.name:''}}
+          td {{ub.book? '('+ub.book.code+') '+ub.book.name:''}}
           td {{ub | createdDateString}}
           td {{ub.role}}
           td {{ub.isAllChaps? 'ALL': ub.chapsCount||''}}
@@ -27,9 +27,9 @@ div(*ngIf='user')
 
     .ui.form(*ngIf='newUserBook')
       .field
-        label Add a Book:
+        label 增加图书
       .eight.wide.field
-        sui-select.selection([(ngModel)]='newUserBook.book', [options]='candidateBooks', labelField='name', #bookSelect='')
+        sui-select.selection([(ngModel)]='newUserBook.book', [options]='candidateBooks', labelField='label', #bookSelect='')
           sui-select-option(*ngFor='let option of bookSelect.filteredOptions', [value]='option')
       .inline.fields
         .field
