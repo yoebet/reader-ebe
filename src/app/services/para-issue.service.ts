@@ -17,7 +17,7 @@ export class ParaIssueService extends BaseService<ParaIssue> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/para_issues`;
+    this.baseUrl = `${apiBase}/${this.apiA}/para_issues`;
   }
 
 

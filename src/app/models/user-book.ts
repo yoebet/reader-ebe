@@ -8,7 +8,9 @@ export class UserBook extends Model {
   isAllChaps: boolean;
   chaps: any[];
   chapsCount: number;
+  acquiredBy: boolean;
   book: Book;
 
   static Roles = ['', 'O', 'E'];
+  static AcquiredMethods = {Purchase: 'P', Bestow: 'B'};
 }

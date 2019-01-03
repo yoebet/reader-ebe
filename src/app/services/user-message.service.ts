@@ -20,8 +20,8 @@ export class UserMessageService extends BaseService<UserMessage> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/user_messages`;
-    this.adminBaseUrl = `${apiBase}/messages`;
+    this.baseUrl = `${apiBase}/${this.apiB}/user_messages`;
+    this.adminBaseUrl = `${apiBase}/${this.apiA}/messages`;
   }
 
 

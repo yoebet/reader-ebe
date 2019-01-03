@@ -42,27 +42,28 @@
       label 详情
       textarea(rows='3', [(ngModel)]='editing.description')
 
-    h4.ui.dividing.grey.header 定价
-    .fields
-      .two.wide.field
-        label 免费?
-        sui-checkbox([(ngModel)]='editing.isFree') 是
-      .seven.wide.field
-        label 价格（分）
-        .inline.field
-          input([(ngModel)]='editing.price', type='number', min='0', max='19900', step='10')
-          | &nbsp; {{{price:editing.price} | priceLabel}}
-      .seven.wide.field
-        label 标签
-        .inline.field
-          input([(ngModel)]='editing.priceLabel', size='12')
-          a((click)='updatePriceLabel()', href='javascript:') 更新
+    ng-template([ngIf]='!editing.isPrivate')
+      h4.ui.dividing.grey.header 定价
+      .fields
+        .two.wide.field
+          label 免费?
+          sui-checkbox([(ngModel)]='editing.isFree') 是
+        .seven.wide.field
+          label 价格（分）
+          .inline.field
+            input([(ngModel)]='editing.price', type='number', min='0', max='19900', step='10')
+            | &nbsp; {{{price:editing.price} | priceLabel}}
+        .seven.wide.field
+          label 标签
+          .inline.field
+            input([(ngModel)]='editing.priceLabel', size='12')
+            a((click)='updatePriceLabel()', href='javascript:') 更新
 
     h4.ui.dividing.grey.header 其他
     .field
       label 标签
       input([(ngModel)]='editing.tags')
-    .field
+    .field(*ngIf='!editing.isPrivate')
       label 推荐语
       input([(ngModel)]='editing.slogan')
     .field

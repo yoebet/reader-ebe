@@ -15,7 +15,7 @@ export class BookService extends SorterService<Book> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/books`;
+    this.baseUrl = `${apiBase}/${this.apiA}/books`;
   }
 
 

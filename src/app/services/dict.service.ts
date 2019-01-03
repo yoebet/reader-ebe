@@ -22,7 +22,7 @@ export class DictService extends BaseService<DictEntry> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/dict`;
+    this.baseUrl = `${apiBase}/${this.apiA}/dict`;
   }
 
   clearCache() {

@@ -96,7 +96,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   }
 
   setAllStatus(status: string, label: string) {
-    if (!confirm('要把所有章节的状态都设置为 [' + label + '] 吗?')) {
+    if (!confirm('要把全部章节都设置为 [' + label + '] 吗?')) {
       return;
     }
     this.bookService.setALLChapsStatus(this.book._id, status)

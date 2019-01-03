@@ -52,7 +52,7 @@ export class ChapParasComponent implements OnInit {
   selectedPara: Para;
   insertPos: number;
   showTrans = true;
-  leftRight = false;
+  leftRight = true;
   clickToEdit = false;
   continuousEditing = false;
   splitMode = false;

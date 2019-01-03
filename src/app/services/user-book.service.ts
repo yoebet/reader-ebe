@@ -13,7 +13,7 @@ export class UserBookService extends BaseService<UserBook> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/user_books`;
+    this.baseUrl = `${apiBase}/${this.apiA}/user_books`;
   }
 
 }

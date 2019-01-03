@@ -18,8 +18,8 @@ export class ChapService extends SorterService<Chap> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.bookBaseUrl = `${apiBase}/books`;
-    this.baseUrl = `${apiBase}/chaps`;
+    this.bookBaseUrl = `${apiBase}/${this.apiA}/books`;
+    this.baseUrl = `${apiBase}/${this.apiA}/chaps`;
   }
 
   create(chap: Chap): Observable<Chap> {

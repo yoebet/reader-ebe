@@ -18,7 +18,7 @@ export class WordCategoryService extends SorterService<WordCategory> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/word_categories`;
+    this.baseUrl = `${apiBase}/${this.apiA}/word_categories`;
   }
 
   fetchSampleWords(code, options: any = {}): Observable<string[]> {

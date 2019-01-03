@@ -1,5 +1,5 @@
 div(*ngIf='user')
-  .ui.header 用户： {{user.name}}
+  .ui.header {{user.name}} （{{user.nickName}}）
   ng-template([ngIf]='!editingUserBook')
     .ui.list
       .item 注册于 {{user | createdDateString:'minute'}}

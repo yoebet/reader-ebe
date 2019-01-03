@@ -21,6 +21,10 @@ export class BaseService<M extends Model> {
     withCredentials: true
   };
 
+  protected apiA = 'api-a';
+
+  protected apiB = 'api-b';
+
   protected baseUrl: string;
 
   constructor(protected http: HttpClient,
@@ -75,6 +79,16 @@ export class BaseService<M extends Model> {
 
   private static loginModal: ActiveModal<string, string, string> = null;
 
+  protected handleError400(error: any): Observable<any> {
+    let message = this.extractErrorMessage(error);
+    if (message) {
+      alert(message);
+    } else {
+      alert('输入错误');
+    }
+    return Observable.empty();
+  }
+
   protected handleError401(error: any): Observable<any> {
     if (BaseService.loginModal == null) {
       BaseService.loginModal = this.modalService.open(new LoginModal('请重新登录'))
@@ -84,12 +98,12 @@ export class BaseService<M extends Model> {
     return Observable.empty();
   }
 
-  protected handleError400(error: any): Observable<any> {
+  protected handleError461(error: any): Observable<any> {
     let message = this.extractErrorMessage(error);
     if (message) {
       alert(message);
     } else {
-      alert('输入错误');
+      alert('没有权限');
     }
     return Observable.empty();
   }
@@ -126,14 +140,18 @@ export class BaseService<M extends Model> {
       url: '...'/null
     }
     */
-    if (error.status === 400) {
-      return this.handleError400(error);
-    } else if (error.status === 401) {
-      return this.handleError401(error);
-    } else if (error.status === 500) {
-      return this.handleError500(error);
-    } else if (error.status === 0) {
-      alert('未知错误，请检查网络连接');
+    switch (error.status) {
+      case 400:
+        return this.handleError400(error);
+      case 401:
+        return this.handleError401(error);
+      case 461:
+        return this.handleError461(error);
+      case 500:
+        return this.handleError500(error);
+      case 0:
+      default:
+        alert('发生错误了，请检查网络连接');
     }
 
     // console.error(error);

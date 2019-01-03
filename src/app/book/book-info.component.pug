@@ -33,7 +33,7 @@
     tr
       td 详情
       td {{book.description}}
-    tr
+    tr(*ngIf='!book.isPrivate')
       td 定价
       td
         //| {{book.isFree? '免费':book.price}}
@@ -42,7 +42,7 @@
     tr
       td 标签
       td {{book.tags}}
-    tr
+    tr(*ngIf='!book.isPrivate')
       td 推荐语
       td {{book.slogan}}
     tr

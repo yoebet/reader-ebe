@@ -25,8 +25,8 @@ export class ParaService extends SorterService<Para> {
               private chapService: ChapService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.chapBaseUrl = `${apiBase}/chaps`;
-    this.baseUrl = `${apiBase}/paras`;
+    this.chapBaseUrl = `${apiBase}/${this.apiA}/chaps`;
+    this.baseUrl = `${apiBase}/${this.apiA}/paras`;
   }
 
   loadPara(id: string): Observable<Para> {

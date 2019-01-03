@@ -15,7 +15,7 @@ export class FeedbackService extends BaseService<UserFeedback> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/user_feedbacks`;
+    this.baseUrl = `${apiBase}/${this.apiA}/user_feedbacks`;
   }
 
 

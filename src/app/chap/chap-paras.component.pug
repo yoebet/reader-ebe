@@ -97,14 +97,17 @@ div(*ngIf='chap')
         (dictRequest)="onDictRequest($event)",
         (noteRequest)="onNoteRequest($event)")
 
-        para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
-        *ngIf='editingPara===para', [para]='para', [showTrans]='showTrans',
+        para-form.ui.form.content.para-editor(*ngIf='editingPara===para',
+        [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+        [para]='para', [showTrans]='showTrans',
         (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
     .item.paragraph(*ngIf='insertPos===chap.paras.length')
       .ui.left.floated.mini.statistic.para-no
         .value +
-      para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+      para-form.ui.form.content.para-editor(
+      [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+      [showTrans]='showTrans',
       (onSave)="save($event)", (onSplit)="saveSplittedPara($event)", (onCancel)="cancelEdit()")
 
   .ui.clearing.hidden.divider

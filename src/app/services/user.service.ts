@@ -17,7 +17,7 @@ export class UserService extends BaseService<User> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/users`;
+    this.baseUrl = `${apiBase}/${this.apiA}/users`;
   }
 
 

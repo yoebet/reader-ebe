@@ -24,7 +24,7 @@ export class SessionService {
 
   constructor(private http: HttpClient) {
     let apiBase = environment.apiBase || '';
-    this.loginUrl = `${apiBase}/login`;
+    this.loginUrl = `${apiBase}/api-b/login`;
   }
 
   login(name, pass): Observable<OpResult> {
