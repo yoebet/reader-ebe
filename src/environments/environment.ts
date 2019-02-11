@@ -3,7 +3,10 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+const ServerRoot = 'http://localhost:3000';
+
 export const environment = {
   production: false,
-  apiBase: 'http://localhost:3000'
+  apiBase: ServerRoot,
+  staticBase: ServerRoot
 };

@@ -276,7 +276,7 @@ export class SentenceAlignComponent {
     }
     for (let row of this.rows) {
       let {left, right, sid} = row;
-      if (left === '') {
+      if (left === '' && right === '') {
         continue;
       }
       if (!sid || isNaN(sid)) {

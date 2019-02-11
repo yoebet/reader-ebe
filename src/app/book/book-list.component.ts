@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
+import {BookImagesBase, BookImageNotSet} from '../config';
 import {SuiModalService} from "ng2-semantic-ui";
 
 import {Book} from '../models/book';
@@ -9,6 +10,7 @@ import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
 import {BookInfoModal} from "./book-info.component";
 import {BookFormModal} from "./book-form.component";
+import {BookImageModal} from "./book-image.component";
 
 @Component({
   selector: 'book-list',
@@ -21,11 +23,13 @@ export class BookListComponent implements OnInit {
   books: Book[] = [];
   newBook: Book = null;
   operations: boolean;
-  showZh: boolean;
+  showZh = true;
 
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
   categoryNames = Book.CategoryNames;
+  bookImagesBase = BookImagesBase;
+  bookImageNotSet = BookImageNotSet;
 
   annOptions: AnnotationFamily[];
 
@@ -46,6 +50,13 @@ export class BookListComponent implements OnInit {
 
   showDetail(book: Book) {
     this.modalService.open(new BookInfoModal(book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
+  }
+
+  showImage(book: Book) {
+    this.modalService.open(new BookImageModal(book))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

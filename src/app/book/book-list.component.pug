@@ -8,6 +8,7 @@
 table.ui.striped.table
   thead
     tr
+      th
       th 代号
       th 书名
       th 作者
@@ -16,6 +17,10 @@ table.ui.striped.table
       th
   tbody
     tr(*ngFor='let book of books; trackBy: bookTracker')
+      td
+        a((click)='showImage(book)', href='javascript:')
+          img.ui.tiny.image(*ngIf='book.image', [src]='bookImagesBase+"/"+book.image.file')
+          img.ui.tiny.image.disabled(*ngIf='!book.image', [src]='bookImageNotSet')
       td {{book.code}}
       td
         a([routerLink]="['/books', book._id]")
@@ -34,7 +39,7 @@ table.ui.striped.table
           button.ui.tiny.button((click)='backup(book)') 备份
           button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
-      td(colspan='5') No Results.
+      td(colspan='6') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
@@ -65,4 +70,5 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
   .field.ui.right.floated.header
     button.ui.tiny.button((click)="cancelEdit()") 取消
     button.ui.tiny.primary.button((click)="add()") 保存
-  .ui.hidden.clearing.divider
+
+.ui.hidden.clearing.divider

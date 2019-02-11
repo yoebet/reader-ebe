@@ -30,6 +30,8 @@ export class Book extends Model {
 
   annotationFamilyId: string;
 
+  image: BookImage;
+
   chaps: Chap[];
 
 
@@ -65,4 +67,11 @@ export class Book extends Model {
     return {value: k, label: Book.StatusNames[k]}
   });
 
+}
+
+export class BookImage {
+  file: string;
+  type: string;
+  size: number;
+  uploadedAt: Date
 }
