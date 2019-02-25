@@ -151,7 +151,8 @@ export class BaseService<M extends Model> {
         return this.handleError500(error);
       case 0:
       default:
-        alert('发生错误了，请检查网络连接');
+        // alert('发生错误了，请检查网络连接');
+        console.error(error);
     }
 
     // console.error(error);

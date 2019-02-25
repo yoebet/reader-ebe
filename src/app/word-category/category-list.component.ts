@@ -132,7 +132,32 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   }
 
   recount(cat) {
-
+    if (!confirm('要重新统计吗？')) {
+      return;
+    }
+    this.wordCategoryService.calculateWordCount(cat.code)
+      .subscribe(opr => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        let updated = opr.updated;
+        if (!updated) {
+          console.log(opr);
+          return;
+        }
+        let updatedNames = [];
+        for (let code in updated) {
+          let {wordCount, extendedWordCount} = updated[code];
+          let cat = this.categories.find(wc => wc.code === code);
+          if (cat) {
+            cat.wordCount = wordCount;
+            cat.extendedWordCount = extendedWordCount;
+            updatedNames.push(cat.name);
+          }
+        }
+        alert('已更新 ' + updatedNames.join(','));
+      });
   }
 
   tracker(index, category) {
