@@ -7,6 +7,7 @@ import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 import {BookFormModal} from "./book-form.component";
 import {BookInfoModal} from "./book-info.component";
+import {BookUsersModal} from "./book-users.component";
 import {SuiModalService} from "ng2-semantic-ui";
 
 @Component({
@@ -42,6 +43,13 @@ export class BookComponent implements OnInit {
 
   showForm() {
     this.modalService.open(new BookFormModal(this.book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
+  }
+
+  showUsers() {
+    this.modalService.open(new BookUsersModal(this.book))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

@@ -110,6 +110,7 @@ export class UserBookComponent implements OnInit {
       });
     }
     ub.chapsCount = ub.chaps.length;
+    ub.acquireMethod = UserBook.AcquireMethods.Bestow;
     this.ubService.update(ub).subscribe(opr => {
       if (opr.ok === 0) {
         alert(opr.message || 'Fail');

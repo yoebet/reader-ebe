@@ -86,6 +86,7 @@ export class UserComponent implements OnInit {
     nub.userId = this.user._id;
     nub.bookId = nub.book._id;
     nub.chapsCount = 0;
+    nub.acquireMethod = UserBook.AcquireMethods.Bestow;
     let book = nub.book;
     delete nub.book;
     this.userBookService.create(nub).subscribe(ub => {

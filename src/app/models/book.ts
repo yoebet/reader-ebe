@@ -1,5 +1,6 @@
 import {Model} from './model';
 import {Chap} from './chap';
+import {UserBook} from "./user-book";
 
 export class Book extends Model {
   code: string;
@@ -74,4 +75,10 @@ export class BookImage {
   type: string;
   size: number;
   uploadedAt: Date
+}
+
+export class PrivilegedUsers {
+  owner: UserBook;
+  editors: UserBook[];
+  readers: UserBook[];
 }

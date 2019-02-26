@@ -1,0 +1,30 @@
+.ui.content
+  ng-template([ngIf]='pUsers')
+    h4.ui.dividing.header
+      | Owner
+      .clearing
+    .ui.users.list(*ngIf='pUsers.owner')
+      .ui.item {{pUsers.owner.userNickName}}
+
+    h4.ui.dividing.header
+      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.editors||pUsers.editors.length<3', (click)='newEditor()') 增加
+      | 编辑
+      span.add-user-tip （不超过3名）
+      .clearing
+    .ui.users.list(*ngIf='pUsers.editors')
+      .ui.item(*ngFor='let editor of pUsers.editors')
+        | {{editor.userNickName}} &nbsp;&nbsp;&nbsp;&nbsp;
+        a((click)='removeEditor(editor.userId)', href='javascript:') 移除
+
+    h4.ui.dividing.header
+      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.readers||pUsers.readers.length<8', (click)='newReader()') 增加
+      | 特权读者
+      span.add-user-tip （不超过8名）
+      .clearing
+    .ui.users.list(*ngIf='pUsers.readers')
+      .ui.item(*ngFor='let reader of pUsers.readers')
+        | {{reader.userNickName}} &nbsp;&nbsp;&nbsp;&nbsp;
+        a((click)='removeReader(reader.userId)', href='javascript:') 移除
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

@@ -9,6 +9,9 @@ export class PriceLabelPipe implements PipeTransform {
     if (pricing.isFree) {
       return '免费';
     }
+    if (!pricing.price) {
+      return '';
+    }
     let cny = pricing.price / 100;
     let cnys = cny.toFixed(2);
     return `${cnys} 元`;

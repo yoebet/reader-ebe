@@ -32,6 +32,8 @@ table.ui.striped.table
       td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td.right.aligned
+        a((click)='showUsers(book)', href='javascript:') 人员
+        | &nbsp;&nbsp;
         a((click)='showDetail(book)', href='javascript:') 详情
         | &nbsp;&nbsp;
         a((click)='showForm(book)', href='javascript:') 修改

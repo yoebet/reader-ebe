@@ -1,0 +1,9 @@
+.users.list {
+  margin-left: 2em;
+}
+
+span.add-user-tip {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: normal;
+}

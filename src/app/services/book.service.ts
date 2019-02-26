@@ -4,9 +4,9 @@ import {environment} from '../../environments/environment';
 
 import {SuiModalService} from "ng2-semantic-ui";
 import {Observable} from "rxjs/Observable";
-import {Subject} from 'rxjs/Subject';
 
-import {Book, BookImage} from '../models/book';
+import {Book, BookImage, PrivilegedUsers} from '../models/book';
+import {UserBook} from '../models/user-book';
 import {SorterService} from './sorter.service';
 import {OpResult} from "../models/op-result";
 
@@ -38,6 +38,37 @@ export class BookService extends SorterService<Book> {
     const formData = new FormData();
     formData.append('image', file, file.name);
     return this.http.post<BookImage>(url, formData, this.httpOptions);
+  }
+
+
+  getPrivilegedUsers(bookId: string): Observable<PrivilegedUsers> {
+    let url = `${this.baseUrl}/${bookId}/privilegedUsers`;
+    return this.http.get<PrivilegedUsers>(url, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  addEditor(bookId: string, userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/editor/${userId}`;
+    return this.http.post<OpResult>(url, null, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  removeEditor(bookId: string, userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/editor/${userId}`;
+    return this.http.delete<OpResult>(url, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  addReader(bookId: string, userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
+    return this.http.post<OpResult>(url, null, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  removeReader(bookId: string, userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
+    return this.http.delete<OpResult>(url, this.httpOptions)
+      .catch(this.handleError);
   }
 
 }

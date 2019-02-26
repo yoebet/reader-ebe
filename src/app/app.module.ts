@@ -32,8 +32,9 @@ import {AppComponent} from './app.component';
 import {BookListComponent} from './book/book-list.component';
 import {BookComponent} from './book/book.component';
 import {BookInfoComponent} from './book/book-info.component';
-import {BookImageComponent} from './book/book-image.component';
 import {BookFormComponent} from './book/book-form.component';
+import {BookUsersComponent} from './book/book-users.component';
+import {BookImageComponent} from './book/book-image.component';
 import {BookChapsComponent} from './book/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
@@ -74,8 +75,9 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     BookListComponent,
     BookComponent,
     BookInfoComponent,
-    BookImageComponent,
     BookFormComponent,
+    BookUsersComponent,
+    BookImageComponent,
     BookChapsComponent,
     ChapComponent,
     ChapParasComponent,
@@ -128,8 +130,9 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
   entryComponents: [
     LoginPopupComponent,
     BookInfoComponent,
-    BookImageComponent,
     BookFormComponent,
+    BookUsersComponent,
+    BookImageComponent,
     ParaSplitComponent,
     SentenceAlignComponent,
     WordAnnosComponent,
