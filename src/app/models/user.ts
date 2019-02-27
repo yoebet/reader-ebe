@@ -9,3 +9,9 @@ export class User extends Model {
 
   static Roles = ['', 'A', 'E'];
 }
+
+export class UserIdName {
+  _id: string;
+  name: string;
+  nickName: string;
+}

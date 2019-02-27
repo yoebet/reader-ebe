@@ -1,5 +1,5 @@
 .ui.content
-  ng-template([ngIf]='pUsers')
+  .ui.tiny.form(*ngIf='pUsers')
     h4.ui.dividing.header
       | Owner
       .clearing
@@ -7,20 +7,30 @@
       .ui.item {{pUsers.owner.userNickName}}
 
     h4.ui.dividing.header
-      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.editors||pUsers.editors.length<3', (click)='newEditor()') 增加
+      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.editors||pUsers.editors.length<3', (click)='addingEditor=true') 增加
       | 编辑
       span.add-user-tip （不超过3名）
       .clearing
+    .fields(*ngIf='addingEditor')
+      .inline.field
+        input(placeholder='账号/手机号', #editorName='')
+        .ui.mini.basic.button((click)='addingEditor=false') 取消
+        .ui.mini.primary.button((click)='addEditor(editorName.value)') 增加编辑
     .ui.users.list(*ngIf='pUsers.editors')
       .ui.item(*ngFor='let editor of pUsers.editors')
         | {{editor.userNickName}} &nbsp;&nbsp;&nbsp;&nbsp;
         a((click)='removeEditor(editor.userId)', href='javascript:') 移除
 
     h4.ui.dividing.header
-      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.readers||pUsers.readers.length<8', (click)='newReader()') 增加
-      | 特权读者
-      span.add-user-tip （不超过8名）
+      .ui.right.floated.mini.compact.button(*ngIf='!pUsers.readers||pUsers.readers.length<7', (click)='addingReader=true') 增加
+      | 读者
+      span.add-user-tip （不超过7名）
       .clearing
+    .fields(*ngIf='addingReader')
+      .inline.field
+        input(placeholder='账号/手机号', #readerName='')
+        .ui.mini.basic.button((click)='addingReader=false') 取消
+        .ui.mini.primary.button((click)='addReader(readerName.value)') 增加读者
     .ui.users.list(*ngIf='pUsers.readers')
       .ui.item(*ngFor='let reader of pUsers.readers')
         | {{reader.userNickName}} &nbsp;&nbsp;&nbsp;&nbsp;

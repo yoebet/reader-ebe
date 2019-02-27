@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpRequest, HttpEventType, HttpResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
 import {SuiModalService} from "ng2-semantic-ui";
 import {Observable} from "rxjs/Observable";
 
 import {Book, BookImage, PrivilegedUsers} from '../models/book';
-import {UserBook} from '../models/user-book';
 import {SorterService} from './sorter.service';
 import {OpResult} from "../models/op-result";
+import {UserIdName} from "../models/user";
 
 @Injectable()
 export class BookService extends SorterService<Book> {
@@ -68,6 +68,12 @@ export class BookService extends SorterService<Book> {
   removeReader(bookId: string, userId: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
     return this.http.delete<OpResult>(url, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  checkCandidate(bookId: string, name: string): Observable<UserIdName> {
+    let url = `${this.baseUrl}/${bookId}/check_candidate/${name}`;
+    return this.http.post<UserIdName>(url, null, this.httpOptions)
       .catch(this.handleError);
   }
 
