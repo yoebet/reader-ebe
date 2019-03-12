@@ -1,11 +1,13 @@
 div(*ngIf='book')
   .ui.content
     .ui.right.floated.sub.header
-      button.ui.tiny.button((click)='showUsers()') 人员
-      | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showForm()') 修改
+      | &nbsp;&nbsp;
+      button.ui.tiny.button((click)='showUsers()') 人员
+      | &nbsp;&nbsp;
+      button.ui.tiny.button((click)='showPacks()') 内容包
     .name-author
       .book-name {{book.name}}
       .author

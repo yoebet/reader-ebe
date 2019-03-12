@@ -5,7 +5,7 @@ import {environment} from '../../environments/environment';
 import {SuiModalService} from "ng2-semantic-ui";
 import {Observable} from "rxjs/Observable";
 
-import {Book, BookImage, PrivilegedUsers} from '../models/book';
+import {Book, BookContentPack, BookImage, PrivilegedUsers} from '../models/book';
 import {SorterService} from './sorter.service';
 import {OpResult} from "../models/op-result";
 import {UserIdName} from "../models/user";
@@ -72,8 +72,20 @@ export class BookService extends SorterService<Book> {
   }
 
   checkCandidate(bookId: string, name: string): Observable<UserIdName> {
-    let url = `${this.baseUrl}/${bookId}/check_candidate/${name}`;
+    let url = `${this.baseUrl}/${bookId}/checkCandidate/${name}`;
     return this.http.post<UserIdName>(url, null, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  buildContentPack(bookId: string, role: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/buildContentPack`;
+    return this.http.post<OpResult>(url, {role}, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  dropContentPack(bookId: string, role: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/dropContentPack`;
+    return this.http.post<OpResult>(url, {role}, this.httpOptions)
       .catch(this.handleError);
   }
 

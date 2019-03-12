@@ -11,6 +11,7 @@ import {OpResult} from '../models/op-result';
 import {BookInfoModal} from "./book-info.component";
 import {BookFormModal} from "./book-form.component";
 import {BookImageModal} from "./book-image.component";
+import {BookPacksModal} from "./book-packs.component";
 import {BookUsersModal} from "./book-users.component";
 
 @Component({
@@ -65,6 +66,13 @@ export class BookListComponent implements OnInit {
 
   showForm(book: Book) {
     this.modalService.open(new BookFormModal(book))
+    // .onDeny((d) => {})
+    // .onApprove((r) => {})
+    ;
+  }
+
+  showPacks(book: Book) {
+    this.modalService.open(new BookPacksModal(book))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

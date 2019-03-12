@@ -33,6 +33,8 @@ export class Book extends Model {
 
   image: BookImage;
 
+  contentPacks: { [name: string]: BookContentPack };
+
   chaps: Chap[];
 
 
@@ -68,13 +70,28 @@ export class Book extends Model {
     return {value: k, label: Book.StatusNames[k]}
   });
 
+  static BookContentPackRoles = {
+    Editor: 'e',
+    Reader: 'r',
+    Public: 'p'
+  };
+
 }
 
 export class BookImage {
   file: string;
   type: string;
   size: number;
-  uploadedAt: Date
+  uploadedAt: Date;
+}
+
+export class BookContentPack {
+  role?: string;
+  file: string;
+  hash: string;
+  size: number;
+  chaps: number;
+  builtAt: Date;
 }
 
 export class PrivilegedUsers {

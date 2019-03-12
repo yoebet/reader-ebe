@@ -1,0 +1,10 @@
+span.tip {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: normal;
+}
+
+.sub.header span.tip {
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}

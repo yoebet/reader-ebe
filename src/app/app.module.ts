@@ -33,6 +33,7 @@ import {BookListComponent} from './book/book-list.component';
 import {BookComponent} from './book/book.component';
 import {BookInfoComponent} from './book/book-info.component';
 import {BookFormComponent} from './book/book-form.component';
+import {BookPacksComponent} from './book/book-packs.component';
 import {BookUsersComponent} from './book/book-users.component';
 import {BookImageComponent} from './book/book-image.component';
 import {BookChapsComponent} from './book/book-chaps.component';
@@ -76,6 +77,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     BookComponent,
     BookInfoComponent,
     BookFormComponent,
+    BookPacksComponent,
     BookUsersComponent,
     BookImageComponent,
     BookChapsComponent,
@@ -131,6 +133,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     LoginPopupComponent,
     BookInfoComponent,
     BookFormComponent,
+    BookPacksComponent,
     BookUsersComponent,
     BookImageComponent,
     ParaSplitComponent,
