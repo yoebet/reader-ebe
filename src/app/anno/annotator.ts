@@ -1,8 +1,9 @@
 import {Annotation} from '../models/annotation';
-import {AnnotateResult} from './annotate-result'
+import {AnnotateResult} from './annotate-result';
+import {UIConstants} from '../config';
 
 export class Annotator {
-  static annotationTagName = 'y-o';
+  static annotationTagName = UIConstants.annotationTagName;
 
   charPattern = /[-a-zA-Z']/;
   wordAtCursorIfNoSelection = true;
@@ -105,7 +106,7 @@ export class Annotator {
   }
 
   private lookupElement(element, selector) {
-    if(!selector){
+    if (!selector) {
       return null;
     }
     while (element) {

@@ -1,5 +1,6 @@
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
+import {DataAttrNames, DataAttrValues, SpecialAnnotations} from '../config';
 
 
 export class AnnotationSet {
@@ -70,14 +71,9 @@ export class AnnotationSet {
   }
 
   annotationOutput(dataName: string, dataValue: string) {
-    if (dataName === 'phra' && /^g\d$/.test(dataValue)) {
+    if (dataName === DataAttrNames.assoc && DataAttrValues.phraPattern.test(dataValue)) {
       return '词组';
     }
-    // if (dataName === 'clau') {
-    //   if (dataValue === 'cc' || dataValue === 'cr') {
-    //     return null;
-    //   }
-    // }
     let annKey = `${dataName}.${dataValue}`;
     let ann = this.annotationsMap.get(annKey);
     if (!ann) {
@@ -85,22 +81,43 @@ export class AnnotationSet {
     }
     return ann.name;
   }
+
+
+  static evalSpecialAnnotations(): Annotation[] {
+
+    let annotations = [];
+    let groupSwm = new AnnotationGroup();
+    groupSwm.dataName = DataAttrNames.mid;
+    let swm = new Annotation();
+    let annSMConfig = SpecialAnnotations.SelectMeaning;
+    swm.name = annSMConfig.name;
+    swm.nameEn = annSMConfig.nameEn;
+    swm.group = groupSwm;
+
+    let groupAan = new AnnotationGroup();
+    groupAan.dataName = DataAttrNames.note;
+    let aan = new Annotation();
+    let annAAConfig = SpecialAnnotations.AddANote;
+    aan.name = annAAConfig.name;
+    aan.nameEn = annAAConfig.nameEn;
+    aan.group = groupAan;
+
+    annotations.push(swm);
+    annotations.push(aan);
+
+    return annotations;
+  }
 }
 
 
 export class HighlightGroups {
 
-  private static group(attr, values) {
+  /*private static group(attr, values) {
     return values.map(v => `[data-${attr}=${v}]`).join(', ');
-  }
+  }*/
 
-  static groupSelectors: string[] = [
-    '[data-phra=g1]',
-    '[data-phra=g2]',
-    '[data-phra=g3]',
-    HighlightGroups.group('clau', ['cc', 'cr']),
-    HighlightGroups.group('memb', ['ms', 'mp', 'mo'])
-  ];
+  static groupSelectors: string[] = DataAttrValues.assocGroups
+    .map(group => `[data-${DataAttrNames.assoc}=${group}]`);
 
   static highlightAnnotationSelectors = HighlightGroups.groupSelectors.join(', ');
 

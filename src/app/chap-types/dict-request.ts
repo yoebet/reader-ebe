@@ -3,7 +3,16 @@ import {DictEntry} from '../models/dict-entry';
 export class DictRequest {
   wordElement: Element;
   dictEntry: DictEntry;
-  meaningItemId: number;
+  initialSelected?: SelectedItem;
   relatedWords?: string[];
-  meaningItemCallback: (selected: { word: string, selectedItemId: number }) => void;
+  meaningItemCallback: (selected: DictSelectedResult) => void;
+}
+
+export class SelectedItem {
+  itemId: number;
+  meaning?: string;
+}
+
+export class DictSelectedResult extends SelectedItem {
+  word?: string;
 }

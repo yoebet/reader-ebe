@@ -5,6 +5,8 @@ import {
 
 import {DictService} from '../services/dict.service';
 import {DictEntryComponent} from './dict-entry.component';
+import {DictSelectedResult} from '../chap-types/dict-request';
+import {SelectedItem} from "../chap-types/dict-request";
 
 @Component({
   selector: 'dict-entry-smi',
@@ -13,7 +15,7 @@ import {DictEntryComponent} from './dict-entry.component';
 })
 export class DictEntrySmiComponent extends DictEntryComponent implements AfterViewChecked {
   @Output() viewReady = new EventEmitter();
-  @Output() dictItemSelected = new EventEmitter<{ word: string, selectedItemId: number }>();
+  @Output() dictItemSelected = new EventEmitter<DictSelectedResult>();
 
   viewReadyEntry = null;
 
@@ -39,16 +41,19 @@ export class DictEntrySmiComponent extends DictEntryComponent implements AfterVi
 
   doneSelect() {
     let word = this.entry.word;
-    let selectedItemId = this.selectedItemId;
+    let initial = this.initialSelectedItem || {} as SelectedItem;
+    let selected = this.selectedItem || {} as SelectedItem;
+    let {itemId, meaning} = selected;
     if (word === this.initialWord) {
       // null: no change; -1: unset
-      if (this.initialSelectedItemId === this.selectedItemId) {
-        selectedItemId = null;
-      } else if (this.initialSelectedItemId !== null && this.selectedItemId == null) {
-        selectedItemId = -1;
+      if (initial.itemId === itemId) {
+        itemId = null;
+      } else if (initial.itemId !== null && itemId == null) {
+        itemId = -1;
       }
     }
-    this.dictItemSelected.emit({word, selectedItemId});
+    let result = {word, itemId, meaning};
+    this.dictItemSelected.emit(result);
   }
 
 }

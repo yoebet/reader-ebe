@@ -43,7 +43,8 @@ export class BookComponent implements OnInit {
   }
 
   showForm() {
-    this.modalService.open(new BookFormModal(this.book))
+    let context = {book: this.book};
+    this.modalService.open(new BookFormModal(context))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

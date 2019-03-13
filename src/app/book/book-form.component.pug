@@ -36,6 +36,11 @@
         valueField="value", labelField="label", placeholder='状态', #statusSelect='')
           sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
     .field
+      label 标注
+      sui-select.selection([(ngModel)]="editing.annotationFamilyId", [options]="annOptions",
+      valueField="_id", labelField="name", placeholder='标注', #annSelect='')
+        sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
+    .field
       label 简介
       input([(ngModel)]='editing.introduction')
     .field

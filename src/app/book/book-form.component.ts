@@ -7,6 +7,8 @@ import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 import {OpResult} from "../models/op-result";
 import {PriceLabelPipe} from "../pipes/price-label.pipe";
+import {AnnotationFamily} from "../models/annotation-family";
+import {AnnoFamilyService} from "../services/anno-family.service";
 
 @Component({
   selector: 'book-form',
@@ -20,14 +22,24 @@ export class BookFormComponent implements OnInit {
   statusOptions = Book.Statuses;
   categoryOptions = Book.Categories;
 
+  annOptions: AnnotationFamily[];
+
   constructor(private bookService: BookService,
+              private annoFamilyService: AnnoFamilyService,
               private priceLabelPipe: PriceLabelPipe,
-              private modal: SuiModal<Book, string, string>) {
-    this.book = modal.context;
+              private modal: SuiModal<BookFormContext, string, string>) {
+    let context = modal.context;
+    this.book = context.book;
+    this.annOptions = context.annOptions;
   }
 
   ngOnInit(): void {
     this.edit();
+    if (!this.annOptions) {
+      this.annoFamilyService
+        .getCandidates()
+        .subscribe(afs => this.annOptions = afs);
+    }
   }
 
   save(): void {
@@ -74,10 +86,14 @@ export class BookFormComponent implements OnInit {
   }
 }
 
+export class BookFormContext {
+  book: Book;
+  annOptions?: AnnotationFamily[];
+}
 
-export class BookFormModal extends ComponentModalConfig<Book> {
-  constructor(book: Book) {
-    super(BookFormComponent, book, false);
+export class BookFormModal extends ComponentModalConfig<BookFormContext> {
+  constructor(context: BookFormContext) {
+    super(BookFormComponent, context, false);
     this.size = ModalSize.Tiny;
     // this.isFullScreen = true;
     this.mustScroll = true;

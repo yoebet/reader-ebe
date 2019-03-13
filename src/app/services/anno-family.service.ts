@@ -10,8 +10,6 @@ import 'rxjs/add/operator/map';
 
 import {BaseService} from './base.service';
 import {AnnotationFamily} from "../models/annotation-family";
-import {AnnotationGroup} from "../models/annotation-group";
-import {Annotation} from "../models/annotation";
 import {AnnotationSet} from "../anno/annotation-set";
 import {SuiModalService} from "ng2-semantic-ui";
 
@@ -43,34 +41,11 @@ export class AnnoFamilyService extends BaseService<AnnotationFamily> {
         return null;
       }
       let groups = family.groups;
-      let sas = this.evalSpecialAnnotations(family);
+      let sas = AnnotationSet.evalSpecialAnnotations();
       let anns = new AnnotationSet(groups, sas);
       this.annotationsMap.set(familyId, anns);
       return anns;
     });
-  }
-
-  private evalSpecialAnnotations(family: AnnotationFamily): Annotation[] {
-
-    let annotations = [];
-    let groupSwm = new AnnotationGroup();
-    groupSwm.dataName = 'mid';
-    let swm = new Annotation();
-    swm.name = '选词义';
-    swm.nameEn = 'SelectWordMeaning';
-    swm.group = groupSwm;
-
-    let groupAan = new AnnotationGroup();
-    groupAan.dataName = 'note';
-    let aan = new Annotation();
-    aan.name = '加注解';
-    aan.nameEn = 'AddANote';
-    aan.group = groupAan;
-
-    annotations.push(swm);
-    annotations.push(aan);
-
-    return annotations;
   }
 
 

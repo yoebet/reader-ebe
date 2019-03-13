@@ -4,13 +4,13 @@
     img.disabled(*ngIf='!book.image', [src]='bookImageNotSet', title='点击选择图片')
 
   input(type="file", style="display: none", (change)="upload()", #file='')
-  .ui.horizontal.list.image-info(*ngIf='book.image')
+  .ui.horizontal.small.list.image-info(*ngIf='book.image')
     .item
       | 上传于
-      .ui.tiny.label {{book.image.uploadedAt | date:'yyyy-M-d' }}
+      .ui.small.label {{book.image.uploadedAt | date:'yyyy-M-d' }}
     .item
       | 大小
-      .ui.tiny.label {{book.image.size | fileSize}}
+      .ui.small.label {{book.image.size | fileSize}}
 
 .actions
   button.ui.tiny.button((click)="close()", autofocus='') 关闭

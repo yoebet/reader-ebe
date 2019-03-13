@@ -5,6 +5,7 @@ import {DictEntry, PosMeanings, MeaningItem, PosTags} from '../models/dict-entry
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
 import {DictBaseComponent} from "./dict-base.component";
+import {SelectedItem} from "../chap-types/dict-request";
 
 @Component({
   selector: 'dict-entry',
@@ -12,10 +13,10 @@ import {DictBaseComponent} from "./dict-base.component";
   styleUrls: ['./dict-entry.component.css']
 })
 export class DictEntryComponent extends DictBaseComponent {
-  @Input() initialSelectedItemId: number;
+  @Input() initialSelectedItem: SelectedItem;
 
   initialWord: string;
-  selectedItemId: number;
+  selectedItem: SelectedItem;
   autoSaveOnAdoptItem = false;
   coTabActive = false;
   selectMeaningItem = false;
@@ -35,10 +36,29 @@ export class DictEntryComponent extends DictBaseComponent {
     super(cdr, dictService);
   }
 
+  get initialSelectedItemId() {
+    if (!this.initialSelectedItem) {
+      return null;
+    }
+    return this.initialSelectedItem.itemId;
+  }
+
+  get selectedItemId() {
+    if (!this.selectedItem) {
+      return null;
+    }
+    return this.selectedItem.itemId;
+  }
+
   ngOnInit() {
     super.ngOnInit();
     this.initialWord = this.entry.word;
-    this.selectedItemId = this.initialSelectedItemId;
+    let isi = this.initialSelectedItem;
+    if (isi) {
+      this.selectedItem = {itemId: isi.itemId, meaning: isi.meaning};
+    } else {
+      this.selectedItem = null;
+    }
   }
 
 
@@ -47,9 +67,14 @@ export class DictEntryComponent extends DictBaseComponent {
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.resetRefWords();
     if (entry.word === this.initialWord) {
-      this.selectedItemId = this.initialSelectedItemId;
+      let isi = this.initialSelectedItem;
+      if (isi) {
+        this.selectedItem = {itemId: isi.itemId, meaning: isi.meaning};
+      } else {
+        this.selectedItem = null;
+      }
     } else {
-      this.selectedItemId = null;
+      this.selectedItem = null;
     }
     if (this.autoEnterEditing) {
       this.startEditing();
@@ -233,10 +258,10 @@ export class DictEntryComponent extends DictBaseComponent {
     if (mi === this.editingMeaningItem || mi === this.newItem) {
       return;
     }
-    if (mi.id === this.selectedItemId) {
-      this.selectedItemId = null;
+    if (this.selectedItem && mi.id === this.selectedItem.itemId) {
+      this.selectedItem = null;
     } else {
-      this.selectedItemId = mi.id;
+      this.selectedItem = {itemId: mi.id, meaning: mi.exp};
     }
   }
 
@@ -271,7 +296,7 @@ export class DictEntryComponent extends DictBaseComponent {
     items.push(item);
 
     if (this.autoSaveOnAdoptItem) {
-      this.selectedItemId = item.id;
+      this.selectedItem = {itemId: item.id, meaning: item.exp};
       this.coTabActive = true;
       this.saveEdit();
     }

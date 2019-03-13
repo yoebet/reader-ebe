@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {DictEntry} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {AnnotationSet} from "../anno/annotation-set";
+import {UIConstants, DataAttrNames, DataAttrValues} from '../config';
 
 @Component({
   selector: 'word-annos',
@@ -10,8 +10,8 @@ import {AnnotationSet} from "../anno/annotation-set";
   styleUrls: ['./word-annos.component.css']
 })
 export class WordAnnosComponent implements OnInit {
-  @Input() _wordEl: Element;
-  @Input() paraTextEl: Element;
+  @Input() _wordEl: HTMLElement;
+  @Input() paraTextEl: HTMLElement;
   @Input() enabled: boolean;
   @Input() annotationSet: AnnotationSet;
   word: string;
@@ -28,14 +28,14 @@ export class WordAnnosComponent implements OnInit {
     this.initialized = true;
   }
 
-  set wordEl(_wordEl: Element) {
+  set wordEl(_wordEl: HTMLElement) {
     this._wordEl = _wordEl;
     if (this.initialized && this.enabled) {
       this.parseAnnotations();
     }
   }
 
-  get wordEl(): Element {
+  get wordEl(): HTMLElement {
     return this._wordEl;
   }
 
@@ -43,33 +43,32 @@ export class WordAnnosComponent implements OnInit {
     this.items = [];
     this.note = null;
     this.meaning = null;
-    if (!this._wordEl) {
+    let wordEl = this._wordEl;
+    if (!wordEl) {
       this.word = null;
       this.head = null;
       return;
     }
-    this.word = this._wordEl.textContent;
+    this.word = wordEl.textContent;
     this.head = this.word;
     let phraseGroup = null;
 
-    let attributes = Array.from(this._wordEl.attributes);
-    for (let {name, value} of attributes) {
-      if (!name.startsWith('data-')) {
-        continue;
-      }
-      name = name.substr(5);
-      if (name === 'mid') {
+    let dataset = wordEl.dataset;
+    for (let name in dataset) {
+      let value = dataset[name];
+      if (name === DataAttrNames.mid) {
         let mid = parseInt(value);
         if (isNaN(mid)) {
           continue;
         }
-        let forWord = this._wordEl.getAttribute('data-word');
+        let forWord = wordEl.dataset[DataAttrNames.word];
         if (!forWord) {
           forWord = this.word;
         }
-        this.meaning = {mid, word: forWord, text: ''};
+        let mean = wordEl.dataset[DataAttrNames.mean];
+        this.meaning = {mid, word: forWord, text: mean || ''};
 
-        let theWordEl = this._wordEl;
+        /*let theWordEl = this._wordEl;
         this.dictService.getEntry(forWord, {noref: true})
           .subscribe((entry: DictEntry) => {
               if (!entry) {
@@ -91,14 +90,14 @@ export class WordAnnosComponent implements OnInit {
                 }
               }
             }
-          );
+          );*/
         continue;
       }
-      if (name === 'note') {
+      if (name === DataAttrNames.note) {
         this.note = value;
         continue;
       }
-      if (name === 'phra' && /^g\d$/.test(value)) {
+      if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(value)) {
         phraseGroup = value;
         continue;
       }
@@ -115,7 +114,7 @@ export class WordAnnosComponent implements OnInit {
       if (!stEl) {
         stEl = this.paraTextEl;
       }
-      let groupSelector = `[data-phra=${phraseGroup}]`;
+      let groupSelector = `[data-${DataAttrNames.assoc}=${phraseGroup}]`;
       let groupEls = stEl.querySelectorAll(groupSelector);
       let els = Array.from(groupEls);
       this.head = els.map((el: Element) => el.textContent).join(' ');
@@ -132,7 +131,7 @@ export class WordAnnosComponent implements OnInit {
         if (el === this.paraTextEl) {
           return null;
         }
-        if (el.matches('s-st')) {
+        if (el.matches(UIConstants.sentenceTagName)) {
           return el;
         }
       }

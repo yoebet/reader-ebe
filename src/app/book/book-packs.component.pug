@@ -4,7 +4,7 @@
     span.tip 创建内容包，app端用户可加速下载图书内容
 .ui.content
   .ui(*ngFor='let pInfo of packInfos')
-    h4.ui.dividing.header
+    h4.ui.grey.dividing.header
       | {{pInfo.title}}
       span.tip {{pInfo.tip}}
       .clearing
@@ -14,17 +14,17 @@
           .ui.mini.button((click)='dropPack(pInfo)', [ngClass]='{disabled: pInfo.allowBuild||executingPack===pInfo}') 删除
         ng-template([ngIf]='!pInfo.pack')
           .ui.mini.primary.button((click)='buildPack(pInfo)', [ngClass]='{disabled: pInfo.allowBuild||executingPack===pInfo}') 创建
-      .ui.horizontal.list
+      .ui.horizontal.small.list.pack-info
         ng-template([ngIf]='pInfo.pack')
           .item
             | 创建于
-            .ui.tiny.label {{pInfo.pack.builtAt | date:'yyyy-M-d' }}
+            .ui.small.label {{pInfo.pack.builtAt | date:'yyyy-M-d' }}
           .item
             | 大小
-            .ui.tiny.label {{pInfo.pack.size | fileSize}}
+            .ui.small.label {{pInfo.pack.size | fileSize}}
           .item
             | 章节
-            .ui.tiny.label {{pInfo.pack.chaps}}
+            .ui.small.label {{pInfo.pack.chaps}}
         ng-template([ngIf]='!pInfo.pack')
           .item.disabled 未创建
     .ui.hidden.divider

@@ -8,3 +8,11 @@ span.tip {
   font-size: 0.9em;
   margin-top: 0.5em;
 }
+
+.ui.list.pack-info {
+  margin-top: 0;
+}
+
+.pack-info .ui.label {
+  background: unset;
+}

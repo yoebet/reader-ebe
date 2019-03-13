@@ -13,7 +13,7 @@ import {OpResult} from '../models/op-result';
 import {ParaFormComponent} from './para-form.component';
 import {AnnotationSet} from '../anno/annotation-set';
 import {ParaLiveContent} from '../chap-types/para-live-content';
-import {DictRequest} from '../chap-types/dict-request';
+import {DictRequest, DictSelectedResult} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
@@ -348,7 +348,7 @@ export class ChapParasComponent implements OnInit {
     return parasCreateAfter;
   }
 
-  saveSplittedPara(paras) {
+  saveSplitPara(paras) {
     if (paras[0]._id) {
       let para = paras.shift();
       this.createManyAfterAndUpdate(para, paras);
@@ -583,7 +583,8 @@ export class ChapParasComponent implements OnInit {
         constraints: [
           {
             to: 'window',
-            attachment: 'together'
+            attachment: 'together',
+            pin: true
           }
         ],
         classPrefix: UIConstants.tetherClassPrefixNoHyphen
@@ -591,7 +592,7 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
-  onDictItemSelect(selected: { word: string, selectedItemId: number }) {
+  onDictItemSelect(selected: DictSelectedResult) {
     if (!this.dictRequest) {
       return;
     }
@@ -630,7 +631,8 @@ export class ChapParasComponent implements OnInit {
       constraints: [
         {
           to: 'window',
-          attachment: 'together'
+          attachment: 'together',
+          pin: true
         }
       ],
       classPrefix: UIConstants.tetherClassPrefixNoHyphen

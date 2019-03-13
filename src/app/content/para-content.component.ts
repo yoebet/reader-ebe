@@ -10,14 +10,14 @@ import {Annotator} from '../anno/annotator';
 import {AnnotateResult} from '../anno/annotate-result'
 import {HighlightGroups} from '../anno/annotation-set';
 
-import {UIConstants} from '../config';
+import {UIConstants, DataAttrNames, DataAttrValues, SpecialAnnotations} from '../config';
 import {DictEntry} from '../models/dict-entry';
 import {Annotation} from '../models/annotation';
 import {AnnotationSet} from '../anno/annotation-set';
 
 import {DictService} from '../services/dict.service';
 import {ParaLiveContent} from '../chap-types/para-live-content';
-import {DictRequest} from '../chap-types/dict-request';
+import {DictRequest, DictSelectedResult, SelectedItem} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
 
@@ -123,14 +123,14 @@ export class ParaContentComponent implements OnChanges {
       stEl = this.contentText.element.nativeElement;
     }
     let ds = wordEl.dataset;
-    let group = ds.phra;
+    let group = ds[DataAttrNames.assoc];
     if (!group) {
       return null;
     }
-    if (!/^g\d$/.test(group)) {
+    if (!DataAttrValues.phraPattern.test(group)) {
       return null;
     }
-    let groupSelector = `[data-phra=${group}]`;
+    let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
     let groupEls = stEl.querySelectorAll(groupSelector);
     let els = Array.from(groupEls);
     return els.map((el: Element) => el.textContent).join(' ');
@@ -152,13 +152,13 @@ export class ParaContentComponent implements OnChanges {
         oriMid = mid;
       }
     }
-    let oriForWord = element.dataset.word || word;
+    let oriForWord = element.dataset[DataAttrNames.word] || word;
 
-    let meaningItemCallback = (selected: { word: string, selectedItemId: number }) => {
+    let meaningItemCallback = (selected: DictSelectedResult) => {
       let mid;
       let forWord;
       if (selected) {
-        mid = selected.selectedItemId;
+        mid = selected.itemId;
         forWord = selected.word;
       } else {
         mid = null;
@@ -175,11 +175,14 @@ export class ParaContentComponent implements OnChanges {
         }
       } else {
         if (mid === -1) {
-          //unset
+          // unset
           // element.removeAttribute('data-mid');
           delete element.dataset[dataName];
-          if (element.dataset.word) {
-            element.removeAttribute('data-word');
+          if (element.dataset[DataAttrNames.word]) {
+            element.removeAttribute(`data-${DataAttrNames.word}`);
+          }
+          if (element.dataset[DataAttrNames.mean]) {
+            element.removeAttribute(`data-${DataAttrNames.mean}`);
           }
           let {changed, removed} = this.removeTagIfDummy(element);
           if (removed) {
@@ -188,7 +191,12 @@ export class ParaContentComponent implements OnChanges {
         } else {
           element.dataset[dataName] = '' + mid;
           if (forWord !== oriForWord) {
-            element.dataset.word = forWord;
+            element.dataset[DataAttrNames.word] = forWord;
+          }
+          if (selected.meaning) {
+            element.dataset[DataAttrNames.mean] = selected.meaning;
+          } else {
+            element.removeAttribute(`data-${DataAttrNames.mean}`);
           }
         }
         this.onContentChange();
@@ -207,7 +215,7 @@ export class ParaContentComponent implements OnChanges {
         let dr = new DictRequest();
         dr.wordElement = element;
         dr.dictEntry = entry;
-        dr.meaningItemId = oriMid;
+        dr.initialSelected = {itemId: oriMid} as SelectedItem;
         dr.relatedWords = null;
         dr.meaningItemCallback = meaningItemCallback;
         if (oriForWord !== word) {
@@ -268,9 +276,9 @@ export class ParaContentComponent implements OnChanges {
   }
 
   private doAnnotate() {
-    if (this.annotation.nameEn === 'SelectWordMeaning') {
+    if (this.annotation.nameEn === SpecialAnnotations.SelectMeaning.nameEn) {
       this.selectWordMeaning();
-    } else if (this.annotation.nameEn === 'AddANote') {
+    } else if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
       this.addANote();
     } else {
       let ar: AnnotateResult = this.annotator.annotate();
@@ -367,6 +375,12 @@ export class ParaContentComponent implements OnChanges {
         this.removeTagIfDummy(spanEl);
       }
     }
+    let sentenceEls = paraTextEl.querySelectorAll(UIConstants.sentenceTagName);
+    for (let sentenceEl of sentenceEls) {
+      if (!sentenceEl.className) {
+        sentenceEl.removeAttribute('class');
+      }
+    }
 
     let textEls = paraTextEl.querySelectorAll('.para-text > .part');
     textEls = Array.from(textEls);
@@ -451,7 +465,7 @@ export class ParaContentComponent implements OnChanges {
         if (!stEl.dataset) {
           continue;
         }
-        let sid = stEl.dataset.sid;
+        let sid = stEl.dataset[UIConstants.sentenceIdAttrName];
         if (sid) {
           selMap.set(sid, stEl);
         }
@@ -468,7 +482,7 @@ export class ParaContentComponent implements OnChanges {
       if (!el.dataset) {
         return;
       }
-      let sid = el.dataset.sid;
+      let sid = el.dataset[UIConstants.sentenceIdAttrName];
       if (!sid) {
         return;
       }

@@ -3,7 +3,7 @@
   span.tip （按空行分段）
 .ui.content
   .ui.column.grid.form.para-split
-    .row.splitted-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
+    .row.split-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
       .two.wide.column
         .ui.horizontal.list
           .ui.item
