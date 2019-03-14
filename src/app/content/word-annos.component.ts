@@ -21,8 +21,6 @@ export class WordAnnosComponent implements OnInit {
   meaning: any;
   private initialized = false;
 
-  constructor(private dictService: DictService) {
-  }
 
   ngOnInit() {
     this.initialized = true;
@@ -67,30 +65,6 @@ export class WordAnnosComponent implements OnInit {
         }
         let mean = wordEl.dataset[DataAttrNames.mean];
         this.meaning = {mid, word: forWord, text: mean || ''};
-
-        /*let theWordEl = this._wordEl;
-        this.dictService.getEntry(forWord, {noref: true})
-          .subscribe((entry: DictEntry) => {
-              if (!entry) {
-                return;
-              }
-              if (this._wordEl !== theWordEl) {
-                return;
-              }
-              if (!entry.complete) {
-                return;
-              }
-              for (let posMeaning of entry.complete) {
-                let items = posMeaning.items;
-                for (let item of items) {
-                  if (item.id === mid) {
-                    let meaningText = `${posMeaning.pos}${item.exp}`;
-                    this.meaning = {mid, word: forWord, text: meaningText};
-                  }
-                }
-              }
-            }
-          );*/
         continue;
       }
       if (name === DataAttrNames.note) {

@@ -65,13 +65,16 @@ export class ParaContentComponent implements OnChanges {
               private dictService: DictService) {
   }
 
-  get annotator() {
+  get annotator0() {
     if (!this._annotator) {
       let contentEl = this.contentText.element.nativeElement;
       this._annotator = new Annotator(contentEl);
     }
-    this._annotator.switchAnnotation(this.annotation);
     return this._annotator;
+  }
+
+  get annotator() {
+    return this.annotator0.switchAnnotation(this.annotation);
   }
 
   private destroyAnnotatedWordsPopup(element) {
@@ -137,7 +140,8 @@ export class ParaContentComponent implements OnChanges {
   }
 
   selectWordMeaning() {
-    let ar: AnnotateResult = this.annotator.annotate();
+    let ann = this.annotationSet.selectMeaningAnnotation;
+    let ar: AnnotateResult = this.annotator0.switchAnnotation(ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
     }
@@ -145,7 +149,7 @@ export class ParaContentComponent implements OnChanges {
     let word = element.textContent;
 
     let oriMid = null;
-    let dataName = this.annotation.dataName;//mid
+    let dataName = DataAttrNames.mid;
     if (element.dataset[dataName]) {
       let mid = parseInt(element.dataset[dataName]);
       if (!isNaN(mid)) {
@@ -234,11 +238,12 @@ export class ParaContentComponent implements OnChanges {
   }
 
   addANote() {
-    let ar: AnnotateResult = this.annotator.annotate();
+    let ann = this.annotationSet.addNoteAnnotation;
+    let ar: AnnotateResult = this.annotator0.switchAnnotation(ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
     }
-    let dataName = this.annotation.dataName;//note
+    let dataName = DataAttrNames.note;
     let element: any = ar.wordEl;
     let oriNote = element.dataset[dataName];
 
@@ -278,39 +283,57 @@ export class ParaContentComponent implements OnChanges {
   private doAnnotate() {
     if (this.annotation.nameEn === SpecialAnnotations.SelectMeaning.nameEn) {
       this.selectWordMeaning();
-    } else if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
+      return;
+    }
+    if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
       this.addANote();
-    } else {
-      let ar: AnnotateResult = this.annotator.annotate();
-      if (!ar) {
-        return;
-      }
-      if (ar.wordEl) {
-        if (ar.elCreated) {
-          if (ar.wordEl.matches(ParaContentComponent.highlightWordsSelector)) {
-            this.highlightAssociatedWords(ar.wordEl);
-          }
-          if (this.annotatedWordsHoverSetup) {
-            this.showAnnotationsHover(ar.wordEl);
-          }
+      return;
+    }
+    let ar: AnnotateResult = this.annotator.annotate();
+    if (!ar) {
+      return;
+    }
+    if (ar.wordEl) {
+      if (ar.elCreated) {
+        if (ar.wordEl.matches(ParaContentComponent.highlightWordsSelector)) {
+          this.highlightAssociatedWords(ar.wordEl);
         }
-        if (ar.operation === 'remove') {
-          let {changed, removed} = this.removeTagIfDummy(ar.wordEl);
-          if (removed) {
-            this.destroyAnnotatedWordsPopup(ar.wordEl);
-          }
+        if (this.annotatedWordsHoverSetup) {
+          this.showAnnotationsHover(ar.wordEl);
         }
-        this.onContentChange();
       }
+      if (ar.operation === 'remove') {
+        let {changed, removed} = this.removeTagIfDummy(ar.wordEl);
+        if (removed) {
+          this.destroyAnnotatedWordsPopup(ar.wordEl);
+        }
+      }
+      this.onContentChange();
     }
   }
 
   onMouseup($event) {
-    if (!this.gotFocus || !this.annotating || !this.annotation) {
+    $event.stopPropagation();
+    if ($event.which === 3) {
       return;
     }
-    $event.stopPropagation();
+    if (!this.gotFocus || !this.annotating) {
+      return;
+    }
+    if ($event.ctrlKey || $event.metaKey) {
+      this.addANote();
+      return;
+    }
+    if (!this.annotation) {
+      return;
+    }
     this.doAnnotate();
+  }
+
+  onContextmenu($event) {
+    this.selectWordMeaning();
+    $event.stopPropagation();
+    $event.preventDefault();
   }
 
   onKeyup($event) {

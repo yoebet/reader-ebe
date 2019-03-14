@@ -22,6 +22,7 @@ const DataAttrNames = {
 
 const DataAttrValues = {
   phraPattern: /^phra\d$/,
+  assocPhra1: 'phra1',
   assocGroups: ['phra1', 'phra2', 'phra3', 'trunk', 'antec', 'group1', 'group2', 'group3']
 };
 
@@ -37,6 +38,8 @@ const SpecialAnnotations = {
   }
 };
 
+const LatestAnnotationsCount = 8;
+
 
 const ImagesBase = `${environment.staticBase}/images`;
 const BookImagesBase = `${ImagesBase}/book`;
@@ -47,6 +50,7 @@ export {
   DataAttrNames,
   DataAttrValues,
   SpecialAnnotations,
+  LatestAnnotationsCount,
   BookImagesBase,
   BookImageNotSet
 };

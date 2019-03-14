@@ -4,8 +4,8 @@ import {UIConstants} from '../config';
 
 export class Annotator {
   static annotationTagName = UIConstants.annotationTagName;
+  static charPattern = /[-a-zA-Z']/;
 
-  charPattern = /[-a-zA-Z']/;
   wordAtCursorIfNoSelection = true;
   isExtendWholeWord = true;
   // element or selector,
@@ -17,13 +17,14 @@ export class Annotator {
     this.container = container;
   }
 
-  switchAnnotation(annotation: Annotation) {
+  switchAnnotation(annotation: Annotation): Annotator {
     this.current = annotation;
+    return this;
   }
 
   private extendWholeWord(text, wordStart, wordEnd) {
     let trimLeft = false, trimRight = false;
-    let cp = this.charPattern;
+    let cp = Annotator.charPattern;
     if (wordStart < wordEnd) {
       if (!cp.test(text.charAt(wordStart))) {
         wordStart++;
@@ -187,6 +188,9 @@ export class Annotator {
     if (match) {
       if (type === 'add') {
         this.setDataAttribute(element);
+        if (element.tagName !== ann.tagName && ann.cssClass) {
+          element.classList.add(ann.cssClass);
+        }
         return;
       }
       // remove,toggle

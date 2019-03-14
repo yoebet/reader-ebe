@@ -1,9 +1,9 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, HostListener} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 import 'rxjs/add/operator/switchMap';
 import Tether from 'tether';
 
-import {UIConstants} from '../config';
+import {UIConstants, DataAttrNames, DataAttrValues, LatestAnnotationsCount} from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
@@ -93,6 +93,16 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent($event: KeyboardEvent) {
+    if ($event.key === 'Escape') {
+      if (this.currentAnnotation) {
+        this.currentAnnotation = null;
+        $event.stopPropagation();
+      }
+    }
+  }
+
   private loadAnnotations() {
     let afId = this._book.annotationFamilyId;
     if (!afId) {
@@ -113,7 +123,7 @@ export class ChapParasComponent implements OnInit {
             this.latestAnnotations.push(ag.annotations[i]);
           }
         }
-        let phraG1 = annotationSet.findAnnotation('phra', 'g1');
+        let phraG1 = annotationSet.findAnnotation(DataAttrNames.assoc, DataAttrValues.assocPhra1);
         if (phraG1) {
           this.latestAnnotations.push(phraG1);
         }
@@ -173,7 +183,7 @@ export class ChapParasComponent implements OnInit {
     }
     this.agPopupTimer = setTimeout(() => {
       this.annotationGroup = group;
-    }, 500);
+    }, 300);
   }
 
   agPopupMouseout(group) {
@@ -198,7 +208,7 @@ export class ChapParasComponent implements OnInit {
     } else {
       this.currentAnnotation = annotation;
       if (this.latestAnnotations.indexOf(annotation) === -1) {
-        if (this.latestAnnotations.length >= 20) {
+        if (this.latestAnnotations.length >= LatestAnnotationsCount) {
           this.latestAnnotations.shift();
         }
         this.latestAnnotations.push(annotation);

@@ -1,4 +1,7 @@
-.para-text.content-text((mouseup)='onMouseup($event)', (keyup)='onKeyup($event)', [attr.contenteditable]='editable',
+.para-text.content-text((mouseup)='onMouseup($event)',
+(keyup)='onKeyup($event)',
+(contextmenu)='onContextmenu($event)',
+[attr.contenteditable]='editable',
  spellcheck='false', #contentText='')
 .para-text.trans-text([hidden]='!showTrans', (keyup)='onTransKeyup($event)', [attr.contenteditable]='editable',
  spellcheck='false', #paraTrans='')

@@ -11,13 +11,43 @@ export class AnnotationSet {
 
   readonly specialAnnotations: Annotation[];
 
-  constructor(groups: AnnotationGroup[], specialAnnotations: Annotation[]) {
+  readonly selectMeaningAnnotation: Annotation;
+
+  readonly addNoteAnnotation: Annotation;
+
+  constructor(groups: AnnotationGroup[]) {
     this.groups = groups.map(og => {
       let ag = new AnnotationGroup();
       Object.assign(ag, og);
       return ag;
     });
-    this.specialAnnotations = specialAnnotations;
+
+
+    let annotations = [];
+
+    let groupSwm = new AnnotationGroup();
+    groupSwm.dataName = DataAttrNames.mid;
+    let swm = new Annotation();
+    let annSMConfig = SpecialAnnotations.SelectMeaning;
+    swm.name = annSMConfig.name;
+    swm.nameEn = annSMConfig.nameEn;
+    swm.group = groupSwm;
+    this.selectMeaningAnnotation = swm;
+
+    let groupAan = new AnnotationGroup();
+    groupAan.dataName = DataAttrNames.note;
+    let aan = new Annotation();
+    let annAAConfig = SpecialAnnotations.AddANote;
+    aan.name = annAAConfig.name;
+    aan.nameEn = annAAConfig.nameEn;
+    aan.group = groupAan;
+    this.addNoteAnnotation = aan;
+
+    annotations.push(swm);
+    annotations.push(aan);
+
+    this.specialAnnotations = annotations;
+
 
     for (let group of this.groups) {
       group.annotations = group.annotations.map(oa => {
@@ -82,31 +112,6 @@ export class AnnotationSet {
     return ann.name;
   }
 
-
-  static evalSpecialAnnotations(): Annotation[] {
-
-    let annotations = [];
-    let groupSwm = new AnnotationGroup();
-    groupSwm.dataName = DataAttrNames.mid;
-    let swm = new Annotation();
-    let annSMConfig = SpecialAnnotations.SelectMeaning;
-    swm.name = annSMConfig.name;
-    swm.nameEn = annSMConfig.nameEn;
-    swm.group = groupSwm;
-
-    let groupAan = new AnnotationGroup();
-    groupAan.dataName = DataAttrNames.note;
-    let aan = new Annotation();
-    let annAAConfig = SpecialAnnotations.AddANote;
-    aan.name = annAAConfig.name;
-    aan.nameEn = annAAConfig.nameEn;
-    aan.group = groupAan;
-
-    annotations.push(swm);
-    annotations.push(aan);
-
-    return annotations;
-  }
 }
 
 

@@ -41,8 +41,7 @@ export class AnnoFamilyService extends BaseService<AnnotationFamily> {
         return null;
       }
       let groups = family.groups;
-      let sas = AnnotationSet.evalSpecialAnnotations();
-      let anns = new AnnotationSet(groups, sas);
+      let anns = new AnnotationSet(groups);
       this.annotationsMap.set(familyId, anns);
       return anns;
     });
