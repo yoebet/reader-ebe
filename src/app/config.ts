@@ -14,6 +14,7 @@ const UIConstants = {
 
 const DataAttrNames = {
   mid: 'mid',
+  pos: 'pos',
   word: 'word',
   mean: 'mean',
   note: 'note',

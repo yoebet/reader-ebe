@@ -52,7 +52,7 @@ export class DictSimpleComponent extends DictBaseComponent {
     this.newItem = null;
   }
 
-  everEdited(oriEntry) {
+  everEdited(oriEntry): boolean {
     let em = this.editingMeanings;
     let oriMeanings = oriEntry.simple;
     let ori = JSON.stringify(oriMeanings);

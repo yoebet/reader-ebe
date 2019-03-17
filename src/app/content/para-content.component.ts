@@ -148,27 +148,13 @@ export class ParaContentComponent implements OnChanges {
     let element: any = ar.wordEl;
     let word = element.textContent;
 
-    let oriMid = null;
-    let dataName = DataAttrNames.mid;
-    if (element.dataset[dataName]) {
-      let mid = parseInt(element.dataset[dataName]);
-      if (!isNaN(mid)) {
-        oriMid = mid;
-      }
-    }
+    let oriPos = element.dataset[DataAttrNames.pos];
+    let oriMeaning = element.dataset[DataAttrNames.mean];
     let oriForWord = element.dataset[DataAttrNames.word] || word;
 
     let meaningItemCallback = (selected: DictSelectedResult) => {
-      let mid;
-      let forWord;
-      if (selected) {
-        mid = selected.itemId;
-        forWord = selected.word;
-      } else {
-        mid = null;
-        forWord = null;
-      }
-      if (mid == null) {
+
+      if (!selected) {
         // cancel
         let {changed, removed} = this.removeTagIfDummy(element);
         if (changed) {
@@ -177,36 +163,34 @@ export class ParaContentComponent implements OnChanges {
             this.destroyAnnotatedWordsPopup(element);
           }
         }
+        return;
+      }
+
+      if (!selected.meaning) {
+        // unset
+        delete element.dataset[DataAttrNames.mid];
+        delete element.dataset[DataAttrNames.pos];
+        delete element.dataset[DataAttrNames.mean];
+        delete element.dataset[DataAttrNames.word];
+        let {changed, removed} = this.removeTagIfDummy(element);
+        if (removed) {
+          this.destroyAnnotatedWordsPopup(element);
+        }
       } else {
-        if (mid === -1) {
-          // unset
-          // element.removeAttribute('data-mid');
-          delete element.dataset[dataName];
-          if (element.dataset[DataAttrNames.word]) {
-            element.removeAttribute(`data-${DataAttrNames.word}`);
-          }
-          if (element.dataset[DataAttrNames.mean]) {
-            element.removeAttribute(`data-${DataAttrNames.mean}`);
-          }
-          let {changed, removed} = this.removeTagIfDummy(element);
-          if (removed) {
-            this.destroyAnnotatedWordsPopup(element);
-          }
-        } else {
-          element.dataset[dataName] = '' + mid;
-          if (forWord !== oriForWord) {
-            element.dataset[DataAttrNames.word] = forWord;
-          }
-          if (selected.meaning) {
-            element.dataset[DataAttrNames.mean] = selected.meaning;
-          } else {
-            element.removeAttribute(`data-${DataAttrNames.mean}`);
-          }
+        if (selected.pos !== oriPos) {
+          element.dataset[DataAttrNames.pos] = selected.pos || '';
         }
-        this.onContentChange();
-        if (this.annotatedWordsHoverSetup) {
-          this.showAnnotationsHover(element);
+        if (selected.meaning !== oriMeaning) {
+          element.dataset[DataAttrNames.mean] = selected.meaning;
         }
+        if (selected.word && selected.word !== oriForWord) {
+          element.dataset[DataAttrNames.word] = selected.word;
+        }
+      }
+
+      this.onContentChange();
+      if (this.annotatedWordsHoverSetup) {
+        this.showAnnotationsHover(element);
       }
     };
 
@@ -219,7 +203,7 @@ export class ParaContentComponent implements OnChanges {
         let dr = new DictRequest();
         dr.wordElement = element;
         dr.dictEntry = entry;
-        dr.initialSelected = {itemId: oriMid} as SelectedItem;
+        dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
         dr.relatedWords = null;
         dr.meaningItemCallback = meaningItemCallback;
         if (oriForWord !== word) {

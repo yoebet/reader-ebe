@@ -1,11 +1,10 @@
-import {Component, Input, SimpleChanges, ChangeDetectorRef} from '@angular/core';
+import {Component, SimpleChanges, ChangeDetectorRef} from '@angular/core';
 import {max} from 'lodash';
 
 import {DictEntry, PosMeanings, MeaningItem, PosTags} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
 import {DictBaseComponent} from "./dict-base.component";
-import {SelectedItem} from "../chap-types/dict-request";
 
 @Component({
   selector: 'dict-entry',
@@ -13,10 +12,7 @@ import {SelectedItem} from "../chap-types/dict-request";
   styleUrls: ['./dict-entry.component.css']
 })
 export class DictEntryComponent extends DictBaseComponent {
-  @Input() initialSelectedItem: SelectedItem;
-
   initialWord: string;
-  selectedItem: SelectedItem;
   autoSaveOnAdoptItem = false;
   coTabActive = false;
   selectMeaningItem = false;
@@ -36,29 +32,9 @@ export class DictEntryComponent extends DictBaseComponent {
     super(cdr, dictService);
   }
 
-  get initialSelectedItemId() {
-    if (!this.initialSelectedItem) {
-      return null;
-    }
-    return this.initialSelectedItem.itemId;
-  }
-
-  get selectedItemId() {
-    if (!this.selectedItem) {
-      return null;
-    }
-    return this.selectedItem.itemId;
-  }
-
   ngOnInit() {
     super.ngOnInit();
     this.initialWord = this.entry.word;
-    let isi = this.initialSelectedItem;
-    if (isi) {
-      this.selectedItem = {itemId: isi.itemId, meaning: isi.meaning};
-    } else {
-      this.selectedItem = null;
-    }
   }
 
 
@@ -66,16 +42,6 @@ export class DictEntryComponent extends DictBaseComponent {
     let entry = this.entry;
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.resetRefWords();
-    if (entry.word === this.initialWord) {
-      let isi = this.initialSelectedItem;
-      if (isi) {
-        this.selectedItem = {itemId: isi.itemId, meaning: isi.meaning};
-      } else {
-        this.selectedItem = null;
-      }
-    } else {
-      this.selectedItem = null;
-    }
     if (this.autoEnterEditing) {
       this.startEditing();
     }
@@ -124,7 +90,7 @@ export class DictEntryComponent extends DictBaseComponent {
     this.newItem = null;
   }
 
-  everEdited(oriEntry) {
+  everEdited(oriEntry): boolean {
     let ecm = this.editingCompleteMeanings
       .filter(pm => pm.items && pm.items.length > 0);
     let oriMeanings = oriEntry.complete;
@@ -254,17 +220,6 @@ export class DictEntryComponent extends DictBaseComponent {
     this.newItem = null;
   }
 
-  clickMeaningItem(mi: MeaningItem) {
-    if (mi === this.editingMeaningItem || mi === this.newItem) {
-      return;
-    }
-    if (this.selectedItem && mi.id === this.selectedItem.itemId) {
-      this.selectedItem = null;
-    } else {
-      this.selectedItem = {itemId: mi.id, meaning: mi.exp};
-    }
-  }
-
 
   adoptMeaningItem(pos, exp) {
     if (!this.editing) {
@@ -296,18 +251,9 @@ export class DictEntryComponent extends DictBaseComponent {
     items.push(item);
 
     if (this.autoSaveOnAdoptItem) {
-      this.selectedItem = {itemId: item.id, meaning: item.exp};
       this.coTabActive = true;
       this.saveEdit();
     }
-  }
-
-  cancelSelect() {
-
-  }
-
-  doneSelect() {
-
   }
 
 }

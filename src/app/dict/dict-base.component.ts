@@ -62,7 +62,7 @@ export abstract class DictBaseComponent implements OnInit, OnChanges, OnDestroy 
 
   abstract cancelEdit();
 
-  abstract everEdited(oriEntry);
+  abstract everEdited(oriEntry): boolean;
 
   protected pushPreviousIfNeeded(pre) {
     if (pre) {

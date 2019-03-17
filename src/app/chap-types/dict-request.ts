@@ -9,7 +9,7 @@ export class DictRequest {
 }
 
 export class SelectedItem {
-  itemId: number;
+  pos?: string;
   meaning?: string;
 }
 

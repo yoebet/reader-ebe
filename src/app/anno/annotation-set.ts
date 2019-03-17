@@ -26,7 +26,7 @@ export class AnnotationSet {
     let annotations = [];
 
     let groupSwm = new AnnotationGroup();
-    groupSwm.dataName = DataAttrNames.mid;
+    groupSwm.dataName = DataAttrNames.mean;
     let swm = new Annotation();
     let annSMConfig = SpecialAnnotations.SelectMeaning;
     swm.name = annSMConfig.name;

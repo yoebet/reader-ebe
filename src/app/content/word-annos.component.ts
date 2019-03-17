@@ -54,17 +54,14 @@ export class WordAnnosComponent implements OnInit {
     let dataset = wordEl.dataset;
     for (let name in dataset) {
       let value = dataset[name];
-      if (name === DataAttrNames.mid) {
-        let mid = parseInt(value);
-        if (isNaN(mid)) {
-          continue;
-        }
+      if (name === DataAttrNames.mean) {
+        let mean = value;
         let forWord = wordEl.dataset[DataAttrNames.word];
         if (!forWord) {
           forWord = this.word;
         }
-        let mean = wordEl.dataset[DataAttrNames.mean];
-        this.meaning = {mid, word: forWord, text: mean || ''};
+        let pos = wordEl.dataset[DataAttrNames.pos] || '';
+        this.meaning = {pos, mean, word: forWord, text: `${pos} ${mean}`};
         continue;
       }
       if (name === DataAttrNames.note) {
