@@ -13,6 +13,8 @@ import {BookFormModal} from "./book-form.component";
 import {BookImageModal} from "./book-image.component";
 import {BookPacksModal} from "./book-packs.component";
 import {BookUsersModal} from "./book-users.component";
+import {SessionService} from "../services/session.service";
+import {User} from "../models/user";
 
 @Component({
   selector: 'book-list',
@@ -24,7 +26,7 @@ export class BookListComponent implements OnInit {
   @ViewChild('newBookName') newBookNameEl: ElementRef;
   books: Book[] = [];
   newBook: Book = null;
-  operations: boolean;
+  operations = false;
   showZh = true;
 
   langOptions = Book.LangTypes;
@@ -35,7 +37,12 @@ export class BookListComponent implements OnInit {
 
   annOptions: AnnotationFamily[];
 
+  get currentUser(): User {
+    return this.sessionService.currentUser;
+  }
+
   constructor(private bookService: BookService,
+              private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
               private modalService: SuiModalService) {
   }

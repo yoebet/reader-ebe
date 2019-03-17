@@ -12,7 +12,7 @@ import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
 import {AnnotationSet} from '../anno/annotation-set';
-import {ParaLiveContent} from '../chap-types/para-live-content';
+import {ChangeCallback, OnSaved, ChangeNotification, ContentFields} from '../chap-types/change-notification';
 import {DictRequest, DictSelectedResult} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
@@ -20,11 +20,6 @@ import {Annotation} from '../models/annotation';
 import {SentenceAlignModal} from '../content/sentence-align.component';
 import {AnnoFamilyService} from "../services/anno-family.service";
 
-
-interface ContentChangedNotification {
-  para: Para;
-  liveContent: ParaLiveContent;
-}
 
 @Component({
   selector: 'chap-paras',
@@ -79,7 +74,8 @@ export class ChapParasComponent implements OnInit {
   noteTether = null;
   noteRequestNote = '';
 
-  lastChanged: ContentChangedNotification = null;
+  lastChanged: ChangeNotification = null;
+  unsavedChanges: Map<string, ChangeNotification> = new Map();
 
 
   constructor(private paraService: ParaService,
@@ -136,7 +132,7 @@ export class ChapParasComponent implements OnInit {
     if (this.selectedPara === para) {
       return;
     }
-    this.saveChangedContentIfAny();
+    this.saveChangedContent(this.lastChanged);
     this.selectedPara = para;
     if (this.clickToEdit) {
       this.edit(para);
@@ -278,33 +274,48 @@ export class ChapParasComponent implements OnInit {
     this.insertPos = null;
   }
 
-  private saveChangedContentIfAny() {
-    if (!this.lastChanged) {
+  private saveChangedContent(cn: ChangeNotification) {
+    if (!cn) {
       return;
     }
-    let {para, liveContent} = this.lastChanged;
-    //{content, trans}
-    let toSave = liveContent() as any;
+    let {para, liveContent, onSaved} = cn;
+    let toSave: ContentFields = liveContent();
     toSave._id = para._id;
-    this.save(toSave);
+    this.save(toSave, onSaved);
   }
 
-  onContentChange(para, liveContent) {
+  onContentChange(para, changeCallback: ChangeCallback) {
+    let {liveContent, onSaved} = changeCallback;
+    let thisChange = {para, liveContent, onSaved};
+    let paraId = para._id;
+    this.unsavedChanges.set(paraId, thisChange);
     let ccn = this.lastChanged;
-    if (ccn && ccn.para._id !== para._id) {
-      this.saveChangedContentIfAny();
+    if (ccn && ccn.para._id !== paraId) {
+      this.saveChangedContent(ccn);
     }
-    this.lastChanged = {para, liveContent};
+    this.lastChanged = thisChange;
   }
 
   onContentCommand(para, command) {
+    let paraId = para._id;
     let ccn = this.lastChanged;
-    if (ccn && ccn.para._id === para._id) {
-      if (command === 'save') {
-        this.saveChangedContentIfAny();
+    if (ccn) {
+      if (ccn.para._id === paraId) {
+        if (command === 'save') {
+          this.saveChangedContent(ccn);
+        }
       }
       if (command === 'save' || command === 'discard') {
         this.lastChanged = null;
+      }
+    } else {
+      ccn = this.unsavedChanges.get(paraId);
+      if (ccn) {
+        if (command === 'save') {
+          this.saveChangedContent(ccn);
+        } else if (command === 'discard') {
+          this.unsavedChanges.delete(paraId);
+        }
       }
     }
   }
@@ -367,35 +378,38 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
-  private createManyAfterAndUpdate(para, newParas) {
+  private createManyAfterAndUpdate(para, newParas, onSaved: OnSaved = null) {
     this.paraService.createManyAfter(para, newParas)
       .subscribe((paras: Para[]) => {
         let index = this.chap.paras.findIndex(p => p._id === para._id);
         this.chap.paras.splice(index + 1, 0, ...paras);
-        this.doUpdate(para);
+        this.doUpdate(para, onSaved);
       });
   }
 
-  private update(para) {
+  private update(para, onSaved: OnSaved = null) {
     let parasCreateAfter = this.splitIfNeeded(para);
     if (parasCreateAfter) {
-      this.createManyAfterAndUpdate(para, parasCreateAfter);
+      this.createManyAfterAndUpdate(para, parasCreateAfter, onSaved);
     } else {
-      this.doUpdate(para);
+      this.doUpdate(para, onSaved);
     }
   }
 
-  private doUpdate(para) {
+  private doUpdate(para, onSaved: OnSaved = null) {
+    let paraId = para._id;
     //deep clone
     para = JSON.parse(JSON.stringify(para));
-    let currentPara = this.chap.paras.find(p => p._id === para._id);
+    let currentPara = this.chap.paras.find(p => p._id === paraId);
 
     let contentNotChanged = typeof para.content === 'undefined' || para.content === currentPara.content;
     let transNotChanged = typeof para.trans === 'undefined' || para.trans === currentPara.trans;
     if (contentNotChanged && transNotChanged) {
-      if (this.editingPara && para._id === this.editingPara._id) {
+      if (this.editingPara && paraId === this.editingPara._id) {
         this.editingPara = null;
       }
+      this.unsavedChanges.delete(paraId);
+      onSaved && onSaved();
       return;
     }
     if (para.content === currentPara.content) {
@@ -412,13 +426,16 @@ export class ChapParasComponent implements OnInit {
           return;
         }
         Object.assign(currentPara, para);
-        if (this.editingPara && para._id === this.editingPara._id) {
+        if (this.editingPara && paraId === this.editingPara._id) {
           this.editingPara = null;
         }
+
+        this.unsavedChanges.delete(paraId);
+        onSaved && onSaved();
       });
   }
 
-  private createMany(paras) {
+  private createMany(paras, onSaved: OnSaved = null) {
     let obs;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
@@ -435,12 +452,14 @@ export class ChapParasComponent implements OnInit {
       } else {
         this.insertPos = null;
       }
+
+      onSaved && onSaved();
     });
   }
 
-  save(para) {
+  save(para, onSaved: OnSaved = null) {
     if (para._id) {
-      this.update(para);
+      this.update(para, onSaved);
       return;
     }
     if (this.insertPos == null) {
@@ -453,7 +472,7 @@ export class ChapParasComponent implements OnInit {
 
     if (paras) {
       paras.unshift(para);
-      this.createMany(paras);
+      this.createMany(paras, onSaved);
       return;
     }
 
@@ -477,6 +496,8 @@ export class ChapParasComponent implements OnInit {
       } else {
         this.insertPos = null;
       }
+
+      onSaved && onSaved();
     });
   }
 

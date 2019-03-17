@@ -8,6 +8,7 @@ import 'rxjs/add/operator/catch';
 import {SuiModalService} from "ng2-semantic-ui";
 import {ActiveModal} from "ng2-semantic-ui/dist/modules/modal/classes/active-modal";
 
+import {DefaultHttpHeaders} from '../config';
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 import {LoginModal} from "../account/login-popup.component";
@@ -15,9 +16,7 @@ import {LoginModal} from "../account/login-popup.component";
 export class BaseService<M extends Model> {
 
   protected httpOptions = {
-    headers: new HttpHeaders({
-      // 'Content-Type': 'application/json'
-    }),
+    headers: new HttpHeaders(DefaultHttpHeaders),
     withCredentials: true
   };
 

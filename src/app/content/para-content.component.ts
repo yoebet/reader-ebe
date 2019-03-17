@@ -16,7 +16,7 @@ import {Annotation} from '../models/annotation';
 import {AnnotationSet} from '../anno/annotation-set';
 
 import {DictService} from '../services/dict.service';
-import {ParaLiveContent} from '../chap-types/para-live-content';
+import {ChangeCallback} from '../chap-types/change-notification';
 import {DictRequest, DictSelectedResult, SelectedItem} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
@@ -40,7 +40,7 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotating: boolean;
   @Input() annotation: Annotation;
   @Input() annotationSet: AnnotationSet;
-  @Output() contentChange = new EventEmitter<ParaLiveContent>();
+  @Output() contentChange = new EventEmitter<ChangeCallback>();
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
   @Output() noteRequest = new EventEmitter<NoteRequest>();
@@ -350,7 +350,11 @@ export class ParaContentComponent implements OnChanges {
     }
     this.beenChanged = true;
     this.contentChanged = true;
-    this.contentChange.emit(this.getLiveContent.bind(this));
+    let callback: ChangeCallback = {
+      liveContent: this.getLiveContent.bind(this),
+      onSaved: this.onParaSaved.bind(this)
+    };
+    this.contentChange.emit(callback);
   }
 
   onTransKeyup($event) {
@@ -415,21 +419,21 @@ export class ParaContentComponent implements OnChanges {
 
 
   getLiveContent() {
-
     let contents: any = {};
-
     if (this.contentChanged) {
       let contentEl = this.contentText.element.nativeElement;
       contents.content = this.parseHtml(contentEl, 'content');
-      this.contentChanged = false;
     }
     if (this.transChanged) {
       let transEl = this.paraTrans.element.nativeElement;
       contents.trans = this.parseHtml(transEl, 'trans');
-      this.transChanged = false;
     }
-
     return contents;
+  }
+
+  onParaSaved() {
+    this.contentChanged = false;
+    this.transChanged = false;
   }
 
   notifySave() {

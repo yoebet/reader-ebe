@@ -1,11 +1,12 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
+import {DefaultHttpHeaders} from "../config";
 import {User} from '../models/user';
 import {OpResult} from '../models/op-result';
 
@@ -13,6 +14,7 @@ import {OpResult} from '../models/op-result';
 export class SessionService {
 
   private httpOptions = {
+    headers: new HttpHeaders(DefaultHttpHeaders),
     withCredentials: true
   };
 

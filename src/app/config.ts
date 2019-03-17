@@ -45,6 +45,9 @@ const ImagesBase = `${environment.staticBase}/images`;
 const BookImagesBase = `${ImagesBase}/book`;
 const BookImageNotSet = `${BookImagesBase}/missing.png`;
 
+
+const DefaultHttpHeaders = environment.httpHeaders || {};
+
 export {
   UIConstants,
   DataAttrNames,
@@ -52,5 +55,6 @@ export {
   SpecialAnnotations,
   LatestAnnotationsCount,
   BookImagesBase,
-  BookImageNotSet
+  BookImageNotSet,
+  DefaultHttpHeaders
 };
