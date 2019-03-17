@@ -1,8 +1,8 @@
 import {Para} from "../models/para";
 
 export class ChangeCallback {
-  liveContent: ParaLiveContent;
-  onSaved: OnSaved;
+  liveContent: () => ContentFields;
+  onSaved: () => void;
 }
 
 export class ChangeNotification extends ChangeCallback {
@@ -13,12 +13,4 @@ export class ContentFields {
   _id?: string;
   content?: string;
   trans?: string;
-}
-
-export interface ParaLiveContent {
-  (): ContentFields;
-}
-
-export interface OnSaved {
-  (): void;
 }

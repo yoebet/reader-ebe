@@ -12,13 +12,14 @@ import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
 import {AnnotationSet} from '../anno/annotation-set';
-import {ChangeCallback, OnSaved, ChangeNotification, ContentFields} from '../chap-types/change-notification';
+import {ChangeCallback, ChangeNotification, ContentFields} from '../chap-types/change-notification';
 import {DictRequest, DictSelectedResult} from '../chap-types/dict-request';
 import {NoteRequest} from '../chap-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
-import {SentenceAlignModal} from '../content/sentence-align.component';
+import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {AnnoFamilyService} from "../services/anno-family.service";
+import {ParaSaver} from "../chap-types/para-saver";
 
 
 @Component({
@@ -77,6 +78,8 @@ export class ChapParasComponent implements OnInit {
   lastChanged: ChangeNotification = null;
   unsavedChanges: Map<string, ChangeNotification> = new Map();
 
+  paraSaver: ParaSaver;
+
 
   constructor(private paraService: ParaService,
               private annoService: AnnoFamilyService,
@@ -87,6 +90,12 @@ export class ChapParasComponent implements OnInit {
     if (!this.chap.paras) {
       this.chap.paras = [];
     }
+
+    this.paraSaver = {
+      save: this.save.bind(this),
+      saveSplit: this.saveSplitPara.bind(this),
+      cancelEdit: this.cancelEdit.bind(this)
+    };
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -369,16 +378,16 @@ export class ChapParasComponent implements OnInit {
     return parasCreateAfter;
   }
 
-  saveSplitPara(paras) {
+  saveSplitPara(paras, onSaved = null) {
     if (paras[0]._id) {
       let para = paras.shift();
-      this.createManyAfterAndUpdate(para, paras);
+      this.createManyAfterAndUpdate(para, paras, onSaved);
     } else {
-      this.createMany(paras);
+      this.createMany(paras, onSaved);
     }
   }
 
-  private createManyAfterAndUpdate(para, newParas, onSaved: OnSaved = null) {
+  private createManyAfterAndUpdate(para, newParas, onSaved = null) {
     this.paraService.createManyAfter(para, newParas)
       .subscribe((paras: Para[]) => {
         let index = this.chap.paras.findIndex(p => p._id === para._id);
@@ -387,7 +396,7 @@ export class ChapParasComponent implements OnInit {
       });
   }
 
-  private update(para, onSaved: OnSaved = null) {
+  private update(para, onSaved = null) {
     let parasCreateAfter = this.splitIfNeeded(para);
     if (parasCreateAfter) {
       this.createManyAfterAndUpdate(para, parasCreateAfter, onSaved);
@@ -396,7 +405,7 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
-  private doUpdate(para, onSaved: OnSaved = null) {
+  private doUpdate(para, onSaved = null) {
     let paraId = para._id;
     //deep clone
     para = JSON.parse(JSON.stringify(para));
@@ -435,7 +444,7 @@ export class ChapParasComponent implements OnInit {
       });
   }
 
-  private createMany(paras, onSaved: OnSaved = null) {
+  private createMany(paras, onSaved = null) {
     let obs;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
@@ -457,7 +466,7 @@ export class ChapParasComponent implements OnInit {
     });
   }
 
-  save(para, onSaved: OnSaved = null) {
+  save(para, onSaved = null) {
     if (para._id) {
       this.update(para, onSaved);
       return;
@@ -684,11 +693,12 @@ export class ChapParasComponent implements OnInit {
       return;
     }
     let selectedPara = JSON.parse(JSON.stringify(this.selectedPara));
+    let context: SentenceAlignContext = {para: selectedPara, paraSaver: this.paraSaver};
     this.modalService
-      .open(new SentenceAlignModal(selectedPara))
+      .open(new SentenceAlignModal(context))
       // .onDeny((d) => {})
       .onApprove((para: Para) => {
-        this.save(para);
+        // this.save(para);
       });
   }
 

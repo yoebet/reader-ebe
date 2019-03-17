@@ -80,8 +80,9 @@ div(*ngIf='chap')
       .item.paragraph(*ngIf='index===insertPos')
         .ui.left.floated.mini.statistic.para-no
           .value +
-        para-form.ui.form.content.para-editor([ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
-        (onSave)="save($event)", (onSplit)="saveSplitPara($event)", (onCancel)="cancelEdit()")
+        para-form.ui.form.content.para-editor(
+        [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+        [paraSaver]='paraSaver')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')
           .value {{index+1}}
@@ -105,8 +106,9 @@ div(*ngIf='chap')
 
         para-form.ui.form.content.para-editor(*ngIf='editingPara===para',
         [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
-        [para]='para', [showTrans]='showTrans',
-        (onSave)="save($event)", (onSplit)="saveSplitPara($event)", (onCancel)="cancelEdit()")
+        [para]='para',
+        [showTrans]='showTrans',
+        [paraSaver]='paraSaver')
 
     .item.paragraph(*ngIf='insertPos===chap.paras.length')
       .ui.left.floated.mini.statistic.para-no
@@ -114,7 +116,7 @@ div(*ngIf='chap')
       para-form.ui.form.content.para-editor(
       [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
       [showTrans]='showTrans',
-      (onSave)="save($event)", (onSplit)="saveSplitPara($event)", (onCancel)="cancelEdit()")
+      [paraSaver]='paraSaver')
 
   .ui.clearing.hidden.divider
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')

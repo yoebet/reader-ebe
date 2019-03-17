@@ -5,6 +5,7 @@ import {findIndex} from 'lodash';
 
 import {Para} from '../models/para';
 import {Row} from '../chap-types/split-align';
+import {ParaSaver} from "../chap-types/para-saver";
 
 @Component({
   selector: 'para-split',
@@ -12,13 +13,20 @@ import {Row} from '../chap-types/split-align';
   styleUrls: ['./para-split.component.css']
 })
 export class ParaSplitComponent {
+  para: Para;
+  paraSaver: ParaSaver;
   rows: Row[];
   editingRow = null;
   editingPart = null;
 
-  constructor(private modal: SuiModal<Para, Para[], string>, private sanitizer: DomSanitizer) {
+  constructor(private modal: SuiModal<ParaSplitContext, Para[], string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
-    let {content, trans} = modal.context;
+    let context = modal.context;
+    this.para = context.para;
+    this.paraSaver = context.paraSaver;
+
+    let {content, trans} = this.para;
+
     let splitPat = /\n\n+/;
     let contents = content.split(splitPat);
     let transs = trans.split(splitPat);
@@ -117,14 +125,28 @@ export class ParaSplitComponent {
       para.trans = row.right;
       paras.push(para);
     }
-    this.modal.approve(paras);
+
+    this.para.content = paras[0].content;
+    this.para.trans = paras[0].trans;
+    //keep other fields
+    paras[0] = this.para;
+
+    this.paraSaver.saveSplit(paras, () => {
+      this.modal.approve(paras);
+    });
   }
 
 }
 
-export class ParaSplitModal extends ComponentModalConfig<Para> {
-  constructor(para: Para) {
-    super(ParaSplitComponent, para, false);
+
+export class ParaSplitContext {
+  para: Para;
+  paraSaver: ParaSaver;
+}
+
+export class ParaSplitModal extends ComponentModalConfig<ParaSplitContext> {
+  constructor(context: ParaSplitContext) {
+    super(ParaSplitComponent, context, false);
     // this.size = ModalSize.Large;
     this.isFullScreen = true;
     this.mustScroll = true;

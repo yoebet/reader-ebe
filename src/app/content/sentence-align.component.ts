@@ -6,6 +6,7 @@ import {differenceBy, isEqual, findIndex} from 'lodash';
 import {Para} from '../models/para';
 import {Model} from '../models/model';
 import {Row} from '../chap-types/split-align';
+import {ParaSaver} from "../chap-types/para-saver";
 
 class SentenceRow extends Row {
   sid = null;
@@ -19,15 +20,19 @@ class SentenceRow extends Row {
 export class SentenceAlignComponent {
   rows: SentenceRow[];
   para: Para;
+  paraSaver: ParaSaver;
+
   endingPattern = /[.?!:;。．？！：；]+['"＇＂’”\n ]*/g;
   endingPattern2 = /[，,]+['"＇＂’”\n ]*/g;
   splitMark = '-=SPL=-';
   editingRow = null;
   editingPart = null;
 
-  constructor(private modal: SuiModal<Para, Para, string>, private sanitizer: DomSanitizer) {
+  constructor(private modal: SuiModal<SentenceAlignContext, Para, string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
-    this.para = modal.context;
+    let context = modal.context;
+    this.para = context.para;
+    this.paraSaver = context.paraSaver;
     this.setup();
   }
 
@@ -292,14 +297,22 @@ export class SentenceAlignComponent {
     this.para.content = contentText;
     this.para.trans = transText;
 
-    this.modal.approve(this.para);
+    this.paraSaver.save(this.para, () => {
+      this.modal.approve(this.para);
+    });
   }
 
 }
 
-export class SentenceAlignModal extends ComponentModalConfig<Para> {
-  constructor(para: Para) {
-    super(SentenceAlignComponent, para, false);
+
+export class SentenceAlignContext {
+  para: Para;
+  paraSaver: ParaSaver;
+}
+
+export class SentenceAlignModal extends ComponentModalConfig<SentenceAlignContext> {
+  constructor(context: SentenceAlignContext) {
+    super(SentenceAlignComponent, context, false);
     // this.size = ModalSize.Large;
     this.isFullScreen = true;
     this.mustScroll = true;

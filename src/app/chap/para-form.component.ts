@@ -1,9 +1,10 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit} from '@angular/core';
+import {Component, Input, ViewChild, ElementRef, OnInit} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Para} from '../models/para';
-import {ParaSplitModal} from './para-split.component';
-import {SentenceAlignModal} from '../content/sentence-align.component';
+import {ParaSplitContext, ParaSplitModal} from './para-split.component';
+import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
+import {ParaSaver} from "../chap-types/para-saver";
 
 @Component({
   selector: 'para-form',
@@ -14,9 +15,7 @@ export class ParaFormComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
   @Input() para: Para;
   @Input() showTrans: boolean;
-  @Output() onSave = new EventEmitter<Para>();
-  @Output() onSplit = new EventEmitter<Para[]>();
-  @Output() onCancel = new EventEmitter();
+  @Input() paraSaver: ParaSaver;
 
   constructor(public modalService: SuiModalService) {
   }
@@ -42,32 +41,28 @@ export class ParaFormComponent implements OnInit {
 
   save() {
     //TODO: check html
-    this.onSave.emit(this.para);
+    this.paraSaver.save(this.para, null);
   }
 
   cancel() {
-    this.onCancel.emit();
+    this.paraSaver.cancelEdit();
   }
 
   splitParas() {
+    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver};
     this.modalService
-      .open(new ParaSplitModal(this.para))
+      .open(new ParaSplitModal(context))
       // .onDeny((d) => {})
       .onApprove((paras: Para[]) => {
-        this.para.content = paras[0].content;
-        this.para.trans = paras[0].trans;
-        //keep other fields
-        paras[0] = this.para;
-        this.onSplit.emit(paras);
       });
   }
 
   alignSentences() {
+    let context: SentenceAlignContext = {para: this.para, paraSaver: this.paraSaver};
     this.modalService
-      .open(new SentenceAlignModal(this.para))
+      .open(new SentenceAlignModal(context))
       // .onDeny((d) => {})
       .onApprove((para: Para) => {
-        this.onSave.emit(para);
       });
   }
 
