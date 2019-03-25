@@ -23,8 +23,8 @@
     //.ui.pointing.secondary.menu
     .ui.top.attached.tabular.menu
       a.item(suiTabHeader='co') 释义
-      a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
-      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（hc）
+      //a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
+      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（参考）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
     .ui.bottom.attached.segment(suiTabContent='co')
 
@@ -47,7 +47,7 @@
               span.meaning-item
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 | {{item.exp}}
-    .ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
+    //.ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
       .ui.selection.divided.list(*ngIf='!entry.completeYd')
         .ui.item(*ngFor='let item of entry.simpleYd',
         [ngClass]='{"selected-item":selectedItem&&item.pos===selectedItem.pos&&item.exp===selectedItem.meaning}',

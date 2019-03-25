@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   apiBase: '',
-  staticBase: ''
+  staticBase: '',
+  httpHeaders: {}
 };

@@ -1,3 +1,19 @@
 .ui.list .item .fields {
   margin-bottom: 0;
 }
+
+td.selectable {
+  cursor: pointer;
+}
+
+table.new-books {
+  color: rgba(0,0,0,0.5);
+}
+
+table.new-books tr.selected {
+  color: rgba(0,0,0,1);
+}
+
+.status-r {
+  color: #16ab39;
+}

@@ -20,10 +20,11 @@ export class UserComponent implements OnInit {
   user: User;
   userBooks: UserBook[];
   allBooks: Book[];
-  candidateBooks: Book[];
+  candidateBooks: any[];
   newUserBook: UserBook;
   bookRoleOptions = UserBook.Roles;
   editingUserBook: UserBook;
+  statusNames = Book.StatusNames;
 
   constructor(private userService: UserService,
               private bookService: BookService,
@@ -60,11 +61,14 @@ export class UserComponent implements OnInit {
       this.candidateBooks = this.allBooks
         .filter(b =>
           this.userBooks.find(ub => ub.bookId === b._id) == null
-        );
+        ).map(b => {
+          return {label: b.label, bookId: b._id, status: b.status, selected: false};
+        });
     };
     if (this.allBooks) {
       ecb();
       this.newUserBook = new UserBook();
+      this.newUserBook.isAllChaps = true;
       return;
     }
     this.bookService.list()
@@ -75,6 +79,7 @@ export class UserComponent implements OnInit {
         }
         ecb();
         this.newUserBook = new UserBook();
+        this.newUserBook.isAllChaps = true;
       });
   }
 
@@ -109,6 +114,60 @@ export class UserComponent implements OnInit {
         }
         this.userBooks = this.userBooks.filter(ub => ub != userBook);
       });
+  }
+
+
+  addUserBooks() {
+    let nub = this.newUserBook;
+    let ubs = {isAllChaps: nub.isAllChaps, role: nub.role} as any;
+    let bookIds = this.candidateBooks.filter(b => b.selected).map(b => b.bookId);
+    if (bookIds.length === 0) {
+      return;
+    }
+    ubs.bookIds = bookIds;
+    this.userService.addBooks(this.user._id, ubs)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        for (let bookId of ubs.bookIds) {
+          let ub = {isAllChaps: ubs.isAllChaps, role: ubs.role, bookId} as UserBook;
+          ub.book = this.allBooks.find(b => b._id === bookId);
+          this.userBooks.push(ub);
+        }
+        this.newUserBook = null;
+      });
+  }
+
+  toggleAll() {
+    let cbs = this.candidateBooks;
+    if (!cbs || cbs.length === 0) {
+      return;
+    }
+    let s = !cbs[0].selected;
+    for (let b of cbs) {
+      b.selected = s;
+    }
+  }
+
+  toggleReleased() {
+    let cbs = this.candidateBooks;
+    if (!cbs || cbs.length === 0) {
+      return;
+    }
+    let reach = false;
+    let s = false;
+    for (let b of cbs) {
+      if (b.status !== 'R') {
+        continue;
+      }
+      if (!reach) {
+        reach = true;
+        s = !b.selected;
+      }
+      b.selected = s;
+    }
   }
 
   cancelNewUserBook() {

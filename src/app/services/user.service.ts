@@ -9,6 +9,7 @@ import {User} from '../models/user';
 import {UserBook} from '../models/user-book';
 import {BaseService} from './base.service';
 import {SuiModalService} from "ng2-semantic-ui";
+import {OpResult} from "../models/op-result";
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -39,6 +40,12 @@ export class UserService extends BaseService<User> {
   userBooks(userId: string): Observable<UserBook[]> {
     let url = `${this.baseUrl}/${userId}/books`;
     return this.http.get<UserBook[]>(url, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  addBooks(userId: string, ubs: { isAllChaps?, role?, bookIds: string[] }): Observable<OpResult> {
+    let url = `${this.baseUrl}/${userId}/addBooks`;
+    return this.http.post<OpResult>(url, ubs, this.httpOptions)
       .catch(this.handleError);
   }
 

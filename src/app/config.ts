@@ -21,10 +21,13 @@ const DataAttrNames = {
   assoc: 'assoc'//关联组
 };
 
+const ValuePhras = ['phra1', 'phra2', 'phra3'];
+const ValueGroups = ['group1', 'group2', 'group3'];
+
 const DataAttrValues = {
   phraPattern: /^phra\d$/,
-  assocPhra1: 'phra1',
-  assocGroups: ['phra1', 'phra2', 'phra3', 'trunk', 'antec', 'group1', 'group2', 'group3']
+  assocPhra1: ValuePhras[0],
+  assocGroups: ValuePhras.concat(['trunk', 'antec']).concat(ValueGroups)
 };
 
 

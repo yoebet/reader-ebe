@@ -12,6 +12,7 @@ div(*ngIf='user')
           th 加入于
           th 角色
           th 章节数
+          th 获得
           th
       tbody
         tr(*ngFor='let ub of userBooks')
@@ -19,18 +20,37 @@ div(*ngIf='user')
           td {{ub | createdDateString}}
           td {{ub.role}}
           td {{ub.isAllChaps? 'ALL': ub.chapsCount||''}}
+          td {{ub.acquireMethod}}
           td.right.aligned
             .ui.mini.button((click)='editUserBook(ub)') 修改
             .ui.mini.button((click)='removeUserBook(ub)') 移除
         tr(*ngIf='!userBooks||userBooks.length===0')
-          td(colspan='5') No Results.
+          td(colspan='6') No Results.
 
     .ui.form(*ngIf='newUserBook')
-      .field
-        label 增加图书
-      .eight.wide.field
-        sui-select.selection([(ngModel)]='newUserBook.book', [options]='candidateBooks', labelField='label', #bookSelect='')
-          sui-select-option(*ngFor='let option of bookSelect.filteredOptions', [value]='option')
+      .ui.hidden.clearing.divider
+      h4.ui.dividing.header 增加图书
+      table.ui.small.selectable.table.new-books
+        thead
+          tr
+            th 书名
+            th 状态
+            th.center.aligned
+              i.checkmark.icon
+              | 选择（
+              a((click)='toggleAll()', href='javascript:') 全部
+              | /
+              a((click)='toggleReleased()', href='javascript:') 已上线
+              | ）
+        tbody
+          tr(*ngFor='let book of candidateBooks', [ngClass]='{selected:book.selected}')
+            td.pre-wrap {{book.label}}
+            td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
+            td.center.aligned.selectable((click)='book.selected=!book.selected')
+              i.green.checkmark.icon(*ngIf='book.selected')
+          tr(*ngIf='candidateBooks.length===0')
+            td(colspan='2') No More.
+
       .inline.fields
         .field
           sui-select.selection.book-role([(ngModel)]='newUserBook.role', [options]='bookRoleOptions', placeholder='Role For Book', #bookRoleSelect='')
@@ -39,7 +59,8 @@ div(*ngIf='user')
           sui-checkbox([(ngModel)]='newUserBook.isAllChaps') 全部章节
         .field
           .ui.mini.button((click)='cancelNewUserBook()') 取消
-          .ui.mini.primary.button((click)='addUserBook()') 增加
+          .ui.mini.primary.button((click)='addUserBooks()') 增加
+
     .ui.right.floated.small.basic.button(*ngIf='!newUserBook', (click)='selectBook()') 增加图书
 
     .ui.hidden.clearing.divider
