@@ -14,5 +14,14 @@ export class Chap extends Model {
   price: number; // cents
   priceLabel: string;
 
+  contentPack: ChapContentPack;
+
   paras: Para[];
+}
+
+export class ChapContentPack {
+  // file: string;
+  // hash: string;
+  size: number;
+  builtAt: Date;
 }

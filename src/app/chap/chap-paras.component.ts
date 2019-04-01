@@ -379,6 +379,12 @@ export class ChapParasComponent implements OnInit {
   }
 
   saveSplitPara(paras, onSaved = null) {
+    let bookId = this.book._id;
+    let chapId = this.chap._id;
+    for (let p of paras) {
+      p.bookId = bookId;
+      p.chapId = chapId;
+    }
     if (paras[0]._id) {
       let para = paras.shift();
       this.createManyAfterAndUpdate(para, paras, onSaved);

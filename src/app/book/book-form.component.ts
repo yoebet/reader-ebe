@@ -9,6 +9,8 @@ import {OpResult} from "../models/op-result";
 import {PriceLabelPipe} from "../pipes/price-label.pipe";
 import {AnnotationFamily} from "../models/annotation-family";
 import {AnnoFamilyService} from "../services/anno-family.service";
+import {User, UserIdName} from "../models/user";
+import {SessionService} from "../services/session.service";
 
 @Component({
   selector: 'book-form',
@@ -23,8 +25,14 @@ export class BookFormComponent implements OnInit {
   categoryOptions = Book.Categories;
 
   annOptions: AnnotationFamily[];
+  settingChiefEditor = false;
+
+  get currentUser(): User {
+    return this.sessionService.currentUser;
+  }
 
   constructor(private bookService: BookService,
+              private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
               private priceLabelPipe: PriceLabelPipe,
               private modal: SuiModal<BookFormContext, string, string>) {
@@ -74,6 +82,35 @@ export class BookFormComponent implements OnInit {
       editing.zhAuthor = '';
     }*/
     this.editing = editing;
+  }
+
+
+  setChiefEditor(name) {
+    name = name.trim();
+    if (!name) {
+      return;
+    }
+    let book = this.book;
+    this.bookService.checkCandidate(book._id, name)
+      .subscribe((idName: UserIdName) => {
+        if (!idName) {
+          alert('用户不存在');
+          return;
+        }
+        if (!confirm(`你要把 ${idName.nickName}（${idName.name}）设为主编辑吗？`)) {
+          return;
+        }
+        this.bookService.setChiefEditor(book._id, idName._id)
+          .subscribe((opr: OpResult) => {
+            if (opr.ok === 0) {
+              alert(opr.message || 'Fail');
+              return;
+            }
+            this.book.chiefEditorId = idName._id;
+            this.book.chiefEditorName = idName.nickName;
+            this.settingChiefEditor = false;
+          });
+      });
   }
 
   updatePriceLabel() {

@@ -15,6 +15,7 @@ import {BookService} from "../services/book.service";
 })
 export class BookChapsComponent extends SortableListComponent implements OnInit {
   @Input() book: Book;
+  contentPack = false;
   tuneOrder = false;
   showRemove = false;
   showZh = false;
@@ -108,6 +109,88 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
         for (let chap of this.book.chaps) {
           chap.status = status;
         }
+      });
+  }
+
+  buildPacks(scope = null) {
+    let confirmMsg = '要生成全部章节的内容包吗?';
+    if (scope === 'R') {
+      confirmMsg = '要生成已上线章节的内容包吗?';
+    }
+    if (!confirm(confirmMsg)) {
+      return;
+    }
+    this.bookService.buildChapPacks(this.book._id, scope)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        let packInfos = opr.data;
+        if (!packInfos) {
+          return;
+        }
+        let packInfoMap = new Map();
+        for (let packInfo of packInfos) {
+          packInfoMap.set(packInfo.chapId, packInfo);
+        }
+        for (let chap of this.book.chaps) {
+          let packInfo = packInfoMap.get(chap._id);
+          if (packInfo) {
+            delete packInfo.chapId;
+          }
+          chap.contentPack = packInfo;
+        }
+        alert(`已生成${packInfos.length}个章节`);
+      });
+  }
+
+  dropAllPacks() {
+    if (!confirm('要删除全部章节的内容包吗?')) {
+      return;
+    }
+    this.bookService.dropChapPacks(this.book._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        for (let chap of this.book.chaps) {
+          chap.contentPack = null;
+        }
+      });
+  }
+
+
+  buildPack(chap: Chap) {
+    if (!confirm('要生成内容包吗?')) {
+      return;
+    }
+    this.chapService.buildContentPack(chap._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        let packInfo = opr.data;
+        if (!packInfo) {
+          return;
+        }
+        chap.contentPack = packInfo;
+      });
+  }
+
+  dropPack(chap: Chap) {
+    if (!confirm('要删除内容包吗?')) {
+      return;
+    }
+    this.chapService.dropContentPack(chap._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        chap.contentPack = null;
       });
   }
 

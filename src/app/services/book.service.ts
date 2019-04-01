@@ -29,8 +29,7 @@ export class BookService extends SorterService<Book> {
 
   setALLChapsStatus(bookId: string, status: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/setALLChapsStatus/${status}`;
-    return this.http.post<OpResult>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
   uploadImage(bookId: string, file: File): Observable<BookImage> {
@@ -47,10 +46,14 @@ export class BookService extends SorterService<Book> {
       .catch(this.handleError);
   }
 
+  setChiefEditor(bookId: string, userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/chiefEditor/${userId}`;
+    return this.postForOpResult(url);
+  }
+
   addEditor(bookId: string, userId: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/editor/${userId}`;
-    return this.http.post<OpResult>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
   removeEditor(bookId: string, userId: string): Observable<OpResult> {
@@ -61,8 +64,7 @@ export class BookService extends SorterService<Book> {
 
   addReader(bookId: string, userId: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
-    return this.http.post<OpResult>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
   removeReader(bookId: string, userId: string): Observable<OpResult> {
@@ -79,13 +81,26 @@ export class BookService extends SorterService<Book> {
 
   buildContentPack(bookId: string, role: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/buildContentPack`;
-    return this.http.post<OpResult>(url, {role}, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url, {role});
   }
 
   dropContentPack(bookId: string, role: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${bookId}/dropContentPack`;
-    return this.http.post<OpResult>(url, {role}, this.httpOptions)
+    return this.postForOpResult(url, {role});
+  }
+
+  buildChapPacks(bookId: string, scope: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/buildChapPacks`;
+    return this.postForOpResult(url, {scope});
+  }
+
+  dropChapPacks(bookId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${bookId}/dropChapPacks`;
+    return this.postForOpResult(url);
+  }
+
+  private postForOpResult(url, body = null): Observable<OpResult> {
+    return this.http.post<OpResult>(url, body, this.httpOptions)
       .catch(this.handleError);
   }
 

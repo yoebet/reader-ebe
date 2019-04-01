@@ -26,7 +26,7 @@ export class BookListComponent implements OnInit {
   @ViewChild('newBookName') newBookNameEl: ElementRef;
   books: Book[] = [];
   newBook: Book = null;
-  operations = false;
+  privilegeOperations = false;
   showZh = true;
 
   langOptions = Book.LangTypes;

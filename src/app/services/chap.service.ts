@@ -8,6 +8,7 @@ import 'rxjs/add/operator/catch';
 import {Chap} from '../models/chap';
 import {SorterService} from './sorter.service';
 import {SuiModalService} from "ng2-semantic-ui";
+import {OpResult} from "../models/op-result";
 
 @Injectable()
 export class ChapService extends SorterService<Chap> {
@@ -26,6 +27,21 @@ export class ChapService extends SorterService<Chap> {
     let bookId = chap.bookId;
     const url = `${this.bookBaseUrl}/${bookId}/chaps`;
     return this.http.post<Chap>(url, chap, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  buildContentPack(chapId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${chapId}/buildChapPack`;
+    return this.postForOpResult(url);
+  }
+
+  dropContentPack(chapId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${chapId}/dropChapPack`;
+    return this.postForOpResult(url);
+  }
+
+  private postForOpResult(url, body = null): Observable<OpResult> {
+    return this.http.post<OpResult>(url, body, this.httpOptions)
       .catch(this.handleError);
   }
 }

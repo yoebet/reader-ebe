@@ -1,3 +1,9 @@
 .zhname.pre-wrap {
   margin-top: 0.3em;
 }
+
+.contentPack {
+  display: inline-block;
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.6);
+}

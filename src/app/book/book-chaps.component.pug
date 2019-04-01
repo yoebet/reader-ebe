@@ -1,37 +1,54 @@
 .ui.small.header
   .ui.right.floated.small.header
-    sui-checkbox([(ngModel)]='showZh') 中文
-    sui-checkbox([(ngModel)]='tuneOrder') 排序
-    sui-checkbox([(ngModel)]='showRemove') 删除
-    .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
-      | 设置状态
+    ng-template([ngIf]="!contentPack")
+      sui-checkbox([(ngModel)]='showZh') 中文
+      sui-checkbox([(ngModel)]='tuneOrder') 排序
+      sui-checkbox([(ngModel)]='showRemove') 删除
+      .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
+        | 设置状态
+        i.dropdown.icon
+        .menu(suiDropdownMenu='')
+          .item(*ngFor='let so of statusOptions', (click)='setAllStatus(so.value,so.label)') {{so.label}}
+    .ui.pointing.dropdown.tiny.button(*ngIf='contentPack', suiDropdown='', autoClose='outsideClick')
+      | 内容包（静态化）
       i.dropdown.icon
       .menu(suiDropdownMenu='')
-        .item(*ngFor='let so of statusOptions', (click)='setAllStatus(so.value,so.label)') {{so.label}}
+        .item((click)='buildPacks(null)') 生成（全部章节）
+        .item((click)='buildPacks("R")') 生成（已上线章节）
+        .item((click)='dropAllPacks()') 删除（全部）
+    sui-checkbox([(ngModel)]='contentPack') 内容包
+
   | 章节
 
 .ui.celled.list(*ngIf='book')
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     div([hidden]="chap===editingChap")
       .right.floated.header
-        ng-template([ngIf]="tuneOrder")
-          button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
-            i.angle.arrow.up.icon
-            | up
-          button.ui.tiny.button(*ngIf='!last', (click)='moveDown(chap)')
-            i.angle.arrow.down.icon
-            | down
-          button.ui.tiny.button(*ngIf='!first', (click)='moveTop(chap)')
-            i.angle.double.up.icon
-            | top
-          button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
-            i.angle.double.down.icon
-            | bottom
-        ng-template([ngIf]="!tuneOrder")
-          .ui.mini.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
-        ng-template([ngIf]="showRemove")
-          button.ui.tiny.button((click)='remove(chap)') Remove
-        button.ui.tiny.button((click)='edit(chap)') Edit
+        .ui.mini.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
+        .contentPack(*ngIf="contentPack")
+          | 内容包：
+          ng-template([ngIf]='chap.contentPack')
+            .ui.small.label {{chap.contentPack.builtAt | date:'yyyy-M-d' }}
+            .ui.small.label {{chap.contentPack.size | fileSize}}
+            .ui.mini.compact.basic.button((click)='dropPack(chap)') 删除
+          .ui.mini.primary.compact.basic.button((click)='buildPack(chap)') 创建
+        ng-template([ngIf]="!contentPack")
+          ng-template([ngIf]="tuneOrder")
+            button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
+              i.angle.arrow.up.icon
+              | up
+            button.ui.tiny.button(*ngIf='!last', (click)='moveDown(chap)')
+              i.angle.arrow.down.icon
+              | down
+            button.ui.tiny.button(*ngIf='!first', (click)='moveTop(chap)')
+              i.angle.double.up.icon
+              | top
+            button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
+              i.angle.double.down.icon
+              | bottom
+          ng-template([ngIf]="showRemove")
+            button.ui.tiny.button((click)='remove(chap)') Remove
+          button.ui.tiny.button((click)='edit(chap)') Edit
 
       a([routerLink]="['/chaps', chap._id]")
         .pre-wrap {{chap.name}}

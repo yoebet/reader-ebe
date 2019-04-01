@@ -21,6 +21,8 @@ export class Book extends Model {
   chiefEditorId: string;
   chiefEditorName: string;
 
+  chapsComplete: boolean;
+
   isFree: boolean;
   price: number; // cents
   priceLabel: string;
@@ -39,15 +41,16 @@ export class Book extends Model {
 
 
   static CategoryNames = {
-    Nov: '小说',
-    Tex: '教材',
+    Nov: '小说名著',
+    Tex: '英语教材',
+    Kid: '儿童文学',
     His: '历史',
     Poe: '诗歌',
     Oth: '其他'
   };
 
 
-  static Categories = ['Nov', 'Tex', 'His', 'Oth'].map(k => {
+  static Categories = ['Nov', 'Tex', 'Kid', 'His', 'Poe', 'Oth'].map(k => {
     return {value: k, label: Book.CategoryNames[k]}
   });
 
@@ -87,8 +90,8 @@ export class BookImage {
 
 export class BookContentPack {
   role?: string;
-  file: string;
-  hash: string;
+  // file: string;
+  // hash: string;
   size: number;
   chaps: number;
   builtAt: Date;

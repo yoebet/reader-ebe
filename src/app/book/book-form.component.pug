@@ -35,11 +35,15 @@
         sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
         valueField="value", labelField="label", placeholder='状态', #statusSelect='')
           sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
-    .field
-      label 标注
-      sui-select.selection([(ngModel)]="editing.annotationFamilyId", [options]="annOptions",
-      valueField="_id", labelField="name", placeholder='标注', #annSelect='')
-        sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
+    .equal.width.fields
+      .field
+        label 标注
+        sui-select.selection([(ngModel)]="editing.annotationFamilyId", [options]="annOptions",
+        valueField="_id", labelField="name", placeholder='标注', #annSelect='')
+          sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
+      .field
+        label 章节
+        sui-checkbox([(ngModel)]='editing.chapsComplete') 录入完整
     .field
       label 简介
       input([(ngModel)]='editing.introduction')
@@ -71,9 +75,18 @@
     .field(*ngIf='!editing.isPrivate')
       label 推荐语
       input([(ngModel)]='editing.slogan')
-    .field
+    .inline.field
       label 主编辑
-      | {{book.chiefEditorName}}
+      ng-template([ngIf]='!currentUser || currentUser.role!=="R"')
+        | {{book.chiefEditorName}}
+      ng-template([ngIf]='currentUser && currentUser.role==="R"')
+        ng-template([ngIf]='!settingChiefEditor')
+          | {{book.chiefEditorName}} &nbsp;&nbsp;
+          .ui.mini.compact.button((click)='settingChiefEditor=true') 变更
+        ng-template([ngIf]='settingChiefEditor')
+          input(placeholder='账号/手机号', #chiefEditorName='')
+          .ui.mini.basic.button((click)='settingChiefEditor=false') 取消
+          .ui.mini.primary.button((click)='setChiefEditor(chiefEditorName.value)') 设置
 
 .actions
   button.ui.tiny.button((click)='close()') 取消

@@ -82,6 +82,7 @@ div(*ngIf='chap')
           .value +
         para-form.ui.form.content.para-editor(
         [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',
+        [showTrans]='showTrans',
         [paraSaver]='paraSaver')
       .item.paragraph
         .ui.left.floated.mini.statistic.para-no((click)='selectPara2(para)')

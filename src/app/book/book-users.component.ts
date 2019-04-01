@@ -56,7 +56,7 @@ export class BookUsersComponent implements OnInit {
           alert('用户不存在');
           return;
         }
-        if (!confirm(`你要把 ${idName.nickName}（账号：${idName.name}）加为编辑吗？`)) {
+        if (!confirm(`你要把 ${idName.nickName}（${idName.name}）加为编辑吗？`)) {
           return;
         }
         this.bookService.addEditor(book._id, idName._id)
