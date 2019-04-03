@@ -2,7 +2,7 @@
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='showZh') 中文
     ng-template([ngIf]='currentUser && currentUser.role==="R"')
-      sui-checkbox([(ngModel)]='privilegeOperations') 操作
+      sui-checkbox([(ngModel)]='privilegeOperations') 更多操作
   | 图书
 
 table.ui.striped.table
@@ -32,16 +32,16 @@ table.ui.striped.table
       td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td.right.aligned
-        a((click)='showDetail(book)', href='javascript:') 详情
-        | &nbsp;&nbsp;
-        a((click)='showForm(book)', href='javascript:') 修改
-        | &nbsp;&nbsp;
-        a((click)='showUsers(book)', href='javascript:') 人员
-        ng-template([ngIf]="privilegeOperations")
+        ng-template([ngIf]="!privilegeOperations")
+          a((click)='showDetail(book)', href='javascript:') 详情
           | &nbsp;&nbsp;
+          a((click)='showForm(book)', href='javascript:') 修改
+          | &nbsp;&nbsp;
+          a((click)='showUsers(book)', href='javascript:') 人员
+        ng-template([ngIf]="privilegeOperations")
           a((click)='showPacks(book)', href='javascript:') 内容包
           | &nbsp;&nbsp;
-          button.ui.tiny.button((click)='backup(book)') 复制
+          button.ui.tiny.compact.button((click)='backup(book)') 复制
           //button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
       td(colspan='6') No Results.

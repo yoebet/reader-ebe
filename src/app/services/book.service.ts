@@ -5,10 +5,11 @@ import {environment} from '../../environments/environment';
 import {SuiModalService} from "ng2-semantic-ui";
 import {Observable} from "rxjs/Observable";
 
-import {Book, BookContentPack, BookImage, PrivilegedUsers} from '../models/book';
+import {Book, BookImage, PrivilegedUsers} from '../models/book';
 import {SorterService} from './sorter.service';
 import {OpResult} from "../models/op-result";
 import {UserIdName} from "../models/user";
+import {UserBook} from "../models/user-book";
 
 @Injectable()
 export class BookService extends SorterService<Book> {
@@ -43,6 +44,12 @@ export class BookService extends SorterService<Book> {
   getPrivilegedUsers(bookId: string): Observable<PrivilegedUsers> {
     let url = `${this.baseUrl}/${bookId}/privilegedUsers`;
     return this.http.get<PrivilegedUsers>(url, this.httpOptions)
+      .catch(this.handleError);
+  }
+
+  getEditors(bookId: string): Observable<UserBook[]> {
+    let url = `${this.baseUrl}/${bookId}/editors`;
+    return this.http.get<UserBook[]>(url, this.httpOptions)
       .catch(this.handleError);
   }
 

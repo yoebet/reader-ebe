@@ -11,6 +11,7 @@ import {AnnotationFamily} from "../models/annotation-family";
 import {AnnoFamilyService} from "../services/anno-family.service";
 import {User, UserIdName} from "../models/user";
 import {SessionService} from "../services/session.service";
+import {UserBook} from "../models/user-book";
 
 @Component({
   selector: 'book-form',
@@ -26,6 +27,7 @@ export class BookFormComponent implements OnInit {
 
   annOptions: AnnotationFamily[];
   settingChiefEditor = false;
+  editors: UserBook[];
 
   get currentUser(): User {
     return this.sessionService.currentUser;
@@ -84,14 +86,35 @@ export class BookFormComponent implements OnInit {
     this.editing = editing;
   }
 
+  alterChiefEditor() {
+    this.settingChiefEditor = true;
+    if (!this.editors) {
+      this.bookService.getEditors(this.book._id)
+        .subscribe((editors: UserBook[]) => {
+          this.editors = editors;
+        });
+    }
+  }
+
+  private doSetChiefEditor(editorId, editorName) {
+    this.bookService.setChiefEditor(this.book._id, editorId)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        this.book.chiefEditorId = editorId;
+        this.book.chiefEditorName = editorName;
+        this.settingChiefEditor = false;
+      });
+  }
 
   setChiefEditor(name) {
     name = name.trim();
     if (!name) {
       return;
     }
-    let book = this.book;
-    this.bookService.checkCandidate(book._id, name)
+    this.bookService.checkCandidate(this.book._id, name)
       .subscribe((idName: UserIdName) => {
         if (!idName) {
           alert('用户不存在');
@@ -100,17 +123,12 @@ export class BookFormComponent implements OnInit {
         if (!confirm(`你要把 ${idName.nickName}（${idName.name}）设为主编辑吗？`)) {
           return;
         }
-        this.bookService.setChiefEditor(book._id, idName._id)
-          .subscribe((opr: OpResult) => {
-            if (opr.ok === 0) {
-              alert(opr.message || 'Fail');
-              return;
-            }
-            this.book.chiefEditorId = idName._id;
-            this.book.chiefEditorName = idName.nickName;
-            this.settingChiefEditor = false;
-          });
+        this.doSetChiefEditor(idName._id, idName.nickName);
       });
+  }
+
+  selectChiefEditor(editor: UserBook) {
+    this.doSetChiefEditor(editor.userId, editor.userNickName);
   }
 
   updatePriceLabel() {
