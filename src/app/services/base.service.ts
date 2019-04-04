@@ -70,6 +70,11 @@ export class BaseService<M extends Model> {
       .catch(this.handleError);
   }
 
+  protected postForOpResult(url, body = null): Observable<OpResult> {
+    return this.http.post<OpResult>(url, body, this.httpOptions)
+      .catch(this.handleError);
+  }
+
   protected modelId(model: M | string): string {
     return typeof model === 'string' ? model : model._id;
   }

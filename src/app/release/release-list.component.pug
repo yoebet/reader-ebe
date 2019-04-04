@@ -1,0 +1,64 @@
+.ui.header
+  | App版本
+
+table.ui.striped.table.form
+  thead
+    tr
+      th 版本
+      th 说明
+      th 日期
+      th 文件
+      th 当前
+      th
+  tbody
+    tr(*ngFor='let rr of releases; trackBy: releaseTracker')
+      ng-template([ngIf]='rr!==editing')
+        td （{{rr.versionCode}}） {{rr.versionName}}
+        td {{rr.releaseNote}}
+        td {{rr.releaseDate | date:'yyyy-M-d' }}
+        td {{rr.packageInfo? '已上传':''}}
+        td {{rr.current? '是':''}}
+        td
+          ng-template([ngIf]='rr.status!=="L"')
+            a((click)='edit(rr)', href='javascript:') 修改
+            | &nbsp;&nbsp;
+            a((click)='lock(rr)', href='javascript:') 锁定
+            ng-template([ngIf]='!rr.current')
+              | &nbsp;&nbsp;
+              a((click)='setCurrent(rr)', href='javascript:') 设为当前最新
+          ng-template([ngIf]='rr.status==="L"')
+            a((click)='archive(rr)', href='javascript:') 隐藏
+            | &nbsp;&nbsp;
+            a((click)='drop(rr)', href='javascript:') 删除
+      ng-template([ngIf]='rr===editing')
+        td
+          .fields
+            input.field.ui.field([value]="rr.versionCode", placeholder='序号', #vCode='', type="number", size="4")
+            input.field([value]="rr.versionName", placeholder='版本号', #vName='', size="10")
+        td
+          textarea(rows='3', [value]='rr.releaseNote', placeholder='更新说明', #rNote='')
+        td {{rr.releaseDate | date:'yyyy-M-d' }}
+        td {{rr.packageInfo? '已上传':''}}
+        td {{rr.current? '是':''}}
+        td
+          .ui.tiny.compact.primary.button((click)='save(rr,vName.value,vCode.value,rNote.value)') 保存
+          .ui.tiny.compact.button((click)='cancelEdit()') 取消
+    tr(*ngIf='newRelease')
+      td
+        | &nbsp;&nbsp;
+        .fields
+          input.field([(ngModel)]="newRelease.versionCode", placeholder='序号', type="number", size="4")
+          input.field([(ngModel)]="newRelease.versionName", placeholder='版本号', size="10")
+      td
+        textarea(rows='3', [(ngModel)]='newRelease.releaseNote', placeholder='更新说明')
+      td
+      td
+      td
+      td
+        .ui.tiny.compact.primary.button((click)='saveNew()') 保存
+        .ui.tiny.compact.button((click)='cancelEditNew()') 取消
+    tr(*ngIf='!releases||releases.length===0')
+      td(colspan='6') No Results.
+
+.ui.hidden.clearing.divider
+button.ui.right.floated.tiny.basic.primary.button([hidden]='newRelease', (click)='editNew()') 新版本

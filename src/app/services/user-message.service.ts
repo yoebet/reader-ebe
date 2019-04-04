@@ -53,42 +53,33 @@ export class UserMessageService extends BaseService<UserMessage> {
 
   markAsRead(messageId: string): Observable<OpResult> {
     let url = this.baseUrl + '/markAsRead/' + messageId;
-    return this.http.post<OpResult>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
   sendMessage(message: UserMessage): Observable<OpResult> {
     let {subject, content, receiverId, sessionId, sendAsRole} = message;
     let url = this.baseUrl + '/send/';
-    return this.http.post<OpResult>(url,
-      {subject, content, receiverId, sessionId, sendAsRole},
-      this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url,
+      {subject, content, receiverId, sessionId, sendAsRole});
   }
 
   replyMessage(messageId: string, message: UserMessage): Observable<OpResult> {
     let {subject, content, sendAsRole} = message;
     let url = this.baseUrl + '/reply/' + messageId;
-    return this.http.post<OpResult>(url,
-      {subject, content, sendAsRole},
-      this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url,
+      {subject, content, sendAsRole});
   }
 
   replyIssue(issueId: string, message: UserMessage): Observable<OpResult> {
     let url = this.adminBaseUrl + '/replyIssue/' + issueId;
-    return this.http.post<OpResult>(url,
-      {subject: message.subject, content: message.content},
-      this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url,
+      {subject: message.subject, content: message.content});
   }
 
   replyFeedback(feedbackId: string, message: UserMessage): Observable<OpResult> {
     let url = this.adminBaseUrl + '/replyFeedback/' + feedbackId;
-    return this.http.post<OpResult>(url,
-      {subject: message.subject, content: message.content},
-      this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url,
+      {subject: message.subject, content: message.content});
   }
 
 }

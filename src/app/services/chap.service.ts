@@ -39,10 +39,5 @@ export class ChapService extends SorterService<Chap> {
     let url = `${this.baseUrl}/${chapId}/dropChapPack`;
     return this.postForOpResult(url);
   }
-
-  private postForOpResult(url, body = null): Observable<OpResult> {
-    return this.http.post<OpResult>(url, body, this.httpOptions)
-      .catch(this.handleError);
-  }
 }
 

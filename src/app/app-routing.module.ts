@@ -15,6 +15,7 @@ import {AnnoFamilyListComponent} from './annotation/anno-family-list.component';
 import {AnnoFamilyComponent} from './annotation/anno-family.component';
 import {LoginComponent} from './account/login.component';
 import {MyMessagesComponent} from './account/my-messages.component';
+import {ReleaseListComponent} from './release/release-list.component';
 
 const routes: Routes = [
   {path: 'books', component: BookListComponent},
@@ -31,7 +32,8 @@ const routes: Routes = [
   {path: 'annotations', component: AnnoFamilyListComponent},
   {path: 'annotations/:id', component: AnnoFamilyComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'my-messages', component: MyMessagesComponent}
+  {path: 'my-messages', component: MyMessagesComponent},
+  {path: 'releases', component: ReleaseListComponent}
 ];
 
 @NgModule({

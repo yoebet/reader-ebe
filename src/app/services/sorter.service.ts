@@ -49,8 +49,7 @@ export class SorterService<M extends Model> extends BaseService<M> {
   protected move(model: M | string, dir: string): Observable<OpResult> {
     const id = this.modelId(model);
     const url = `${this.baseUrl}/${id}/${dir}`;
-    return this.http.post<OpResult>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
   moveUp(model: M | string): Observable<OpResult> {

@@ -106,9 +106,4 @@ export class BookService extends SorterService<Book> {
     return this.postForOpResult(url);
   }
 
-  private postForOpResult(url, body = null): Observable<OpResult> {
-    return this.http.post<OpResult>(url, body, this.httpOptions)
-      .catch(this.handleError);
-  }
-
 }

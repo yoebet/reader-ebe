@@ -64,13 +64,13 @@
       .fields
         .inline.field
           label 状态
-          sui-select.selection([(ngModel)]="chap.status", [options]="statusOptions",
+          sui-select.selection([ngModel]="chap.status", [options]="statusOptions",
           valueField="value", labelField="label", placeholder='状态', #statusSelect='')
             sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
       .right.floated.field
         button.ui.tiny.button((click)="editingChap=null")
           | 取消
-        button.ui.tiny.primary.button((click)="saveChap(chap,chapName.value,chapZhName.value)")
+        button.ui.tiny.primary.button((click)="saveChap(chap,chapName.value,chapZhName.value,statusSelect.selectedOption&&statusSelect.selectedOption.value)")
           | 保存
 
   .ui.hidden.clearing.divider

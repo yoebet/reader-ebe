@@ -58,39 +58,24 @@ export class BookListComponent implements OnInit {
 
 
   showDetail(book: Book) {
-    this.modalService.open(new BookInfoModal(book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookInfoModal(book));
   }
 
   showImage(book: Book) {
-    this.modalService.open(new BookImageModal(book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookImageModal(book));
   }
 
   showForm(book: Book) {
     let context = {book, annOptions: this.annOptions};
-    this.modalService.open(new BookFormModal(context))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookFormModal(context));
   }
 
   showPacks(book: Book) {
-    this.modalService.open(new BookPacksModal(book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookPacksModal(book));
   }
 
   showUsers(book: Book) {
-    this.modalService.open(new BookUsersModal(book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookUsersModal(book));
   }
 
   editNew() {

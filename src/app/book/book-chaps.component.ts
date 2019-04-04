@@ -80,18 +80,22 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
     this.editingChap = chap;
   }
 
-  saveChap(chap: Chap, name: string, zhName: string): void {
+  saveChap(chap: Chap, name: string, zhName: string, status: string): void {
     name = name.trim();
     if (!name) {
       return;
     }
-    chap.name = name;
-    chap.zhName = zhName.trim();
-    this.chapService.update(chap).subscribe((opr: OpResult) => {
+    zhName = zhName.trim();
+    let chapAltered = {name, zhName, status} as Chap;
+    chapAltered._id = chap._id;
+    this.chapService.update(chapAltered).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
         alert(opr.message || 'Fail');
         return;
       }
+      chap.name = name;
+      chap.zhName = zhName;
+      chap.status = status;
       this.editingChap = null;
     });
   }

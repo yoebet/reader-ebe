@@ -36,32 +36,20 @@ export class BookComponent implements OnInit {
   }
 
   showDetail() {
-    this.modalService.open(new BookInfoModal(this.book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookInfoModal(this.book));
   }
 
   showForm() {
     let context = {book: this.book};
-    this.modalService.open(new BookFormModal(context))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookFormModal(context));
   }
 
   showPacks() {
-    this.modalService.open(new BookPacksModal(this.book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookPacksModal(this.book));
   }
 
   showUsers() {
-    this.modalService.open(new BookUsersModal(this.book))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.modalService.open(new BookUsersModal(this.book));
   }
 
   goBack(): void {

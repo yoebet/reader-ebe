@@ -21,6 +21,7 @@ import {ParaIssueService} from './services/para-issue.service';
 import {WordCategoryService} from './services/word-category.service';
 import {AnnoFamilyService} from './services/anno-family.service';
 import {AnnoGroupService} from './services/anno-group.service';
+import {ReleaseService} from './services/release.service';
 
 import {CreatedDatePipe} from './pipes/created-date.pipe';
 import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
@@ -62,6 +63,7 @@ import {LoginComponent} from './account/login.component';
 import {LoginPopupComponent} from './account/login-popup.component';
 import {MyMessagesComponent} from './account/my-messages.component';
 import {MessagesPopupComponent} from './message/messages-popup.component';
+import {ReleaseListComponent} from './release/release-list.component';
 
 @NgModule({
   imports: [
@@ -110,7 +112,8 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     LoginComponent,
     LoginPopupComponent,
     MyMessagesComponent,
-    MessagesPopupComponent
+    MessagesPopupComponent,
+    ReleaseListComponent
   ],
   providers: [
     AppService,
@@ -127,6 +130,7 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
     WordCategoryService,
     AnnoFamilyService,
     AnnoGroupService,
+    ReleaseService,
     PriceLabelPipe
   ],
   entryComponents: [

@@ -32,8 +32,7 @@ export class ParaIssueService extends BaseService<ParaIssue> {
 
   updateStatus(issueId: string, status: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${issueId}/status/${status}`;
-    return this.http.post(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.postForOpResult(url);
   }
 
 }
