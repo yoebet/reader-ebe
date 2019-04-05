@@ -16,9 +16,9 @@ import {Annotation} from '../models/annotation';
 import {AnnotationSet} from '../anno/annotation-set';
 
 import {DictService} from '../services/dict.service';
-import {ChangeCallback} from '../chap-types/change-notification';
-import {DictRequest, DictSelectedResult, SelectedItem} from '../chap-types/dict-request';
-import {NoteRequest} from '../chap-types/note-request';
+import {ChangeCallback} from '../content-types/change-notification';
+import {DictRequest, DictSelectedResult, SelectedItem} from '../content-types/dict-request';
+import {NoteRequest} from '../content-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
 
 @Component({

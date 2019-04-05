@@ -4,8 +4,8 @@ import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui"
 import {findIndex} from 'lodash';
 
 import {Para} from '../models/para';
-import {Row} from '../chap-types/split-align';
-import {ParaSaver} from "../chap-types/para-saver";
+import {Row} from '../content-types/split-align';
+import {ParaSaver} from "../content-types/para-saver";
 
 @Component({
   selector: 'para-split',

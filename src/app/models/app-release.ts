@@ -7,7 +7,6 @@ export class AppRelease extends Model {
   versionCode: number;
 
   releaseNote: string;
-  releaseDate: Date;
   packageInfo: PackageInfo;
   current: boolean;
 
@@ -20,5 +19,6 @@ export class PackageInfo {
   file: string;
   hash: string;
   size: number;
+  uploadedAt: Date;
   commit: string;
 }

@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 
 import {DictService} from '../services/dict.service';
-import {DictSelectedResult} from '../chap-types/dict-request';
-import {SelectedItem} from "../chap-types/dict-request";
+import {DictSelectedResult} from '../content-types/dict-request';
+import {SelectedItem} from "../content-types/dict-request";
 import {DictBaseComponent} from "./dict-base.component";
 import {DictEntry, MeaningItem, SimpleMeaning} from "../models/dict-entry";
 

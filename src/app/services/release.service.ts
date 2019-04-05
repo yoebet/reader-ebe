@@ -5,7 +5,7 @@ import {Observable} from "rxjs/Observable";
 
 import {environment} from "../../environments/environment";
 import {OpResult} from "../models/op-result";
-import {AppRelease} from "../models/app-release";
+import {AppRelease, PackageInfo} from "../models/app-release";
 import {BaseService} from "./base.service";
 
 @Injectable()
@@ -37,6 +37,19 @@ export class ReleaseService extends BaseService<AppRelease> {
   archiveVersion(id: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${id}/archive`;
     return this.postForOpResult(url);
+  }
+
+  uploadPackage(releaseId: string, file: File): Observable<PackageInfo> {
+    let url = `${this.baseUrl}/${releaseId}/package`;
+    const formData = new FormData();
+    formData.append('package', file, file.name);
+    return this.http.post<PackageInfo>(url, formData, this.httpOptions);
+  }
+
+  dropPackage(id: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${id}/package`;
+    return this.http.delete<OpResult>(url, this.httpOptions)
+      .catch(this.handleError);
   }
 
 }

@@ -44,10 +44,11 @@ const SpecialAnnotations = {
 
 const LatestAnnotationsCount = 8;
 
-
-const ImagesBase = `${environment.staticBase}/images`;
+const staticBase = environment.staticBase;
+const ImagesBase = `${staticBase}/images`;
 const BookImagesBase = `${ImagesBase}/book`;
 const BookImageNotSet = `${BookImagesBase}/missing.png`;
+const AppPackagesBase = `${staticBase}/packages`;
 
 
 const DefaultHttpHeaders = environment.httpHeaders || {};
@@ -60,5 +61,6 @@ export {
   LatestAnnotationsCount,
   BookImagesBase,
   BookImageNotSet,
+  AppPackagesBase,
   DefaultHttpHeaders
 };

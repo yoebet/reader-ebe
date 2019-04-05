@@ -5,8 +5,8 @@ import {differenceBy, isEqual, findIndex} from 'lodash';
 
 import {Para} from '../models/para';
 import {Model} from '../models/model';
-import {Row} from '../chap-types/split-align';
-import {ParaSaver} from "../chap-types/para-saver";
+import {Row} from '../content-types/split-align';
+import {ParaSaver} from "../content-types/para-saver";
 
 class SentenceRow extends Row {
   sid = null;

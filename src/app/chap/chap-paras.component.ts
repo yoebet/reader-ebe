@@ -12,14 +12,14 @@ import {OpResult} from '../models/op-result';
 
 import {ParaFormComponent} from './para-form.component';
 import {AnnotationSet} from '../anno/annotation-set';
-import {ChangeCallback, ChangeNotification, ContentFields} from '../chap-types/change-notification';
-import {DictRequest, DictSelectedResult} from '../chap-types/dict-request';
-import {NoteRequest} from '../chap-types/note-request';
+import {ChangeCallback, ChangeNotification, ContentFields} from '../content-types/change-notification';
+import {DictRequest, DictSelectedResult} from '../content-types/dict-request';
+import {NoteRequest} from '../content-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {AnnoFamilyService} from "../services/anno-family.service";
-import {ParaSaver} from "../chap-types/para-saver";
+import {ParaSaver} from "../content-types/para-saver";
 
 
 @Component({

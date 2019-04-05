@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 
-import {BookImagesBase, BookImageNotSet} from '../config';
 import {ComponentModalConfig, SuiModal} from "ng2-semantic-ui";
 import {ModalSize} from "ng2-semantic-ui/dist/modules/modal/classes/modal-config";
 
+import {BookImagesBase, BookImageNotSet} from '../config';
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 

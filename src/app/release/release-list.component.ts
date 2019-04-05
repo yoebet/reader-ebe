@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppRelease, AppPlatform} from "../models/app-release";
 
+import {AppPackagesBase} from '../config';
 import {ReleaseService} from '../services/release.service';
 import {OpResult} from "../models/op-result";
 
@@ -10,11 +11,16 @@ import {OpResult} from "../models/op-result";
   styleUrls: ['./release-list.component.css']
 })
 export class ReleaseListComponent implements OnInit {
+  @ViewChild('file') file;
   platform: string = AppPlatform.Android;
 
   releases: AppRelease[];
   newRelease: AppRelease = null;
   editing: AppRelease = null;
+
+  uploading = false;
+
+  appPackagesBase = AppPackagesBase;
 
   constructor(private  releaseService: ReleaseService) {
   }
@@ -29,7 +35,14 @@ export class ReleaseListComponent implements OnInit {
     let rr = new AppRelease();
     rr.platform = this.platform;
     rr.status = 'N';
-    rr.releaseDate = new Date();
+
+    if (this.releases && this.releases[0]) {
+      let latest = this.releases[0];
+      rr.versionCode = latest.versionCode + 1;
+      rr.versionName = latest.versionName.replace(
+        /\d+$/,
+        d => '' + (+d + 1))
+    }
 
     this.newRelease = rr;
   }
@@ -150,6 +163,52 @@ export class ReleaseListComponent implements OnInit {
         }
         this.releases = this.releases.filter(r => r !== rr);
       });
+  }
+
+  dropPackage(rr: AppRelease) {
+    if (!confirm('要删除安装包吗？')) {
+      return;
+    }
+    this.releaseService
+      .dropPackage(rr._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        rr.packageInfo = null;
+      });
+  }
+
+  selectFile() {
+    if (this.uploading) {
+      alert('正在上传');
+      return;
+    }
+    this.file.nativeElement.click();
+  }
+
+  upload(rr: AppRelease) {
+    let files = this.file.nativeElement.files;
+    // console.log(files);// FileList
+    if (!files || files.length == 0) {
+      return;
+    }
+    this.uploading = true;
+    this.releaseService.uploadPackage(rr._id, files[0])
+      .subscribe(packageInfo => {
+          this.uploading = false;
+          if (!packageInfo.file) {
+            alert('上传失败');
+            return;
+          }
+          rr.packageInfo = packageInfo;
+        },
+        error => {
+          alert('上传失败');
+          this.uploading = false;
+          console.error(error);
+        });
   }
 
   releaseTracker(index, release) {
