@@ -68,7 +68,7 @@
   border-bottom: 1px dashed cadetblue;
 }
 
-.para-text.content-text [data-note]:after {
+.para-text [data-note]:after {
   content: '注';
   font-size: 0.6em;
   vertical-align: super;

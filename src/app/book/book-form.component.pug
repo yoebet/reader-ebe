@@ -35,7 +35,7 @@
         sui-select.selection([(ngModel)]="editing.status", [options]="statusOptions",
         valueField="value", labelField="label", placeholder='状态', #statusSelect='')
           sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
-    .equal.width.fields
+    .equal.width.inline.fields
       .field
         label 标注
         sui-select.selection([(ngModel)]="editing.annotationFamilyId", [options]="annOptions",
@@ -44,12 +44,18 @@
       .field
         label 章节
         sui-checkbox([(ngModel)]='editing.chapsComplete') 录入完整
+    .inline.field
+      label 语言
+      sui-select.selection([(ngModel)]="editing.contentLang", [options]="langOptions",
+      valueField="value", labelField="label", placeholder='（原文）', #langSelect='')
+        sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+      | &nbsp;&nbsp; - &nbsp;&nbsp;
+      sui-select.selection([(ngModel)]="editing.transLang", [options]="langOptions",
+      valueField="value", labelField="label", placeholder='（对照）', #langSelect='')
+        sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
     .field
       label 简介
       input([(ngModel)]='editing.introduction')
-    .field
-      label 详情
-      textarea(rows='2', [(ngModel)]='editing.description')
 
     ng-template([ngIf]='!editing.isPrivate')
       h4.ui.dividing.grey.header 定价
@@ -57,12 +63,12 @@
         .two.wide.field
           label 免费?
           sui-checkbox([(ngModel)]='editing.isFree') 是
-        .seven.wide.field
+        .six.wide.field
           label 价格（分）
           .inline.field
-            input([(ngModel)]='editing.price', type='number', min='0', max='19900', step='10')
+            input([(ngModel)]='editing.price', [disabled]='editing.isFree', type='number', min='0', max='19900', step='10')
             | &nbsp; {{{price:editing.price} | priceLabel}}
-        .seven.wide.field
+        .eight.wide.field
           label 标签
           .inline.field
             input([(ngModel)]='editing.priceLabel', size='12')
@@ -76,6 +82,9 @@
       .field(*ngIf='!editing.isPrivate')
         label 推荐语
         input([(ngModel)]='editing.slogan')
+    .field
+      label 详情
+      textarea(rows='2', [(ngModel)]='editing.description')
     .inline.field
       label 主编辑
       ng-template([ngIf]='!currentUser || currentUser.role!=="R"')

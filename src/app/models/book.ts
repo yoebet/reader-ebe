@@ -11,8 +11,9 @@ export class Book extends Model {
 
   label: string;
 
+  contentLang: string = 'En';
+  transLang: string = 'Zh';
   category: string;
-  langType: string = 'EZ';
   description: string;
 
   status: string = 'E';
@@ -55,9 +56,9 @@ export class Book extends Model {
   });
 
   static LangTypes = [
-    {value: 'EZ', label: '英文原著 - 中文译文'},
-    {value: 'ZE', label: '英文译文 - 中文原著'}/*,
-    {value: 'CZ', label: '文言文/诗词 - 现代文/注释/解析'}*/
+    {value: 'En', label: '英文'},
+    {value: 'Zh', label: '中文'},
+    {value: 'Zc', label: '文言文/诗词'}
   ];
 
 

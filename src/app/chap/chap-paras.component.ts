@@ -20,6 +20,7 @@ import {Annotation} from '../models/annotation';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {AnnoFamilyService} from "../services/anno-family.service";
 import {ParaSaver} from "../content-types/para-saver";
+import {ContentContext} from "../content-types/content-context";
 
 
 @Component({
@@ -34,6 +35,11 @@ export class ChapParasComponent implements OnInit {
     if (!book) {
       return;
     }
+    if (!this.contentContext) {
+      this.contentContext = new ContentContext();
+    }
+    this.contentContext.contentLang = book.contentLang;
+    this.contentContext.transLang = book.transLang;
     this.loadAnnotations();
   }
 
@@ -59,6 +65,7 @@ export class ChapParasComponent implements OnInit {
   annotatedWordsHover = true;
 
   annotationSet: AnnotationSet;
+  contentContext: ContentContext;
 
   annotationGroup: AnnotationGroup = null;
   currentAnnotation: Annotation = null;
@@ -119,6 +126,7 @@ export class ChapParasComponent implements OnInit {
           return;
         }
         this.annotationSet = annotationSet;
+        this.contentContext.annotationSet = annotationSet;
         this.latestAnnotations = [];
 
         let ag: AnnotationGroup = annotationSet.groups[0];

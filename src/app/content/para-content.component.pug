@@ -1,10 +1,15 @@
-.para-text.content-text((mouseup)='onMouseup($event)',
-(keyup)='onKeyup($event)',
-(contextmenu)='onContextmenu($event)',
+.para-text.content-text(
+(mouseup)='onMouseup($event,"content")',
+(keyup)='onKeyup($event,"content")',
+(contextmenu)='onContextmenu($event,"content")',
 [attr.contenteditable]='editable',
- spellcheck='false', #contentText='')
-.para-text.trans-text([hidden]='!showTrans', (keyup)='onTransKeyup($event)', [attr.contenteditable]='editable',
- spellcheck='false', #paraTrans='')
+spellcheck='false', #contentText='')
+.para-text.trans-text([hidden]='!showTrans',
+(mouseup)='onMouseup($event,"trans")',
+(keyup)='onKeyup($event,"trans")',
+(contextmenu)='onContextmenu($event,"trans")',
+[attr.contenteditable]='editable',
+spellcheck='false', #transText='')
 .ui.right.rail(*ngIf='beenChanged')
   .ui.list([hidden]='!gotFocus')
     .ui.item

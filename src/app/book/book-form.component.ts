@@ -21,7 +21,8 @@ import {UserBook} from "../models/user-book";
 export class BookFormComponent implements OnInit {
   @Input() book: Book;
   editing: Book;
-  // langOptions = Book.LangTypes;
+
+  langOptions = Book.LangTypes;
   statusOptions = Book.Statuses;
   categoryOptions = Book.Categories;
 

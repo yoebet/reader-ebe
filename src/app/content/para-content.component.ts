@@ -7,19 +7,26 @@ import {
 import Drop from 'tether-drop'
 
 import {Annotator} from '../anno/annotator';
+import {AnnotatorHelper} from "../anno/annotator-helper";
 import {AnnotateResult} from '../anno/annotate-result'
 import {HighlightGroups} from '../anno/annotation-set';
 
-import {UIConstants, DataAttrNames, DataAttrValues, SpecialAnnotations} from '../config';
+import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
 import {DictEntry} from '../models/dict-entry';
 import {Annotation} from '../models/annotation';
-import {AnnotationSet} from '../anno/annotation-set';
 
 import {DictService} from '../services/dict.service';
 import {ChangeCallback} from '../content-types/change-notification';
 import {DictRequest, DictSelectedResult, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
+import {ContentContext} from "../content-types/content-context";
+
+
+declare type Side = 'content' | 'trans';
+
+const SideContent: Side = 'content';
+const SideTrans: Side = 'trans';
 
 @Component({
   selector: 'para-content',
@@ -28,7 +35,7 @@ import {WordAnnosComponent} from './word-annos.component'
 })
 export class ParaContentComponent implements OnChanges {
   @ViewChild('contentText', {read: ViewContainerRef}) contentText: ViewContainerRef;
-  @ViewChild('paraTrans', {read: ViewContainerRef}) paraTrans: ViewContainerRef;
+  @ViewChild('transText', {read: ViewContainerRef}) transText: ViewContainerRef;
   @ViewChild('wordAnnos', {read: ViewContainerRef}) wordAnnos: ViewContainerRef;
   @Input() content: string;
   @Input() trans: string;
@@ -39,13 +46,14 @@ export class ParaContentComponent implements OnChanges {
   @Input() annotatedWordsHover: boolean;
   @Input() annotating: boolean;
   @Input() annotation: Annotation;
-  @Input() annotationSet: AnnotationSet;
+  @Input() contentContext: ContentContext;
   @Output() contentChange = new EventEmitter<ChangeCallback>();
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
   @Output() noteRequest = new EventEmitter<NoteRequest>();
 
-  _annotator: Annotator;
+  _contentAnnotator: Annotator;
+  _transAnnotator: Annotator;
   beenChanged = false;
   contentChanged = false;
   transChanged = false;
@@ -58,6 +66,9 @@ export class ParaContentComponent implements OnChanges {
   wordsPopupMap = new Map<Element, Drop>();
   wordAnnosComponentRef: ComponentRef<WordAnnosComponent>;
 
+  contentSentenceMap: Map<string, Element>;
+  transSentenceMap: Map<string, Element>;
+
   static highlightWordsSelector = HighlightGroups.highlightAnnotationSelectors;
 
 
@@ -65,16 +76,41 @@ export class ParaContentComponent implements OnChanges {
               private dictService: DictService) {
   }
 
-  get annotator0() {
-    if (!this._annotator) {
-      let contentEl = this.contentText.element.nativeElement;
-      this._annotator = new Annotator(contentEl);
-    }
-    return this._annotator;
+
+  get annotationSet() {
+    return this.contentContext.annotationSet;
   }
 
-  get annotator() {
-    return this.annotator0.switchAnnotation(this.annotation);
+  getAnnotator(side: Side, annotation = null) {
+    let annt;
+    if (side === SideContent) {
+      annt = this._contentAnnotator;
+      if (!annt) {
+        annt = new Annotator(this.contentText.element.nativeElement);
+        this._contentAnnotator = annt;
+      }
+    } else {
+      annt = this._transAnnotator;
+      if (!annt) {
+        annt = new Annotator(this.transText.element.nativeElement);
+        annt.isExtendWholeWord = false;
+        this._transAnnotator = annt;
+      }
+    }
+    annt.switchAnnotation(annotation || this.annotation);
+    return annt;
+  }
+
+  private getTextEl(side: Side) {
+    return side === SideContent ?
+      this.contentText.element.nativeElement :
+      this.transText.element.nativeElement;
+  }
+
+  private getTheOtherSide(textEl) {
+    return textEl === this.transText.element.nativeElement ?
+      this.contentText.element.nativeElement :
+      this.transText.element.nativeElement;
   }
 
   private destroyAnnotatedWordsPopup(element) {
@@ -87,7 +123,7 @@ export class ParaContentComponent implements OnChanges {
 
   private removeTagIfDummy(el) {
     let result = {changed: false, removed: false};
-    if (el.tagName !== Annotator.annotationTagName.toUpperCase() && el.tagName !== 'SPAN') {
+    if (el.tagName !== UIConstants.annotationTagName.toUpperCase() && el.tagName !== 'SPAN') {
       return result;
     }
     if (el.className === '') {
@@ -120,28 +156,9 @@ export class ParaContentComponent implements OnChanges {
     return result;
   }
 
-  private currentPhrase(wordEl) {
-    let stEl = this.findSentence(wordEl);
-    if (!stEl) {
-      stEl = this.contentText.element.nativeElement;
-    }
-    let ds = wordEl.dataset;
-    let group = ds[DataAttrNames.assoc];
-    if (!group) {
-      return null;
-    }
-    if (!DataAttrValues.phraPattern.test(group)) {
-      return null;
-    }
-    let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
-    let groupEls = stEl.querySelectorAll(groupSelector);
-    let els = Array.from(groupEls);
-    return els.map((el: Element) => el.textContent).join(' ');
-  }
-
-  selectWordMeaning() {
+  selectWordMeaning(side: Side) {
     let ann = this.annotationSet.selectMeaningAnnotation;
-    let ar: AnnotateResult = this.annotator0.switchAnnotation(ann).annotate();
+    let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
     }
@@ -151,6 +168,8 @@ export class ParaContentComponent implements OnChanges {
     let oriPos = element.dataset[DataAttrNames.pos];
     let oriMeaning = element.dataset[DataAttrNames.mean];
     let oriForWord = element.dataset[DataAttrNames.word] || word;
+
+    let textEl = this.getTextEl(side);
 
     let meaningItemCallback = (selected: DictSelectedResult) => {
 
@@ -188,9 +207,9 @@ export class ParaContentComponent implements OnChanges {
         }
       }
 
-      this.onContentChange();
+      this.notifyChange(side);
       if (this.annotatedWordsHoverSetup) {
-        this.showAnnotationsHover(element);
+        this.showAnnotationsHover(element, textEl);
       }
     };
 
@@ -209,7 +228,7 @@ export class ParaContentComponent implements OnChanges {
         if (oriForWord !== word) {
           dr.relatedWords = [word];
         }
-        let phrase = this.currentPhrase(element);
+        let phrase = AnnotatorHelper.currentPhrase(element, textEl);
         if (phrase && phrase !== word && phrase !== oriForWord) {
           if (dr.relatedWords === null) {
             dr.relatedWords = [phrase];
@@ -221,9 +240,9 @@ export class ParaContentComponent implements OnChanges {
       });
   }
 
-  addANote() {
+  addANote(side: Side) {
     let ann = this.annotationSet.addNoteAnnotation;
-    let ar: AnnotateResult = this.annotator0.switchAnnotation(ann).annotate();
+    let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
     }
@@ -250,9 +269,10 @@ export class ParaContentComponent implements OnChanges {
         }
       }
       if (changed) {
-        this.onContentChange();
+        this.notifyChange(side);
         if (this.annotatedWordsHoverSetup) {
-          this.showAnnotationsHover(element);
+          let textEl = this.getTextEl(side);
+          this.showAnnotationsHover(element, textEl);
         }
       }
     };
@@ -264,26 +284,27 @@ export class ParaContentComponent implements OnChanges {
     this.noteRequest.emit(nr)
   }
 
-  private doAnnotate() {
+  private doAnnotate(side: Side) {
     if (this.annotation.nameEn === SpecialAnnotations.SelectMeaning.nameEn) {
-      this.selectWordMeaning();
+      this.selectWordMeaning(side);
       return;
     }
     if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
-      this.addANote();
+      this.addANote(side);
       return;
     }
-    let ar: AnnotateResult = this.annotator.annotate();
+    let ar: AnnotateResult = this.getAnnotator(side).annotate();
     if (!ar) {
       return;
     }
     if (ar.wordEl) {
       if (ar.elCreated) {
+        let textEl = this.getTextEl(side);
         if (ar.wordEl.matches(ParaContentComponent.highlightWordsSelector)) {
-          this.highlightAssociatedWords(ar.wordEl);
+          this.highlightAssociatedWords(ar.wordEl, textEl, this.getTheOtherSide(textEl));
         }
         if (this.annotatedWordsHoverSetup) {
-          this.showAnnotationsHover(ar.wordEl);
+          this.showAnnotationsHover(ar.wordEl, textEl);
         }
       }
       if (ar.operation === 'remove') {
@@ -292,11 +313,12 @@ export class ParaContentComponent implements OnChanges {
           this.destroyAnnotatedWordsPopup(ar.wordEl);
         }
       }
-      this.onContentChange();
+      this.notifyChange(side);
     }
   }
 
-  onMouseup($event) {
+  onMouseup($event, side: Side) {
+    console.log(side);
     $event.stopPropagation();
     if ($event.which === 3) {
       return;
@@ -305,35 +327,42 @@ export class ParaContentComponent implements OnChanges {
       return;
     }
     if ($event.ctrlKey || $event.metaKey) {
-      this.addANote();
+      this.addANote(side);
       return;
     }
     if (!this.annotation) {
       return;
     }
-    this.doAnnotate();
+    this.doAnnotate(side);
   }
 
-  onContextmenu($event) {
-    this.selectWordMeaning();
+  onContextmenu($event, side: Side) {
+    this.selectWordMeaning(side);
     $event.stopPropagation();
     $event.preventDefault();
   }
 
-  onKeyup($event) {
+  onKeyup($event, side: Side) {
     $event.stopPropagation();
     if (!this.editable) {
       return;
     }
-    this.onContentChange();
+    this.notifyChange(side);
   }
 
-  private onContentChange() {
-    if (this.contentChanged) {
+  private notifyChange(side: Side) {
+    if (side === SideContent && this.contentChanged) {
+      return;
+    }
+    if (side === SideTrans && this.transChanged) {
       return;
     }
     this.beenChanged = true;
-    this.contentChanged = true;
+    if (side === SideContent) {
+      this.contentChanged = true;
+    } else if (side === SideTrans) {
+      this.transChanged = true;
+    }
     let callback: ChangeCallback = {
       liveContent: this.getLiveContent.bind(this),
       onSaved: this.onParaSaved.bind(this)
@@ -341,23 +370,10 @@ export class ParaContentComponent implements OnChanges {
     this.contentChange.emit(callback);
   }
 
-  onTransKeyup($event) {
-    $event.stopPropagation();
-    if (!this.editable) {
-      return;
-    }
-    if (this.transChanged) {
-      return;
-    }
-    this.beenChanged = true;
-    this.transChanged = true;
-    this.contentChange.emit(this.getLiveContent.bind(this));
-  }
-
-  private parseHtml(paraTextEl, side) {
+  private parseHtml(paraTextEl, side: Side) {
     paraTextEl = paraTextEl.cloneNode(true);
 
-    if (side === 'content') {
+    if (side === SideContent) {
       let dcp = UIConstants.dropClassPrefix;
       let tcp = UIConstants.tetherClassPrefix;
       let dropEls = paraTextEl.querySelectorAll(`.${dcp}target, .${tcp}target`);
@@ -406,11 +422,11 @@ export class ParaContentComponent implements OnChanges {
     let contents: any = {};
     if (this.contentChanged) {
       let contentEl = this.contentText.element.nativeElement;
-      contents.content = this.parseHtml(contentEl, 'content');
+      contents.content = this.parseHtml(contentEl, SideContent);
     }
     if (this.transChanged) {
-      let transEl = this.paraTrans.element.nativeElement;
-      contents.trans = this.parseHtml(transEl, 'trans');
+      let transEl = this.transText.element.nativeElement;
+      contents.trans = this.parseHtml(transEl, SideTrans);
     }
     return contents;
   }
@@ -460,17 +476,15 @@ export class ParaContentComponent implements OnChanges {
     this.highlightedWords = null;
   }
 
-  private setupSentenceHover() {
-
-    if (this.sentenceHoverSetup || !this.highlightSentence || !this.gotFocus) {
+  private setupSentenceIdMap() {
+    if (this.contentSentenceMap != null) {
       return;
     }
-
+    this.contentSentenceMap = new Map<string, Element>();
+    this.transSentenceMap = new Map<string, Element>();
     let contentEl = this.contentText.element.nativeElement;
-    let transEl = this.paraTrans.element.nativeElement;
-    let contentMap = new Map<string, Element>();
-    let transMap = new Map<string, Element>();
-    for (let [textEl, selMap] of [[contentEl, contentMap], [transEl, transMap]]) {
+    let transEl = this.transText.element.nativeElement;
+    for (let [textEl, selMap] of [[contentEl, this.contentSentenceMap], [transEl, this.transSentenceMap]]) {
       let sentenceEls = textEl.querySelectorAll(UIConstants.sentenceTagName);
       for (let stEl of sentenceEls) {
         if (!stEl.dataset) {
@@ -482,6 +496,15 @@ export class ParaContentComponent implements OnChanges {
         }
       }
     }
+  }
+
+  private setupSentenceHover() {
+
+    if (this.sentenceHoverSetup || !this.highlightSentence || !this.gotFocus) {
+      return;
+    }
+
+    this.setupSentenceIdMap();
 
     let component = this;
 
@@ -499,7 +522,7 @@ export class ParaContentComponent implements OnChanges {
       }
 
       component.clearSentenceHighlights();
-      for (let selMap of [contentMap, transMap]) {
+      for (let selMap of [component.contentSentenceMap, component.transSentenceMap]) {
         let tsEl = selMap.get(sid);
         if (tsEl) {
           tsEl.classList.add(UIConstants.highlightClass);
@@ -511,6 +534,8 @@ export class ParaContentComponent implements OnChanges {
       }
     };
 
+    let contentEl = this.contentText.element.nativeElement;
+    let transEl = this.transText.element.nativeElement;
     for (let textEl of [contentEl, transEl]) {
       let sentenceEls = textEl.querySelectorAll(UIConstants.sentenceTagName);
       for (let sentenceEl of sentenceEls) {
@@ -521,25 +546,10 @@ export class ParaContentComponent implements OnChanges {
     this.sentenceHoverSetup = true;
   }
 
-  private findSentence(node): any {
-    let contentTextEl = this.contentText.element.nativeElement;
-    let sentenceSelector = UIConstants.sentenceTagName;
-    do {
-      if (node instanceof Element) {
-        let el = node as Element;
-        if (el === contentTextEl) {
-          return null;
-        }
-        if (el.matches(sentenceSelector)) {
-          return el;
-        }
-      }
-      node = node.parentNode;
-    } while (node);
-    return null;
-  }
+  private highlightAssociatedWords(wordEl, textEl, theOtherTextEl) {
 
-  private highlightAssociatedWords(wordEl) {
+    let theOtherSentenceMap = (textEl === this.contentText.element.nativeElement) ?
+      this.transSentenceMap : this.contentSentenceMap;
 
     let component = this;
 
@@ -551,21 +561,34 @@ export class ParaContentComponent implements OnChanges {
       component.clearWordHighlights();
 
       let el = this;
-      let stEl = component.findSentence(el);
-      if (!stEl) {
-        stEl = component.contentText.element.nativeElement;
+      let stEl = AnnotatorHelper.findSentence(el, textEl);
+      let stEl2;
+      if (stEl) {
+        if (stEl.dataset) {
+          let sid = stEl.dataset[UIConstants.sentenceIdAttrName];
+          stEl2 = theOtherSentenceMap.get(sid);
+        }
+      } else {
+        stEl = textEl;
+        stEl2 = theOtherTextEl;
       }
 
       let groupSelector = HighlightGroups.matchGroup(el);
       if (!groupSelector) {
         return;
       }
+      if (!component.highlightedWords) {
+        component.highlightedWords = [];
+      }
+
       let annEls = stEl.querySelectorAll(groupSelector);
       for (let annEl of annEls) {
         annEl.classList.add(UIConstants.highlightClass);
-        if (!component.highlightedWords) {
-          component.highlightedWords = [];
-        }
+        component.highlightedWords.push(annEl);
+      }
+      let annEls2 = stEl2.querySelectorAll(groupSelector);
+      for (let annEl of annEls2) {
+        annEl.classList.add(UIConstants.highlightClass);
         component.highlightedWords.push(annEl);
       }
     };
@@ -580,17 +603,26 @@ export class ParaContentComponent implements OnChanges {
       return;
     }
 
+    this.setupSentenceIdMap();
+
     let contentEl = this.contentText.element.nativeElement;
+    let transEl = this.transText.element.nativeElement;
+
     let annEls = contentEl.querySelectorAll(ParaContentComponent.highlightWordsSelector);
     for (let annEl of annEls) {
-      this.highlightAssociatedWords(annEl);
+      this.highlightAssociatedWords(annEl, contentEl, transEl);
+    }
+
+    let tAnnEls = transEl.querySelectorAll(ParaContentComponent.highlightWordsSelector);
+    for (let annEl of tAnnEls) {
+      this.highlightAssociatedWords(annEl, transEl, contentEl);
     }
 
     this.associatedWordsHoverSetup = true;
   }
 
 
-  private showAnnotationsHover(wordEl) {
+  private showAnnotationsHover(wordEl, textEl) {
     if (this.wordsPopupMap.has(wordEl)) {
       return;
     }
@@ -601,7 +633,7 @@ export class ParaContentComponent implements OnChanges {
       this.wordAnnosComponentRef = this.wordAnnos.createComponent(factory);
     }
     let wacr = this.wordAnnosComponentRef;
-    wacr.instance.paraTextEl = this.contentText.element.nativeElement;
+    wacr.instance.paraTextEl = textEl;
     let component = this;
 
     let content = function () {
@@ -634,9 +666,15 @@ export class ParaContentComponent implements OnChanges {
     this.wordsPopupMap.clear();
 
     let contentEl = this.contentText.element.nativeElement;
-    let annEls = contentEl.querySelectorAll(Annotator.annotationTagName);
+    let annEls = contentEl.querySelectorAll(UIConstants.annotationTagName);
     for (let annEl of annEls) {
-      this.showAnnotationsHover(annEl);
+      this.showAnnotationsHover(annEl, contentEl);
+    }
+
+    let transEl = this.transText.element.nativeElement;
+    let tAnnEls = transEl.querySelectorAll(UIConstants.annotationTagName);
+    for (let annEl of tAnnEls) {
+      this.showAnnotationsHover(annEl, transEl);
     }
 
     this.annotatedWordsHoverSetup = true;
@@ -651,8 +689,16 @@ export class ParaContentComponent implements OnChanges {
   refreshTrans() {
     let html = this.trans || ' ';
     html = `<div class="part">${html}</div>`;
-    this.paraTrans.element.nativeElement.innerHTML = html;
+    this.transText.element.nativeElement.innerHTML = html;
     this.transRendered = true;
+  }
+
+  private annotateCurrentCursor(side: Side) {
+    let annotator = this.getAnnotator(side);
+    let wacins = annotator.wordAtCursorIfNoSelection;
+    annotator.wordAtCursorIfNoSelection = false;
+    this.doAnnotate(side);
+    annotator.wordAtCursorIfNoSelection = wacins;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -670,11 +716,17 @@ export class ParaContentComponent implements OnChanges {
       this.annotatedWordsHoverSetup = false;
     } else if (changes.annotation) {
       if (this.gotFocus && this.annotating && this.annotation) {
-        let annotator = this.annotator;
-        let wacins = annotator.wordAtCursorIfNoSelection;
-        annotator.wordAtCursorIfNoSelection = false;
-        this.doAnnotate();
-        annotator.wordAtCursorIfNoSelection = wacins;
+        let contentEl = this.contentText.element.nativeElement;
+        let transEl = this.transText.element.nativeElement;
+        let selection = window.getSelection();
+        let selected = AnnotatorHelper.checkSelectionContainer(selection, contentEl, transEl);
+        if (selected) {
+          if (selected === contentEl) {
+            this.annotateCurrentCursor(SideContent);
+          } else {
+            this.annotateCurrentCursor(SideTrans);
+          }
+        }
       }
     }
 
