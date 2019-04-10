@@ -1,0 +1,27 @@
+.ui.grid
+  .three.wide.column
+    .ui.list.words-history
+      a.item(*ngFor='let entry of entryHistory', (click)='selectHistoryEntry(entry)')
+        | {{entry.word}}
+      .item(*ngIf='entryHistory.length>0')
+        a.ui.right.floated((click)='clearHistory()') 清空
+  .thirteen.wide.column
+    .ui.segment.small.form.filter-group
+      .field
+        .ui.right.floated.header(*ngIf='entry')
+          button.ui.compact.mini.button((click)='loadPreviousEntry()')
+            i.left.arrow.icon
+          span {{entry.word}}
+          button.ui.compact.mini.button((click)='loadNextEntry()')
+            i.right.arrow.icon
+        .grouped.fields.search
+          sui-search([optionsLookup]="dictSearch", optionsField="word", searchDelay="400",
+          (resultSelected)="selectSearchResult($event)",
+          (keyup)='onSearchInputKeyup($event)',
+          [retainSelectedResult]="false",
+          placeholder='汉字、词',
+          #searchInput='')
+
+      .clearing
+    ng-template([ngIf]='entry')
+      dict-zh-entry.ui.segment([entry]='entry')

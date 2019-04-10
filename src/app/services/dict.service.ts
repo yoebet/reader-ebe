@@ -31,7 +31,7 @@ export class DictService extends BaseService<DictEntry> {
     this._entryHistory = [];
   }
 
-  search(key: string, options?): Observable<DictEntry[]> {
+  search(key: string, options: any = {}): Observable<DictEntry[]> {
     let {limit, previous, next, fields, simpleEdited} = options;
     if (next === true) {
       key = key + '_';

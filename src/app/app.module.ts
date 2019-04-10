@@ -12,6 +12,7 @@ import {BookService} from './services/book.service';
 import {ChapService} from './services/chap.service';
 import {ParaService} from './services/para.service';
 import {DictService} from './services/dict.service';
+import {DictZhService} from './services/dict-zh.service';
 import {UserService} from './services/user.service';
 import {SessionService} from './services/session.service';
 import {UserBookService} from './services/user-book.service';
@@ -50,6 +51,8 @@ import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictSimpleComponent} from './dict/dict-simple.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
+import {DictZhComponent} from './dict-zh/dict-zh.component';
+import {DictZhEntryComponent} from './dict-zh/dict-zh-entry.component';
 import {UserListComponent} from './user/user-list.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
@@ -95,6 +98,8 @@ import {ReleaseListComponent} from './release/release-list.component';
     DictEntryComponent,
     DictEntrySmiComponent,
     DictSimpleComponent,
+    DictZhComponent,
+    DictZhEntryComponent,
     UserListComponent,
     FeedbackListComponent,
     IssueListComponent,
@@ -121,6 +126,7 @@ import {ReleaseListComponent} from './release/release-list.component';
     ChapService,
     ParaService,
     DictService,
+    DictZhService,
     UserService,
     SessionService,
     UserBookService,

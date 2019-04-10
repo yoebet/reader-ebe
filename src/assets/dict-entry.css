@@ -11,6 +11,10 @@
   padding-right: 1em;
 }
 
+span.pinyin {
+  margin-left: 0.8em;
+}
+
 .categories, .categories *, .phonetics, .phonetics * {
   font-weight: normal;
   font-size: 0.9rem;

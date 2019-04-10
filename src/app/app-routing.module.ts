@@ -5,6 +5,7 @@ import {BookListComponent} from './book/book-list.component';
 import {BookComponent} from './book/book.component';
 import {ChapComponent} from './chap/chap.component';
 import {DictComponent} from './dict/dict.component';
+import {DictZhComponent} from './dict-zh/dict-zh.component';
 import {UserListComponent} from './user/user-list.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'chaps/:id', component: ChapComponent},
   {path: 'dict', component: DictComponent},
   {path: 'dict-c', component: DictComponent, data: {editSimple: false}},
+  {path: 'dict-zh', component: DictZhComponent},
   {path: 'users', component: UserListComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'feedbacks', component: FeedbackListComponent},

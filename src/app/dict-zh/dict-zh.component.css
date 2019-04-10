@@ -1,0 +1,12 @@
+.ui.list.words-history {
+  margin-top: 3.5em;
+}
+
+span.search-options {
+  margin-left: 1em;
+}
+
+dict-zh-entry {
+  display: block;
+  margin-top: 1em;
+}

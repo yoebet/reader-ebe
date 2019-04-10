@@ -37,12 +37,12 @@ export class BaseService<M extends Model> {
 
   getOne(id: string): Observable<M> {
     const url = `${this.baseUrl}/${id}`;
-    return this.http.get<M[]>(url, this.httpOptions)
+    return this.http.get<M>(url, this.httpOptions)
       .catch(this.handleError);
   }
 
   getOneByUrl(url: string): Observable<M> {
-    return this.http.get<M[]>(url, this.httpOptions)
+    return this.http.get<M>(url, this.httpOptions)
       .catch(this.handleError);
   }
 

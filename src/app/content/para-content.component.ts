@@ -318,7 +318,6 @@ export class ParaContentComponent implements OnChanges {
   }
 
   onMouseup($event, side: Side) {
-    console.log(side);
     $event.stopPropagation();
     if ($event.which === 3) {
       return;
