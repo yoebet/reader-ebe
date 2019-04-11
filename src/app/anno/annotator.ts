@@ -1,20 +1,29 @@
 import {UIConstants} from '../config';
 import {Annotation} from '../models/annotation';
+import {Book} from '../models/book';
 import {AnnotateResult} from './annotate-result';
 import {AnnotatorHelper} from "./annotator-helper";
+import {ZhPhrases} from "./zh-phrases";
+
 
 export class Annotator {
+  // element or selector,
+  container: Element | string = null;
+  lang: string;
+  zhPhrases: ZhPhrases;
 
   wordAtCursorIfNoSelection = true;
   isExtendWholeWord = true;
-  // element or selector,
-  container: Element | string = null;
-  wordPattern = /[-a-zA-Z']/;
+  charPattern = /[-a-zA-Z']/;
 
   current: Annotation;
 
-  constructor(container) {
+  constructor(container, lang) {
     this.container = container;
+    this.lang = lang;
+    if (Book.isChineseText(this.lang)) {
+      this.charPattern = /[\u4E00-\u9FA5]/;
+    }
   }
 
   switchAnnotation(annotation: Annotation): Annotator {
@@ -149,6 +158,7 @@ export class Annotator {
     }
   }
 
+
   private doInOneTextNode(textNode: Text, offset1, offset2): AnnotateResult {
 
     let nodeText = textNode.textContent;
@@ -163,7 +173,13 @@ export class Annotator {
 
     let [wordStart, wordEnd] = [offset1, offset2];
     if (this.isExtendWholeWord) {
-      [wordStart, wordEnd] = AnnotatorHelper.extendWholeWord(nodeText, this.wordPattern, wordStart, wordEnd);
+      if (this.lang === Book.LangCodeEn) {
+        [wordStart, wordEnd] = AnnotatorHelper.extendWholeWord(
+          nodeText, this.charPattern, wordStart, wordEnd);
+      } else if (Book.isChineseText(this.lang)) {
+        [wordStart, wordEnd] = AnnotatorHelper.extendZhPhrases(
+          nodeText, this.charPattern, wordStart, wordEnd, this.zhPhrases);
+      }
     }
     if (wordStart === wordEnd) {
       return null;
@@ -247,8 +263,13 @@ export class Annotator {
     let text1 = textNode1.textContent, text2 = textNode2.textContent;
 
     if (this.isExtendWholeWord) {
-      [wordStart1,] = AnnotatorHelper.extendWholeWord(text1, this.wordPattern, wordStart1, text1.length);
-      [, wordEnd2] = AnnotatorHelper.extendWholeWord(text2, this.wordPattern, 0, wordEnd2);
+      if (this.lang === Book.LangCodeEn) {
+        [wordStart1,] = AnnotatorHelper.extendWholeWord(text1, this.charPattern, wordStart1, text1.length);
+        [, wordEnd2] = AnnotatorHelper.extendWholeWord(text2, this.charPattern, 0, wordEnd2);
+      } else if (Book.isChineseText(this.lang)) {
+        [wordStart1,] = AnnotatorHelper.extendZhPhrases(text1, this.charPattern, wordStart1, text1.length, this.zhPhrases);
+        [, wordEnd2] = AnnotatorHelper.extendZhPhrases(text2, this.charPattern, 0, wordEnd2, this.zhPhrases);
+      }
     }
 
     let beginingNode = textNode1;

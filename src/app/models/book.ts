@@ -11,8 +11,8 @@ export class Book extends Model {
 
   label: string;
 
-  contentLang: string = 'En';
-  transLang: string = 'Zh';
+  contentLang: string = Book.LangCodeEn;
+  transLang: string = Book.LangCodeZh;
   category: string;
   description: string;
 
@@ -55,12 +55,19 @@ export class Book extends Model {
     return {value: k, label: Book.CategoryNames[k]}
   });
 
+  static LangCodeEn = 'En';
+  static LangCodeZh = 'Zh';
+  static LangCodeZc = 'Zc';
+
   static LangTypes = [
-    {value: 'En', label: '英文'},
-    {value: 'Zh', label: '中文'},
-    {value: 'Zc', label: '文言文/诗词'}
+    {value: Book.LangCodeEn, label: '英文'},
+    {value: Book.LangCodeZh, label: '中文'},
+    {value: Book.LangCodeZc, label: '文言文/诗词'}
   ];
 
+  static isChineseText(lang) {
+    return lang === Book.LangCodeZh || lang === Book.LangCodeZc;
+  }
 
   static StatusNames = {
     E: '编辑中',

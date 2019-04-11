@@ -9,11 +9,13 @@ import 'rxjs/add/operator/share';
 import {environment} from '../../environments/environment';
 import {DictZh} from '../models/dict-zh';
 import {BaseService} from './base.service';
+import {ZhPhrases} from "../anno/zh-phrases";
 
 @Injectable()
 export class DictZhService extends BaseService<DictZh> {
   private _entryHistory: DictZh[] = [];
   private entryCache: Map<string, DictZh> = new Map();
+  private phrases: ZhPhrases;
 
   constructor(protected http: HttpClient,
               protected modalService: SuiModalService) {
@@ -68,6 +70,10 @@ export class DictZhService extends BaseService<DictZh> {
   }
 
   getEntry(idOrWord: string, options: any = {}): Observable<DictZh> {
+    let cachedEntry = this.entryCache.get(idOrWord);
+    if (cachedEntry) {
+      return Observable.of(cachedEntry);
+    }
     let {cl} = options;
     if (cl !== false) {
       cl = true;
@@ -77,6 +83,19 @@ export class DictZhService extends BaseService<DictZh> {
       url += '?cl'
     }
     return this.cacheOne(this.getOneByUrl(url));
-
   }
+
+  getPhrases(): Observable<ZhPhrases> {
+    if (this.phrases) {
+      return Observable.of(this.phrases);
+    }
+    let url = `${this.baseUrl}/phrases/all`;
+    return this.http.get<string[]>(url, this.httpOptions)
+      .map(words => {
+        this.phrases = new ZhPhrases(words);
+        return this.phrases;
+      })
+      .catch(this.handleError);
+  }
+
 }

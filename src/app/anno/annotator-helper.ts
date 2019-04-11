@@ -1,10 +1,11 @@
 import {DataAttrNames, DataAttrValues, UIConstants} from "../config";
+import {ZhPhrases} from "./zh-phrases";
 
 export class AnnotatorHelper {
 
-  static extendWholeWord(text: string, wordPattern: RegExp, wordStart: number, wordEnd: number) {
-    let trimLeft = false, trimRight = false;
-    let cp = wordPattern;
+  static trimSelected(text: string, charPattern: RegExp, wordStart: number, wordEnd: number) {
+    let result = {trimLeft: false, trimRight: false, wordStart, wordEnd};
+    let cp = charPattern;
     if (wordStart < wordEnd) {
       if (!cp.test(text.charAt(wordStart))) {
         wordStart++;
@@ -16,7 +17,7 @@ export class AnnotatorHelper {
             break;
           }
         }
-        trimLeft = true;
+        result.trimLeft = true;
       }
       if (!cp.test(text.charAt(wordEnd - 1))) {
         wordEnd--;
@@ -28,35 +29,131 @@ export class AnnotatorHelper {
             break;
           }
         }
-        trimRight = true;
+        result.trimRight = true;
       }
     }
-    if (!trimLeft) {
+    if (wordStart > wordEnd) {
+      wordStart = wordEnd;
+      result.trimLeft = true;
+    }
+    result.wordStart = wordStart;
+    result.wordEnd = wordEnd;
+    return result;
+  }
+
+
+  static extendWholeWord(text: string,
+                         charPattern: RegExp,
+                         wordStart: number,
+                         wordEnd: number): number[] {
+    let trimResult = this.trimSelected(text, charPattern, wordStart, wordEnd);
+    if (trimResult.trimLeft) {
+      wordStart = trimResult.wordStart;
+    } else {
       while (wordStart > 0) {
         let c = text.charAt(wordStart - 1);
-        if (cp.test(c)) {
+        if (charPattern.test(c)) {
           wordStart--;
         } else {
           break;
         }
       }
     }
-    if (!trimRight) {
+    if (trimResult.trimRight) {
+      wordEnd = trimResult.wordEnd;
+    } else {
       while (wordEnd < text.length) {
         let c = text.charAt(wordEnd);
-        if (cp.test(c)) {
+        if (charPattern.test(c)) {
           wordEnd++;
         } else {
           break;
         }
       }
     }
-    if (wordStart > wordEnd) {
-      wordStart = wordEnd;
-    }
     return [wordStart, wordEnd];
   }
 
+
+  static extendZhPhrases(text: string,
+                         charPattern: RegExp,
+                         wordStart: number,
+                         wordEnd: number,
+                         zhPhrases: ZhPhrases): number[] {
+
+    let trimResult = AnnotatorHelper.trimSelected(text, charPattern, wordStart, wordEnd);
+    if (trimResult.trimLeft) {
+      wordStart = trimResult.wordStart;
+    }
+    if (trimResult.trimRight) {
+      wordEnd = trimResult.wordEnd;
+    }
+
+    if (!zhPhrases) {
+      return [wordStart, wordEnd];
+    }
+
+    let word = null;
+    if (wordStart < wordEnd) {
+      word = text.substring(wordStart, wordEnd);
+      if (zhPhrases.checkIsPhrase(word)) {
+        return [wordStart, wordEnd];
+      }
+    }
+
+    if (!trimResult.trimRight) {
+      let tryEnd = wordEnd + 1;
+      while (tryEnd <= text.length && tryEnd - wordStart >= 2 && tryEnd - wordStart <= 4) {
+        if (!charPattern.test(text.charAt(tryEnd))) {
+          break;
+        }
+        word = text.substring(wordStart, tryEnd);
+        if (zhPhrases.checkIsPhrase(word)) {
+          return [wordStart, tryEnd];
+        }
+        tryEnd++;
+      }
+    }
+
+    if (!trimResult.trimLeft) {
+      let tryStart = wordStart - 1;
+      while (tryStart > 0 && wordEnd - tryStart >= 2 && wordEnd - tryStart <= 4) {
+        if (!charPattern.test(text.charAt(tryStart))) {
+          break;
+        }
+        word = text.substring(tryStart, wordEnd);
+        if (zhPhrases.checkIsPhrase(word)) {
+          return [tryStart, wordEnd];
+        }
+        tryStart--;
+      }
+
+    }
+
+    if (!trimResult.trimLeft && !trimResult.trimRight) {
+      if (wordEnd - wordStart < 2) {
+        let pos = wordStart;
+        for (let [s, e] of [[pos - 1, pos + 2], [pos - 1, pos + 3], [pos - 2, pos + 2]]) {
+          if (s > 0 && e <= text.length) {
+            word = text.substring(s, e);
+            if (zhPhrases.checkIsPhrase(word)) {
+              return [s, e];
+            }
+          }
+        }
+      }
+    }
+
+    if (wordEnd === wordStart) {
+      if (wordEnd < text.length && charPattern.test(text.charAt(wordStart))) {
+        return [wordStart, wordStart + 1];
+      } else if (wordStart > 0 && charPattern.test(text.charAt(wordStart - 1))) {
+        return [wordStart - 1, wordStart];
+      }
+    }
+
+    return [wordStart, wordEnd];
+  }
 
   static removeTagIfDummy(element) {
     if (element.tagName !== UIConstants.annotationTagName.toUpperCase()) {

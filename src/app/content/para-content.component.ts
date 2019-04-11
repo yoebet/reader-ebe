@@ -15,6 +15,7 @@ import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
 import {DictEntry} from '../models/dict-entry';
 import {DictZh} from '../models/dict-zh';
 import {Annotation} from '../models/annotation';
+import {Book} from '../models/book';
 
 import {DictService} from '../services/dict.service';
 import {DictZhService} from '../services/dict-zh.service';
@@ -84,21 +85,32 @@ export class ParaContentComponent implements OnChanges {
     return this.contentContext.annotationSet;
   }
 
+  getTextLang(side: Side) {
+    let {contentLang, transLang} = this.contentContext;
+    return (side === SideContent) ? (contentLang || Book.LangCodeEn) : (transLang || Book.LangCodeZh);
+  }
+
   getAnnotator(side: Side, annotation = null) {
     let annt;
     if (side === SideContent) {
       annt = this._contentAnnotator;
       if (!annt) {
-        annt = new Annotator(this.contentText.element.nativeElement);
+        let el = this.contentText.element.nativeElement;
+        let lang = this.getTextLang(side);
+        annt = new Annotator(el, lang);
         this._contentAnnotator = annt;
       }
     } else {
       annt = this._transAnnotator;
       if (!annt) {
-        annt = new Annotator(this.transText.element.nativeElement);
-        annt.isExtendWholeWord = false;
+        let el = this.transText.element.nativeElement;
+        let lang = this.getTextLang(side);
+        annt = new Annotator(el, lang);
         this._transAnnotator = annt;
       }
+    }
+    if (Book.isChineseText(annt.lang) && !annt.zhPhrases) {
+      annt.zhPhrases = this.contentContext.zhPhrases;
     }
     annt.switchAnnotation(annotation || this.annotation);
     return annt;
@@ -216,8 +228,8 @@ export class ParaContentComponent implements OnChanges {
       }
     };
 
-    let {contentLang, transLang} = this.contentContext;
-    if (side === SideContent && (!contentLang || contentLang === 'En')) {
+    let lang = this.getTextLang(side);
+    if (!lang || lang === Book.LangCodeEn) {
 
       this.dictService.getEntry(oriForWord, {base: true, stem: true})
         .subscribe((entry: DictEntry) => {
@@ -245,7 +257,7 @@ export class ParaContentComponent implements OnChanges {
           }
           this.dictRequest.emit(dr);
         });
-    } else if (side === SideTrans && (!transLang || transLang === 'Zh' || transLang === 'Zc')) {
+    } else if (Book.isChineseText(lang)) {
 
       this.dictZhService.getEntry(oriForWord)
         .subscribe((entry: DictZh) => {

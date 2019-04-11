@@ -21,6 +21,7 @@ import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-alig
 import {AnnoFamilyService} from "../services/anno-family.service";
 import {ParaSaver} from "../content-types/para-saver";
 import {ContentContext} from "../content-types/content-context";
+import {DictZhService} from "../services/dict-zh.service";
 
 
 @Component({
@@ -40,6 +41,8 @@ export class ChapParasComponent implements OnInit {
     }
     this.contentContext.contentLang = book.contentLang;
     this.contentContext.transLang = book.transLang;
+    this.dictZhService.getPhrases()
+      .subscribe(ph => this.contentContext.zhPhrases = ph);
     this.loadAnnotations();
   }
 
@@ -89,6 +92,7 @@ export class ChapParasComponent implements OnInit {
 
 
   constructor(private paraService: ParaService,
+              private dictZhService: DictZhService,
               private annoService: AnnoFamilyService,
               public modalService: SuiModalService) {
   }
