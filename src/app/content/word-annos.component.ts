@@ -61,7 +61,11 @@ export class WordAnnosComponent implements OnInit {
           forWord = this.word;
         }
         let pos = wordEl.dataset[DataAttrNames.pos] || '';
-        this.meaning = {pos, mean, word: forWord, text: `${pos} ${mean}`};
+        let text = mean;
+        if (pos) {
+          text = `${pos} ${mean}`;
+        }
+        this.meaning = {pos, mean, word: forWord, text};
         continue;
       }
       if (name === DataAttrNames.note) {

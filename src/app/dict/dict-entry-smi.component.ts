@@ -90,9 +90,6 @@ export class DictEntrySmiComponent extends DictBaseComponent implements AfterVie
     } else {
       this.selectedItem = null;
     }
-    if (this.autoEnterEditing) {
-      this.startEditing();
-    }
     this.cdr.detectChanges();
   }
 

@@ -13,9 +13,11 @@ import {HighlightGroups} from '../anno/annotation-set';
 
 import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
 import {DictEntry} from '../models/dict-entry';
+import {DictZh} from '../models/dict-zh';
 import {Annotation} from '../models/annotation';
 
 import {DictService} from '../services/dict.service';
+import {DictZhService} from '../services/dict-zh.service';
 import {ChangeCallback} from '../content-types/change-notification';
 import {DictRequest, DictSelectedResult, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
@@ -73,7 +75,8 @@ export class ParaContentComponent implements OnChanges {
 
 
   constructor(private resolver: ComponentFactoryResolver,
-              private dictService: DictService) {
+              private dictService: DictService,
+              private dictZhService: DictZhService) {
   }
 
 
@@ -213,31 +216,53 @@ export class ParaContentComponent implements OnChanges {
       }
     };
 
-    this.dictService.getEntry(oriForWord, {base: true, stem: true})
-      .subscribe((entry: DictEntry) => {
-        if (entry == null) {
-          this.removeTagIfDummy(element);
-          return;
-        }
-        let dr = new DictRequest();
-        dr.wordElement = element;
-        dr.dictEntry = entry;
-        dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
-        dr.relatedWords = null;
-        dr.meaningItemCallback = meaningItemCallback;
-        if (oriForWord !== word) {
-          dr.relatedWords = [word];
-        }
-        let phrase = AnnotatorHelper.currentPhrase(element, textEl);
-        if (phrase && phrase !== word && phrase !== oriForWord) {
-          if (dr.relatedWords === null) {
-            dr.relatedWords = [phrase];
-          } else {
-            dr.relatedWords.push(phrase);
+    let {contentLang, transLang} = this.contentContext;
+    if (side === SideContent && (!contentLang || contentLang === 'En')) {
+
+      this.dictService.getEntry(oriForWord, {base: true, stem: true})
+        .subscribe((entry: DictEntry) => {
+          if (entry == null) {
+            this.removeTagIfDummy(element);
+            return;
           }
-        }
-        this.dictRequest.emit(dr);
-      });
+          let dr = new DictRequest();
+          dr.dictLang = 'en';
+          dr.wordElement = element;
+          dr.dictEntry = entry;
+          dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
+          dr.relatedWords = null;
+          dr.meaningItemCallback = meaningItemCallback;
+          if (oriForWord !== word) {
+            dr.relatedWords = [word];
+          }
+          let phrase = AnnotatorHelper.currentPhrase(element, textEl);
+          if (phrase && phrase !== word && phrase !== oriForWord) {
+            if (dr.relatedWords === null) {
+              dr.relatedWords = [phrase];
+            } else {
+              dr.relatedWords.push(phrase);
+            }
+          }
+          this.dictRequest.emit(dr);
+        });
+    } else if (side === SideTrans && (!transLang || transLang === 'Zh' || transLang === 'Zc')) {
+
+      this.dictZhService.getEntry(oriForWord)
+        .subscribe((entry: DictZh) => {
+          if (entry == null) {
+            this.removeTagIfDummy(element);
+            return;
+          }
+          let dr = new DictRequest();
+          dr.dictLang = 'zh';
+          dr.wordElement = element;
+          dr.dictEntry = entry;
+          dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
+          dr.meaningItemCallback = meaningItemCallback;
+          this.dictRequest.emit(dr);
+        });
+    }
+
   }
 
   addANote(side: Side) {

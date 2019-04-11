@@ -123,8 +123,14 @@ div(*ngIf='chap')
   .ui.right.floated.header([hidden]='insertPos==chap.paras.length')
     button.ui.tiny.basic.primary.button((click)='append()') 新增
 
-  #dictPopup.ui.basic.popup
-    dict-entry-smi(*ngIf='dictRequest',
+  #dictPopup.ui.basic.popup(*ngIf='dictRequest')
+    dict-entry-smi(*ngIf='dictRequest.dictLang==="en"',
+    [entry]='dictRequest.dictEntry',
+    [initialSelectedItem]='dictRequest.initialSelected',
+    [relatedWords]='dictRequest.relatedWords',
+    (viewReady)='onDictPopupReady()',
+    (dictItemSelected)='onDictItemSelect($event)')
+    dict-zh-entry-smi(*ngIf='dictRequest.dictLang==="zh"',
     [entry]='dictRequest.dictEntry',
     [initialSelectedItem]='dictRequest.initialSelected',
     [relatedWords]='dictRequest.relatedWords',

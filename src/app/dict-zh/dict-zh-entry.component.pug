@@ -14,14 +14,14 @@
     a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)')
       | {{word}}
 
-.ui.clearing.divider
-.ui.segment
-  sui-accordion(*ngIf='entry.complete', [closeOthers]='false')
-    sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.complete; first as first', [isOpen]='first')
-      .pos-header(title='')
-        i.dropdown.icon
-        | {{pm.head}}
-      .ui.ordered.selection.divided.list.meaning-items(content='')
-        .ui.item(*ngFor='let item of pm.items')
-          span.meaning-item
-            | {{item.exp}}
+  .ui.clearing.divider
+  .ui.segment
+    sui-accordion(*ngIf='entry.complete', [closeOthers]='false')
+      sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.complete; first as first', [isOpen]='first')
+        .pos-header(title='')
+          i.dropdown.icon
+          | {{pm.head}}
+        .ui.ordered.selection.divided.list.meaning-items(content='')
+          .ui.item(*ngFor='let item of pm.items')
+            span.meaning-item
+              | {{item.exp}}
