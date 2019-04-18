@@ -1,12 +1,12 @@
 {
   "name": "ee",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "GPL",
   "scripts": {
     "puggy": "pug src -P -w",
     "ng": "ng",
     "start": "npm run puggy & ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --base-href /ee/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -31,6 +31,7 @@
     "rxjs-compat": "^6.4.0",
     "tether": "^1.4.5",
     "tether-drop": "^1.4.2",
+    "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
