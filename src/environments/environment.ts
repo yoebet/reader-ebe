@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 // const ServerRoot = 'http://localhost:3000';
-const ServerRoot = 'http://39.105.209.195';
+const ServerRoot = 'https://39.105.209.195';
 
 export const environment = {
   production: false,

@@ -1,9 +1,8 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/catch';
+import {EMPTY, throwError} from 'rxjs';
 
 import {SuiModalService} from "ng2-semantic-ui";
 import {ActiveModal} from "ng2-semantic-ui/dist/modules/modal/classes/active-modal";
@@ -79,27 +78,27 @@ export class BaseService<M extends Model> {
     return typeof model === 'string' ? model : model._id;
   }
 
-  protected handleError = this._handleError.bind(this);
+  protected handleError = (err) => this._handleError(err);
 
   private static loginModal: ActiveModal<string, string, string> = null;
 
-  protected handleError400(error: any): Observable<any> {
+  protected handleError400(error: any) {
     let message = this.extractErrorMessage(error);
     if (message) {
       alert(message);
     } else {
       alert('输入错误');
     }
-    return Observable.empty();
+    return EMPTY;
   }
 
   protected handleError401(error: any): Observable<any> {
     if (BaseService.loginModal == null) {
-      BaseService.loginModal = this.modalService.open(new LoginModal('请重新登录'))
+      BaseService.loginModal = this.modalService.open<string, string, string>(new LoginModal('请重新登录'))
         .onDeny(d => BaseService.loginModal = null)
         .onApprove(r => BaseService.loginModal = null);
     }
-    return Observable.empty();
+    return EMPTY;
   }
 
   protected handleError461(error: any): Observable<any> {
@@ -109,12 +108,12 @@ export class BaseService<M extends Model> {
     } else {
       alert('没有权限');
     }
-    return Observable.empty();
+    return EMPTY;
   }
 
   protected handleError500(error: any): Observable<any> {
     alert('服务器内部错误');
-    return Observable.empty();
+    return EMPTY;
   }
 
   protected extractErrorMessage(error: any): string {
@@ -160,7 +159,7 @@ export class BaseService<M extends Model> {
     }
 
     // console.error(error);
-    return Observable.throw(error);
+    return throwError(error);
   }
 
 }
