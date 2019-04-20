@@ -14,7 +14,7 @@ export class Annotator {
 
   wordAtCursorIfNoSelection = true;
   isExtendWholeWord = true;
-  charPattern = /[-a-zA-Z']/;
+  charPattern = /[-a-zA-Z­']/; // ­ soft hyphen
 
   current: Annotation;
 
@@ -100,7 +100,10 @@ export class Annotator {
       if (ann.dataName) {
         delete element.dataset[ann.dataName];
       }
-      element.classList.remove(ann.cssClass);
+      let cc = ann.cssClass || ann.group.cssClass;
+      if (cc) {
+        element.classList.remove(cc);
+      }
       if (element.tagName === ann.tagName && element.hasAttributes()) {
         let wrapping = document.createElement(UIConstants.annotationTagName);
         wrapping.className = element.className;
@@ -126,7 +129,10 @@ export class Annotator {
       if (ann.dataName) {
         delete element.dataset[ann.dataName];
       }
-      element.classList.remove(ann.cssClass);
+      let cc = ann.cssClass || ann.group.cssClass;
+      if (cc) {
+        element.classList.remove(cc);
+      }
       AnnotatorHelper.removeTagIfDummy(element);
     }
   }

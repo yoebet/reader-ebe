@@ -56,7 +56,7 @@ export class ChapParasComponent implements OnInit {
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
-  showTrans = true;
+  showTrans = false;
   leftRight = true;
   clickToEdit = false;
   continuousEditing = false;

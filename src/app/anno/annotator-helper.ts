@@ -173,6 +173,41 @@ export class AnnotatorHelper {
     }
   }
 
+  static removeDropTagIfDummy(el) {
+    let result = {changed: false, removed: false};
+    if (el.tagName !== UIConstants.annotationTagName.toUpperCase() && el.tagName !== 'SPAN') {
+      return result;
+    }
+    if (el.className === '') {
+      el.removeAttribute('class');
+      result.changed = true;
+    } else if (el.attributes.length === 1 && el.hasAttributes('class')) {
+      let cns = el.className.split(' ')
+        .filter(n => !n.startsWith(UIConstants.dropClassPrefix)
+          && !n.startsWith(UIConstants.tetherClassPrefix)
+          && n !== UIConstants.highlightClass);
+      if (cns.length === 0) {
+        el.removeAttribute('class');
+        result.changed = true;
+      }
+    }
+    if (!el.hasAttributes()) {
+      //remove tag
+      let pp = el.parentNode;
+      if (!pp) {
+        return result;
+      }
+      while (el.firstChild) {
+        pp.insertBefore(el.firstChild, el);
+      }
+      pp.removeChild(el);
+      pp.normalize();
+      result.changed = true;
+      result.removed = true;
+    }
+    return result;
+  }
+
   static findSentence(node, textEl): any {
     let sentenceSelector = UIConstants.sentenceTagName;
     do {

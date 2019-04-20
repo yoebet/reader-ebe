@@ -101,9 +101,9 @@ export class AnnotationSet {
   }
 
   annotationOutput(dataName: string, dataValue: string) {
-    if (dataName === DataAttrNames.assoc && DataAttrValues.phraPattern.test(dataValue)) {
-      return '词组';
-    }
+    // if (dataName === DataAttrNames.assoc && DataAttrValues.phraPattern.test(dataValue)) {
+    //   return '词组';
+    // }
     let annKey = `${dataName}.${dataValue}`;
     let ann = this.annotationsMap.get(annKey);
     if (!ann) {
@@ -121,10 +121,10 @@ export class HighlightGroups {
     return values.map(v => `[data-${attr}=${v}]`).join(', ');
   }*/
 
-  static groupSelectors: string[] = DataAttrValues.assocGroups
+  private static groupSelectors: string[] = DataAttrValues.assocGroups
     .map(group => `[data-${DataAttrNames.assoc}=${group}]`);
 
-  static highlightAnnotationSelectors = HighlightGroups.groupSelectors.join(', ');
+  static HighlightSelectors = HighlightGroups.groupSelectors.join(', ');
 
   static matchGroup(element): string {
     for (let selector of HighlightGroups.groupSelectors) {

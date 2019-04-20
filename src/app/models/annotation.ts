@@ -10,7 +10,8 @@ export class Annotation extends Model {
   group: AnnotationGroup;
 
   get cssClass() {
-    return this.group.cssClass;
+    // return this.group.cssClass;
+    return null;
   }
 
   get tagName() {

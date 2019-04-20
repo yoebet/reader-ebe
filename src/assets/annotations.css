@@ -7,7 +7,7 @@ y-o, .yo {
   /*border-bottom-style: dashed;*/
 }
 
-.pos {
+.pos, [data-pos] {
   border-bottom-color: dimgrey;
 }
 
@@ -19,80 +19,84 @@ y-o, .yo {
 
 /* *** 名词 Noun *** */
 
-.noun {
+.noun, [data-noun] {
   border-bottom-color: cadetblue;
 }
 
 /* *** 动词 Verb *** */
 
-.verb {
+.verb, [data-verb] {
   border-bottom-color: darkgreen;
 }
 
 /* *** 成分 Members of the Sentence *** */
 
-.memb {
+.memb, [data-memb] {
   border-bottom-color: darkolivegreen;
   border-bottom-style: solid;
 }
 
 /* *** 从句 Clauses *** */
 
-.clau {
+.clau, [data-clau] {
   border-bottom-color: silver;
 }
 
 /* *** 时态 Tense *** */
 
-.tens {
+.tens, [data-tens] {
   border-bottom-color: olive;
   border-bottom-style: solid;
 }
 
 /* *** 短语 Phrases *** */
 
-.assoc {
+.assoc, [data-assoc] {
   border-bottom-color: lightskyblue;
   border-bottom-style: solid;
 }
 
-.assoc[data-assoc=phra1] {
+[data-assoc=phra1] {
   border-bottom-color: deepskyblue;
 }
 
-.assoc[data-assoc=phra2] {
+[data-assoc=phra2] {
   border-bottom-color: lightsalmon;
 }
 
-.assoc[data-assoc=phra3] {
+[data-assoc=phra3] {
   border-bottom-color: darkgreen;
 }
 
-.assoc[data-assoc=trunk] {
+[data-assoc=trunk] {
   border-bottom-color: darkgreen;
   border-bottom-style: double;
 }
 
-.assoc[data-assoc=antec] {
+[data-assoc=antec] {
   border-bottom-color: palevioletred;
   border-bottom-style: solid;
 }
 
-.assoc[data-assoc=group1] {
+[data-assoc=group1] {
   border-bottom-color: deepskyblue;
 }
 
-.assoc[data-assoc=group2] {
+[data-assoc=group2] {
   border-bottom-color: lightsalmon;
 }
 
-.assoc[data-assoc=group3] {
+[data-assoc=group3] {
   border-bottom-color: darkgreen;
+}
+
+[data-mean] {
+  font-weight: bold;
 }
 
 /* *** 其他 Misc *** */
 
-.misc {
+.misc, [data-misc] {
   border-bottom-color: cornflowerblue;
   border-bottom-style: solid;
 }

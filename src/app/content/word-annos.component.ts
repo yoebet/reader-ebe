@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {DictService} from '../services/dict.service';
 import {AnnotationSet} from "../anno/annotation-set";
-import {UIConstants, DataAttrNames, DataAttrValues} from '../config';
+import {UIConstants, DataAttrNames} from '../config';
+import {AnnotatorHelper} from "../anno/annotator-helper";
 
 @Component({
   selector: 'word-annos',
@@ -14,6 +14,8 @@ export class WordAnnosComponent implements OnInit {
   @Input() paraTextEl: HTMLElement;
   @Input() enabled: boolean;
   @Input() annotationSet: AnnotationSet;
+  @Input() onTagRemoved: (el: HTMLElement) => void;
+  @Input() notifyChange: () => void;
   word: string;
   head: string;
   items: any[];
@@ -49,7 +51,6 @@ export class WordAnnosComponent implements OnInit {
     }
     this.word = wordEl.textContent;
     this.head = this.word;
-    let phraseGroup = null;
 
     let dataset = wordEl.dataset;
     for (let name in dataset) {
@@ -72,28 +73,27 @@ export class WordAnnosComponent implements OnInit {
         this.note = value;
         continue;
       }
-      if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(value)) {
-        phraseGroup = value;
-        continue;
-      }
       let text = this.annotationSet.annotationOutput(name, value);
       if (!text) {
         continue;
       }
       let item = {dataName: name, dataValue: value, text};
       this.items.push(item);
+
+      /*if (name === DataAttrNames.assoc/!* && DataAttrValues.phraPattern.test(value)*!/) {
+        let group = value;
+
+        let stEl = this.findSentence(this.wordEl);
+        if (!stEl) {
+          stEl = this.paraTextEl;
+        }
+        let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
+        let groupEls = stEl.querySelectorAll(groupSelector);
+        let els = Array.from(groupEls);
+        item.phrase = els.map((el: Element) => el.textContent).join(' ');
+      }*/
     }
 
-    if (phraseGroup && this.items.length === 0 && !this.note && !this.meaning) {
-      let stEl = this.findSentence(this.wordEl);
-      if (!stEl) {
-        stEl = this.paraTextEl;
-      }
-      let groupSelector = `[data-${DataAttrNames.assoc}=${phraseGroup}]`;
-      let groupEls = stEl.querySelectorAll(groupSelector);
-      let els = Array.from(groupEls);
-      this.head = els.map((el: Element) => el.textContent).join(' ');
-    }
     if (this.head.length > 20) {
       this.head = this.head.substring(0, 20) + '...';
     }
@@ -113,6 +113,37 @@ export class WordAnnosComponent implements OnInit {
       node = node.parentNode;
     } while (node);
     return null;
+  }
+
+  dropAnno(item) {
+    let element = this._wordEl;
+    let dataset = element.dataset;
+    if (item === 'meaning') {
+      delete dataset[DataAttrNames.pos];
+      delete dataset[DataAttrNames.word];
+      delete dataset[DataAttrNames.mean];
+      this.meaning = null;
+    } else if (item === 'note') {
+      delete dataset[DataAttrNames.note];
+      this.note = null;
+    } else {
+      let dataName = item.dataName;
+      if (!dataName) {
+        return;
+      }
+      delete dataset[dataName];
+      element.classList.remove(dataName);
+      this.items = this.items.filter(it => it !== item);
+    }
+
+    this.notifyChange();
+
+    if (!this.note && !this.meaning && (!this.items || this.items.length == 0)) {
+      let {removed} = AnnotatorHelper.removeDropTagIfDummy(element);
+      if (removed) {
+        this.onTagRemoved(element);
+      }
+    }
   }
 
 }
