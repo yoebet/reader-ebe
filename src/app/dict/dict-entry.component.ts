@@ -4,7 +4,7 @@ import {max} from 'lodash';
 import {DictEntry, PosMeanings, MeaningItem, PosTags} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
-import {DictBaseComponent} from "./dict-base.component";
+import {DictBaseComponent} from './dict-base.component';
 
 @Component({
   selector: 'dict-entry',

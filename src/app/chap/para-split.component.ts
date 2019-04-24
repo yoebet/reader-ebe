@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui"
+import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui'
 import {findIndex} from 'lodash';
 
 import {Para} from '../models/para';
 import {Row} from '../content-types/split-align';
-import {ParaSaver} from "../content-types/para-saver";
+import {ParaSaver} from '../content-types/para-saver';
 
 @Component({
   selector: 'para-split',

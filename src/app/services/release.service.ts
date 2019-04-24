@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {SuiModalService} from "ng2-semantic-ui";
-import {Observable} from "rxjs/Observable";
+import {HttpClient} from '@angular/common/http';
+import {SuiModalService} from 'ng2-semantic-ui';
 
-import {environment} from "../../environments/environment";
-import {OpResult} from "../models/op-result";
-import {AppRelease, PackageInfo} from "../models/app-release";
-import {BaseService} from "./base.service";
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+import {environment} from '../../environments/environment';
+import {OpResult} from '../models/op-result';
+import {AppRelease, PackageInfo} from '../models/app-release';
+import {BaseService} from './base.service';
 
 @Injectable()
 export class ReleaseService extends BaseService<AppRelease> {
@@ -48,8 +50,8 @@ export class ReleaseService extends BaseService<AppRelease> {
 
   dropPackage(id: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${id}/package`;
-    return this.http.delete<OpResult>(url, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.delete<OpResult>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
 }

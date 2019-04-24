@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 
-import {SuiModalService} from "ng2-semantic-ui";
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {UserMessageService} from '../services/user-message.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {SessionService} from "../services/session.service";
-import {User} from "../models/user";
+import {SessionService} from '../services/session.service';
+import {User} from '../models/user';
 import {UserMessage} from '../models/user-message';
-import {MessagesModal} from "../message/messages-popup.component";
-import {MessageScope} from "../message/message-scope";
+import {MessagesModal} from '../message/messages-popup.component';
+import {MessageScope} from '../message/message-scope';
 
 @Component({
   selector: 'my-messages',

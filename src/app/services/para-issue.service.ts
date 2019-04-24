@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {ParaIssue} from '../models/para-issue';
+import {OpResult} from '../models/op-result';
+
 import {BaseService} from './base.service';
-import {OpResult} from "../models/op-result";
-import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class ParaIssueService extends BaseService<ParaIssue> {

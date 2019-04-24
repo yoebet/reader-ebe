@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
-import {SuiModalService} from "ng2-semantic-ui";
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {User} from './models/user';
 import {AppService} from './services/app.service';
-import {SessionService} from "./services/session.service";
-import {LoginModal} from "./account/login-popup.component";
+import {SessionService} from './services/session.service';
+import {LoginModal} from './account/login-popup.component';
 
 @Component({
   selector: 'app-root',

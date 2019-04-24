@@ -1,8 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/combineLatest';
+import {combineLatest} from 'rxjs';
 
 import {Chap} from '../models/chap';
 import {Book} from '../models/book';
@@ -34,7 +32,7 @@ export class UserBookComponent implements OnInit {
   ngOnInit(): void {
     let obsBook = this.bookService.getDetail(this.userBook.bookId);
     let obsUserBook = this.ubService.getOne(this.userBook._id);
-    Observable.combineLatest(obsBook, obsUserBook)
+    combineLatest(obsBook, obsUserBook)
       .subscribe(([book, ub]) => {
         if (!book) {
           return;

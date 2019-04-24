@@ -1,4 +1,4 @@
-import {OpResult} from "../models/op-result";
+import {OpResult} from '../models/op-result';
 
 export abstract class SortableListComponent {
 

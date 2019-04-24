@@ -1,16 +1,15 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import {EMPTY, throwError} from 'rxjs';
+import {Observable, EMPTY, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-import {SuiModalService} from "ng2-semantic-ui";
-import {ActiveModal} from "ng2-semantic-ui/dist/modules/modal/classes/active-modal";
+import {SuiModalService} from 'ng2-semantic-ui';
+import {ActiveModal} from 'ng2-semantic-ui/dist/modules/modal/classes/active-modal';
 
 import {DefaultHttpHeaders} from '../config';
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
-import {LoginModal} from "../account/login-popup.component";
+import {LoginModal} from '../account/login-popup.component';
 
 export class BaseService<M extends Model> {
 
@@ -30,19 +29,19 @@ export class BaseService<M extends Model> {
   }
 
   list(url: string = null): Observable<M[]> {
-    return this.http.get<M[]>(url || this.baseUrl, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.get<M[]>(url || this.baseUrl, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   getOne(id: string): Observable<M> {
     const url = `${this.baseUrl}/${id}`;
-    return this.http.get<M>(url, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.get<M>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   getOneByUrl(url: string): Observable<M> {
-    return this.http.get<M>(url, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.get<M>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   getDetail(id: string): Observable<M> {
@@ -51,27 +50,27 @@ export class BaseService<M extends Model> {
   }
 
   create(model: M): Observable<M> {
-    return this.http.post<M>(this.baseUrl, model, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<M>(this.baseUrl, model, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   remove(model: M | string): Observable<OpResult> {
     const id = this.modelId(model);
     const url = `${this.baseUrl}/${id}`;
-    return this.http.delete<OpResult>(url, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.delete<OpResult>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   update(model: M): Observable<OpResult> {
     const id = this.modelId(model);
     const url = `${this.baseUrl}/${id}`;
-    return this.http.put<OpResult>(url, model, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.put<OpResult>(url, model, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   protected postForOpResult(url, body = null): Observable<OpResult> {
-    return this.http.post<OpResult>(url, body, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<OpResult>(url, body, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   protected modelId(model: M | string): string {

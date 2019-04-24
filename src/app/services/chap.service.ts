@@ -2,13 +2,16 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Chap} from '../models/chap';
+import {OpResult} from '../models/op-result';
+
 import {SorterService} from './sorter.service';
-import {SuiModalService} from "ng2-semantic-ui";
-import {OpResult} from "../models/op-result";
+
 
 @Injectable()
 export class ChapService extends SorterService<Chap> {
@@ -26,8 +29,8 @@ export class ChapService extends SorterService<Chap> {
   create(chap: Chap): Observable<Chap> {
     let bookId = chap.bookId;
     const url = `${this.bookBaseUrl}/${bookId}/chaps`;
-    return this.http.post<Chap>(url, chap, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<Chap>(url, chap, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   buildContentPack(chapId: string): Observable<OpResult> {

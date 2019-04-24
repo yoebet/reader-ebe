@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {WordCategory} from '../models/word-category';
-import {WordCategoryService} from "../services/word-category.service";
-import {OpResult} from "../models/op-result";
-import {SortableListComponent} from "../common/sortable-list.component";
+import {WordCategoryService} from '../services/word-category.service';
+import {OpResult} from '../models/op-result';
+import {SortableListComponent} from '../common/sortable-list.component';
 
 @Component({
   selector: 'category-list',

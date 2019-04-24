@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
-import 'rxjs/add/operator/switchMap';
+
+import {switchMap} from 'rxjs/operators';
 
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
@@ -26,9 +27,9 @@ export class ChapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.switchMap((params: ParamMap) =>
+    this.route.paramMap.pipe(switchMap((params: ParamMap) =>
       this.chapService.getDetail(params.get('id'))
-    ).subscribe(chap => {
+    )).subscribe(chap => {
       if (chap.zhName == null) {
         chap.zhName = '';
       }

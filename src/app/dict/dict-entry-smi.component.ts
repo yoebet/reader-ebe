@@ -5,9 +5,9 @@ import {
 
 import {DictService} from '../services/dict.service';
 import {DictSelectedResult} from '../content-types/dict-request';
-import {SelectedItem} from "../content-types/dict-request";
-import {DictBaseComponent} from "./dict-base.component";
-import {DictEntry, MeaningItem, SimpleMeaning} from "../models/dict-entry";
+import {SelectedItem} from '../content-types/dict-request';
+import {DictBaseComponent} from './dict-base.component';
+import {DictEntry, MeaningItem, SimpleMeaning} from '../models/dict-entry';
 
 @Component({
   selector: 'dict-entry-smi',

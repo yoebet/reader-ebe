@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {AnnotationGroup} from "../models/annotation-group";
-import {SuiModalService} from "ng2-semantic-ui";
-import {SorterService} from "./sorter.service";
+import {SuiModalService} from 'ng2-semantic-ui';
+
+import {environment} from '../../environments/environment';
+import {AnnotationGroup} from '../models/annotation-group';
+import {SorterService} from './sorter.service';
 
 @Injectable()
 export class AnnoGroupService extends SorterService<AnnotationGroup> {

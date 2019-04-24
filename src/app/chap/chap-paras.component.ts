@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, ViewChild, HostListener} from '@angular/core';
-import {PopStateEvent} from "@angular/common/src/location/location";
+import {PopStateEvent} from '@angular/common/src/location/location';
 import {SuiModalService} from 'ng2-semantic-ui';
-import 'rxjs/add/operator/switchMap';
-import Tether from 'tether';
+
+import * as Tether from 'tether';
 
 import {UIConstants, DataAttrNames, DataAttrValues, LatestAnnotationsCount} from '../config';
 import {Book} from '../models/book';
@@ -19,10 +19,10 @@ import {NoteRequest} from '../content-types/note-request';
 import {AnnotationGroup} from '../models/annotation-group';
 import {Annotation} from '../models/annotation';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
-import {AnnoFamilyService} from "../services/anno-family.service";
-import {ParaSaver} from "../content-types/para-saver";
-import {ContentContext} from "../content-types/content-context";
-import {DictZhService} from "../services/dict-zh.service";
+import {AnnoFamilyService} from '../services/anno-family.service';
+import {ParaSaver} from '../content-types/para-saver';
+import {ContentContext} from '../content-types/content-context';
+import {DictZhService} from '../services/dict-zh.service';
 
 
 @Component({

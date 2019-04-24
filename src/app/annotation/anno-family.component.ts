@@ -1,15 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {Location} from "@angular/common";
+import {Location} from '@angular/common';
 
-import 'rxjs/add/operator/switchMap';
+import {switchMap} from 'rxjs/operators';
+
+import {SortableListComponent} from '../common/sortable-list.component';
 import {AnnotationFamily} from '../models/annotation-family';
-import {AnnoFamilyService} from "../services/anno-family.service";
-import {AnnoGroupService} from "../services/anno-group.service";
-import {AnnotationGroup} from "../models/annotation-group";
-import {Annotation} from "../models/annotation";
-import {OpResult} from "../models/op-result";
-import {SortableListComponent} from "../common/sortable-list.component";
+import {AnnotationGroup} from '../models/annotation-group';
+import {Annotation} from '../models/annotation';
+import {OpResult} from '../models/op-result';
+
+import {AnnoFamilyService} from '../services/anno-family.service';
+import {AnnoGroupService} from '../services/anno-group.service';
 
 @Component({
   selector: 'annotation-family',
@@ -34,9 +36,9 @@ export class AnnoFamilyComponent extends SortableListComponent implements OnInit
   }
 
   ngOnInit() {
-    this.route.paramMap.switchMap((params: ParamMap) =>
+    this.route.paramMap.pipe(switchMap((params: ParamMap) =>
       this.familyService.getDetail(params.get('id'))
-    ).subscribe(family => {
+    )).subscribe(family => {
       this.family = family;
     });
   }

@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/share';
+import {of as observableOf, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {DictEntry, DictFields} from '../models/dict-entry';
 import {BaseService} from './base.service';
 import {OpResult} from '../models/op-result';
-import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class DictService extends BaseService<DictEntry> {
@@ -86,29 +86,26 @@ export class DictService extends BaseService<DictEntry> {
   }
 
   private cacheOne(obs: Observable<DictEntry>, withRefFields): Observable<DictEntry> {
-    obs = obs.share();
-    obs.subscribe(entry => {
-      if (entry) {
-        if (withRefFields) {
-          this.pushHistory(entry);
+    return obs.pipe(
+      tap(entry => {
+        if (entry) {
+          if (withRefFields) {
+            this.pushHistory(entry);
+          }
+          this.updateCache(entry, withRefFields);
         }
-        this.updateCache(entry, withRefFields);
-      }
-    });
-    return obs;
+      }));
   }
 
   private cacheList(obs: Observable<DictEntry[]>, withRefFields = true): Observable<DictEntry[]> {
-    obs = obs.share();
-    obs.subscribe(entries => {
+    return obs.pipe(tap(entries => {
       for (let entry of entries) {
         if (withRefFields) {
           this.pushHistory(entry);
         }
         this.updateCache(entry, withRefFields);
       }
-    });
-    return obs;
+    }));
   }
 
   getEntry(idOrWord: string, options: any = {}): Observable<DictEntry> {
@@ -117,7 +114,7 @@ export class DictService extends BaseService<DictEntry> {
       cachedEntry = this.norefEntryCache.get(idOrWord);
     }
     if (cachedEntry) {
-      return Observable.of(cachedEntry);
+      return observableOf(cachedEntry);
     }
     let url = `${this.baseUrl}/${idOrWord}`;
     let addedParam = false;

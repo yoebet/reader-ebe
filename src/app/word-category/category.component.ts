@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {Location} from "@angular/common";
+import {Location} from '@angular/common';
 
-import 'rxjs/add/operator/switchMap';
+import {switchMap} from 'rxjs/operators';
+
 import {WordCategory} from '../models/word-category';
-import {WordCategoryService} from "../services/word-category.service";
+import {WordCategoryService} from '../services/word-category.service';
 
 @Component({
   selector: 'category',
@@ -28,9 +29,9 @@ export class CategoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.switchMap((params: ParamMap) =>
+    this.route.paramMap.pipe(switchMap((params: ParamMap) =>
       this.wordCategoryService.getOne(params.get('id'))
-    ).subscribe(category => {
+    )).subscribe(category => {
       this.category = category;
     });
   }

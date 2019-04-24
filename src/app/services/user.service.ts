@@ -2,14 +2,16 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {User} from '../models/user';
 import {UserBook} from '../models/user-book';
+import {OpResult} from '../models/op-result';
+
 import {BaseService} from './base.service';
-import {SuiModalService} from "ng2-semantic-ui";
-import {OpResult} from "../models/op-result";
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -39,8 +41,8 @@ export class UserService extends BaseService<User> {
 
   userBooks(userId: string): Observable<UserBook[]> {
     let url = `${this.baseUrl}/${userId}/books`;
-    return this.http.get<UserBook[]>(url, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.get<UserBook[]>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   addBooks(userId: string, ubs: { isAllChaps?, role?, bookIds: string[] }): Observable<OpResult> {

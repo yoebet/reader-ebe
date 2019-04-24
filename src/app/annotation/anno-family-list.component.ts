@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AnnotationFamily} from '../models/annotation-family';
-import {AnnoFamilyService} from "../services/anno-family.service";
-import {OpResult} from "../models/op-result";
+import {AnnoFamilyService} from '../services/anno-family.service';
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'annotation-family-list',

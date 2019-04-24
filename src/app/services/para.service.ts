@@ -2,17 +2,16 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
+import {of as observableOf, combineLatest as observableCombineLatest, Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
 import {SorterService} from './sorter.service';
 import {ChapService} from './chap.service';
 import {BookService} from './book.service';
-import {SuiModalService} from "ng2-semantic-ui";
 
 @Injectable()
 export class ParaService extends SorterService<Para> {
@@ -38,7 +37,7 @@ export class ParaService extends SorterService<Para> {
           return;
         }
         let {bookId, chapId} = para;
-        Observable.combineLatest(
+        observableCombineLatest(
           this.bookService.getOne(bookId),
           this.chapService.getOne(chapId))
           .subscribe(([book, chap]) => {
@@ -54,18 +53,18 @@ export class ParaService extends SorterService<Para> {
   create(para: Para): Observable<Para> {
     let chapId = para.chapId;
     const url = `${this.chapBaseUrl}/${chapId}/paras`;
-    return this.http.post<Para>(url, para, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<Para>(url, para, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   createMany(paras: Para[]): Observable<Para[]> {
     if (paras.length === 0) {
-      return Observable.of([]);
+      return observableOf([]);
     }
     let chapId = paras[0].chapId;
     const url = `${this.chapBaseUrl}/${chapId}/paras`;
-    return this.http.put<Para>(url, paras, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.put<Para>(url, paras, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
 }

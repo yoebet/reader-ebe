@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {Location} from "@angular/common";
-import {Router} from "@angular/router";
+import {Component} from '@angular/core';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
-import {SessionService} from "../services/session.service";
-import {OpResult} from "../models/op-result";
+import {SessionService} from '../services/session.service';
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'login-form',

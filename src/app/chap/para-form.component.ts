@@ -4,7 +4,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {Para} from '../models/para';
 import {ParaSplitContext, ParaSplitModal} from './para-split.component';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
-import {ParaSaver} from "../content-types/para-saver";
+import {ParaSaver} from '../content-types/para-saver';
 
 @Component({
   selector: 'para-form',

@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {AnnotationSet} from "../anno/annotation-set";
+import {AnnotationSet} from '../anno/annotation-set';
 import {UIConstants, DataAttrNames} from '../config';
-import {AnnotatorHelper} from "../anno/annotator-helper";
+import {AnnotatorHelper} from '../anno/annotator-helper';
 
 @Component({
   selector: 'word-annos',

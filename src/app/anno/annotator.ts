@@ -2,8 +2,8 @@ import {UIConstants} from '../config';
 import {Annotation} from '../models/annotation';
 import {Book} from '../models/book';
 import {AnnotateResult} from './annotate-result';
-import {AnnotatorHelper} from "./annotator-helper";
-import {ZhPhrases} from "./zh-phrases";
+import {AnnotatorHelper} from './annotator-helper';
+import {ZhPhrases} from './zh-phrases';
 
 
 export class Annotator {

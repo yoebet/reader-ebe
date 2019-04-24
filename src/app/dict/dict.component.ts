@@ -2,10 +2,9 @@ import {Component, ViewChild} from '@angular/core';
 
 import {DictEntry, DictFields} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
-import {SuiSearch} from "ng2-semantic-ui/dist/modules/search/components/search";
+import {SuiSearch} from 'ng2-semantic-ui/dist/modules/search/components/search';
 
-import 'rxjs/add/operator/toPromise';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'dict-main',

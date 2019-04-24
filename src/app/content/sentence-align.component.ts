@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {SuiModal, ComponentModalConfig} from "ng2-semantic-ui";
+import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui';
 import {differenceBy, isEqual, findIndex} from 'lodash';
 
 import {Para} from '../models/para';
 import {Model} from '../models/model';
 import {Row} from '../content-types/split-align';
-import {ParaSaver} from "../content-types/para-saver";
+import {ParaSaver} from '../content-types/para-saver';
 
 class SentenceRow extends Row {
   sid = null;

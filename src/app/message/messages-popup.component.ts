@@ -1,15 +1,15 @@
-import {Component, OnInit} from "@angular/core";
-import {ComponentModalConfig, SuiModal} from "ng2-semantic-ui";
+import {Component, OnInit} from '@angular/core';
+import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 
-import {MessageScope} from "./message-scope";
-import {UserMessage} from "../models/user-message";
-import {UserMessageService} from "../services/user-message.service";
-import {SessionService} from "../services/session.service";
-import {User} from "../models/user";
-import {OpResult} from "../models/op-result";
-import {UserFeedback} from "../models/user-feedback";
-import {ParaIssue} from "../models/para-issue";
-import {ModalSize} from "ng2-semantic-ui/dist/modules/modal/classes/modal-config";
+import {MessageScope} from './message-scope';
+import {UserMessage} from '../models/user-message';
+import {UserMessageService} from '../services/user-message.service';
+import {SessionService} from '../services/session.service';
+import {User} from '../models/user';
+import {OpResult} from '../models/op-result';
+import {UserFeedback} from '../models/user-feedback';
+import {ParaIssue} from '../models/para-issue';
+import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
 @Component({
   selector: 'messages-popup',

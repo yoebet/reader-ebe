@@ -4,10 +4,10 @@ import {
   ComponentFactoryResolver, ComponentFactory, ComponentRef
 } from '@angular/core';
 
-import Drop from 'tether-drop';
+import * as Drop from 'tether-drop';
 
 import {Annotator} from '../anno/annotator';
-import {AnnotatorHelper} from "../anno/annotator-helper";
+import {AnnotatorHelper} from '../anno/annotator-helper';
 import {AnnotateResult} from '../anno/annotate-result';
 import {AnnotationSet, HighlightGroups} from '../anno/annotation-set';
 
@@ -23,7 +23,7 @@ import {ChangeCallback} from '../content-types/change-notification';
 import {DictRequest, DictSelectedResult, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
-import {ContentContext} from "../content-types/content-context";
+import {ContentContext} from '../content-types/content-context';
 
 
 declare type Side = 'content' | 'trans';

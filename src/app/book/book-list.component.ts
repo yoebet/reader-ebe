@@ -1,20 +1,20 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import {BookImagesBase, BookImageNotSet} from '../config';
-import {SuiModalService} from "ng2-semantic-ui";
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
-import {AnnotationFamily} from "../models/annotation-family";
+import {AnnotationFamily} from '../models/annotation-family';
 import {BookService} from '../services/book.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
-import {BookInfoModal} from "./book-info.component";
-import {BookFormModal} from "./book-form.component";
-import {BookImageModal} from "./book-image.component";
-import {BookPacksModal} from "./book-packs.component";
-import {BookUsersModal} from "./book-users.component";
-import {SessionService} from "../services/session.service";
-import {User} from "../models/user";
+import {BookInfoModal} from './book-info.component';
+import {BookFormModal} from './book-form.component';
+import {BookImageModal} from './book-image.component';
+import {BookPacksModal} from './book-packs.component';
+import {BookUsersModal} from './book-users.component';
+import {SessionService} from '../services/session.service';
+import {User} from '../models/user';
 
 @Component({
   selector: 'book-list',

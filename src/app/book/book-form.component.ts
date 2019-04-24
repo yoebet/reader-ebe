@@ -1,17 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {ComponentModalConfig, SuiModal} from "ng2-semantic-ui";
-import {ModalSize} from "ng2-semantic-ui/dist/modules/modal/classes/modal-config";
+import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
+import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
-import {OpResult} from "../models/op-result";
-import {PriceLabelPipe} from "../pipes/price-label.pipe";
-import {AnnotationFamily} from "../models/annotation-family";
-import {AnnoFamilyService} from "../services/anno-family.service";
-import {User, UserIdName} from "../models/user";
-import {SessionService} from "../services/session.service";
-import {UserBook} from "../models/user-book";
+import {OpResult} from '../models/op-result';
+import {PriceLabelPipe} from '../pipes/price-label.pipe';
+import {AnnotationFamily} from '../models/annotation-family';
+import {AnnoFamilyService} from '../services/anno-family.service';
+import {User, UserIdName} from '../models/user';
+import {SessionService} from '../services/session.service';
+import {UserBook} from '../models/user-book';
 
 @Component({
   selector: 'book-form',

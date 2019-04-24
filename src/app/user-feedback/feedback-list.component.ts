@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 
-import {SuiModalService} from "ng2-semantic-ui";
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {UserFeedback} from '../models/user-feedback';
 import {FeedbackService} from '../services/feedback.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {MessagesModal} from "../message/messages-popup.component";
-import {MessageScope} from "../message/message-scope";
-import {User} from "../models/user";
+import {MessagesModal} from '../message/messages-popup.component';
+import {MessageScope} from '../message/message-scope';
+import {User} from '../models/user';
 
 @Component({
   selector: 'feedback-list',

@@ -6,8 +6,8 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {MessagesModal} from "../message/messages-popup.component";
-import {MessageScope} from "../message/message-scope";
+import {MessagesModal} from '../message/messages-popup.component';
+import {MessageScope} from '../message/message-scope';
 
 @Component({
   selector: 'user-list',

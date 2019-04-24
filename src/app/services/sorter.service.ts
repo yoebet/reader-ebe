@@ -1,12 +1,13 @@
 import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 import {BaseService} from './base.service';
-import {SuiModalService} from "ng2-semantic-ui";
 
 export class SorterService<M extends Model> extends BaseService<M> {
 
@@ -18,8 +19,8 @@ export class SorterService<M extends Model> extends BaseService<M> {
   protected createBeforeOrAfter(target: M | string, model: M, pos: string): Observable<M> {
     let targetId = this.modelId(target);
     const url = `${this.baseUrl}/${targetId}/create${pos}`;
-    return this.http.post<M>(url, model, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<M>(url, model, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   createBefore(target: M | string, model: M): Observable<M> {
@@ -34,8 +35,8 @@ export class SorterService<M extends Model> extends BaseService<M> {
                                     models: M[], pos: string): Observable<M[]> {
     let targetId = this.modelId(target);
     const url = `${this.baseUrl}/${targetId}/createMany${pos}`;
-    return this.http.post<M>(url, models, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<M>(url, models, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   createManyBefore(target: M | string, models: M[]): Observable<M[]> {
@@ -72,8 +73,8 @@ export class SorterService<M extends Model> extends BaseService<M> {
     const id1 = this.modelId(m1);
     const id2 = this.modelId(m2);
     const url = `${this.baseUrl}/${id1}/swapOrder/${id2}`;
-    return this.http.post<M>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<M>(url, null, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 }
 

@@ -1,5 +1,5 @@
-import {DataAttrNames, DataAttrValues, UIConstants} from "../config";
-import {ZhPhrases} from "./zh-phrases";
+import {DataAttrNames, DataAttrValues, UIConstants} from '../config';
+import {ZhPhrases} from './zh-phrases';
 
 export class AnnotatorHelper {
 

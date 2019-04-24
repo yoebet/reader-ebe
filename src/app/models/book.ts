@@ -1,6 +1,6 @@
 import {Model} from './model';
 import {Chap} from './chap';
-import {UserBook} from "./user-book";
+import {UserBook} from './user-book';
 
 export class Book extends Model {
   code: string;

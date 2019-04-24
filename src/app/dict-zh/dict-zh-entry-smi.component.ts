@@ -6,8 +6,8 @@ import {
 import {MeaningItemZh} from '../models/dict-zh';
 import {DictZhService} from '../services/dict-zh.service';
 import {DictSelectedResult} from '../content-types/dict-request';
-import {SelectedItem} from "../content-types/dict-request";
-import {DictZhEntryComponent} from "./dict-zh-entry.component";
+import {SelectedItem} from '../content-types/dict-request';
+import {DictZhEntryComponent} from './dict-zh-entry.component';
 
 @Component({
   selector: 'dict-zh-entry-smi',

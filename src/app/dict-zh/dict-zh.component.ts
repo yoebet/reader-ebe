@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import {SuiSearch} from "ng2-semantic-ui/dist/modules/search/components/search";
+
+import {SuiSearch} from 'ng2-semantic-ui/dist/modules/search/components/search';
 
 import {DictZh} from '../models/dict-zh';
 import {DictZhService} from '../services/dict-zh.service';

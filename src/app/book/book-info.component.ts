@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {ComponentModalConfig, SuiModal} from "ng2-semantic-ui";
-import {ModalSize} from "ng2-semantic-ui/dist/modules/modal/classes/modal-config";
+import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
+import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';

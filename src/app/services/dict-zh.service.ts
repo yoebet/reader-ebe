@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {SuiModalService} from "ng2-semantic-ui";
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/share';
+import {of as observableOf, Observable} from 'rxjs';
+import {map, tap, catchError} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {environment} from '../../environments/environment';
+import {ZhPhrases} from '../anno/zh-phrases';
 import {DictZh} from '../models/dict-zh';
 import {BaseService} from './base.service';
-import {ZhPhrases} from "../anno/zh-phrases";
 
 @Injectable()
 export class DictZhService extends BaseService<DictZh> {
@@ -49,17 +49,6 @@ export class DictZhService extends BaseService<DictZh> {
     this.entryCache.set(entry.word, entry);
   }
 
-  private cacheOne(obs: Observable<DictZh>): Observable<DictZh> {
-    obs = obs.share();
-    obs.subscribe(entry => {
-      if (entry) {
-        this.pushHistory(entry);
-        this.updateCache(entry);
-      }
-    });
-    return obs;
-  }
-
   search(key: string, options: any = {}): Observable<DictZh[]> {
     let {limit} = options;
     if (!limit) {
@@ -72,7 +61,7 @@ export class DictZhService extends BaseService<DictZh> {
   getEntry(idOrWord: string, options: any = {}): Observable<DictZh> {
     let cachedEntry = this.entryCache.get(idOrWord);
     if (cachedEntry) {
-      return Observable.of(cachedEntry);
+      return observableOf(cachedEntry);
     }
     let {cl} = options;
     if (cl !== false) {
@@ -82,20 +71,27 @@ export class DictZhService extends BaseService<DictZh> {
     if (cl) {
       url += '?cl';
     }
-    return this.cacheOne(this.getOneByUrl(url));
+    return this.getOneByUrl(url).pipe(
+      tap(entry => {
+        if (entry) {
+          this.pushHistory(entry);
+          this.updateCache(entry);
+        }
+      }));
   }
 
   getPhrases(): Observable<ZhPhrases> {
     if (this.phrases) {
-      return Observable.of(this.phrases);
+      return observableOf(this.phrases);
     }
     let url = `${this.baseUrl}/phrases/all`;
     return this.http.get<string[]>(url, this.httpOptions)
-      .map(words => {
-        this.phrases = new ZhPhrases(words);
-        return this.phrases;
-      })
-      .catch(this.handleError);
+      .pipe(
+        map(words => {
+          this.phrases = new ZhPhrases(words);
+          return this.phrases;
+        }),
+        catchError(this.handleError));
   }
 
 }

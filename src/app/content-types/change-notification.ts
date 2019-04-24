@@ -1,4 +1,4 @@
-import {Para} from "../models/para";
+import {Para} from '../models/para';
 
 export class ChangeCallback {
   liveContent: () => ContentFields;

@@ -2,16 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import {of as observableOf, Observable} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {BaseService} from './base.service';
-import {AnnotationFamily} from "../models/annotation-family";
-import {AnnotationSet} from "../anno/annotation-set";
-import {SuiModalService} from "ng2-semantic-ui";
+import {AnnotationFamily} from '../models/annotation-family';
+import {AnnotationSet} from '../anno/annotation-set';
 
 @Injectable()
 export class AnnoFamilyService extends BaseService<AnnotationFamily> {
@@ -33,10 +31,10 @@ export class AnnoFamilyService extends BaseService<AnnotationFamily> {
   getAnnotationSet(familyId: string): Observable<AnnotationSet> {
     let anns = this.annotationsMap.get(familyId);
     if (anns) {
-      return Observable.of(anns);
+      return observableOf(anns);
     }
 
-    return this.getDetail(familyId).map((family: AnnotationFamily) => {
+    return this.getDetail(familyId).pipe(map((family: AnnotationFamily) => {
       if (!family) {
         return null;
       }
@@ -44,14 +42,14 @@ export class AnnoFamilyService extends BaseService<AnnotationFamily> {
       let anns = new AnnotationSet(groups);
       this.annotationsMap.set(familyId, anns);
       return anns;
-    });
+    }));
   }
 
 
   clone(familyId: string): Observable<AnnotationFamily> {
     let url = `${this.baseUrl}/${familyId}/clone`;
-    return this.http.post<AnnotationFamily>(url, null, this.httpOptions)
-      .catch(this.handleError);
+    return this.http.post<AnnotationFamily>(url, null, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
 }

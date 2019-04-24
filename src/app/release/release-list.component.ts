@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {AppRelease, AppPlatform} from "../models/app-release";
+import {AppRelease, AppPlatform} from '../models/app-release';
 
 import {AppPackagesBase} from '../config';
 import {ReleaseService} from '../services/release.service';
-import {OpResult} from "../models/op-result";
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'release-list',

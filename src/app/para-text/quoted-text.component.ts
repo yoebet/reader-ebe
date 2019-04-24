@@ -4,7 +4,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {UIConstants} from '../config';
 import {Para} from '../models/para';
 import {ParaService} from '../services/para.service';
-import {SafeHtml} from "@angular/platform-browser/src/security/dom_sanitization_service";
+import {SafeHtml} from '@angular/platform-browser/src/security/dom_sanitization_service';
 
 @Component({
   selector: 'quoted-text',
