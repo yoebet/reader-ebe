@@ -8,7 +8,8 @@ const UIConstants = {
   tetherClassPrefix: 'dp-',
   tetherClassPrefixNoHyphen: 'dp',
   highlightClass: 'highlight',
-  highlightWordClass: 'highlight-word'
+  highlightWordClass: 'highlight-word',
+  annoDisabledBodyClass: 'anno-disabled'
 };
 
 

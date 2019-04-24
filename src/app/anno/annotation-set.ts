@@ -11,9 +11,30 @@ export class AnnotationSet {
 
   readonly specialAnnotations: Annotation[];
 
-  readonly selectMeaningAnnotation: Annotation;
+  static selectMeaningAnnotation: Annotation;
 
-  readonly addNoteAnnotation: Annotation;
+  static addNoteAnnotation: Annotation;
+
+  static buildStaticAnnotations() {
+
+    let groupSwm = new AnnotationGroup();
+    groupSwm.dataName = DataAttrNames.mean;
+    let swm = new Annotation();
+    let annSMConfig = SpecialAnnotations.SelectMeaning;
+    swm.name = annSMConfig.name;
+    swm.nameEn = annSMConfig.nameEn;
+    swm.group = groupSwm;
+    AnnotationSet.selectMeaningAnnotation = swm;
+
+    let groupAan = new AnnotationGroup();
+    groupAan.dataName = DataAttrNames.note;
+    let aan = new Annotation();
+    let annAAConfig = SpecialAnnotations.AddANote;
+    aan.name = annAAConfig.name;
+    aan.nameEn = annAAConfig.nameEn;
+    aan.group = groupAan;
+    AnnotationSet.addNoteAnnotation = aan;
+  }
 
   constructor(groups: AnnotationGroup[]) {
     this.groups = groups.map(og => {
@@ -23,31 +44,9 @@ export class AnnotationSet {
     });
 
 
-    let annotations = [];
-
-    let groupSwm = new AnnotationGroup();
-    groupSwm.dataName = DataAttrNames.mean;
-    let swm = new Annotation();
-    let annSMConfig = SpecialAnnotations.SelectMeaning;
-    swm.name = annSMConfig.name;
-    swm.nameEn = annSMConfig.nameEn;
-    swm.group = groupSwm;
-    this.selectMeaningAnnotation = swm;
-
-    let groupAan = new AnnotationGroup();
-    groupAan.dataName = DataAttrNames.note;
-    let aan = new Annotation();
-    let annAAConfig = SpecialAnnotations.AddANote;
-    aan.name = annAAConfig.name;
-    aan.nameEn = annAAConfig.nameEn;
-    aan.group = groupAan;
-    this.addNoteAnnotation = aan;
-
-    annotations.push(swm);
-    annotations.push(aan);
-
-    this.specialAnnotations = annotations;
-
+    this.specialAnnotations = [
+      AnnotationSet.selectMeaningAnnotation,
+      AnnotationSet.addNoteAnnotation];
 
     for (let group of this.groups) {
       group.annotations = group.annotations.map(oa => {
@@ -74,7 +73,7 @@ export class AnnotationSet {
     for (let group of this.groups) {
       let {name, nameEn, cssClass, tagName, dataName} = group;
       styles.push(`\n/* *** ${name} ${nameEn} *** */\n`);
-      let selector = '.' + cssClass;
+      let selector = '';// '.' + cssClass;
       // let before = selector + ':before';
       // let after = selector + ':after';
       if (tagName) {
@@ -113,6 +112,8 @@ export class AnnotationSet {
   }
 
 }
+
+AnnotationSet.buildStaticAnnotations();
 
 
 export class HighlightGroups {

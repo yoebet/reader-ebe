@@ -6,7 +6,7 @@ export class Chap extends Model {
   zhName: string = '';
   bookId: string;
   no: number;
-  originalId: string;
+  // originalId: string;
 
   status: string = 'E';
 

@@ -3,7 +3,7 @@ import {
   AfterViewChecked, ChangeDetectorRef, Input, SimpleChanges, OnInit
 } from '@angular/core';
 
-import {DictZh,MeaningItemZh} from '../models/dict-zh';
+import {MeaningItemZh} from '../models/dict-zh';
 import {DictZhService} from '../services/dict-zh.service';
 import {DictSelectedResult} from '../content-types/dict-request';
 import {SelectedItem} from "../content-types/dict-request";
@@ -14,7 +14,7 @@ import {DictZhEntryComponent} from "./dict-zh-entry.component";
   templateUrl: './dict-zh-entry-smi.component.html',
   styleUrls: ['./dict-zh-entry-smi.component.css']
 })
-export class DictZhEntrySmiComponent extends DictZhEntryComponent implements OnInit,  AfterViewChecked {
+export class DictZhEntrySmiComponent extends DictZhEntryComponent implements OnInit, AfterViewChecked {
   @Input() initialSelectedItem: SelectedItem;
   @Output() viewReady = new EventEmitter();
   @Output() dictItemSelected = new EventEmitter<DictSelectedResult>();

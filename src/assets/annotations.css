@@ -100,3 +100,10 @@ y-o, .yo {
   border-bottom-color: cornflowerblue;
   border-bottom-style: solid;
 }
+
+.para-text [data-note]:after {
+  content: '注';
+  font-size: 0.6em;
+  vertical-align: super;
+  color: indianred;
+}

@@ -4,12 +4,12 @@ import {
   ComponentFactoryResolver, ComponentFactory, ComponentRef
 } from '@angular/core';
 
-import Drop from 'tether-drop'
+import Drop from 'tether-drop';
 
 import {Annotator} from '../anno/annotator';
 import {AnnotatorHelper} from "../anno/annotator-helper";
-import {AnnotateResult} from '../anno/annotate-result'
-import {HighlightGroups} from '../anno/annotation-set';
+import {AnnotateResult} from '../anno/annotate-result';
+import {AnnotationSet, HighlightGroups} from '../anno/annotation-set';
 
 import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
 import {DictEntry} from '../models/dict-entry';
@@ -46,7 +46,6 @@ export class ParaContentComponent implements OnChanges {
   @Input() trans: string;
   @Input() showTrans: boolean;
   @Input() gotFocus: boolean;
-  @Input() editable: boolean;
   @Input() highlightSentence: boolean;
   @Input() annotatedWordsHover: boolean;
   @Input() annotating: boolean;
@@ -143,7 +142,7 @@ export class ParaContentComponent implements OnChanges {
   }
 
   selectWordMeaning(side: Side) {
-    let ann = this.annotationSet.selectMeaningAnnotation;
+    let ann = AnnotationSet.selectMeaningAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
@@ -251,7 +250,7 @@ export class ParaContentComponent implements OnChanges {
   }
 
   addANote(side: Side) {
-    let ann = this.annotationSet.addNoteAnnotation;
+    let ann = AnnotationSet.addNoteAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
@@ -352,11 +351,11 @@ export class ParaContentComponent implements OnChanges {
   }
 
   onKeyup($event, side: Side) {
-    $event.stopPropagation();
+    /*$event.stopPropagation();
     if (!this.editable) {
       return;
     }
-    this.notifyChange(side);
+    this.notifyChange(side);*/
   }
 
   private notifyChange(side: Side) {
@@ -759,7 +758,8 @@ export class ParaContentComponent implements OnChanges {
     if (changes.content) {
       this.refreshContent();
       textChanged = true;
-    } else if (changes.annotation) {
+    }
+    if (!textChanged && changes.annotation) {
       if (this.gotFocus && this.annotating && this.annotation) {
         let contentEl = this.contentText.element.nativeElement;
         let transEl = this.transText.element.nativeElement;

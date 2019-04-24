@@ -44,10 +44,10 @@
   background: lightgoldenrodyellow;
 }
 
-body.drop-anno-disabled .drop-target.drop-enabled {
+body.anno-disabled .drop-target.drop-enabled {
   background: none;
 }
 
-body.drop-anno-disabled .drop-element.drop-anno {
+body.anno-disabled .drop-element.drop-anno {
   display: none;
 }

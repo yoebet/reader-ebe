@@ -80,7 +80,7 @@ export class DictZhService extends BaseService<DictZh> {
     }
     let url = `${this.baseUrl}/${idOrWord}`;
     if (cl) {
-      url += '?cl'
+      url += '?cl';
     }
     return this.cacheOne(this.getOneByUrl(url));
   }

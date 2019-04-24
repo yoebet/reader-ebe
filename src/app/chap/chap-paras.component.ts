@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, ViewChild, HostListener} from '@angular/core';
+import {PopStateEvent} from "@angular/common/src/location/location";
 import {SuiModalService} from 'ng2-semantic-ui';
 import 'rxjs/add/operator/switchMap';
 import Tether from 'tether';
@@ -56,7 +57,8 @@ export class ChapParasComponent implements OnInit {
   editingPara: Para;
   selectedPara: Para;
   insertPos: number;
-  showTrans = false;
+  aligningSentence = false;
+  showTrans = true;
   leftRight = true;
   clickToEdit = false;
   continuousEditing = false;
@@ -111,11 +113,38 @@ export class ChapParasComponent implements OnInit {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent($event: KeyboardEvent) {
+    // alert(`${$event.key} ${$event.code}`);
     if ($event.key === 'Escape') {
+      if (this.dictRequest) {
+        this.onDictItemSelect(null);
+        $event.stopPropagation();
+        return;
+      }
       if (this.currentAnnotation) {
         this.currentAnnotation = null;
         $event.stopPropagation();
       }
+    }
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onPopState($event: PopStateEvent) {
+    if (this.dictRequest) {
+      this.closeDictPopup();
+    }
+    if (this.noteRequest) {
+      this.closeNotePopup();
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadEvent($event) {
+    if (this.editingPara || this.insertPos != null || this.noteRequest || this.aligningSentence) {
+      // $event.stopPropagation();
+      $event.preventDefault();
+      // Chrome requires returnValue to be set
+      $event.returnValue = '';
+      return;
     }
   }
 
@@ -248,14 +277,17 @@ export class ChapParasComponent implements OnInit {
     this.stopEvent($event);
   }
 
-  onAnnotatedWordsHoverChange() {
+  private toggleBodyClass(className: string, flag: boolean) {
     let bodyClasses = document.body.classList;
-    let className = 'drop-anno-disabled';
-    if (this.annotatedWordsHover) {
+    if (flag) {
       bodyClasses.remove(className);
     } else {
       bodyClasses.add(className);
     }
+  }
+
+  onAnnotatedWordsHoverChange() {
+    this.toggleBodyClass(UIConstants.annoDisabledBodyClass, this.annotatedWordsHover);
   }
 
   remove(para: Para): void {
@@ -714,10 +746,13 @@ export class ChapParasComponent implements OnInit {
     let context: SentenceAlignContext = {para: selectedPara, paraSaver: this.paraSaver};
     this.modalService
       .open(new SentenceAlignModal(context))
-      // .onDeny((d) => {})
+      .onDeny((d) => {
+        this.aligningSentence = false;
+      })
       .onApprove((para: Para) => {
-        // this.save(para);
+        this.aligningSentence = false;
       });
+    this.aligningSentence = true;
   }
 
   paraTracker(index, para) {
