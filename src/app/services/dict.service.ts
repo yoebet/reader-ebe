@@ -134,7 +134,6 @@ export class DictService extends BaseService<DictEntry> {
     if (options.fields) {
       url += addedParam ? '&' : '?';
       url += 'fields=' + options.fields;
-      addedParam = true;
     }
 
     let obs = this.getOneByUrl(url);

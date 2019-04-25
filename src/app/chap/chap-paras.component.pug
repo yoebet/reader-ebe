@@ -135,6 +135,7 @@ div(*ngIf='chap')
     [relatedWords]='dictRequest.relatedWords',
     (viewReady)='onDictPopupReady()',
     (dictItemSelected)='onDictItemSelect($event)')
+  ng-template(#dictSimple='')
 
   #notePopup.ui.basic.popup.form
     .ui.sub.header 注：

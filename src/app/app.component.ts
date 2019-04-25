@@ -4,9 +4,9 @@ import {Router} from '@angular/router';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {User} from './models/user';
+import {OpResult} from './models/op-result';
 import {AppService} from './services/app.service';
 import {SessionService} from './services/session.service';
-import {LoginModal} from './account/login-popup.component';
 
 @Component({
   selector: 'app-root',
@@ -26,18 +26,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionService.checkLogin();
-  }
-
-  loginPopup() {
-    this.modalService.open(new LoginModal(null))
-    // .onDeny((d) => {})
-    // .onApprove((r) => {})
-    ;
+    this.sessionService.checkLogin()
+      .subscribe(a => {
+      });
   }
 
   logout() {
-    this.sessionService.logout();
-    this.router.navigate(['/']);
+    this.sessionService.logout()
+      .subscribe((opr: OpResult) => {
+        if (opr && opr.ok === 1) {
+          this.router.navigate(['/']);
+        }
+      });
   }
 }

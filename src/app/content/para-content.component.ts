@@ -12,7 +12,7 @@ import {AnnotateResult} from '../anno/annotate-result';
 import {AnnotationSet, HighlightGroups} from '../anno/annotation-set';
 
 import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
-import {DictEntry} from '../models/dict-entry';
+import {DictEntry, DictFields} from '../models/dict-entry';
 import {DictZh} from '../models/dict-zh';
 import {Annotation} from '../models/annotation';
 import {Book} from '../models/book';
@@ -32,6 +32,8 @@ const SideContent: Side = 'content';
 const SideTrans: Side = 'trans';
 
 const TextWrapPart = false; // =editInplace
+
+// declare type TriggerMethod = Tap/Click/LongClick/RightClick/Selection
 
 @Component({
   selector: 'para-content',
@@ -141,7 +143,7 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
-  selectWordMeaning(side: Side) {
+  selectWordMeaning(side: Side, triggerMethod = null) {
     let ann = AnnotationSet.selectMeaningAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
@@ -203,7 +205,12 @@ export class ParaContentComponent implements OnChanges {
       if (oriForWord.indexOf('­') >= 0) {// 173, 0xAD, soft hyphen
         oriForWord = oriForWord.replace(/­/, '');
       }
-      this.dictService.getEntry(oriForWord, {base: true, stem: true})
+      let simplePopup = triggerMethod === 'Ctrl_Click';
+      let options = {base: true, stem: true} as any;
+      if (simplePopup) {
+        options.fields = DictFields.SIMPLE;
+      }
+      this.dictService.getEntry(oriForWord, options)
         .subscribe((entry: DictEntry) => {
           if (entry == null) {
             AnnotatorHelper.removeDropTagIfDummy(element);
@@ -227,6 +234,7 @@ export class ParaContentComponent implements OnChanges {
               dr.relatedWords.push(phrase);
             }
           }
+          dr.simplePopup = simplePopup;
           this.dictRequest.emit(dr);
         });
     } else if (Book.isChineseText(lang)) {
@@ -249,7 +257,7 @@ export class ParaContentComponent implements OnChanges {
 
   }
 
-  addANote(side: Side) {
+  addANote(side: Side, triggerMethod = null) {
     let ann = AnnotationSet.addNoteAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
@@ -293,13 +301,13 @@ export class ParaContentComponent implements OnChanges {
     this.noteRequest.emit(nr)
   }
 
-  private doAnnotate(side: Side) {
+  private doAnnotate(side: Side, triggerMethod = null) {
     if (this.annotation.nameEn === SpecialAnnotations.SelectMeaning.nameEn) {
-      this.selectWordMeaning(side);
+      this.selectWordMeaning(side, triggerMethod);
       return;
     }
     if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
-      this.addANote(side);
+      this.addANote(side, triggerMethod);
       return;
     }
     let ar: AnnotateResult = this.getAnnotator(side).annotate();
@@ -334,18 +342,25 @@ export class ParaContentComponent implements OnChanges {
     if (!this.gotFocus || !this.annotating) {
       return;
     }
+    let triggerMethod = 'Click';
+    if ($event.altKey) {
+      triggerMethod = 'Alt_' + triggerMethod;
+      this.addANote(side, triggerMethod);
+      return;
+    }
     if ($event.ctrlKey || $event.metaKey) {
-      this.addANote(side);
+      triggerMethod = 'Ctrl_' + triggerMethod;
+      this.selectWordMeaning(side, triggerMethod);
       return;
     }
     if (!this.annotation) {
       return;
     }
-    this.doAnnotate(side);
+    this.doAnnotate(side, triggerMethod);
   }
 
   onContextmenu($event, side: Side) {
-    this.selectWordMeaning(side);
+    this.selectWordMeaning(side, 'RightClick');
     $event.stopPropagation();
     $event.preventDefault();
   }
@@ -742,7 +757,7 @@ export class ParaContentComponent implements OnChanges {
     let annotator = this.getAnnotator(side);
     let wacins = annotator.wordAtCursorIfNoSelection;
     annotator.wordAtCursorIfNoSelection = false;
-    this.doAnnotate(side);
+    this.doAnnotate(side, 'Selection');
     annotator.wordAtCursorIfNoSelection = wacins;
   }
 

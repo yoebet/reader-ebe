@@ -50,6 +50,7 @@ import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
 import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictSimpleComponent} from './dict/dict-simple.component';
+import {DictSimpleSmiComponent} from './dict/dict-simple-smi.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
 import {DictZhComponent} from './dict-zh/dict-zh.component';
 import {DictZhEntryComponent} from './dict-zh/dict-zh-entry.component';
@@ -99,6 +100,7 @@ import {ReleaseListComponent} from './release/release-list.component';
     DictEntryComponent,
     DictEntrySmiComponent,
     DictSimpleComponent,
+    DictSimpleSmiComponent,
     DictZhComponent,
     DictZhEntryComponent,
     DictZhEntrySmiComponent,
@@ -151,6 +153,7 @@ import {ReleaseListComponent} from './release/release-list.component';
     ParaSplitComponent,
     SentenceAlignComponent,
     WordAnnosComponent,
+    DictSimpleSmiComponent,
     MessagesPopupComponent
   ],
   bootstrap: [AppComponent]

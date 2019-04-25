@@ -8,6 +8,8 @@ export class DictRequest {
   initialSelected?: SelectedItem;
   relatedWords?: string[];
   meaningItemCallback: (selected: DictSelectedResult) => void;
+
+  simplePopup = false;
 }
 
 export class SelectedItem {

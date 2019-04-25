@@ -1,28 +1,35 @@
-import {Component, Input, OnInit, ViewChild, HostListener} from '@angular/core';
+import {
+  Input, OnInit, ViewChild, ViewContainerRef, Component, ComponentFactory,
+  ComponentFactoryResolver, ComponentRef, HostListener
+} from '@angular/core';
 import {PopStateEvent} from '@angular/common/src/location/location';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import * as Tether from 'tether';
+import * as Drop from 'tether-drop';
 
-import {UIConstants, DataAttrNames, DataAttrValues, LatestAnnotationsCount} from '../config';
+import {DataAttrNames, DataAttrValues, LatestAnnotationsCount, UIConstants} from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
-import {ParaService} from '../services/para.service';
+import {DictEntry} from '../models/dict-entry';
+import {Annotation} from '../models/annotation';
+import {AnnotationGroup} from '../models/annotation-group';
 import {OpResult} from '../models/op-result';
-
-import {ParaFormComponent} from './para-form.component';
 import {AnnotationSet} from '../anno/annotation-set';
+import {AnnotatorHelper} from '../anno/annotator-helper';
 import {ChangeCallback, ChangeNotification, ContentFields} from '../content-types/change-notification';
 import {DictRequest, DictSelectedResult} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
-import {AnnotationGroup} from '../models/annotation-group';
-import {Annotation} from '../models/annotation';
-import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
-import {AnnoFamilyService} from '../services/anno-family.service';
 import {ParaSaver} from '../content-types/para-saver';
 import {ContentContext} from '../content-types/content-context';
+
+import {ParaService} from '../services/para.service';
+import {AnnoFamilyService} from '../services/anno-family.service';
 import {DictZhService} from '../services/dict-zh.service';
+import {ParaFormComponent} from './para-form.component';
+import {DictSimpleSmiComponent} from "../dict/dict-simple-smi.component";
+import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 
 
 @Component({
@@ -31,6 +38,7 @@ import {DictZhService} from '../services/dict-zh.service';
   styleUrls: ['./chap-paras.component.css']
 })
 export class ChapParasComponent implements OnInit {
+  @ViewChild('dictSimple', {read: ViewContainerRef}) dictSimple: ViewContainerRef;
   private _book: Book;
   @Input() set book(book: Book) {
     this._book = book;
@@ -65,7 +73,7 @@ export class ChapParasComponent implements OnInit {
   splitMode = false;
   annotating = false;
   annotateOnly = false;
-  editInplace = false;
+  // editInplace = false;
   highlightSentence = true;
   annotatedWordsHover = true;
 
@@ -83,6 +91,10 @@ export class ChapParasComponent implements OnInit {
   dictRequest: DictRequest = null;
   dictTether = null;
 
+  simpleDictRequest: DictRequest = null;
+  simpleDictDrop: Drop;
+  simpleDictComponentRef: ComponentRef<DictSimpleSmiComponent>;
+
   noteRequest: NoteRequest = null;
   noteTether = null;
   noteRequestNote = '';
@@ -93,7 +105,8 @@ export class ChapParasComponent implements OnInit {
   paraSaver: ParaSaver;
 
 
-  constructor(private paraService: ParaService,
+  constructor(private resolver: ComponentFactoryResolver,
+              private paraService: ParaService,
               private dictZhService: DictZhService,
               private annoService: AnnoFamilyService,
               public modalService: SuiModalService) {
@@ -654,7 +667,11 @@ export class ChapParasComponent implements OnInit {
         this.onDictItemSelect(null);
       }
     }
-    this.dictRequest = dictRequest;
+    if (dictRequest && dictRequest.simplePopup) {
+      this.showDictSimple(dictRequest);
+    } else {
+      this.dictRequest = dictRequest;
+    }
   }
 
   onDictPopupReady() {
@@ -702,6 +719,55 @@ export class ChapParasComponent implements OnInit {
       this.noteRequest = null;
     }
     this.noteRequestNote = '';
+  }
+
+  private showDictSimple(dictRequest: DictRequest) {
+    if (!dictRequest) {
+      return;
+    }
+    if (this.simpleDictRequest) {
+      let el = this.simpleDictRequest.wordElement;
+      if (el === dictRequest.wordElement) {
+        return;
+      }
+    }
+
+    let {dictEntry, wordElement} = dictRequest;
+    if (!this.simpleDictComponentRef) {
+      let factory: ComponentFactory<DictSimpleSmiComponent> = this.resolver.resolveComponentFactory(DictSimpleSmiComponent);
+      this.dictSimple.clear();
+      this.simpleDictComponentRef = this.dictSimple.createComponent(factory);
+    }
+    let dscr = this.simpleDictComponentRef;
+
+    let content = function () {
+      dscr.instance.entry = dictEntry as DictEntry;
+      return dscr.location.nativeElement;
+    };
+
+    setTimeout(() => {
+      let drop = new Drop({
+        target: wordElement,
+        content: content,
+        classes: `${UIConstants.dropClassPrefix}dict`,
+        position: 'bottom center',
+        constrainToScrollParent: false,
+        remove: true,
+        openOn: 'click'//click,hover,always
+      });
+      drop.open();
+      drop.on('close', () => {
+        AnnotatorHelper.removeDropTagIfDummy(wordElement);
+        this.simpleDictRequest = null;
+        setTimeout(() => {
+          drop.destroy();
+          this.simpleDictDrop = null;
+        }, 10);
+      });
+
+      this.simpleDictRequest = dictRequest;
+      this.simpleDictDrop = drop;
+    }, 10);
   }
 
   onNoteRequest(noteRequest) {
