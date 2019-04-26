@@ -5,15 +5,17 @@ import {DataAttrNames, DataAttrValues, SpecialAnnotations} from '../config';
 
 export class AnnotationSet {
 
+  static selectMeaningAnnotation: Annotation;
+
+  static addNoteAnnotation: Annotation;
+
+  static emptySet = () => new AnnotationSet([]);
+
   readonly groups: AnnotationGroup[];
 
   readonly annotationsMap: Map<string, Annotation> = new Map();
 
   readonly specialAnnotations: Annotation[];
-
-  static selectMeaningAnnotation: Annotation;
-
-  static addNoteAnnotation: Annotation;
 
   static buildStaticAnnotations() {
 

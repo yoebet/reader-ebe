@@ -20,7 +20,7 @@ import {Book} from '../models/book';
 import {DictService} from '../services/dict.service';
 import {DictZhService} from '../services/dict-zh.service';
 import {ChangeCallback} from '../content-types/change-notification';
-import {DictRequest, DictSelectedResult, SelectedItem} from '../content-types/dict-request';
+import {DictRequest, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
 import {ContentContext} from '../content-types/content-context';
@@ -82,16 +82,19 @@ export class ParaContentComponent implements OnChanges {
   }
 
 
-  get annotationSet() {
+  get annotationSet(): AnnotationSet {
+    if (!this.contentContext) {
+      return AnnotationSet.emptySet();
+    }
     return this.contentContext.annotationSet;
   }
 
-  getTextLang(side: Side) {
+  getTextLang(side: Side): string {
     let {contentLang, transLang} = this.contentContext;
     return (side === SideContent) ? (contentLang || Book.LangCodeEn) : (transLang || Book.LangCodeZh);
   }
 
-  getAnnotator(side: Side, annotation = null) {
+  getAnnotator(side: Side, annotation = null): Annotator {
     let annt;
     if (side === SideContent) {
       annt = this._contentAnnotator;
@@ -123,7 +126,7 @@ export class ParaContentComponent implements OnChanges {
       this.transText.element.nativeElement;
   }
 
-  private getTheSide(textEl) {
+  private getTheSide(textEl): Side {
     return textEl === this.contentText.element.nativeElement ?
       SideContent :
       SideTrans;
@@ -158,7 +161,7 @@ export class ParaContentComponent implements OnChanges {
 
     let textEl = this.getTextEl(side);
 
-    let meaningItemCallback = (selected: DictSelectedResult) => {
+    let meaningItemCallback = (selected: SelectedItem) => {
 
       if (!selected) {
         // cancel

@@ -7,16 +7,13 @@ export class DictRequest {
   dictEntry: DictEntry | DictZh;
   initialSelected?: SelectedItem;
   relatedWords?: string[];
-  meaningItemCallback: (selected: DictSelectedResult) => void;
+  meaningItemCallback: (selected: SelectedItem) => void;
 
   simplePopup = false;
 }
 
 export class SelectedItem {
+  word?: string;
   pos?: string;
   meaning?: string;
-}
-
-export class DictSelectedResult extends SelectedItem {
-  word?: string;
 }

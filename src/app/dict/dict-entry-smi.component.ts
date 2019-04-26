@@ -4,7 +4,6 @@ import {
 } from '@angular/core';
 
 import {DictService} from '../services/dict.service';
-import {DictSelectedResult} from '../content-types/dict-request';
 import {SelectedItem} from '../content-types/dict-request';
 import {DictBaseComponent} from './dict-base.component';
 import {DictEntry, MeaningItem, SimpleMeaning} from '../models/dict-entry';
@@ -17,7 +16,7 @@ import {DictEntry, MeaningItem, SimpleMeaning} from '../models/dict-entry';
 export class DictEntrySmiComponent extends DictBaseComponent implements AfterViewChecked {
   @Input() initialSelectedItem: SelectedItem;
   @Output() viewReady = new EventEmitter();
-  @Output() dictItemSelected = new EventEmitter<DictSelectedResult>();
+  @Output() dictItemSelected = new EventEmitter<SelectedItem>();
 
   viewReadyEntry = null;
   initialWord: string;
@@ -120,7 +119,7 @@ export class DictEntrySmiComponent extends DictBaseComponent implements AfterVie
       return;
     }
     let {pos, meaning} = this.selectedItem;
-    let selectedResult: DictSelectedResult = {pos, meaning, word: this.entry.word};
+    let selectedResult: SelectedItem = {pos, meaning, word: this.entry.word};
     this.dictItemSelected.emit(selectedResult);
   }
 

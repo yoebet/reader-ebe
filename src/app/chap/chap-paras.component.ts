@@ -19,7 +19,7 @@ import {OpResult} from '../models/op-result';
 import {AnnotationSet} from '../anno/annotation-set';
 import {AnnotatorHelper} from '../anno/annotator-helper';
 import {ChangeCallback, ChangeNotification, ContentFields} from '../content-types/change-notification';
-import {DictRequest, DictSelectedResult} from '../content-types/dict-request';
+import {DictRequest, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {ParaSaver} from '../content-types/para-saver';
 import {ContentContext} from '../content-types/content-context';
@@ -699,7 +699,7 @@ export class ChapParasComponent implements OnInit {
     }
   }
 
-  onDictItemSelect(selected: DictSelectedResult) {
+  onDictItemSelect(selected: SelectedItem) {
     if (!this.dictRequest) {
       return;
     }
@@ -746,6 +746,10 @@ export class ChapParasComponent implements OnInit {
     };
 
     setTimeout(() => {
+      let lastDrop = this.simpleDictDrop;
+      if (lastDrop) {
+        lastDrop.close();
+      }
       let drop = new Drop({
         target: wordElement,
         content: content,
@@ -756,12 +760,10 @@ export class ChapParasComponent implements OnInit {
         openOn: 'click'//click,hover,always
       });
       drop.open();
-      drop.on('close', () => {
+      drop.once('close', () => {
         AnnotatorHelper.removeDropTagIfDummy(wordElement);
-        this.simpleDictRequest = null;
         setTimeout(() => {
           drop.destroy();
-          this.simpleDictDrop = null;
         }, 10);
       });
 

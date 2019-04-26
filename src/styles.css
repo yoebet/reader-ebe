@@ -34,8 +34,8 @@
 @import url('assets/sentence-align.css');
 @import url('assets/dict-popup.css');
 @import url('assets/dict-entry.css');
-@import url('assets/annotations.css');
 @import url('assets/para-text.css');
+@import url('assets/annotations.css');
 
 .pre-wrap {
   white-space: pre-wrap;
