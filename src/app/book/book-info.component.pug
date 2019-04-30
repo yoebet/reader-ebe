@@ -4,7 +4,7 @@
       td 英文
       td
         .book-name {{book.name}}
-        .author
+        .author(*ngIf='book.author')
           span.author-by by
           | {{book.author}}
     tr

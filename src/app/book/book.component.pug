@@ -10,7 +10,7 @@ div(*ngIf='book')
       button.ui.tiny.button((click)='showPacks()') 内容包
     .name-author
       .book-name {{book.name}}
-      .author
+      .author(*ngIf='book.author')
         span.author-by by
         | {{book.author}}
     .zh-name-author(*ngIf='book.zhName')

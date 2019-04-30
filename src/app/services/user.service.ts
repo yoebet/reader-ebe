@@ -50,4 +50,28 @@ export class UserService extends BaseService<User> {
     return this.postForOpResult(url, ubs);
   }
 
+  getTempToken(userId: string): Observable<any> {
+    let url = `${this.baseUrl}/${userId}/tempToken`;
+    return this.http.get<any>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  genTempToken(userId: string): Observable<any> {
+    let url = `${this.baseUrl}/${userId}/tempToken`;
+    return this.http.post<any>(url, null, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  refreshTempToken(userId: string): Observable<any> {
+    let url = `${this.baseUrl}/${userId}/tempToken`;
+    return this.http.put<any>(url, null, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  dropTempToken(userId: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${userId}/tempToken`;
+    return this.http.delete<OpResult>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
 }

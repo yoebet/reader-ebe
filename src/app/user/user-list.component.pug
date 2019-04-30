@@ -1,4 +1,6 @@
 .ui.header
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='tokenOp') Token操作
   | 用户
 
 .ui.small.form
@@ -15,8 +17,10 @@ table.ui.small.striped.table
       th 登录名
       th 昵称
       th 注册于
+      th 上次登录
       th 角色
       th
+        ng-template([ngIf]='tokenOp') 临时Token
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
@@ -24,22 +28,38 @@ table.ui.small.striped.table
       td {{user.nickName}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
+        ng-template([ngIf]='user.lastLogin&&user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}}
+      td
         ng-template([ngIf]='!editing(user)') {{user.role}}
         ng-template([ngIf]='editing(user)')
           sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
             sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
       td.right.aligned
-        .ui.mini.button((click)='messages(user)') 消息
-        ng-template([ngIf]='!editing(user)')
-          .ui.mini.button((click)='edit(user)') 修改
-        ng-template([ngIf]='editing(user)')
-          .ui.mini.button((click)='editingUser=null') 取消
-          .ui.mini.primary.button((click)='save()') 保存
+        ng-template([ngIf]='tokenOp')
+          ng-template([ngIf]='user.tokenObj')
+            ng-template([ngIf]='user.tokenObj.token')
+              | {{user.tokenObj.token}} &nbsp;
+              i.clock.icon
+              | ttl {{user.tokenObj.ttl | hms}}
+              .ui.mini.compact.button((click)='dropTempToken(user)') 删除Token
+              .ui.mini.compact.primary.button((click)='refreshTempToken(user)') 刷新Token
+            ng-template([ngIf]='!user.tokenObj.token')
+              | 无
+              .ui.mini.compact.primary.button((click)='genTempToken(user)') 生成Token
+          ng-template([ngIf]='!user.tokenObj')
+            .ui.mini.compact.basic.button((click)='getTempToken(user)') 查看Token
+        ng-template([ngIf]='!tokenOp')
+          .ui.mini.button((click)='messages(user)') 消息
+          ng-template([ngIf]='!editing(user)')
+            .ui.mini.button((click)='edit(user)') 修改
+          ng-template([ngIf]='editing(user)')
+            .ui.mini.button((click)='editingUser=null') 取消
+            .ui.mini.primary.button((click)='save()') 保存
     tr(*ngIf='!users||users.length===0')
-      td(colspan='5') No Results.
+      td(colspan='6') No Results.
   tfoot
     tr
-      th(colspan='5')
+      th(colspan='6')
         .ui.right.floated.mini.pagination.menu
           a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
             i.left.chevron.icon

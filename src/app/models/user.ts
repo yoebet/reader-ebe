@@ -7,6 +7,9 @@ export class User extends Model {
   role: string;
   status: string;
 
+  lastLogin?: any; // {time}
+  tokenObj?: any; // {token,ttl}
+
   static Roles = ['', 'A', 'E'];
 }
 

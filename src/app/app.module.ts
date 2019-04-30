@@ -29,6 +29,7 @@ import {CreatedDateStringPipe} from './pipes/created-date-string.pipe';
 import {ClientInfoPipe} from './pipes/client-info.pipe';
 import {PriceLabelPipe} from './pipes/price-label.pipe';
 import {FileSizePipe} from './pipes/file-size.pipe';
+import {SecondsToHmsPipe} from './pipes/seconds-to-hms.pipe';
 
 import {AppComponent} from './app.component';
 import {BookListComponent} from './book/book-list.component';
@@ -114,6 +115,7 @@ import {ReleaseListComponent} from './release/release-list.component';
     ClientInfoPipe,
     PriceLabelPipe,
     FileSizePipe,
+    SecondsToHmsPipe,
     CategoryListComponent,
     CategoryComponent,
     AnnoFamilyListComponent,

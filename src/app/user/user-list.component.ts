@@ -20,6 +20,7 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   editingUser: User;
   manager: false;
   searchName: string;
+  tokenOp = false;
 
   roleOptions = User.Roles;
 
@@ -113,6 +114,47 @@ export class UserListComponent extends PageableListComponent implements OnInit {
       .open(new MessagesModal(scope))
       // .onDeny((d) => {})
       .onApprove((r) => {
+      });
+  }
+
+  getTempToken(user: User) {
+    this.userService.getTempToken(user._id)
+      .subscribe(tokenObj => {
+        user.tokenObj = tokenObj || {};
+      });
+  }
+
+  genTempToken(user: User) {
+    this.userService.genTempToken(user._id)
+      .subscribe(tokenObj => {
+        if (tokenObj) {
+          user.tokenObj = tokenObj;
+        }
+      });
+  }
+
+  refreshTempToken(user: User) {
+    this.userService.refreshTempToken(user._id)
+      .subscribe(tokenObj => {
+        if (!tokenObj) {
+          alert('Token不存在');
+          return;
+        }
+        user.tokenObj = tokenObj;
+      });
+  }
+
+  dropTempToken(user: User) {
+    if (!confirm('要删除Token吗？')) {
+      return;
+    }
+    this.userService.dropTempToken(user._id)
+      .subscribe(opr => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        user.tokenObj = {};
       });
   }
 
