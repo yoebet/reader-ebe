@@ -1,17 +1,23 @@
-import {Component, SimpleChanges, ChangeDetectorRef} from '@angular/core';
+import {
+  Component, SimpleChanges, ChangeDetectorRef, ViewChild,
+  ViewContainerRef, ComponentFactory, ComponentRef, ComponentFactoryResolver
+} from '@angular/core';
 import {max} from 'lodash';
+import * as Drop from 'tether-drop';
 
+import {UIConstants} from "../config";
 import {DictEntry, PosMeanings, MeaningItem, PosTags} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
 import {DictBaseComponent} from './dict-base.component';
+import {DictSimpleSmiComponent} from "./dict-simple-smi.component";
 
 @Component({
   selector: 'dict-entry',
-  templateUrl: './dict-entry.component.html',
-  styleUrls: ['./dict-entry.component.css']
+  templateUrl: './dict-entry.component.html'
 })
 export class DictEntryComponent extends DictBaseComponent {
+  @ViewChild('phrasePopup', {read: ViewContainerRef}) phrasePopup: ViewContainerRef;
   initialWord: string;
   autoSaveOnAdoptItem = false;
   coTabActive = false;
@@ -27,8 +33,11 @@ export class DictEntryComponent extends DictBaseComponent {
   newItem: MeaningItem = null;
   posOptions = null;
 
+  simpleDictComponentRef: ComponentRef<DictSimpleSmiComponent>;
 
-  constructor(cdr: ChangeDetectorRef, dictService: DictService) {
+  constructor(private resolver: ComponentFactoryResolver,
+              cdr: ChangeDetectorRef,
+              dictService: DictService) {
     super(cdr, dictService);
   }
 
@@ -109,6 +118,7 @@ export class DictEntryComponent extends DictBaseComponent {
     }
     let ecm = this.editingCompleteMeanings
       .filter(pm => pm.items && pm.items.length > 0);
+    this.editingCompleteMeanings = null;
     let updateObj = {
       _id: entry._id,
       word: entry.word,
@@ -254,6 +264,45 @@ export class DictEntryComponent extends DictBaseComponent {
       this.coTabActive = true;
       this.saveEdit();
     }
+  }
+
+  clickPhrase(phrase, $event) {
+
+    if ($event.ctrlKey || $event.metaKey) {
+      this.goto(phrase);
+      return;
+    }
+
+    this.dictService.getEntry(phrase)
+      .subscribe(phraseEntry => {
+          if (!phraseEntry) {
+            return;
+          }
+
+          if (!this.simpleDictComponentRef) {
+            let factory: ComponentFactory<DictSimpleSmiComponent> = this.resolver
+              .resolveComponentFactory(DictSimpleSmiComponent);
+            this.phrasePopup.clear();
+            this.simpleDictComponentRef = this.phrasePopup.createComponent(factory);
+          }
+          let dscr = this.simpleDictComponentRef;
+
+          let drop = new Drop({
+            target: $event.target,
+            content: function () {
+              dscr.instance.entry = phraseEntry;
+              return dscr.location.nativeElement;
+            },
+            classes: `${UIConstants.dropClassPrefix}dict`,
+            position: 'bottom left',
+            constrainToScrollParent: false,
+            remove: true,
+            openOn: 'hover'//click,hover,always
+          });
+          drop.open();
+        }
+      );
+
   }
 
 }

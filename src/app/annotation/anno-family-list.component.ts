@@ -7,8 +7,7 @@ import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'annotation-family-list',
-  templateUrl: './anno-family-list.component.html',
-  styleUrls: ['./anno-family-list.component.css']
+  templateUrl: './anno-family-list.component.html'
 })
 export class AnnoFamilyListComponent implements OnInit {
 

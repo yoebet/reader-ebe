@@ -11,8 +11,7 @@ import {MessageScope} from '../message/message-scope';
 
 @Component({
   selector: 'user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css']
+  templateUrl: './user-list.component.html'
 })
 export class UserListComponent extends PageableListComponent implements OnInit {
   users: User[];

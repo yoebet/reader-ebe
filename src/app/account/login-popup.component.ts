@@ -8,8 +8,7 @@ import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'login-popup',
-  templateUrl: './login-popup.component.html',
-  styleUrls: ['./login-popup.component.css']
+  templateUrl: './login-popup.component.html'
 })
 export class LoginPopupComponent {
 

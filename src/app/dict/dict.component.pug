@@ -8,14 +8,14 @@
   .thirteen.wide.column
     .ui.right.floated.small.compact.menu
       a.item((click)='editSimple=true', [ngClass]='{active:editSimple}') 简单释义
-      a.item((click)='editSimple=false', [ngClass]='{active:!editSimple}') 详尽释义
+      a.item((click)='switchComplete()', [ngClass]='{active:!editSimple}') 详尽释义
     .ui.clearing.hidden.divider
     .ui.segment.small.form.filter-group
       .field
         .ui.right.floated.header(*ngIf='entry')
           button.ui.compact.mini.button((click)='loadPreviousEntry()')
             i.left.arrow.icon
-          span {{entry.word}}
+          span.nav-word {{entry.word}}
           button.ui.compact.mini.button((click)='loadNextEntry()')
             i.right.arrow.icon
         .grouped.fields.search

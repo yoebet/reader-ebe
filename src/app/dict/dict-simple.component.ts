@@ -7,8 +7,7 @@ import {DictBaseComponent} from './dict-base.component';
 
 @Component({
   selector: 'dict-simple',
-  templateUrl: './dict-simple.component.html',
-  styleUrls: ['./dict-entry.component.css']
+  templateUrl: './dict-simple.component.html'
 })
 export class DictSimpleComponent extends DictBaseComponent {
   sortMeaningItems = false;
@@ -42,6 +41,7 @@ export class DictSimpleComponent extends DictBaseComponent {
     } else {
       this.editingMeanings = [];
     }
+    // console.log('startEditing: ' + this.entry.word + ' ' + JSON.stringify(this.editingMeanings));
     this.editing = true;
   }
 
@@ -70,6 +70,7 @@ export class DictSimpleComponent extends DictBaseComponent {
     }
 
     let em = this.editingMeanings;
+    // console.log('saveEdit: ' + entry.word + ' ' + JSON.stringify(this.editingMeanings));
     let updateObj = {
       _id: entry._id,
       word: entry.word,
@@ -110,7 +111,6 @@ export class DictSimpleComponent extends DictBaseComponent {
     this.editingMeanings = this.editingMeanings.filter(m => m !== item);
     this.stopEvent($event);
   }
-
 
   moveUpMeaningItem(item: SimpleMeaning, $event) {
     let index = this.editingMeanings.indexOf(item);

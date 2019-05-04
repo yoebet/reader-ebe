@@ -9,8 +9,7 @@ import {ParaSaver} from '../content-types/para-saver';
 
 @Component({
   selector: 'para-split',
-  templateUrl: './para-split.component.html',
-  styleUrls: ['./para-split.component.css']
+  templateUrl: './para-split.component.html'
 })
 export class ParaSplitComponent {
   para: Para;

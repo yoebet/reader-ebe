@@ -5,8 +5,7 @@ import {DictService} from '../services/dict.service';
 
 @Component({
   selector: 'dict-simple-smi',
-  templateUrl: './dict-simple-smi.component.html',
-  styleUrls: ['./dict-simple-smi.component.css']
+  templateUrl: './dict-simple-smi.component.html'
 })
 export class DictSimpleSmiComponent {
   private _entry: DictEntry;

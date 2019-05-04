@@ -10,8 +10,7 @@ import {DictEntry, MeaningItem, SimpleMeaning} from '../models/dict-entry';
 
 @Component({
   selector: 'dict-entry-smi',
-  templateUrl: './dict-entry-smi.component.html',
-  styleUrls: ['./dict-entry-smi.component.css']
+  templateUrl: './dict-entry-smi.component.html'
 })
 export class DictEntrySmiComponent extends DictBaseComponent implements AfterViewChecked {
   @Input() initialSelectedItem: SelectedItem;

@@ -14,8 +14,7 @@ class SentenceRow extends Row {
 
 @Component({
   selector: 'para-split',
-  templateUrl: './sentence-align.component.html',
-  styleUrls: ['./sentence-align.component.css']
+  templateUrl: './sentence-align.component.html'
 })
 export class SentenceAlignComponent {
   rows: SentenceRow[];

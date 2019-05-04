@@ -160,5 +160,7 @@
               span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items
-        a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)')
+        a.ui.item(*ngFor='let phrase of entry.phrases', (click)='clickPhrase(phrase,$event)')
           | {{phrase}}
+
+  ng-template(#phrasePopup='')

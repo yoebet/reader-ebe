@@ -97,6 +97,16 @@ export class DictComponent {
     this.entry = entry;
   }
 
+  switchComplete() {
+    this.editSimple = false;
+    if (this.entry && typeof this.entry.complete === 'undefined') {
+      this.dictService.getEntry(this.entry.word, {})
+        .subscribe(e => {
+            this.entry = e;
+          }
+        );
+    }
+  }
 
   private loadAdjacentOne(direction: string) {
     if (!this.entry) {

@@ -101,7 +101,7 @@ export abstract class DictBaseComponent implements OnInit, OnChanges, OnDestroy 
 
     this.categoryTags = DictEntry.EvaluateCategoryTags(entry.categories);
     this.resetRefWords();
-    if (this.autoEnterEditing) {
+    if (this.editing || this.autoEnterEditing) {
       this.startEditing();
     }
     this.cdr.detectChanges();
@@ -115,9 +115,6 @@ export abstract class DictBaseComponent implements OnInit, OnChanges, OnDestroy 
           }
           this.entryStack.push(this.entry);
           this.entry = e;
-          if (this.autoEnterEditing) {
-            this.startEditing();
-          }
           this.onEntryChanged();
         }
       );
@@ -131,9 +128,6 @@ export abstract class DictBaseComponent implements OnInit, OnChanges, OnDestroy 
   goback() {
     if (this.entryStack.length > 0) {
       this.entry = this.entryStack.pop();
-      if (this.autoEnterEditing) {
-        this.startEditing();
-      }
       this.onEntryChanged();
     }
   }
