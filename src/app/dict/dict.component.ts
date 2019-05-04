@@ -94,13 +94,21 @@ export class DictComponent {
   }
 
   selectHistoryEntry(entry) {
-    this.entry = entry;
+    if (this.editSimple || typeof this.entry.complete !== 'undefined') {
+      this.entry = entry;
+      return;
+    }
+    this.dictService.getEntry(entry.word, {fields: DictFields.COMPLETE})
+      .subscribe(e => {
+          this.entry = e;
+        }
+      );
   }
 
   switchComplete() {
     this.editSimple = false;
     if (this.entry && typeof this.entry.complete === 'undefined') {
-      this.dictService.getEntry(this.entry.word, {})
+      this.dictService.getEntry(this.entry.word, {fields: DictFields.COMPLETE})
         .subscribe(e => {
             this.entry = e;
           }
@@ -139,7 +147,7 @@ export class DictComponent {
   }
 
   clearHistory() {
-    this.dictService.clearCache();
+    this.dictService.clearHistory();
   }
 
 }

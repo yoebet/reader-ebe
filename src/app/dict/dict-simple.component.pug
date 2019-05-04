@@ -2,11 +2,8 @@
   .ui.header.entry-header
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
-    .phonetics(*ngIf='entry.phonetics')
-      label.ui.small.label 英
-      span {{entry.phonetics['UK']}}
-      label.ui.small.label 美
-      span {{entry.phonetics['US']}}
+    dict-phonetics([phonetics]='entry.phonetics')
+
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
   .clearing
@@ -36,7 +33,7 @@
               i.refresh.icon
               | 完全采用
           i.dropdown.icon
-          | 简单释义 参考（HC）
+          | 参考（HC）
         .ui.selection.divided.list.meaning-items(content='')
           .ui.item(*ngFor='let item of entry.simpleHc')
             .ui.right.floated.basic.mini.compact.button(*ngIf='editing&&editingMeanings', (click)='importMeaningItem(item,"hc")')
@@ -50,7 +47,7 @@
               i.refresh.icon
               | 完全采用
           i.dropdown.icon
-          | 简单释义 参考（YD）
+          | 参考（YD）
         .ui.selection.divided.list.meaning-items(content='')
           .ui.item(*ngFor='let item of entry.simpleYd')
             .ui.right.floated.basic.mini.compact.button(*ngIf='editing&&editingMeanings', (click)='importMeaningItem(item,"yd")')
@@ -64,7 +61,7 @@
               i.add.icon
               | 释义
           i.dropdown.icon
-          | 简单释义 编辑
+          | 简单释义
         .ui.selection.divided.list.meaning-items(content='')
           .ui.item(*ngFor='let item of editingMeanings; first as firstItem; last as lastItem', [ngClass]='{"editing-item":item===editingItem}')
             .ui.right.floated.sub.header

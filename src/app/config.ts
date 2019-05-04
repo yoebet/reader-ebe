@@ -43,6 +43,7 @@ const SpecialAnnotations = {
   }
 };
 
+const DictHistoryCapacity = 20;
 const LatestAnnotationsCount = 8;
 
 const staticBase = environment.staticBase;
@@ -59,6 +60,7 @@ export {
   DataAttrNames,
   DataAttrValues,
   SpecialAnnotations,
+  DictHistoryCapacity,
   LatestAnnotationsCount,
   BookImagesBase,
   BookImageNotSet,

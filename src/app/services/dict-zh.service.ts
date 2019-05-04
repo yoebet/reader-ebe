@@ -6,6 +6,7 @@ import {map, tap, catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {DictHistoryCapacity} from '../config';
 import {environment} from '../../environments/environment';
 import {ZhPhrases} from '../anno/zh-phrases';
 import {DictZh} from '../models/dict-zh';
@@ -39,7 +40,7 @@ export class DictZhService extends BaseService<DictZh> {
     if (!inHistory) {
       eh.push(entry);
     }
-    if (eh.length > 10) {
+    if (eh.length > DictHistoryCapacity) {
       eh.shift();
     }
   }

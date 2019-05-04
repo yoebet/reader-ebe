@@ -53,6 +53,7 @@ import {DictEntryComponent} from './dict/dict-entry.component';
 import {DictSimpleComponent} from './dict/dict-simple.component';
 import {DictSimpleSmiComponent} from './dict/dict-simple-smi.component';
 import {DictEntrySmiComponent} from './dict/dict-entry-smi.component';
+import {DictPhoneticsComponent} from './dict/dict-phonetics.component';
 import {DictZhComponent} from './dict-zh/dict-zh.component';
 import {DictZhEntryComponent} from './dict-zh/dict-zh-entry.component';
 import {DictZhEntrySmiComponent} from './dict-zh/dict-zh-entry-smi.component';
@@ -100,6 +101,7 @@ import {ReleaseListComponent} from './release/release-list.component';
     DictComponent,
     DictEntryComponent,
     DictEntrySmiComponent,
+    DictPhoneticsComponent,
     DictSimpleComponent,
     DictSimpleSmiComponent,
     DictZhComponent,

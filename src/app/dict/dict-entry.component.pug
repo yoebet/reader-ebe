@@ -2,11 +2,8 @@
   .ui.header.entry-header
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
-    .phonetics(*ngIf='entry.phonetics')
-      label.ui.small.label 英
-      span {{entry.phonetics['UK']}}
-      label.ui.small.label 美
-      span {{entry.phonetics['US']}}
+    dict-phonetics([phonetics]='entry.phonetics')
+
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
   .clearing
@@ -76,7 +73,7 @@
                   labelField='label', icon='list', placeholder='标签', #tagsSelect='')
                     .scrolling.menu
                       sui-select-option(*ngFor='let o of tagsSelect.filteredOptions', [value]='o')
-                .eight.wide.field
+                .ten.wide.field
                   input.ui.mini.input([(ngModel)]='item.exp')
                 .field
                   button.ui.basic.tiny.button((click)='editingMeaningItem=null')
@@ -85,19 +82,20 @@
               span.meaning-item([hidden]='item===editingMeaningItem')
                 span.ui.mini.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 span {{item.exp}}
-            .fields(*ngIf='pm===editingPosMeanings && newItem')
-              .field
-                sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
-                labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
-                  .scrolling.menu
-                    sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
-              .seven.wide.field
-                input.ui.mini.input([(ngModel)]='newItem.exp')
-              .field
-                button.ui.tiny.button((click)='newItem=null') 取消
-                button.ui.basic.tiny.button((click)='addMeaningItem()')
-                  i.checkmark.icon
-                  | 增加
+            .ui.item.editing-item(*ngIf='pm===editingPosMeanings && newItem')
+              .fields
+                .field
+                  sui-multi-select([(ngModel)]='newItem.tags', [options]='posTags', valueField="value",
+                  labelField='label', icon='list', placeholder='标签', #tagsSelect2='')
+                    .scrolling.menu
+                      sui-select-option(*ngFor='let o of tagsSelect2.filteredOptions', [value]='o')
+                .ten.wide.field
+                  input.ui.mini.input([(ngModel)]='newItem.exp')
+                .field
+                  button.ui.tiny.button((click)='newItem=null') 取消
+                  button.ui.basic.tiny.button((click)='addMeaningItem()')
+                    i.checkmark.icon
+                    | 增加
         .new-pos.clearing
           .ui.right.floated.header
             .ui.basic.primary.mini.button(*ngIf='!newPos', (click)='newPosMeanings()')

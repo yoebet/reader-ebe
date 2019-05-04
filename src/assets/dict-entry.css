@@ -5,6 +5,7 @@
 
 .entry-word, .categories, .phonetics {
   display: inline;
+  vertical-align: text-bottom;
 }
 
 .phonetics {
@@ -43,11 +44,11 @@ span.pinyin {
 .ui.list.meaning-items {
   margin-top: 0;
   margin-left: 2em !important;
-  overflow: auto;
 }
 
 .ui.list.meaning-items.smi {
   max-height: 300px;
+  overflow: auto;
 }
 
 .ui.list.meaning-items .item sui-select-option {
@@ -74,8 +75,12 @@ input.ui.mini.input {
   padding: 0.57em 1em;
 }
 
-.meaning-items > .editing-item.item:before {
+.meaning-items > .item.editing-item:before {
   top: 0.7em;
+}
+
+.item.editing-item .fields {
+  margin: 0em 1em;
 }
 
 .ui.selection.list > .item {

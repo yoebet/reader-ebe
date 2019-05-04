@@ -1,0 +1,7 @@
+.phonetics(*ngIf='phonetics')
+  ng-template([ngIf]='phonetics["UK"]')
+    label.ui.small.label 英
+    span {{phonetics['UK']}}
+  ng-template([ngIf]='phonetics["US"]')
+    label.ui.small.label 美
+    span {{phonetics['US']}}
