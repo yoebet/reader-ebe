@@ -105,6 +105,10 @@ export class DictComponent {
       );
   }
 
+  entryTracker(index, entry) {
+    return entry.word;
+  }
+
   switchComplete() {
     this.editSimple = false;
     if (this.entry && typeof this.entry.complete === 'undefined') {

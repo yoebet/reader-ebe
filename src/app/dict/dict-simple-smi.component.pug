@@ -1,6 +1,5 @@
 .ui.small.header
   dict-phonetics.ui.right.floated.tiny.header([phonetics]='entry.phonetics')
-
   | {{word}}
 .ui.list(*ngIf='entry')
   .ui.item(*ngFor='let item of entry.simple')

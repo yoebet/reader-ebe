@@ -1,3 +1,8 @@
+dict-entry-smi > .dict-entry {
+  max-height: 96vh;
+  overflow: auto;
+}
+
 .entry-word {
   padding-right: 0.8em;
   font-size: 1.4em;
@@ -10,6 +15,10 @@
 
 .phonetics {
   padding-right: 1em;
+}
+
+.phonetics * {
+  vertical-align: middle;
 }
 
 span.pinyin {

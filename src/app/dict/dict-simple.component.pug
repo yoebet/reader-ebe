@@ -3,19 +3,10 @@
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
     dict-phonetics([phonetics]='entry.phonetics')
-
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
   .clearing
 
-  .ui.horizontal.list.base-forms(*ngIf='refWords||entryStack.length > 0')
-    a.ui.item(*ngIf='entryStack.length > 0', (click)='goback()')
-      i.left.arrow.icon
-      | {{entryStack[entryStack.length-1].word}}
-    a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)')
-      | {{word}}
-
-  .ui.clearing.divider
   .ui.small.form
     .ui.right.floated.sub.header
       sui-checkbox(*ngIf='editing', [(ngModel)]="deleteItems") 删除
@@ -23,6 +14,12 @@
       .ui.mini.button(*ngIf='editing', (click)='cancelEdit()') 取消
       .ui.mini.primary.button(*ngIf='editing', (click)='saveEdit()') 完成
       .ui.mini.button(*ngIf='!editing', (click)='startEditing()') 编辑
+    .ui.horizontal.list.base-forms(*ngIf='refWords||entryStack.length > 0')
+      a.ui.item(*ngIf='entryStack.length > 0', (click)='goback()')
+        i.left.arrow.icon
+        | {{entryStack[entryStack.length-1].word}}
+      a.ui.item(*ngFor='let word of refWords||[]', (click)='goto(word)')
+        | {{word}}
     .ui.clearing.divider
 
     sui-accordion([closeOthers]='false')
@@ -40,7 +37,7 @@
               i.add.icon
               | 加入
             | {{item.pos}} {{item.exp}}
-      sui-accordion-panel(*ngIf='entry.simpleYd', [isOpen]='true')
+      //sui-accordion-panel(*ngIf='entry.simpleYd', [isOpen]='true')
         .pos-header(title='')
           .ui.right.floated.sub.header(*ngIf='editing&&editingMeanings')
             .ui.mini.button((click)='useMeanings(entry.simpleYd,$event)')

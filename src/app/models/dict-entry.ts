@@ -67,16 +67,16 @@ export class DictEntry extends Model {
           }
         }
       }
-      /*if (categories.haici) {
-        tags.push(`海词 ${categories.haici}星`);
-      }*/
-      let wordFreqs = ['coca', 'bnc', 'anc'];
-      for (let freqName of wordFreqs) {
-        let rank = categories[freqName];
-        if (rank) {
-          let align3 = rank + (3 - rank % 3);
-          tags.push(`${freqName.toUpperCase()} ${align3}000`);
-        }
+    }
+    if (categories.haici) {
+      tags.push(`海词 ${categories.haici}星`);
+    }
+    let wordFreqs = ['coca', 'bnc', 'anc'];
+    for (let freqName of wordFreqs) {
+      let rank = categories[freqName];
+      if (rank) {
+        let align3 = rank + (3 - rank % 3);
+        tags.push(`${freqName.toUpperCase()} ${align3}000`);
       }
     }
 

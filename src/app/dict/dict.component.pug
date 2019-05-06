@@ -1,7 +1,7 @@
 .ui.grid
   .three.wide.column
     .ui.list.words-history
-      a.item(*ngFor='let entry of entryHistory', (click)='selectHistoryEntry(entry)')
+      a.item(*ngFor='let entry of entryHistory; trackBy: entryTracker', (click)='selectHistoryEntry(entry)')
         | {{entry.word}}
       .item(*ngIf='entryHistory.length>0')
         a.ui.right.floated((click)='clearHistory()') 清空
