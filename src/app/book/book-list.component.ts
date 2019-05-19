@@ -15,13 +15,14 @@ import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
+import {SortableListComponent} from "../common/sortable-list.component";
 
 @Component({
   selector: 'book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent extends SortableListComponent implements OnInit {
   @ViewChild('newBookCode') newBookCodeEl: ElementRef;
   @ViewChild('newBookName') newBookNameEl: ElementRef;
   books: Book[] = [];
@@ -41,10 +42,19 @@ export class BookListComponent implements OnInit {
     return this.sessionService.currentUser;
   }
 
+  get modelList() {
+    return this.books;
+  }
+
+  get sortableService() {
+    return this.bookService;
+  }
+
   constructor(private bookService: BookService,
               private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
               private modalService: SuiModalService) {
+    super();
   }
 
   ngOnInit(): void {

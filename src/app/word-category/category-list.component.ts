@@ -22,7 +22,6 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
 
   recountOperation = false;
   removeOperation = false;
-  tuneOrder = false;
 
   constructor(private wordCategoryService: WordCategoryService,
               private router: Router) {

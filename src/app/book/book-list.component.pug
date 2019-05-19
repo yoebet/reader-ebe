@@ -2,7 +2,8 @@
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='showZh') 中文
     ng-template([ngIf]='currentUser && currentUser.role==="R"')
-      sui-checkbox([(ngModel)]='privilegeOperations') 更多操作
+      sui-checkbox([(ngModel)]='tuneOrder') 排序
+      sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
   | 图书
 
 table.ui.striped.table
@@ -32,17 +33,31 @@ table.ui.striped.table
       td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td.right.aligned
-        ng-template([ngIf]="!privilegeOperations")
-          a((click)='showDetail(book)', href='javascript:') 详情
-          | &nbsp;&nbsp;
-          a((click)='showForm(book)', href='javascript:') 修改
-          | &nbsp;&nbsp;
-          a((click)='showUsers(book)', href='javascript:') 人员
-        ng-template([ngIf]="privilegeOperations")
-          a((click)='showPacks(book)', href='javascript:') 内容包
-          | &nbsp;&nbsp;
-          button.ui.tiny.compact.button((click)='backup(book)') 复制
-          //button.ui.tiny.button((click)='remove(book)') 删除
+        ng-template([ngIf]="tuneOrder")
+          button.ui.tiny.button(*ngIf='!first', (click)='moveUp(book)')
+            i.angle.arrow.up.icon
+            | up
+          button.ui.tiny.button(*ngIf='!last', (click)='moveDown(book)')
+            i.angle.arrow.down.icon
+            | down
+          button.ui.tiny.button(*ngIf='!first', (click)='moveTop(book)')
+            i.angle.double.up.icon
+            | top
+          button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(book)')
+            i.angle.double.down.icon
+            | bottom
+        ng-template([ngIf]="!tuneOrder")
+          ng-template([ngIf]="!privilegeOperations")
+            a((click)='showDetail(book)', href='javascript:') 详情
+            | &nbsp;&nbsp;
+            a((click)='showForm(book)', href='javascript:') 修改
+            | &nbsp;&nbsp;
+            a((click)='showUsers(book)', href='javascript:') 人员
+          ng-template([ngIf]="privilegeOperations")
+            a((click)='showPacks(book)', href='javascript:') 内容包
+            | &nbsp;&nbsp;
+            button.ui.tiny.compact.button((click)='backup(book)') 复制
+            //button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
       td(colspan='6') No Results.
 

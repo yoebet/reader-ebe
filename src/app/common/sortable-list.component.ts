@@ -2,6 +2,8 @@ import {OpResult} from '../models/op-result';
 
 export abstract class SortableListComponent {
 
+  tuneOrder = false;
+
   abstract get modelList();
   abstract get sortableService();
 

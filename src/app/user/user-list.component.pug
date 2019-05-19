@@ -1,11 +1,11 @@
 .ui.header
-  .ui.right.floated.header
-    sui-checkbox([(ngModel)]='tokenOp') Token操作
   | 用户
 
 .ui.small.form
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='tokenOp') Token操作
   .fields
-    .sixteen.wide.inline.field
+    .inline.field
       input([(ngModel)]='searchName', placeholder='Name')
       sui-checkbox([(ngModel)]='manager') 管理维护人员
       button.ui.tiny.button((click)="search()") 查找

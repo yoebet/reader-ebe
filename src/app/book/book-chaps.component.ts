@@ -16,9 +16,8 @@ import {BookService} from '../services/book.service';
 export class BookChapsComponent extends SortableListComponent implements OnInit {
   @Input() book: Book;
   contentPack = false;
-  tuneOrder = false;
   showRemove = false;
-  showZh = false;
+  showZh = true;
   editingChap: Chap;
   editNew = false;
   statusNames = Book.StatusNames;
