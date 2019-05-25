@@ -89,6 +89,11 @@ export class Book extends Model {
     Public: 'p'
   };
 
+  static PricingModes = [
+    {value: 'B', label: '整书'},
+    {value: 'C', label: '按章节'}
+  ];
+
 }
 
 export class BookImage {

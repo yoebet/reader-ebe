@@ -11,7 +11,7 @@ export class User extends Model {
   tokenObj?: any; // {token, ttl}
   avatarSetting?: any; // {type: 'img/char', imgUrl: 'xxx', ...}
 
-  static Roles = ['', 'A', 'E'];
+  static Roles = ['', 'A', 'E', 'P'];
 }
 
 export class UserIdName {
