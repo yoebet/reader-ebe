@@ -1,0 +1,41 @@
+.ui.header
+  | 订单
+
+.ui.small.form
+  .fields
+    .inline.field
+      input([(ngModel)]='searchOrderNo', placeholder='Order No.')
+      button.ui.tiny.button((click)="search()") 查找
+      button.ui.tiny.button((click)="searchReset()") 全部
+
+table.ui.small.striped.table
+  thead
+    tr
+      th 单号
+      th 用户
+      th 产品
+      th 价格
+      th 状态
+      th
+        ng-template([ngIf]='tokenOp') 临时Token
+  tbody
+    tr(*ngFor='let order of orders; trackBy: orderTracker')
+      td {{order.orderNo}}
+      td {{order.userNickName}}（{{order.userName}}）
+      td {{order.productDesc}}
+      td.right.aligned {{order.totalFee && (order.totalFee/100).toFixed(2)}}
+      td {{order.status}}
+      td.right.aligned
+    tr(*ngIf='!orders||orders.length===0')
+      td(colspan='6') No Results.
+  tfoot
+    tr
+      th(colspan='6')
+        .ui.right.floated.mini.pagination.menu
+          a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+            i.left.chevron.icon
+          a.item.disabled {{page}}
+          a.icon.item([ngClass]='{disabled:!orders||orders.length<pageSize}', (click)='nextPage()')
+            i.right.chevron.icon
+
+.ui.hidden.clearing.divider
