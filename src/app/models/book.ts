@@ -25,7 +25,9 @@ export class Book extends Model {
   chapsComplete: boolean;
 
   isFree: boolean;
+  pricingMode: string; // B,C
   price: number; // cents
+  pricePerChap: number;
   priceLabel: string;
 
   slogan: string;

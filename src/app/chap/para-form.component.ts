@@ -48,8 +48,17 @@ export class ParaFormComponent implements OnInit {
     this.paraSaver.cancelEdit();
   }
 
-  splitParas() {
-    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver};
+  splitParasByLflf() {
+    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver, splitPat: /\n\n+/};
+    this.modalService
+      .open(new ParaSplitModal(context))
+      // .onDeny((d) => {})
+      .onApprove((paras: Para[]) => {
+      });
+  }
+
+  splitParasByLf() {
+    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver, splitPat: /\n+/};
     this.modalService
       .open(new ParaSplitModal(context))
       // .onDeny((d) => {})

@@ -116,17 +116,25 @@ export class BaseService<M extends Model> {
   }
 
   protected extractErrorMessage(error: any): string {
-    let errorString = error.error;
-    if (typeof errorString !== 'string') {
+    let ee = error.error;
+    if (typeof ee === 'object') {
+      let message=ee.message;
+      if (message && typeof message === 'string') {
+        return message;
+      }
+      return null;
+    }
+    if (typeof ee !== 'string') {
       return null;
     }
     try {
-      let eo = JSON.parse(errorString);
+      let jsonStr = ee.replace(/([\w]+):/g, '"$1":');
+      let eo = JSON.parse(jsonStr);
       if (eo && typeof eo.message === 'string') {
         return eo.message;
       }
     } catch (e) {
-      console.error('>> ' + errorString);
+      console.error('>> ' + ee);
     }
     return null;
   }

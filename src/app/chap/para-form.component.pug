@@ -4,9 +4,14 @@
   .para-textarea.trans-textarea(*ngIf='showTrans')
     textarea([(ngModel)]="para.trans", #trans='', spellcheck='false')
 .field.operations
-  button.ui.tiny.button((click)='splitParas()')
-    i.paragraph.icon
-    | 分段
+  .ui.tiny.buttons
+    button.ui.button((click)='splitParasByLflf()')
+      i.paragraph.icon
+      | 分段 按空行
+    .or
+    button.ui.button((click)='splitParasByLf()')
+      | 按换行
+  | &nbsp;&nbsp;
   button.ui.tiny.button((click)='alignSentences()')
     i.align.left.icon
     | 分句

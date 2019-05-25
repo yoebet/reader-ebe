@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppRelease, AppPlatform} from '../models/app-release';
 
-import {AppPackagesBase} from '../config';
+import {StaticResource} from '../config';
 import {ReleaseService} from '../services/release.service';
 import {OpResult} from '../models/op-result';
 
@@ -20,7 +20,7 @@ export class ReleaseListComponent implements OnInit {
 
   uploading = false;
 
-  appPackagesBase = AppPackagesBase;
+  appPackagesBase = StaticResource.AppPackagesBase;
 
   constructor(private  releaseService: ReleaseService) {
   }

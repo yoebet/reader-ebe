@@ -19,6 +19,8 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   showRemove = false;
   showZh = true;
   editingChap: Chap;
+  editChapStatus = false;
+  editingChapFree;
   editNew = false;
   statusNames = Book.StatusNames;
   statusOptions = Book.Statuses;
@@ -77,15 +79,23 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
 
   edit(chap: Chap): void {
     this.editingChap = chap;
+    this.editingChapFree = this.editingChap.isFree;
+    this.editChapStatus = false;
   }
 
-  saveChap(chap: Chap, name: string, zhName: string, status: string): void {
+  editStatus(chap: Chap): void {
+    this.editingChap = chap;
+    this.editingChapFree = this.editingChap.isFree;
+    this.editChapStatus = true;
+  }
+
+  saveChap(chap: Chap, name: string, zhName: string): void {
     name = name.trim();
     if (!name) {
       return;
     }
     zhName = zhName.trim();
-    let chapAltered = {name, zhName, status} as Chap;
+    let chapAltered = {name, zhName} as Chap;
     chapAltered._id = chap._id;
     this.chapService.update(chapAltered).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
@@ -94,7 +104,22 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
       }
       chap.name = name;
       chap.zhName = zhName;
+      this.editingChap = null;
+    });
+  }
+
+  saveChapStatus(chap: Chap, status: string): void {
+    let isFree = this.editingChapFree;
+    console.log(isFree);
+    let chapAltered = {status, isFree} as Chap;
+    chapAltered._id = chap._id;
+    this.chapService.update(chapAltered).subscribe((opr: OpResult) => {
+      if (opr.ok === 0) {
+        alert(opr.message || 'Fail');
+        return;
+      }
       chap.status = status;
+      chap.isFree = isFree;
       this.editingChap = null;
     });
   }

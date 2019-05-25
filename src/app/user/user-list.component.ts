@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {StaticResource} from '../config';
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
 import {PageableListComponent} from '../common/pageable-list.component';
@@ -22,9 +22,9 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   tokenOp = false;
 
   roleOptions = User.Roles;
+  userAvatarsBase = StaticResource.UserAvatarsBase;
 
   constructor(private userService: UserService,
-              private router: Router,
               public modalService: SuiModalService) {
     super();
   }
@@ -155,10 +155,6 @@ export class UserListComponent extends PageableListComponent implements OnInit {
         }
         user.tokenObj = {};
       });
-  }
-
-  gotoDetail(user: User): void {
-    this.router.navigate(['/users', user._id]);
   }
 
   userTracker(index, user) {

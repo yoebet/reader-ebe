@@ -14,6 +14,7 @@
 table.ui.small.striped.table
   thead
     tr
+      th
       th 登录名
       th 昵称
       th 注册于
@@ -24,7 +25,9 @@ table.ui.small.striped.table
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
-        a((click)='gotoDetail(user)', [routerLink]="['/users', user._id]") {{user.name}}
+        img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='userAvatarsBase+"/"+user.avatarSetting.imgUrl')
+      td
+        a([routerLink]="['/users', user._id]") {{user.name}}
       td {{user.nickName}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
@@ -56,10 +59,10 @@ table.ui.small.striped.table
             .ui.mini.button((click)='editingUser=null') 取消
             .ui.mini.primary.button((click)='save()') 保存
     tr(*ngIf='!users||users.length===0')
-      td(colspan='6') No Results.
+      td(colspan='7') No Results.
   tfoot
     tr
-      th(colspan='6')
+      th(colspan='7')
         .ui.right.floated.mini.pagination.menu
           a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
             i.left.chevron.icon

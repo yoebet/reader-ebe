@@ -75,15 +75,6 @@ export class BookFormComponent implements OnInit {
     Object.assign(editing, this.book);
     delete editing.chaps;
     delete editing.updatedAt;
-    /*if (editing.author == null) {
-      editing.author = '';
-    }
-    if (editing.zhName == null) {
-      editing.zhName = '';
-    }
-    if (editing.zhAuthor == null) {
-      editing.zhAuthor = '';
-    }*/
     this.editing = editing;
   }
 
@@ -134,7 +125,17 @@ export class BookFormComponent implements OnInit {
 
   updatePriceLabel() {
     let book = this.editing;
-    book.priceLabel = this.priceLabelPipe.transform(book);
+    if (book.isFree) {
+      book.priceLabel = '免费';
+      return;
+    }
+    let pipe = this.priceLabelPipe;
+    if (book.pricingMode === 'B') {
+      book.priceLabel = pipe.transform({price: book.price});
+    } else if (book.pricingMode === 'C') {
+      let priceLabel = pipe.transform({price: book.pricePerChap});
+      book.priceLabel = `${priceLabel}/章`;
+    }
   }
 
   close() {

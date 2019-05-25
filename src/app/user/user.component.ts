@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
 
+import {StaticResource} from '../config';
 import {User} from '../models/user';
 import {Book} from '../models/book';
 import {UserBook} from '../models/user-book';
@@ -24,6 +25,7 @@ export class UserComponent implements OnInit {
   bookRoleOptions = UserBook.Roles;
   editingUserBook: UserBook;
   statusNames = Book.StatusNames;
+  userAvatarsBase = StaticResource.UserAvatarsBase;
 
   constructor(private userService: UserService,
               private bookService: BookService,

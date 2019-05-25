@@ -1,6 +1,10 @@
 .ui.header.para-split-header
   | 分段 & 对齐
-  span.tip （按空行分段）
+  span.tip
+    | （按
+    span.split-by-lflf(*ngIf='splitBy2Lf') 空行
+    span.split-by-lf(*ngIf='!splitBy2Lf') 换行
+    | 分段）
 .ui.content
   .ui.column.grid.form.para-split
     .row.split-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')

@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
-import {BookImagesBase, BookImageNotSet} from '../config';
+import {StaticResource} from '../config';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
@@ -33,8 +33,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
   categoryNames = Book.CategoryNames;
-  bookImagesBase = BookImagesBase;
-  bookImageNotSet = BookImageNotSet;
+  bookImagesBase = StaticResource.BookImagesBase;
+  bookImageNotSet = StaticResource.BookImageNotSet;
 
   annOptions: AnnotationFamily[];
 
@@ -98,13 +98,13 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
   add(): void {
     let book = this.newBook;
-    /*if (book.code) {
+    if (book.code) {
       book.code = book.code.trim();
     }
     if (!book.code) {
       this.newBookCodeEl.nativeElement.focus();
       return;
-    }*/
+    }
     if (book.name) {
       book.name = book.name.trim();
     }
@@ -115,6 +115,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     book.author = book.author.trim();
     book.zhName = book.zhName.trim();
     book.zhAuthor = book.zhAuthor.trim();
+    book.isFree = false;
+    book.pricingMode = 'B';
     this.bookService.create(book)
       .subscribe(newBook => {
         this.books.push(newBook);

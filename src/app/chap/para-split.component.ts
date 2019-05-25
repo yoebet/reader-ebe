@@ -17,18 +17,21 @@ export class ParaSplitComponent {
   rows: Row[];
   editingRow = null;
   editingPart = null;
+  splitPat = null;
+  splitBy2Lf: boolean;
 
   constructor(private modal: SuiModal<ParaSplitContext, Para[], string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
     let context = modal.context;
     this.para = context.para;
     this.paraSaver = context.paraSaver;
+    this.splitPat = context.splitPat;
+    this.splitBy2Lf = this.splitPat.source === '\\n\\n+';
 
     let {content, trans} = this.para;
 
-    let splitPat = /\n\n+/;
-    let contents = content.split(splitPat);
-    let transs = trans.split(splitPat);
+    let contents = content.split(this.splitPat);
+    let transs = trans.split(this.splitPat);
     this.rows = [];
 
     let length = Math.max(contents.length, transs.length);
@@ -45,42 +48,45 @@ export class ParaSplitComponent {
   onKeyup(index, part, $event) {
     $event.stopPropagation();
     let textarea = $event.target;
-    let idx = textarea.value.indexOf('\n\n');
-    if ($event.keyCode === 13 && idx >= 0) {
-      let texts = textarea.value.split(/\n\n+/);
-      let addedRowCount = texts.length - 1;
-      let fixIndex = findIndex(this.rows, r => r.fix, index + 1);
-      if (fixIndex === -1) {
-        fixIndex = this.rows.length;
-      }
-      for (let i = fixIndex - 1; i > index; i--) {
-        let r = this.rows[i];
-        if (r[part] == '' && addedRowCount > 0) {
-          addedRowCount--;
-        }
-      }
-      for (let i = index + 1; i < fixIndex; i++) {
-        let row = this.rows[i];
-        if (row[part] !== '') {
-          texts.push(row[part]);
-          row[part] = '';
-        }
-      }
-      if (addedRowCount > 0) {
-        let newRows = [];
-        for (let i = 0; i < addedRowCount; i++) {
-          newRows.push(new Row());
-        }
-        this.rows.splice(index + 1, 0, ...newRows);
-      }
-      let ri = index;
-      for (let text of texts) {
-        let r = this.rows[ri];
-        r[part] = text;
-        ri++;
-      }
-      this.editingRow = this.rows[index + 1];
+    if ($event.keyCode !== 13) {
+      return;
     }
+    let texts = textarea.value.split(this.splitPat);
+    if (texts.length === 1) {
+      return;
+    }
+    let addedRowCount = texts.length - 1;
+    let fixIndex = findIndex(this.rows, r => r.fix, index + 1);
+    if (fixIndex === -1) {
+      fixIndex = this.rows.length;
+    }
+    for (let i = fixIndex - 1; i > index; i--) {
+      let r = this.rows[i];
+      if (r[part] == '' && addedRowCount > 0) {
+        addedRowCount--;
+      }
+    }
+    for (let i = index + 1; i < fixIndex; i++) {
+      let row = this.rows[i];
+      if (row[part] !== '') {
+        texts.push(row[part]);
+        row[part] = '';
+      }
+    }
+    if (addedRowCount > 0) {
+      let newRows = [];
+      for (let i = 0; i < addedRowCount; i++) {
+        newRows.push(new Row());
+      }
+      this.rows.splice(index + 1, 0, ...newRows);
+    }
+    let ri = index;
+    for (let text of texts) {
+      let r = this.rows[ri];
+      r[part] = text;
+      ri++;
+    }
+    this.editingRow = this.rows[index + 1];
   }
 
   moveUp(index, part, $event) {
@@ -91,7 +97,10 @@ export class ParaSplitComponent {
     }
 
     if (preRow[part] && thisRow[part]) {
-      preRow[part] = preRow[part] + '\n';
+      preRow[part] = preRow[part];
+      if (this.splitBy2Lf) {
+        preRow[part] = preRow[part] + '\n';
+      }
     }
     preRow[part] = preRow[part] + thisRow[part];
 
@@ -141,6 +150,7 @@ export class ParaSplitComponent {
 export class ParaSplitContext {
   para: Para;
   paraSaver: ParaSaver;
+  splitPat: RegExp;
 }
 
 export class ParaSplitModal extends ComponentModalConfig<ParaSplitContext> {

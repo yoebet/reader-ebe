@@ -21,8 +21,8 @@ export class SentenceAlignComponent {
   para: Para;
   paraSaver: ParaSaver;
 
-  endingPattern = /[.?!:;。．？！：；]+['"＇＂’”\n ]*/g;
-  endingPattern2 = /[，,]+['"＇＂’”\n ]*/g;
+  endingPattern = /[.?!:;。．？！：；]+['"＇＂’” ]*\n?/g;
+  endingPattern2 = /[，,]+['"＇＂’” ]*\n?/g;
   splitMark = '-=SPL=-';
   editingRow = null;
   editingPart = null;
@@ -81,7 +81,7 @@ export class SentenceAlignComponent {
         ti++;
       } else {
         if (cs && ts && cs.sid && ts.sid) {
-          console.log("shouldn't happen");
+          console.log("Shouldn't Happen.");
           break;
         }
         if (cs && !cs.sid) {

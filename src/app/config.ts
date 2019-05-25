@@ -47,11 +47,20 @@ const DictHistoryCapacity = 20;
 const LatestAnnotationsCount = 8;
 
 const staticBase = environment.staticBase;
+
 const ImagesBase = `${staticBase}/images`;
 const BookImagesBase = `${ImagesBase}/book`;
 const BookImageNotSet = `${BookImagesBase}/missing.png`;
+const UserAvatarsBase = `${staticBase}/avatars`;
 const AppPackagesBase = `${staticBase}/packages`;
 
+
+const StaticResource = {
+  BookImagesBase,
+  BookImageNotSet,
+  UserAvatarsBase,
+  AppPackagesBase
+};
 
 const DefaultHttpHeaders = environment.httpHeaders || {};
 
@@ -62,8 +71,6 @@ export {
   SpecialAnnotations,
   DictHistoryCapacity,
   LatestAnnotationsCount,
-  BookImagesBase,
-  BookImageNotSet,
-  AppPackagesBase,
+  StaticResource,
   DefaultHttpHeaders
 };

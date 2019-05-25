@@ -8,7 +8,8 @@ export class User extends Model {
   status: string;
 
   lastLogin?: any; // {time}
-  tokenObj?: any; // {token,ttl}
+  tokenObj?: any; // {token, ttl}
+  avatarSetting?: any; // {type: 'img/char', imgUrl: 'xxx', ...}
 
   static Roles = ['', 'A', 'E'];
 }

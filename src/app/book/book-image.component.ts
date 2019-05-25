@@ -3,7 +3,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
-import {BookImagesBase, BookImageNotSet} from '../config';
+import {StaticResource} from '../config';
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 
@@ -18,8 +18,8 @@ export class BookImageComponent implements OnInit {
 
   uploading = false;
 
-  bookImagesBase = BookImagesBase;
-  bookImageNotSet = BookImageNotSet;
+  bookImagesBase = StaticResource.BookImagesBase;
+  bookImageNotSet = StaticResource.BookImageNotSet;
 
   constructor(private bookService: BookService,
               private modal: SuiModal<Book, string, string>) {

@@ -2,7 +2,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'priceLabel'})
 export class PriceLabelPipe implements PipeTransform {
-  transform(pricing: { isFree: boolean, price: number }): string {
+  transform(pricing: { isFree?: boolean, price: number }): string {
     if (!pricing) {
       return '';
     }

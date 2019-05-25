@@ -15,6 +15,7 @@ table.ui.striped.table
       th 作者
       th 类别
       th 状态
+      th 定价
       th
   tbody
     tr(*ngFor='let book of books; trackBy: bookTracker')
@@ -32,20 +33,23 @@ table.ui.striped.table
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
       td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
+      td
+        .ui.mini.teal.tag.label(*ngIf="book.isFree") 全免
+        ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         ng-template([ngIf]="tuneOrder")
           button.ui.tiny.button(*ngIf='!first', (click)='moveUp(book)')
             i.angle.arrow.up.icon
-            | up
+            | 上
           button.ui.tiny.button(*ngIf='!last', (click)='moveDown(book)')
             i.angle.arrow.down.icon
-            | down
+            | 下
           button.ui.tiny.button(*ngIf='!first', (click)='moveTop(book)')
             i.angle.double.up.icon
-            | top
+            | 顶
           button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(book)')
             i.angle.double.down.icon
-            | bottom
+            | 底
         ng-template([ngIf]="!tuneOrder")
           ng-template([ngIf]="!privilegeOperations")
             a((click)='showDetail(book)', href='javascript:') 详情
@@ -76,12 +80,12 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
       .eight.wide.inline.field
         label 语言
         sui-select.selection([(ngModel)]="newBook.contentLang", [options]="langOptions",
-        valueField="value", labelField="label", placeholder='（原文）', #langSelect='')
-          sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+        valueField="value", labelField="label", placeholder='（原文）', #contentLangSelect='')
+          sui-select-option(*ngFor="let option of contentLangSelect.filteredOptions", [value]="option")
         | &nbsp;&nbsp; - &nbsp;&nbsp;
         sui-select.selection([(ngModel)]="newBook.transLang", [options]="langOptions",
-        valueField="value", labelField="label", placeholder='（对照）', #langSelect='')
-          sui-select-option(*ngFor="let option of langSelect.filteredOptions", [value]="option")
+        valueField="value", labelField="label", placeholder='（对照）', #transLangSelect='')
+          sui-select-option(*ngFor="let option of transLangSelect.filteredOptions", [value]="option")
   .fields
     .twelve.wide.field
       input([(ngModel)]="newBook.name", #newBookName='', placeholder='Book Name')
