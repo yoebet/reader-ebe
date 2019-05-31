@@ -37,6 +37,32 @@
 @import url('assets/para-text.css');
 @import url('assets/annotations.css');
 
+
+#main {
+  min-height: calc(100vh - 82px);
+}
+
+#header {
+  background-color: #FAFAFA;
+  margin-bottom: 1em;
+}
+
+#header > .pointing.menu {
+  border-bottom-color: transparent;
+}
+
+#footer {
+  margin-top: 2em;
+  border-top: 1px solid #DDDDDD;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.08) inset;
+  background-color: #FAFAFA;
+}
+
+#icp-text {
+  color: rgba(0, 0, 0, .4);
+  font-size: 0.8em;
+}
+
 .pre-wrap {
   white-space: pre-wrap;
 }
@@ -66,10 +92,6 @@ sui-multi-select i.list.icon {
   margin: 0em 0.25rem 0em 0em !important;
   padding: 0.55em 0em 0em 0.5em !important;
 }
-
-/*sui-select.user-role, sui-select.book-role {*/
-/*min-width: inherit !important;*/
-/*}*/
 
 .ui.search .prompt {
   border-radius: 0.3rem;

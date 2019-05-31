@@ -58,7 +58,7 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   }
 
   edit(user) {
-    this.editingUser = Object.assign({}, user);
+    this.editingUser = {_id: user._id, role: user.role, memo: user.memo} as User;
   }
 
   editing(user) {

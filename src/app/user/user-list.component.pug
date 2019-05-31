@@ -11,15 +11,17 @@
       button.ui.tiny.button((click)="search()") 查找
       button.ui.tiny.button((click)="searchReset()") 全部
 
-table.ui.small.striped.table
+table.ui.small.striped.table.form
   thead
     tr
       th
       th 登录名
       th 昵称
+      th 手机号
       th 注册于
       th 上次登录
       th 角色
+      th 备注
       th
         ng-template([ngIf]='tokenOp') 临时Token
   tbody
@@ -29,6 +31,7 @@ table.ui.small.striped.table
       td
         a([routerLink]="['/users', user._id]") {{user.name}}
       td {{user.nickName}}
+      td {{user.phoneNumber}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
         ng-template([ngIf]='user.lastLogin&&user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}}
@@ -37,6 +40,10 @@ table.ui.small.striped.table
         ng-template([ngIf]='editing(user)')
           sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
             sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
+      td
+        ng-template([ngIf]='!editing(user)') {{user.memo}}
+        ng-template([ngIf]='editing(user)')
+          input.input([(ngModel)]='editingUser.memo', placeholder='备注')
       td.right.aligned
         ng-template([ngIf]='tokenOp')
           ng-template([ngIf]='user.tokenObj')
@@ -52,17 +59,17 @@ table.ui.small.striped.table
           ng-template([ngIf]='!user.tokenObj')
             .ui.mini.compact.basic.button((click)='getTempToken(user)') 查看Token
         ng-template([ngIf]='!tokenOp')
-          .ui.mini.button((click)='messages(user)') 消息
           ng-template([ngIf]='!editing(user)')
+            .ui.mini.button((click)='messages(user)') 消息
             .ui.mini.button((click)='edit(user)') 修改
           ng-template([ngIf]='editing(user)')
             .ui.mini.button((click)='editingUser=null') 取消
             .ui.mini.primary.button((click)='save()') 保存
     tr(*ngIf='!users||users.length===0')
-      td(colspan='7') No Results.
+      td(colspan='9') No Results.
   tfoot
     tr
-      th(colspan='7')
+      th(colspan='9')
         .ui.right.floated.mini.pagination.menu
           a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
             i.left.chevron.icon
@@ -75,8 +82,8 @@ button.ui.tiny.basic.button([hidden]='newUser', (click)='editNew()') 创建用�
   .field
     label New:
   .inline.field
-    input([(ngModel)]='newUser.name', placeholder='Login Name')
     input([(ngModel)]='newUser.nickName', placeholder='Nick Name')
+    input([(ngModel)]='newUser.name', placeholder='Login Name')
     input([(ngModel)]='newUser.pass', type='password', placeholder='Password')
     sui-select.selection.user-role([(ngModel)]='newUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
       sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')

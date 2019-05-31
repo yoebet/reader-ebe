@@ -25,16 +25,16 @@
       .ui.mini.teal.tag.label(*ngIf="chap.isFree") 免费
       .ui.mini.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
       ng-template([ngIf]="tuneOrder")
-        button.ui.tiny.button(*ngIf='!first', (click)='moveUp(chap)')
+        button.ui.mini.button(*ngIf='!first', (click)='moveUp(chap)')
           i.angle.arrow.up.icon
           | 上
-        button.ui.tiny.button(*ngIf='!last', (click)='moveDown(chap)')
+        button.ui.mini.button(*ngIf='!last', (click)='moveDown(chap)')
           i.angle.arrow.down.icon
           | 下
-        button.ui.tiny.button(*ngIf='!first', (click)='moveTop(chap)')
+        button.ui.mini.button(*ngIf='!first', (click)='moveTop(chap)')
           i.angle.double.up.icon
           | 顶
-        button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(chap)')
+        button.ui.mini.button(*ngIf='!last', (click)='moveBottom(chap)')
           i.angle.double.down.icon
           | 底
       .contentPack(*ngIf="!tuneOrder&&contentPack")

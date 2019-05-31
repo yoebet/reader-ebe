@@ -6,6 +6,7 @@ export class User extends Model {
   pass: string;
   role: string;
   status: string;
+  memo: string;
 
   lastLogin?: any; // {time}
   tokenObj?: any; // {token, ttl}

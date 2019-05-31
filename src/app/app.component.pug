@@ -1,26 +1,29 @@
-.ui.container
-  .ui.stackable.secondary.pointing.menu
-    a.item(routerLink='/') Home
-    ng-template([ngIf]='currentUser')
-      a.item(routerLink='/books', routerLinkActive='active') 图书
-      ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
-        a.item(routerLink='/dict', routerLinkActive='active') 词典
-        a.item(routerLink='/word-categories', routerLinkActive='active') 词书
-        a.item(routerLink='/annotations', routerLinkActive='active') 标注
-        a.item(routerLink='/issues', routerLinkActive='active') 纠错
-      ng-template([ngIf]='currentUser.role==="R"')
-        a.item(routerLink='/users', routerLinkActive='active') 用户
-        a.item(routerLink='/orders', routerLinkActive='active') 订单
-        a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
-        a.item(routerLink='/releases', routerLinkActive='active') App版本
-    .right.menu
-      a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
-      .item(*ngIf='currentUser')
-        | {{currentUser.nickName}} &nbsp;&nbsp;
-        a(routerLink='/my-messages', routerLinkActive='active') 消息
-        | &nbsp;&nbsp;
-        a((click)='logout()', href='javascript:') Logout
+#main
+  #header
+    .ui.stackable.secondary.pointing.menu.container
+      a.item(routerLink='/') Home
+      ng-template([ngIf]='currentUser')
+        a.item(routerLink='/books', routerLinkActive='active') 图书
+        ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+          a.item(routerLink='/dict', routerLinkActive='active') 词典
+          a.item(routerLink='/word-categories', routerLinkActive='active') 词书
+          a.item(routerLink='/annotations', routerLinkActive='active') 标注
+          a.item(routerLink='/issues', routerLinkActive='active') 纠错
+        ng-template([ngIf]='currentUser.role==="R"')
+          a.item(routerLink='/users', routerLinkActive='active') 用户
+          a.item(routerLink='/orders', routerLinkActive='active') 订单
+          a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
+          a.item(routerLink='/releases', routerLinkActive='active') App版本
+      .right.menu
+        a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
+        .item(*ngIf='currentUser')
+          | {{currentUser.nickName}} &nbsp;&nbsp;
+          a(routerLink='/my-messages', routerLinkActive='active') 消息
+          | &nbsp;&nbsp;
+          a((click)='logout()', href='javascript:') Logout
 
-  router-outlet
+  .ui.container
+    router-outlet
 
-  p &nbsp;
+#footer.ui.vertical.segment
+  #icp-text.ui.center.aligned.container 京ICP备19021873号

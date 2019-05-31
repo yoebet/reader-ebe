@@ -38,16 +38,16 @@ table.ui.striped.table
         ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         ng-template([ngIf]="tuneOrder")
-          button.ui.tiny.button(*ngIf='!first', (click)='moveUp(book)')
+          button.ui.mini.button(*ngIf='!first', (click)='moveUp(book)')
             i.angle.arrow.up.icon
             | 上
-          button.ui.tiny.button(*ngIf='!last', (click)='moveDown(book)')
+          button.ui.mini.button(*ngIf='!last', (click)='moveDown(book)')
             i.angle.arrow.down.icon
             | 下
-          button.ui.tiny.button(*ngIf='!first', (click)='moveTop(book)')
+          button.ui.mini.button(*ngIf='!first', (click)='moveTop(book)')
             i.angle.double.up.icon
             | 顶
-          button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(book)')
+          button.ui.mini.button(*ngIf='!last', (click)='moveBottom(book)')
             i.angle.double.down.icon
             | 底
         ng-template([ngIf]="!tuneOrder")

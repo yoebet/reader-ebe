@@ -2,6 +2,8 @@
   | 订单
 
 .ui.small.form
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='dropOp') 删除
   .fields
     .inline.field
       input([(ngModel)]='searchOrderNo', placeholder='Order No.')
@@ -16,16 +18,16 @@ table.ui.small.striped.table
       th 产品
       th 价格
       th 状态
-      th
-        ng-template([ngIf]='tokenOp') 临时Token
+      th 操作
   tbody
     tr(*ngFor='let order of orders; trackBy: orderTracker')
       td {{order.orderNo}}
       td {{order.userNickName}}（{{order.userName}}）
-      td {{order.productDesc}}
+      td.pre-wrap {{order.productDesc}}
       td.right.aligned {{order.totalFee && (order.totalFee/100).toFixed(2)}}
       td {{order.status}}
       td.right.aligned
+        .ui.mini.button(*ngIf='dropOp', (click)='drop(order)') 删除
     tr(*ngIf='!orders||orders.length===0')
       td(colspan='6') No Results.
   tfoot

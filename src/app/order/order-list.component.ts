@@ -5,6 +5,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {Order} from '../models/order';
 import {OrderService} from '../services/order.service';
 import {PageableListComponent} from '../common/pageable-list.component';
+import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'order-list',
@@ -13,6 +14,8 @@ import {PageableListComponent} from '../common/pageable-list.component';
 export class OrderListComponent extends PageableListComponent implements OnInit {
   orders: Order[];
   searchOrderNo: string;
+
+  dropOp = false;
 
 
   constructor(private orderService: OrderService,
@@ -44,6 +47,19 @@ export class OrderListComponent extends PageableListComponent implements OnInit 
     this.list();
   }
 
+  drop(order) {
+    if (!confirm('Are You Sure?')) {
+      return;
+    }
+    this.orderService.remove(order._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        this.orders = this.orders.filter(o => o !== order);
+      });
+  }
 
   orderTracker(index, order) {
     return order._id;
