@@ -17,6 +17,8 @@ export class Chap extends Model {
   contentPack: ChapContentPack;
 
   paras: Para[];
+
+  paraCommentsCountLoaded = false;
 }
 
 export class ChapContentPack {

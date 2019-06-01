@@ -4,8 +4,6 @@ import {environment} from '../../environments/environment';
 
 import {Observable} from 'rxjs';
 
-
-
 import {UserMessage} from '../models/user-message';
 import {BaseService} from './base.service';
 import {OpResult} from '../models/op-result';

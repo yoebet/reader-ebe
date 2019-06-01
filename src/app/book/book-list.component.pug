@@ -34,7 +34,7 @@ table.ui.striped.table
       td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td
-        .ui.mini.teal.tag.label(*ngIf="book.isFree") 全免
+        .ui.mini.teal.tag.label(*ngIf="book.isFree") 免费
         ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         ng-template([ngIf]="tuneOrder")
@@ -61,7 +61,7 @@ table.ui.striped.table
             a((click)='showPacks(book)', href='javascript:') 内容包
             | &nbsp;&nbsp;
             button.ui.tiny.compact.button((click)='backup(book)') 复制
-            //button.ui.tiny.button((click)='remove(book)') 删除
+            button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
       td(colspan='6') No Results.
 

@@ -37,9 +37,8 @@
 @import url('assets/para-text.css');
 @import url('assets/annotations.css');
 
-
 #main {
-  min-height: calc(100vh - 82px);
+  min-height: calc(100% - 82px);
 }
 
 #header {
@@ -124,4 +123,15 @@ sui-multi-select i.list.icon {
 
 .para-quote .ui.checkbox label {
   color: rgba(0, 0, 0, 0.6);
+}
+
+.comments .footer {
+  margin-top: 0.6em;
+  font-size: 0.9em;
+  color: gray;
+}
+
+.comments .title {
+  font-weight: bold;
+  margin: .5em 0;
 }

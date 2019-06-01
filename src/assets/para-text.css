@@ -60,7 +60,7 @@
 
 /* Colors */
 
-.paragraph > .selected.para-content {
+.paragraph .selected.para-content {
   border-color: lightskyblue;
 }
 

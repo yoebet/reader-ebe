@@ -34,6 +34,14 @@ export class BookFormComponent implements OnInit {
     return this.sessionService.currentUser;
   }
 
+  get admin(): boolean {
+    let cu = this.sessionService.currentUser;
+    if (!cu) {
+      return false;
+    }
+    return cu.role === 'A' || cu.role === 'R';
+  }
+
   constructor(private bookService: BookService,
               private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,

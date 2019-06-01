@@ -3,12 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
 import {of as observableOf, combineLatest as observableCombineLatest, Observable} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {map, catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
+import {ParaComment} from '../models/para-comment';
 import {SorterService} from './sorter.service';
 import {ChapService} from './chap.service';
 import {BookService} from './book.service';
@@ -17,6 +18,7 @@ import {BookService} from './book.service';
 export class ParaService extends SorterService<Para> {
 
   protected chapBaseUrl: string;
+  protected baseUrlUserEnd: string;
 
   constructor(protected http: HttpClient,
               protected modalService: SuiModalService,
@@ -26,6 +28,7 @@ export class ParaService extends SorterService<Para> {
     let apiBase = environment.apiBase || '';
     this.chapBaseUrl = `${apiBase}/${this.apiA}/chaps`;
     this.baseUrl = `${apiBase}/${this.apiA}/paras`;
+    this.baseUrlUserEnd = `${apiBase}/${this.apiB}/paras`;
   }
 
   loadPara(id: string): Observable<Para> {
@@ -65,6 +68,17 @@ export class ParaService extends SorterService<Para> {
     const url = `${this.chapBaseUrl}/${chapId}/paras`;
     return this.http.put<Para>(url, paras, this.httpOptions).pipe(
       catchError(this.handleError));
+  }
+
+  loadComments(para: Para): Observable<ParaComment[]> {
+    let url = `${this.baseUrlUserEnd}/${para._id}/comments`;
+    return this.http.get<ParaComment[]>(url, this.httpOptions)
+      .pipe(
+        map((comments: ParaComment[]) => {
+          para.comments = comments;
+          return comments;
+        }),
+        catchError(this.handleError));
   }
 
 }

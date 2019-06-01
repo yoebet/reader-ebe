@@ -13,7 +13,7 @@
           a.item(routerLink='/users', routerLinkActive='active') 用户
           a.item(routerLink='/orders', routerLinkActive='active') 订单
           a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
-          a.item(routerLink='/releases', routerLinkActive='active') App版本
+          a.item(routerLink='/releases', routerLinkActive='active') APP
       .right.menu
         a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
         .item(*ngIf='currentUser')

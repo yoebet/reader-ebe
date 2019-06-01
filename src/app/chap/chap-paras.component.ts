@@ -24,12 +24,14 @@ import {NoteRequest} from '../content-types/note-request';
 import {ParaSaver} from '../content-types/para-saver';
 import {ContentContext} from '../content-types/content-context';
 
+import {ChapService} from "../services/chap.service";
 import {ParaService} from '../services/para.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {DictZhService} from '../services/dict-zh.service';
 import {ParaFormComponent} from './para-form.component';
 import {DictSimpleSmiComponent} from "../dict/dict-simple-smi.component";
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
+import {ParaCommentsModal} from '../content/para-comments.component';
 
 
 @Component({
@@ -76,6 +78,7 @@ export class ChapParasComponent implements OnInit {
   // editInplace = false;
   highlightSentence = true;
   annotatedWordsHover = true;
+  showCommentsCount = false;
 
   annotationSet: AnnotationSet;
   contentContext: ContentContext;
@@ -106,6 +109,7 @@ export class ChapParasComponent implements OnInit {
 
 
   constructor(private resolver: ComponentFactoryResolver,
+              private chapService: ChapService,
               private paraService: ParaService,
               private dictZhService: DictZhService,
               private annoService: AnnoFamilyService,
@@ -113,8 +117,12 @@ export class ChapParasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.chap.paras) {
-      this.chap.paras = [];
+    let chap = this.chap;
+    if (chap) {
+      if (!chap.paras) {
+        chap.paras = [];
+      }
+      this.checkCommentsCount();
     }
 
     this.paraSaver = {
@@ -122,6 +130,39 @@ export class ChapParasComponent implements OnInit {
       saveSplit: this.saveSplitPara.bind(this),
       cancelEdit: this.cancelEdit.bind(this)
     };
+  }
+
+  private checkCommentsCount() {
+    if (!this.showCommentsCount) {
+      return;
+    }
+    let chap = this.chap;
+    if (chap && !chap.paraCommentsCountLoaded) {
+      this.chapService.loadCommentsCount(chap)
+        .subscribe(total => {
+          console.log(`total comments: ${total}`);
+        });
+    }
+  }
+
+  private doShowComments(para) {
+    this.selectPara(para);
+    this.modalService
+      .open(new ParaCommentsModal(para));
+  }
+
+  showComments(para) {
+    if (para.commentsCount === 0) {
+      return;
+    }
+    if (para.comments) {
+      this.doShowComments(para);
+    } else {
+      this.paraService.loadComments(para)
+        .subscribe(cs => {
+          this.doShowComments(para);
+        });
+    }
   }
 
   @HostListener('window:keyup', ['$event'])

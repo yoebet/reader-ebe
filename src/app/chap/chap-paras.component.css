@@ -108,3 +108,14 @@
   color: rgba(0, 0, 0, 1) !important;
   box-shadow: 0px 0px 0px 1px rgba(33, 150, 240, 0.99) inset, 0px 0px 0px 0px rgba(33, 150, 240, 0.39) inset;
 }
+
+.item.paragraph > .para {
+  width: 100%;
+}
+
+.para-op {
+  font-size: 0.9em !important;
+  padding-top: 0.3em !important;
+  margin-bottom: 0.3em !important;
+}
+

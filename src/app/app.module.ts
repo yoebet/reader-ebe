@@ -47,6 +47,7 @@ import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
 import {SentenceAlignComponent} from './content/sentence-align.component';
 import {ParaContentComponent} from './content/para-content.component';
+import {ParaCommentsComponent} from './content/para-comments.component';
 import {QuotedTextComponent} from './para-text/quoted-text.component';
 import {WordAnnosComponent} from './content/word-annos.component';
 import {DictComponent} from './dict/dict.component';
@@ -98,6 +99,7 @@ import {OrderListComponent} from './order/order-list.component';
     ParaSplitComponent,
     SentenceAlignComponent,
     ParaContentComponent,
+    ParaCommentsComponent,
     QuotedTextComponent,
     WordAnnosComponent,
     DictComponent,
@@ -159,6 +161,7 @@ import {OrderListComponent} from './order/order-list.component';
     BookUsersComponent,
     BookImageComponent,
     ParaSplitComponent,
+    ParaCommentsComponent,
     SentenceAlignComponent,
     WordAnnosComponent,
     DictSimpleSmiComponent,

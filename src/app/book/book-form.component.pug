@@ -89,7 +89,7 @@
       .field
         label 标签
         input([(ngModel)]='editing.tags')
-      .field(*ngIf='!editing.isPrivate')
+      .field
         label 推荐语
         input([(ngModel)]='editing.slogan')
     //.field
@@ -97,9 +97,9 @@
       textarea(rows='2', [(ngModel)]='editing.description')
     .inline.field
       label 主编辑
-      ng-template([ngIf]='!currentUser || currentUser.role!=="R"')
+      ng-template([ngIf]='!admin')
         | {{book.chiefEditorName}}
-      ng-template([ngIf]='currentUser && currentUser.role==="R"')
+      ng-template([ngIf]='admin')
         ng-template([ngIf]='!settingChiefEditor')
           | {{book.chiefEditorName}} &nbsp;&nbsp;
           .ui.mini.compact.button((click)='alterChiefEditor()') {{book.chiefEditorName? '变更':'选择'}}
@@ -111,6 +111,12 @@
               | {{editor.userNickName}} &nbsp;&nbsp;&nbsp;&nbsp;
               a((click)='selectChiefEditor(editor)', href='javascript:') 选择
             .ui.item(*ngIf='editors.length===0') （主编辑从编辑中选择，请先在"人员"里增加编辑）
+    .inline.field
+      label 私有？
+      ng-template([ngIf]='admin')
+        sui-checkbox([(ngModel)]='editing.isPrivate') 私有
+      ng-template([ngIf]='!admin') {{book.isPrivate? '是（不公开）':'否（公开可见）'}}
+      | （管理员可修改）
 
 .actions
   button.ui.tiny.button((click)='close()') 取消
