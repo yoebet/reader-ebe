@@ -36,9 +36,7 @@ export class SessionService {
             let cu = this.currentUser;
             let from = cu ? cu.name : null;
             cu = new User();
-            cu.name = name;
-            cu.nickName = (opr as any).nickName;
-            cu.role = (opr as any).role;
+            Object.assign(cu, opr);
             this.currentUser = cu;
             if (from !== name) {
               this.onCurrentUserChanged.emit({from, to: name});
@@ -73,9 +71,7 @@ export class SessionService {
           let from = cu ? cu.name : null;
           if (userinfo && userinfo.login) {
             cu = new User();
-            cu.name = userinfo.name;
-            cu.nickName = userinfo.nickName;
-            cu.role = userinfo.role;
+            Object.assign(cu, userinfo);
           } else {
             cu = null;
           }

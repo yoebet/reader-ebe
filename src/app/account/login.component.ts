@@ -38,8 +38,11 @@ export class LoginComponent {
       });
   }
 
-  loginPopup(){
-
+  onPassKeyup(name, pass, $event) {
+    $event.stopPropagation();
+    if ($event.keyCode === 13 && name && pass) {
+      this.login(name, pass);
+    }
   }
 
 }

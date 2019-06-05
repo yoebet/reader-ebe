@@ -22,7 +22,7 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   tokenOp = false;
 
   roleOptions = User.Roles;
-  userAvatarsBase = StaticResource.UserAvatarsBase;
+  avatarsBase = StaticResource.UserAvatarsBase;
 
   constructor(private userService: UserService,
               public modalService: SuiModalService) {

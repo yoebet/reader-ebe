@@ -13,7 +13,7 @@ table.ui.striped.table
       th 代号
       th 书名
       th 作者
-      th 类别
+      //th 类别
       th 状态
       th 定价
       th
@@ -31,7 +31,7 @@ table.ui.striped.table
       td
         .enname {{book.author}}
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
-      td {{categoryNames[book.category]}}
+      //td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td
         .ui.mini.teal.tag.label(*ngIf="book.isFree") 免费
@@ -63,7 +63,7 @@ table.ui.striped.table
             button.ui.tiny.compact.button((click)='backup(book)') 复制
             button.ui.tiny.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
-      td(colspan='6') No Results.
+      td(colspan='7') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增

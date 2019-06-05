@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {StaticResource} from "./config";
 import {User} from './models/user';
 import {OpResult} from './models/op-result';
 import {AppService} from './services/app.service';
@@ -13,6 +14,8 @@ import {SessionService} from './services/session.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
+
+  avatarsBase = StaticResource.UserAvatarsBase;
 
   get currentUser(): User {
     return this.sessionService.currentUser;
