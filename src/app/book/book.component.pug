@@ -8,6 +8,8 @@ div(*ngIf='book')
       button.ui.tiny.button((click)='showUsers()') 人员
       | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showPacks()') 内容包
+      | &nbsp;&nbsp;
+      button.ui.tiny.button((click)='showLink()') 链接
     .name-author
       .book-name {{book.name}}
       .author(*ngIf='book.author')

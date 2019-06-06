@@ -1,9 +1,12 @@
 .ui.header
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='showZh') 中文
-    ng-template([ngIf]='currentUser && currentUser.role==="R"')
-      sui-checkbox([(ngModel)]='tuneOrder') 排序
-      sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
+    ng-template([ngIf]='currentUser')
+      ng-template([ngIf]='currentUser.role==="R"')
+        sui-checkbox([(ngModel)]='tuneOrder') 排序
+        sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
+      .ui.horizontal.link.list(*ngIf='currentUser.role==="A" || currentUser.role==="R"')
+        a.item((click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
   | 图书
 
 table.ui.striped.table
@@ -57,6 +60,8 @@ table.ui.striped.table
             a((click)='showForm(book)', href='javascript:') 修改
             | &nbsp;&nbsp;
             a((click)='showUsers(book)', href='javascript:') 人员
+            | &nbsp;&nbsp;
+            a((click)='showLink(book)', href='javascript:') 链接
           ng-template([ngIf]="privilegeOperations")
             a((click)='showPacks(book)', href='javascript:') 内容包
             | &nbsp;&nbsp;

@@ -74,6 +74,8 @@ import {MyMessagesComponent} from './account/my-messages.component';
 import {MessagesPopupComponent} from './message/messages-popup.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
+import {AppLinkComponent} from './common/app-link.component';
+
 
 @NgModule({
   imports: [
@@ -131,7 +133,8 @@ import {OrderListComponent} from './order/order-list.component';
     MyMessagesComponent,
     MessagesPopupComponent,
     ReleaseListComponent,
-    OrderListComponent
+    OrderListComponent,
+    AppLinkComponent
   ],
   providers: [
     AppService,
@@ -165,7 +168,8 @@ import {OrderListComponent} from './order/order-list.component';
     SentenceAlignComponent,
     WordAnnosComponent,
     DictSimpleSmiComponent,
-    MessagesPopupComponent
+    MessagesPopupComponent,
+    AppLinkComponent
   ],
   bootstrap: [AppComponent]
 })

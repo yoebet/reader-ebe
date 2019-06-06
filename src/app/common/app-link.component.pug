@@ -1,0 +1,28 @@
+.ui.small.header
+  | 微信链接
+  .title {{title}}
+
+.ui.content
+
+  .ui.unstackable.definition.table.links
+    tr
+      td 直接进入
+      td
+        .app-link(*ngIf='url') {{url}}
+        .short-link
+          .sl-tip
+            | 短链接：
+            a(*ngIf='!shortUrl', (click)='genShortUrl(url,"shortUrl")', href='javascript:') 生成
+          .app-link(*ngIf='shortUrl') {{shortUrl}}
+    tr
+      td 先登录
+      td
+        .app-link(*ngIf='wxUrl') {{wxUrl}}
+        .short-link
+          .sl-tip
+            | 短链接：
+            a(*ngIf='!wxShortUrl', (click)='genShortUrl(wxUrl,"wxShortUrl")', href='javascript:') 生成
+          .app-link(*ngIf='wxShortUrl') {{wxShortUrl}}
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

@@ -13,9 +13,10 @@ import {BookFormModal} from './book-form.component';
 import {BookImageModal} from './book-image.component';
 import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
+import {SortableListComponent} from "../common/sortable-list.component";
+import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
-import {SortableListComponent} from "../common/sortable-list.component";
 
 @Component({
   selector: 'book-list',
@@ -66,6 +67,16 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       .subscribe(afs => this.annOptions = afs);
   }
 
+
+  showListLink() {
+    let appLink = {path: 'books', title: '图书列表'} as AppLink;
+    this.modalService.open(new AppLinkModal(appLink));
+  }
+
+  showLink(book) {
+    let appLink = {path: `books/${book._id}`, title: book.name} as AppLink;
+    this.modalService.open(new AppLinkModal(appLink));
+  }
 
   showDetail(book: Book) {
     this.modalService.open(new BookInfoModal(book));

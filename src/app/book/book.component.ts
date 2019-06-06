@@ -3,6 +3,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
 
 import {switchMap} from 'rxjs/operators';
+import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
@@ -10,7 +11,7 @@ import {BookFormModal} from './book-form.component';
 import {BookInfoModal} from './book-info.component';
 import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
-import {SuiModalService} from 'ng2-semantic-ui';
+import {AppLink, AppLinkModal} from "../common/app-link.component";
 
 @Component({
   selector: 'book-detail',
@@ -51,6 +52,11 @@ export class BookComponent implements OnInit {
 
   showUsers() {
     this.modalService.open(new BookUsersModal(this.book));
+  }
+
+  showLink() {
+    let appLink = {path: `books/${this.book._id}`, title: this.book.name} as AppLink;
+    this.modalService.open(new AppLinkModal(appLink));
   }
 
   goBack(): void {

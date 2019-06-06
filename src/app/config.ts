@@ -63,6 +63,11 @@ const StaticResource = {
 };
 
 const DefaultHttpHeaders = environment.httpHeaders || {};
+const WebAppBase = environment.webAppBase;
+
+const WX_CONFIG = {
+  mp_appId: 'wx4a226a806e99f56c'
+};
 
 export {
   UIConstants,
@@ -72,5 +77,7 @@ export {
   DictHistoryCapacity,
   LatestAnnotationsCount,
   StaticResource,
-  DefaultHttpHeaders
+  DefaultHttpHeaders,
+  WebAppBase,
+  WX_CONFIG
 };

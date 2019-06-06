@@ -49,6 +49,7 @@
           button.ui.tiny.button((click)='remove(chap)') 删除
         button.ui.tiny.button((click)='edit(chap)') 标题
         button.ui.tiny.button((click)='editStatus(chap)') 状态
+        button.ui.tiny.button((click)='showLink(chap)') 链接
 
     a([routerLink]="['/chaps', chap._id]", [hidden]="chap===editingChap&&!editChapStatus")
       .pre-wrap {{chap.name}}

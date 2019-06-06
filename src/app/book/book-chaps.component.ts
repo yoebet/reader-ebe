@@ -1,12 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+
+import {SuiModalService} from "ng2-semantic-ui";
 
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
+import {BookService} from '../services/book.service';
 import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
 import {SortableListComponent} from '../common/sortable-list.component';
-import {BookService} from '../services/book.service';
+import {AppLink, AppLinkModal} from "../common/app-link.component";
 
 @Component({
   selector: 'book-chaps',
@@ -27,7 +29,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
 
   constructor(private bookService: BookService,
               private chapService: ChapService,
-              private router: Router) {
+              private modalService: SuiModalService) {
     super();
   }
 
@@ -222,8 +224,9 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
       });
   }
 
-  gotoDetail(chap: Chap): void {
-    this.router.navigate(['/chaps', chap._id]);
+  showLink(chap: Chap) {
+    let appLink = {path: `chaps/${chap._id}`, title: chap.name} as AppLink;
+    this.modalService.open(new AppLinkModal(appLink));
   }
 
   chapTracker(index, chap) {

@@ -32,8 +32,8 @@ export class ChapService extends SorterService<Chap> {
   create(chap: Chap): Observable<Chap> {
     let bookId = chap.bookId;
     const url = `${this.bookBaseUrl}/${bookId}/chaps`;
-    return this.http.post<Chap>(url, chap, this.httpOptions).pipe(
-      catchError(this.handleError));
+    return this.http.post<Chap>(url, chap, this.httpOptions)
+      .pipe(catchError(this.handleError));
   }
 
   buildContentPack(chapId: string): Observable<OpResult> {
@@ -48,8 +48,8 @@ export class ChapService extends SorterService<Chap> {
 
   paraNotesCount(chapId: string): Observable<ParaIdCount[]> {
     let url = `${this.baseUrl}/${chapId}/paraNotesCount`;
-    return this.http.get<ParaIdCount[]>(url, this.httpOptions).pipe(
-      catchError(this.handleError));
+    return this.http.get<ParaIdCount[]>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
   }
 
   loadCommentsCount(chap: Chap): Observable<number> {
