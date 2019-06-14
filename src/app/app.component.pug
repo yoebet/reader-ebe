@@ -20,8 +20,7 @@
           img.ui.avatar.image(*ngIf='currentUser.avatarSetting&&currentUser.avatarSetting.imgUrl', [src]='avatarsBase+"/"+currentUser.avatarSetting.imgUrl')
           | {{currentUser.nickName}} &nbsp;&nbsp;
           a(routerLink='/my-messages', routerLinkActive='active') 消息
-          | &nbsp;&nbsp;
-          a((click)='logout()', href='javascript:') Logout
+          a((click)='logout()', href='javascript:') &nbsp;&nbsp;退出
 
   .ui.container
     router-outlet

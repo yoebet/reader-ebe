@@ -1,11 +1,11 @@
-.ui.small.form.login
+.form.login
   h3.header.login-header
     .ui.right.floated.horizontal.small.link.list.login-methods
-      a.item((click)='loginMethod="wx"', [ngClass]='{active: loginMethod==="wx"}') 微信登录
       a.item((click)='loginMethod="pass"', [ngClass]='{active: loginMethod==="pass"}') 密码登录
+      a.item((click)='switchToWx()', [ngClass]='{active: loginMethod==="wx"}') 微信登录
     | 请登录
 
-  ng-template([ngIf]='loginMethod==="pass"')
+  .ui.small.form(*ngIf='loginMethod==="pass"')
     .ui.small.message(*ngIf='loginMessage') {{loginMessage}}
     .field
       input(type="text", #name="", placeholder="账号")

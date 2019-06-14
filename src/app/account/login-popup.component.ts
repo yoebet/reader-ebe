@@ -5,23 +5,47 @@ import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 
 import {SessionService} from '../services/session.service';
 import {OpResult} from '../models/op-result';
+import {LoginBaseComponent} from "./login-base-component";
+
 
 @Component({
   selector: 'login-popup',
-  templateUrl: './login-popup.component.html'
+  templateUrl: './login-popup.component.html',
+  styleUrls: ['./login-popup.component.css']
 })
-export class LoginPopupComponent {
+export class LoginPopupComponent extends LoginBaseComponent {
 
   loginMessage: string;
 
-  constructor(private sessionService: SessionService,
+  wxLoginUrl;
+
+  wxAuthWindow = false;
+
+
+  constructor(protected sessionService: SessionService,
               private modal: SuiModal<string, string, string>) {
+    super();
     this.loginMessage = modal.context;
+
+    this.wxLoginUrl = this.genWxAuthLink();
+  }
+
+  protected genWxQrCode() {
+    this.wxQrCodeInit = true;
+    setTimeout(() => {
+      this.doGenWxQrCode("login_popup_container");
+    }, 10);
   }
 
   cancel() {
     this.loginMessage = null;
     this.modal.deny('');
+    if (this.wxAuthWindow) {
+      this.wxAuthWindow = false;
+      this.sessionService.checkLogin()
+        .subscribe(a => {
+        });
+    }
   }
 
   login(name, pass) {
@@ -44,6 +68,6 @@ export class LoginModal extends ComponentModalConfig<string> {
   constructor(message: string) {
     super(LoginPopupComponent, message, false);
     this.size = ModalSize.Mini;
-    this.mustScroll = false;
+    this.mustScroll = true;
   }
 }

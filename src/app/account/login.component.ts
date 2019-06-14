@@ -2,37 +2,24 @@ import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 
-import {SelfBase} from '../config';
 import {SessionService} from '../services/session.service';
 import {OpResult} from '../models/op-result';
+import {LoginBaseComponent} from "./login-base-component";
 
 @Component({
   selector: 'login-form',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-
-  loginMethod: 'wx' | 'pass' = 'wx';
+export class LoginComponent extends LoginBaseComponent implements OnInit {
 
   loginMessage: string;
 
-  constructor(private sessionService: SessionService,
-              private router: Router,
-              private location: Location) {
-  }
 
-  ngOnInit() {
-    let obj = new window['WxLogin']({
-      self_redirect: false,
-      id: "login_container",
-      appid: "wx0645bedc5ee3d3de",
-      scope: "snsapi_login",
-      redirect_uri: `${SelfBase}`,
-      state: "wxeeLTAI55Dra7SzFLUi",
-      // href: "https://yuwen-reading.net/ee/assets/wx-login.css",
-      style: ""
-    });
+  constructor(protected sessionService: SessionService,
+              protected router: Router,
+              protected location: Location) {
+    super();
   }
 
   cancel() {
@@ -52,13 +39,6 @@ export class LoginComponent implements OnInit {
       }, (err) => {
         this.loginMessage = '发生错误了';
       });
-  }
-
-  onPassKeyup(name, pass, $event) {
-    $event.stopPropagation();
-    if ($event.keyCode === 13 && name && pass) {
-      this.login(name, pass);
-    }
   }
 
 }

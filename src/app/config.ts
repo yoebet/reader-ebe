@@ -67,6 +67,7 @@ const SelfBase = environment.selfBase;
 const WebAppBase = environment.webAppBase;
 
 const WX_CONFIG = {
+  appId: 'wx0645bedc5ee3d3de',
   mp_appId: 'wx4a226a806e99f56c'
 };
 

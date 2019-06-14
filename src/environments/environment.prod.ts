@@ -1,4 +1,4 @@
-const ServerDomain = 'cs.yuwen-reading.net';
+const ServerDomain = 'yuwen-reading.net';
 
 export const environment = {
   production: true,
