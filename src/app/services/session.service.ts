@@ -19,6 +19,8 @@ export class SessionService {
 
   private loginUrl: string;
 
+  private wxAuthUrl: string;
+
   currentUser: User;
 
   readonly onCurrentUserChanged = new EventEmitter<{ from, to }>();
@@ -26,23 +28,17 @@ export class SessionService {
   constructor(private http: HttpClient) {
     let apiBase = environment.apiBase || '';
     this.loginUrl = `${apiBase}/api-b/login`;
+    this.wxAuthUrl = `${apiBase}/api-b/wx_auth`;
   }
 
-  login(name, pass): Observable<OpResult> {
-    return this.http.post(this.loginUrl, {name, pass}, this.httpOptions)
+  login(name, pass): Observable<any> {
+    return this.http.post<any>(this.loginUrl, {name, pass}, this.httpOptions)
       .pipe(
-        map((opr: OpResult) => {
-          if (opr && opr.ok === 1) {
-            let cu = this.currentUser;
-            let from = cu ? cu.name : null;
-            cu = new User();
-            Object.assign(cu, opr);
-            this.currentUser = cu;
-            if (from !== name) {
-              this.onCurrentUserChanged.emit({from, to: name});
-            }
-            return opr;
+        map((userinfo) => {
+          if (userinfo && userinfo.ok === 1) {
+            this.processLogin(userinfo);
           }
+          return userinfo;
         }));
   }
 
@@ -67,21 +63,39 @@ export class SessionService {
     return this.http.get<any>(url, this.httpOptions)
       .pipe(
         map(userinfo => {
-          let cu = this.currentUser;
-          let from = cu ? cu.name : null;
           if (userinfo && userinfo.login) {
-            cu = new User();
-            Object.assign(cu, userinfo);
-          } else {
-            cu = null;
-          }
-          this.currentUser = cu;
-          let to = cu ? cu.name : null;
-          if (from !== to) {
-            this.onCurrentUserChanged.emit({from, to});
+            this.processLogin(userinfo);
           }
           return userinfo;
         })
       );
+  }
+
+
+  private processLogin(userinfo) {
+    let cu = this.currentUser;
+    let from = cu ? cu.name : null;
+    if (userinfo && userinfo.nickName) {
+      cu = new User();
+      Object.assign(cu, userinfo);
+    } else {
+      cu = null;
+    }
+    this.currentUser = cu;
+    let to = cu ? cu.name : null;
+    if (from !== to) {
+      this.onCurrentUserChanged.emit({from, to});
+    }
+  }
+
+
+  requestAccessTokenAndLogin(code: string): Observable<any> {
+    let url = `${this.wxAuthUrl}/requestAccessTokenAndLogin`;
+    return this.http.post<any>(url, {code}, this.httpOptions)
+      .pipe(
+        map((userinfo) => {
+          this.processLogin(userinfo);
+          return userinfo;
+        }));
   }
 }

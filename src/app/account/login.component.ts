@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 
+import {SelfBase} from '../config';
 import {SessionService} from '../services/session.service';
 import {OpResult} from '../models/op-result';
 
@@ -10,13 +11,28 @@ import {OpResult} from '../models/op-result';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
+  loginMethod: 'wx' | 'pass' = 'wx';
 
   loginMessage: string;
 
   constructor(private sessionService: SessionService,
               private router: Router,
               private location: Location) {
+  }
+
+  ngOnInit() {
+    let obj = new window['WxLogin']({
+      self_redirect: false,
+      id: "login_container",
+      appid: "wx0645bedc5ee3d3de",
+      scope: "snsapi_login",
+      redirect_uri: `${SelfBase}`,
+      state: "wxeeLTAI55Dra7SzFLUi",
+      // href: "https://yuwen-reading.net/ee/assets/wx-login.css",
+      style: ""
+    });
   }
 
   cancel() {

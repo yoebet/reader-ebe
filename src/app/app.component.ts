@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
+import {DOCUMENT} from "@angular/common";
 
+import {combineLatest} from 'rxjs';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {StaticResource} from "./config";
@@ -17,6 +20,8 @@ export class AppComponent implements OnInit {
 
   avatarsBase = StaticResource.UserAvatarsBase;
 
+  loginChecked = false;
+
   get currentUser(): User {
     return this.sessionService.currentUser;
   }
@@ -24,10 +29,40 @@ export class AppComponent implements OnInit {
   constructor(private appService: AppService,
               private sessionService: SessionService,
               private router: Router,
-              public modalService: SuiModalService) {
+              private route: ActivatedRoute,
+              public modalService: SuiModalService,
+              @Inject(DOCUMENT) private document) {
   }
 
   ngOnInit() {
+    combineLatest(this.route.paramMap, this.route.queryParamMap)
+      .subscribe(([pathParams, queryParams]) => {
+        console.log(queryParams);
+
+        let state = queryParams.get('state');
+        let code = queryParams.get('code');
+        if (code && code.length >= 24 && state && state.startsWith('wxee')) {
+          window.history.pushState({}, '', '/');
+          this.sessionService.requestAccessTokenAndLogin(code)
+            .subscribe(result => {
+              console.log(result);
+              if (result.ok === 0) {
+                this.checkLogin();
+                alert(result.message || '微信登录失败');
+                return;
+              }
+            });
+          return;
+        }
+
+        if (!this.loginChecked) {
+          this.checkLogin();
+          this.loginChecked = true;
+        }
+      });
+  }
+
+  private checkLogin() {
     this.sessionService.checkLogin()
       .subscribe(a => {
       });

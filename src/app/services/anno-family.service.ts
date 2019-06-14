@@ -20,7 +20,7 @@ export class AnnoFamilyService extends BaseService<AnnotationFamily> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/${this.apiA}/annotation_families`;
+    this.baseUrl = `${apiBase}/${this.apiA}/anno_families`;
   }
 
   getCandidates(): Observable<AnnotationFamily[]> {

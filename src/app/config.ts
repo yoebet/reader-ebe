@@ -62,7 +62,8 @@ const StaticResource = {
   AppPackagesBase
 };
 
-const DefaultHttpHeaders = environment.httpHeaders || {};
+const DefaultHttpHeaders = Object.assign({'X-CL': 'E'}, environment.httpHeaders);
+const SelfBase = environment.selfBase;
 const WebAppBase = environment.webAppBase;
 
 const WX_CONFIG = {
@@ -78,6 +79,7 @@ export {
   LatestAnnotationsCount,
   StaticResource,
   DefaultHttpHeaders,
+  SelfBase,
   WebAppBase,
   WX_CONFIG
 };

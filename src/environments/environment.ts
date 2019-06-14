@@ -6,14 +6,15 @@
 const ServerDomain = 'yuwen-reading.net';
 
 
-const ServerRoot = 'http://localhost:3000';
-// const ServerRoot = `https://${ServerDomain}`;
+// const ServerRoot = 'http://localhost:3000';
+const ServerRoot = `http://${ServerDomain}`;
 // const ServerRoot = 'https://yuwen-reading.net';
 
 export const environment = {
   production: false,
   apiBase: ServerRoot,
   staticBase: ServerRoot,
+  selfBase: `http://${ServerDomain}/ee`,
   webAppBase: `http://${ServerDomain}/ww`,
   httpHeaders: {
     'X-XS': 'grMmqX5wDJsQKDs2oF7KxK'

@@ -14,7 +14,7 @@ export class AnnoGroupService extends SorterService<AnnotationGroup> {
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
-    this.baseUrl = `${apiBase}/${this.apiA}/annotation_groups`;
+    this.baseUrl = `${apiBase}/${this.apiA}/anno_groups`;
   }
 
 }
