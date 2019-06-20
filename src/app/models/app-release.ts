@@ -20,5 +20,4 @@ export class PackageInfo {
   hash: string;
   size: number;
   uploadedAt: Date;
-  commit: string;
 }

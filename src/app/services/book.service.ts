@@ -113,9 +113,10 @@ export class BookService extends SorterService<Book> {
     return this.postForOpResult(url);
   }
 
-  shortUrl(longUrl: string): Observable<any> {
+  shortUrl(longUrl: string, context = {}): Observable<any> {
     let url = `${this.wxMpBase}/shortUrl`;
-    return this.http.post<any>(url, {url: longUrl}, this.httpOptions)
+    let data = Object.assign({url: longUrl}, context);
+    return this.http.post<any>(url, data, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 

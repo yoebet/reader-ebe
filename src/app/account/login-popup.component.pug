@@ -20,9 +20,9 @@ ng-template([ngIf]='loginMethod==="wx"')
   .ui.content
     #login_popup_container &nbsp;
     p
-      | 直接扫码登录会刷新页面。<br>
-      | 为避免丢失修改，可以&nbsp;
-      a(href="{{wxLoginUrl}}", target="_blank", (click)='wxAuthWindow=true') 打开新窗口登录
+      | 直接扫码登录将会刷新页面
+      //| <br>为避免丢失修改，可以&nbsp;
+      //a(href="{{wxLoginUrl}}", target="_blank", (click)='wxAuthWindow=true') 打开新窗口登录
 
   .actions
     .ui.tiny.button((click)='cancel()') 关闭

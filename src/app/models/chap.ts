@@ -23,6 +23,7 @@ export class Chap extends Model {
 
 export class ChapContentPack {
   // file: string;
+  // jsonFile: string;
   // hash: string;
   size: number;
   builtAt: Date;

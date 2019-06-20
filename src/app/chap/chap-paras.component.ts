@@ -356,7 +356,9 @@ export class ChapParasComponent implements OnInit {
       .remove(para._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          console.error(opr.message || 'Fail');
+          let message = opr.message || '不能删除';
+          console.error(message);
+          alert(message);
           return;
         }
         this.chap.paras = this.chap.paras.filter(p => p !== para);
@@ -535,7 +537,9 @@ export class ChapParasComponent implements OnInit {
     this.paraService.update(para)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          console.error(opr.message || 'Fail');
+          let message = opr.message || '保存失败';
+          console.error(message);
+          alert(message);
           return;
         }
         Object.assign(currentPara, para);
@@ -598,7 +602,9 @@ export class ChapParasComponent implements OnInit {
     }
     obs2.subscribe(p => {
       if (!p._id) {
-        console.error('Fail');
+        let message = p.message || '保存失败';
+        console.error(message);
+        alert(message);
         return;
       }
       this.chap.paras.splice(this.insertPos, 0, p);
@@ -633,14 +639,18 @@ export class ChapParasComponent implements OnInit {
   private saveMerge(targetPara, removePara) {
     this.paraService.update(targetPara).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
-        console.error(opr.message || 'Fail To Save');
+        let message = opr.message || '保存失败';
+        console.error(message);
+        alert(message);
         return;
       }
     });
     this.paraService.remove(removePara._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
-          console.error(opr.message || 'Fail To Remove');
+          let message = opr.message || '删除失败';
+          console.error(message);
+          alert(message);
           return;
         }
         this.chap.paras = this.chap.paras.filter(p => p !== removePara);

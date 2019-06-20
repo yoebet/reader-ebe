@@ -26,7 +26,7 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/assets/wx-login.js"
+              "src/js/wx-login.js"
             ],
             "es5BrowserSupport": true
           },
@@ -50,7 +50,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "5mb"
                 }
               ]

@@ -16,6 +16,7 @@ export class AppLinkComponent implements OnInit {
   @Input() appLink: AppLink;
 
   title: string;
+  context: any;
   url: string;
   wxUrl: string;
   shortUrl: string;
@@ -26,6 +27,7 @@ export class AppLinkComponent implements OnInit {
     this.appLink = modal.context;
 
     this.title = this.appLink.title;
+    this.context = this.appLink.context;
     let link = this.appLink;
 
     this.url = `${WebAppBase}/${link.path}`;
@@ -47,7 +49,7 @@ export class AppLinkComponent implements OnInit {
   }
 
   genShortUrl(url, shotUrlName) {
-    this.bookService.shortUrl(url)
+    this.bookService.shortUrl(url, this.context)
       .subscribe(result => {
         if (result.ok !== 1) {
           alert(result.message || 'Fail');
@@ -62,6 +64,7 @@ export class AppLinkComponent implements OnInit {
 export class AppLink {
   title: string;
   path: string;
+  context?: any;
   wxScope: 'snsapi_userinfo' | 'snsapi_base';
   wxState: string;
 }

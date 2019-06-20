@@ -55,7 +55,8 @@ export class BookComponent implements OnInit {
   }
 
   showLink() {
-    let appLink = {path: `books/${this.book._id}`, title: this.book.name} as AppLink;
+    let bookId = this.book._id;
+    let appLink = {path: `books/${bookId}`, title: this.book.name, context: {bookId: bookId}} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
   }
 

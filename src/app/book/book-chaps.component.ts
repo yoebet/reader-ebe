@@ -225,7 +225,8 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   }
 
   showLink(chap: Chap) {
-    let appLink = {path: `chaps/${chap._id}`, title: chap.name} as AppLink;
+    let chapId = chap._id;
+    let appLink = {path: `chaps/${chapId}`, title: chap.name, context: {chapId}} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
   }
 

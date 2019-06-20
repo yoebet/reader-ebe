@@ -25,11 +25,13 @@ table.ui.striped.table.form
       td
         .ui.tiny.compact.primary.button((click)='saveNew()') 保存
         .ui.tiny.compact.button((click)='cancelEditNew()') 取消
-    tr(*ngFor='let rr of releases; trackBy: releaseTracker')
+    tr(*ngFor='let rr of releases; index as idx; trackBy: releaseTracker')
       ng-template([ngIf]='rr===editing')
         td
-          input.field.version-name([value]="rr.versionCode", placeholder='序号', #vCode='', type="number", size="4")
-          input.field.version-name([value]="rr.versionName", placeholder='版本号', #vName='', size="10")
+          ng-template([ngIf]='!rr.packageInfo')
+            input.field.version-name([value]="rr.versionCode", placeholder='序号', #vCode='', type="number", size="4")
+            input.field.version-name([value]="rr.versionName", placeholder='版本号', #vName='', size="10")
+          ng-template([ngIf]='rr.packageInfo') （{{rr.versionCode}}） {{rr.versionName}}
         td {{rr | createdDateString:'yyyy-M-d' }}
         td
           textarea(rows='3', [value]='rr.releaseNote', placeholder='更新说明', #rNote='')
@@ -63,9 +65,9 @@ table.ui.striped.table.form
             a((click)='edit(rr)', href='javascript:') 修改
             | &nbsp;&nbsp;
             a((click)='lock(rr)', href='javascript:') 锁定
-            ng-template([ngIf]='!rr.current&&rr.packageInfo')
+            ng-template([ngIf]='idx<3&&!rr.current&&rr.packageInfo')
               | &nbsp;&nbsp;
-              a((click)='setCurrent(rr)', href='javascript:') 设为当前最新
+              a((click)='setCurrent(rr)', href='javascript:') 设为最新
           ng-template([ngIf]='rr.status==="L"')
             a((click)='archive(rr)', href='javascript:') 隐藏
             | &nbsp;&nbsp;
