@@ -3,6 +3,7 @@
     sui-checkbox([(ngModel)]='showZh') 中文
     sui-checkbox(*ngIf='!contentPack', [(ngModel)]='tuneOrder') 排序
     sui-checkbox(*ngIf='!tuneOrder&&!contentPack', [(ngModel)]='showRemove') 删除
+    sui-checkbox(*ngIf='!tuneOrder&&!contentPack', [(ngModel)]='wxLink') 微信链接
     .ui.pointing.dropdown.tiny.button(*ngIf='!tuneOrder&&!contentPack', suiDropdown='', autoClose='outsideClick')
       | 设置状态
       i.dropdown.icon
@@ -45,11 +46,11 @@
           .ui.mini.compact.basic.button((click)='dropPack(chap)') 删除
         .ui.mini.primary.compact.basic.button((click)='buildPack(chap)') 创建
       ng-template([ngIf]="!tuneOrder&&!contentPack")
-        ng-template([ngIf]="showRemove")
-          button.ui.tiny.button((click)='remove(chap)') 删除
-        button.ui.tiny.button((click)='edit(chap)') 标题
-        button.ui.tiny.button((click)='editStatus(chap)') 状态
-        button.ui.tiny.button((click)='showLink(chap)') 链接
+        button.ui.tiny.button(*ngIf='showRemove', (click)='remove(chap)') 删除
+        button.ui.tiny.button(*ngIf='wxLink', (click)='showLink(chap)') 链接
+        ng-template([ngIf]="!showRemove&&!wxLink")
+          button.ui.tiny.button((click)='edit(chap)') 标题
+          button.ui.tiny.button((click)='editStatus(chap)') 状态
 
     a([routerLink]="['/chaps', chap._id]", [hidden]="chap===editingChap&&!editChapStatus")
       .pre-wrap {{chap.name}}

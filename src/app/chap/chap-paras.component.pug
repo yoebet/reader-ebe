@@ -20,7 +20,7 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
       sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
-      sui-checkbox([(ngModel)]='showCommentsCount', (ngModelChange)='checkCommentsCount()') 评论数
+      sui-checkbox([(ngModel)]='paraOperations', (ngModelChange)='checkCommentsCount()') 操作
     .operations([hidden]='annotateOnly')
       .title
         i.write.icon
@@ -105,10 +105,13 @@ div(*ngIf='chap')
           (contentCommand)="onContentCommand(para,$event)",
           (dictRequest)="onDictRequest($event)",
           (noteRequest)="onNoteRequest($event)")
-          .ui.right.floated.selection.horizontal.list.para-op(*ngIf='showCommentsCount')
+          .ui.right.floated.selection.horizontal.list.para-op(*ngIf='paraOperations')
             .item((click)='showComments(para)')
               i.comment.icon
               | 评论({{para.commentsCount}})
+            .item((click)='showLink(index+1)')
+              i.wechat.icon
+              | 链接
 
         para-form.ui.form.content.para-editor(*ngIf='editingPara===para',
         [ngClass]='{"left-right": leftRight, "up-down": !leftRight}',

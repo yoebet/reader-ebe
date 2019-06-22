@@ -52,7 +52,7 @@ const ImagesBase = `${staticBase}/images`;
 const BookImagesBase = `${ImagesBase}/book`;
 const BookImageNotSet = `${BookImagesBase}/missing.png`;
 const UserAvatarsBase = `${staticBase}/avatars`;
-const AppPackagesBase = `${staticBase}/packages`;
+const AppPackagesBase = `${staticBase}/apks`;
 
 
 const StaticResource = {

@@ -32,6 +32,7 @@ import {ParaFormComponent} from './para-form.component';
 import {DictSimpleSmiComponent} from "../dict/dict-simple-smi.component";
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {ParaCommentsModal} from '../content/para-comments.component';
+import {AppLink, AppLinkModal} from "../common/app-link.component";
 
 
 @Component({
@@ -78,7 +79,7 @@ export class ChapParasComponent implements OnInit {
   // editInplace = false;
   highlightSentence = true;
   annotatedWordsHover = true;
-  showCommentsCount = false;
+  paraOperations = false;
 
   annotationSet: AnnotationSet;
   contentContext: ContentContext;
@@ -133,7 +134,7 @@ export class ChapParasComponent implements OnInit {
   }
 
   private checkCommentsCount() {
-    if (!this.showCommentsCount) {
+    if (!this.paraOperations) {
       return;
     }
     let chap = this.chap;
@@ -163,6 +164,13 @@ export class ChapParasComponent implements OnInit {
           this.doShowComments(para);
         });
     }
+  }
+
+  showLink(pn) {
+    let chap = this.chap;
+    let chapId = chap._id;
+    let appLink = {path: `chaps/${chapId}?pn=${pn}`, title: chap.name, context: {chapId}} as AppLink;
+    this.modalService.open(new AppLinkModal(appLink));
   }
 
   @HostListener('window:keyup', ['$event'])

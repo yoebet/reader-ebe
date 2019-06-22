@@ -19,6 +19,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   @Input() book: Book;
   contentPack = false;
   showRemove = false;
+  wxLink = false;
   showZh = true;
   editingChap: Chap;
   editChapStatus = false;

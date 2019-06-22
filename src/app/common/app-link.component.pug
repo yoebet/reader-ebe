@@ -15,8 +15,14 @@
             a(*ngIf='!shortUrl', (click)='genShortUrl(url,"shortUrl")', href='javascript:') 生成
           .app-link(*ngIf='shortUrl') {{shortUrl}}
     tr
-      td 先登录
+      td 尝试登录
       td
+        .ui.mini.form
+          .fields
+            .inline.field
+              sui-checkbox([(ngModel)]='requestUserinfo', (click)='resetWxUrl()') 请求用户信息
+              label state &nbsp;
+              input([(ngModel)]='wxState', placeholder='Name', (change)='resetWxUrl()', size='8')
         .app-link(*ngIf='wxUrl') {{wxUrl}}
         .short-link
           .sl-tip

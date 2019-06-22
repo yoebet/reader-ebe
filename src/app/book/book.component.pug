@@ -3,13 +3,15 @@ div(*ngIf='book')
     .ui.right.floated.sub.header
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
-      button.ui.tiny.button((click)='showForm()') 修改
-      | &nbsp;&nbsp;
-      button.ui.tiny.button((click)='showUsers()') 人员
-      | &nbsp;&nbsp;
-      button.ui.tiny.button((click)='showPacks()') 内容包
-      | &nbsp;&nbsp;
-      button.ui.tiny.button((click)='showLink()') 链接
+      .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
+        | 操作
+        i.dropdown.icon
+        .menu(suiDropdownMenu='')
+          .item((click)='showForm()') 修改
+          .item((click)='showUsers()') 人员
+          .item((click)='showPacks()') 内容包
+          .item((click)='showLink()') 微信链接
+
     .name-author
       .book-name {{book.name}}
       .author(*ngIf='book.author')
