@@ -8,6 +8,7 @@ import {UserService} from '../services/user.service';
 import {PageableListComponent} from '../common/pageable-list.component';
 import {MessagesModal} from '../message/messages-popup.component';
 import {MessageScope} from '../message/message-scope';
+import {UserInfoModal} from "./user-info.component";
 
 @Component({
   selector: 'user-list',
@@ -55,6 +56,18 @@ export class UserListComponent extends PageableListComponent implements OnInit {
     this.searchName = null;
     this.manager = false;
     this.list();
+  }
+
+  showDetail(user: User) {
+    this.modalService.open(new UserInfoModal(user));
+    if (!user.resourceCounts) {
+      this.userService.getDetail(user._id)
+        .subscribe(u => {
+          if (u) {
+            user.resourceCounts = u.resourceCounts;
+          }
+        });
+    }
   }
 
   edit(user) {

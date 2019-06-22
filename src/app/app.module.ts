@@ -59,10 +59,11 @@ import {DictPhoneticsComponent} from './dict/dict-phonetics.component';
 import {DictZhComponent} from './dict-zh/dict-zh.component';
 import {DictZhEntryComponent} from './dict-zh/dict-zh-entry.component';
 import {DictZhEntrySmiComponent} from './dict-zh/dict-zh-entry-smi.component';
-import {UserListComponent} from './user/user-list.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
+import {UserListComponent} from './user/user-list.component';
 import {UserComponent} from './user/user.component';
+import {UserInfoComponent} from './user/user-info.component';
 import {UserBookComponent} from './user/user-book.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
@@ -113,10 +114,11 @@ import {AppLinkComponent} from './common/app-link.component';
     DictZhComponent,
     DictZhEntryComponent,
     DictZhEntrySmiComponent,
-    UserListComponent,
     FeedbackListComponent,
     IssueListComponent,
+    UserListComponent,
     UserComponent,
+    UserInfoComponent,
     UserBookComponent,
     CreatedDatePipe,
     CreatedDateStringPipe,
@@ -158,6 +160,7 @@ import {AppLinkComponent} from './common/app-link.component';
   ],
   entryComponents: [
     LoginPopupComponent,
+    UserInfoComponent,
     BookInfoComponent,
     BookFormComponent,
     BookPacksComponent,

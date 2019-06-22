@@ -8,9 +8,24 @@ export class User extends Model {
   status: string;
   memo: string;
 
-  lastLogin?: any; // {time}
+  gender: string;
+  selfIntro?: string;
+  phoneNumber?: string;
+
+  province?: string;
+  city?: string;
+  wxUnionid?: string;
+  wxBoundAt?: string;
+
+  rc: string;
+  frc?: string;
+
+  lastLogin?: any; // {time, client, appVersion?, osVersion?}
+  lastLoginApp?: any;
   tokenObj?: any; // {token, ttl}
   avatarSetting?: any; // {type: 'img/char', imgUrl: 'xxx', ...}
+
+  resourceCounts?: any; // {"order":0,"userWord":63,"comment":2,"note":2,"recUser":1}
 
   static Roles = ['', 'A', 'E', 'P'];
 }

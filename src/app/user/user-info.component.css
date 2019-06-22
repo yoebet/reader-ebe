@@ -1,0 +1,18 @@
+.prop {
+  margin-right: 0.8em;
+  display: inline-block;
+}
+
+.prop-name {
+  font-size: 0.9em;
+  color: rgba(128, 128, 128, 0.9);
+  margin-right: 0.3em;
+}
+
+.ui.table tr td:first-child {
+  white-space: nowrap;
+}
+
+.ui.table tr td:nth-child(2) {
+  width: 96%;
+}

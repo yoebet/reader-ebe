@@ -34,7 +34,11 @@ table.ui.small.striped.table.form
       td {{user.phoneNumber}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
-        ng-template([ngIf]='user.lastLogin&&user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}}
+        ng-template([ngIf]='user.lastLogin')
+          ng-template([ngIf]='user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}} &nbsp;
+          ng-template([ngIf]='user.lastLogin.client') {{user.lastLogin.client}} &nbsp;
+          ng-template([ngIf]='user.lastLogin.appVersion') {{user.lastLogin.appVersion}} &nbsp;
+          ng-template([ngIf]='user.lastLogin.osVersion') {{user.lastLogin.osVersion}} &nbsp;
       td
         ng-template([ngIf]='!editing(user)') {{user.role}}
         ng-template([ngIf]='editing(user)')
@@ -60,8 +64,9 @@ table.ui.small.striped.table.form
             .ui.mini.compact.basic.button((click)='getTempToken(user)') 查看Token
         ng-template([ngIf]='!tokenOp')
           ng-template([ngIf]='!editing(user)')
-            .ui.mini.button((click)='messages(user)') 消息
+            .ui.mini.button((click)='showDetail(user)') 详情
             .ui.mini.button((click)='edit(user)') 修改
+            .ui.mini.button((click)='messages(user)') 消息
           ng-template([ngIf]='editing(user)')
             .ui.mini.button((click)='editingUser=null') 取消
             .ui.mini.primary.button((click)='save()') 保存

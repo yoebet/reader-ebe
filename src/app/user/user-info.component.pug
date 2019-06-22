@@ -1,0 +1,95 @@
+.ui.content
+  .ui.unstackable.definition.table(*ngIf='user')
+    tr
+      td 账号
+      td
+        .prop
+          span.prop-name {{user.name}}
+          | {{user.nickName}}
+        .prop(*ngIf='user.role')
+          span.prop-name role
+          | {{user.role}}
+        .prop
+          span.prop-name 注册于
+          | {{user | createdDate | date:'yyyy-MM-dd'}}
+    tr
+      td 上次登录
+      td
+        ng-template([ngIf]='user.lastLogin')
+          .prop(*ngIf='user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}}
+          .prop(*ngIf='user.lastLogin.client')
+            span.prop-name cli
+            | {{user.lastLogin.client}}
+          .prop(*ngIf='user.lastLogin.appVersion')
+            span.prop-name v
+            | {{user.lastLogin.appVersion}}
+          .prop(*ngIf='user.lastLogin.osVersion')
+            span.prop-name os
+            | {{user.lastLogin.osVersion}}
+    tr(*ngIf='user.lastLoginApp&&(user.lastLogin&&!user.lastLogin.appVersion)')
+      td (app)
+      td
+        .prop(*ngIf='user.lastLoginApp.time') {{user.lastLoginApp.time.substr(0,10)}}
+        .prop(*ngIf='user.lastLoginApp.client')
+          span.prop-name cli
+          | {{user.lastLoginApp.client}}
+        .prop(*ngIf='user.lastLoginApp.appVersion')
+          span.prop-name v
+          | {{user.lastLoginApp.appVersion}}
+        .prop(*ngIf='user.lastLoginApp.osVersion')
+          span.prop-name os
+          | {{user.lastLoginApp.osVersion}}
+    tr(*ngIf='user.phoneNumber')
+      td 手机号
+      td {{user.phoneNumber}}
+    tr
+      td 基本
+      td
+        .prop(*ngIf='user.gender')
+          span.prop-name 性别
+          | {{user.gender}}
+        .prop(*ngIf='user.province||user.city')
+          span.prop-name 地区
+          | {{user.province}} {{user.city}}
+    tr(*ngIf='user.selfIntro')
+      td 自我介绍
+      td {{user.selfIntro}}
+    tr
+      td 微信
+      td.props
+        .prop(*ngIf='user.wxUnionid')
+          span.prop-name 已绑定
+          | {{user.wxAppOpenid? 'app':''}}
+          | {{user.wxWebOpenid? 'ww':''}}
+          | {{user.wxEditorOpenid? 'ee':''}}
+    tr
+      td 推荐码
+      td
+        | {{user.rc}}
+        .prop(*ngIf='user.frc')
+          span.prop-name From
+          | {{user.frc}}
+    tr(*ngIf='user.memo')
+      td 备注
+      td {{user.memo}}
+    tr(*ngIf='counters')
+      td 资源
+      td
+        .prop(*ngIf='counters.order')
+          span.prop-name 订单
+          | {{counters.order}}
+        .prop(*ngIf='counters.userWord')
+          span.prop-name 词表
+          | {{counters.userWord}}
+        .prop(*ngIf='counters.comment')
+          span.prop-name 评论
+          | {{counters.comment}}
+        .prop(*ngIf='counters.note')
+          span.prop-name 笔记
+          | {{counters.note}}
+        .prop(*ngIf='counters.recUser')
+          span.prop-name 推荐用户
+          | {{counters.recUser}}
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭
