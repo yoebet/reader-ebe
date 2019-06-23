@@ -25,7 +25,7 @@ export class User extends Model {
   tokenObj?: any; // {token, ttl}
   avatarSetting?: any; // {type: 'img/char', imgUrl: 'xxx', ...}
 
-  resourceCounts?: any; // {"order":0,"userWord":63,"comment":2,"note":2,"recUser":1}
+  resourceCounts?: any; // {"order":0,"userWord":63,"comment":2,"note":2,"recUser":1,"editedBook":0}
 
   static Roles = ['', 'A', 'E', 'P'];
 }

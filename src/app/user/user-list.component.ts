@@ -9,6 +9,8 @@ import {PageableListComponent} from '../common/pageable-list.component';
 import {MessagesModal} from '../message/messages-popup.component';
 import {MessageScope} from '../message/message-scope';
 import {UserInfoModal} from "./user-info.component";
+import {SessionService} from "../services/session.service";
+import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'user-list',
@@ -21,13 +23,19 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   manager: false;
   searchName: string;
   tokenOp = false;
+  moreOp = false;
 
   roleOptions = User.Roles;
   avatarsBase = StaticResource.UserAvatarsBase;
 
   constructor(private userService: UserService,
+              private sessionService: SessionService,
               public modalService: SuiModalService) {
     super();
+  }
+
+  get currentUser(): User {
+    return this.sessionService.currentUser;
   }
 
   doList(options: any) {
@@ -71,7 +79,12 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   }
 
   edit(user) {
-    this.editingUser = {_id: user._id, role: user.role, memo: user.memo} as User;
+    this.editingUser = {
+      _id: user._id,
+      role: user.role,
+      phoneNumber: user.phoneNumber,
+      memo: user.memo
+    } as User;
   }
 
   editing(user) {
@@ -167,6 +180,22 @@ export class UserListComponent extends PageableListComponent implements OnInit {
           return;
         }
         user.tokenObj = {};
+      });
+  }
+
+
+  dropUser(user: User) {
+    if (!confirm('要删除用户吗？如果用户包含相关数据则不能删除')) {
+      return;
+    }
+    this.userService
+      .remove(user._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        this.users = this.users.filter(u => u !== user);
       });
   }
 

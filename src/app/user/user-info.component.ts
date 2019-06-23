@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
-import {User} from '../models/user';
+import {User, UserIdName} from '../models/user';
 import {UserService} from '../services/user.service';
 
 @Component({
@@ -13,6 +13,7 @@ import {UserService} from '../services/user.service';
 })
 export class UserInfoComponent {
   @Input() user: User;
+  frcUser: UserIdName;
 
   get counters(): any {
     if (!this.user) {
@@ -24,6 +25,13 @@ export class UserInfoComponent {
   constructor(private userService: UserService,
               private modal: SuiModal<User, string, string>) {
     this.user = modal.context;
+  }
+
+  fetchFrcUser() {
+    this.userService.getByRc(this.user.frc)
+      .subscribe(uin => {
+        this.frcUser = uin;
+      });
   }
 
   close() {

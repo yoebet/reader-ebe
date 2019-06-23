@@ -39,9 +39,6 @@
         .prop(*ngIf='user.lastLoginApp.osVersion')
           span.prop-name os
           | {{user.lastLoginApp.osVersion}}
-    tr(*ngIf='user.phoneNumber')
-      td 手机号
-      td {{user.phoneNumber}}
     tr
       td 基本
       td
@@ -54,6 +51,9 @@
     tr(*ngIf='user.selfIntro')
       td 自我介绍
       td {{user.selfIntro}}
+    tr(*ngIf='user.phoneNumber')
+      td 手机号
+      td {{user.phoneNumber}}
     tr
       td 微信
       td.props
@@ -66,9 +66,17 @@
       td 推荐码
       td
         | {{user.rc}}
-        .prop(*ngIf='user.frc')
-          span.prop-name From
-          | {{user.frc}}
+        ng-template([ngIf]='user.frc')
+          .prop
+            i.icon.left.caret
+            span.prop-name 推荐者
+            | {{user.frc}}
+          .prop(*ngIf='!frcUser')
+            span.prop-name
+              a((click)='fetchFrcUser()', href='javascript:') 查看
+          .prop(*ngIf='frcUser')
+            span.prop-name {{frcUser.name}}
+            | {{frcUser.nickName}}
     tr(*ngIf='user.memo')
       td 备注
       td {{user.memo}}
@@ -87,6 +95,9 @@
         .prop(*ngIf='counters.note')
           span.prop-name 笔记
           | {{counters.note}}
+        .prop(*ngIf='counters.editedBook')
+          span.prop-name 编辑图书
+          | {{counters.editedBook}}
         .prop(*ngIf='counters.recUser')
           span.prop-name 推荐用户
           | {{counters.recUser}}

@@ -7,7 +7,7 @@ import {catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {User} from '../models/user';
+import {User, UserIdName} from '../models/user';
 import {UserBook} from '../models/user-book';
 import {OpResult} from '../models/op-result';
 
@@ -37,6 +37,12 @@ export class UserService extends BaseService<User> {
       url += '&manager';
     }
     return super.list(url) as Observable<User[]>;
+  }
+
+  getByRc(rc): Observable<UserIdName> {
+    let url = `${this.baseUrl}/getByRc/${rc}`;
+    return this.http.get<UserIdName>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
   }
 
   userBooks(userId: string): Observable<UserBook[]> {

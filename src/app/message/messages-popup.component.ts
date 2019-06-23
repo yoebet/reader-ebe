@@ -138,7 +138,7 @@ export class MessagesPopupComponent implements OnInit {
 export class MessagesModal extends ComponentModalConfig<MessageScope> {
   constructor(scope: MessageScope) {
     super(MessagesPopupComponent, scope, false);
-    this.size = ModalSize.Normal;
+    this.size = ModalSize.Tiny;
     // this.isFullScreen = true;
     this.mustScroll = true;
   }

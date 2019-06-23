@@ -4,6 +4,7 @@
 .ui.small.form
   .ui.right.floated.header
     sui-checkbox([(ngModel)]='tokenOp') Token操作
+    sui-checkbox([(ngModel)]='moreOp') 更多操作
   .fields
     .inline.field
       input([(ngModel)]='searchName', placeholder='Name')
@@ -31,7 +32,10 @@ table.ui.small.striped.table.form
       td
         a([routerLink]="['/users', user._id]") {{user.name}}
       td {{user.nickName}}
-      td {{user.phoneNumber}}
+      td
+        ng-template([ngIf]='!editing(user)') {{user.phoneNumber}}
+        ng-template([ngIf]='editing(user)')
+          input.input([(ngModel)]='editingUser.phoneNumber', placeholder='手机号', size="11")
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
         ng-template([ngIf]='user.lastLogin')
@@ -42,7 +46,7 @@ table.ui.small.striped.table.form
       td
         ng-template([ngIf]='!editing(user)') {{user.role}}
         ng-template([ngIf]='editing(user)')
-          sui-select.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
+          sui-select.compact.selection.user-role([(ngModel)]='editingUser.role', [options]='roleOptions', placeholder='User Role', #roleSelect='')
             sui-select-option(*ngFor='let option of roleSelect.filteredOptions', [value]='option')
       td
         ng-template([ngIf]='!editing(user)') {{user.memo}}
@@ -64,9 +68,12 @@ table.ui.small.striped.table.form
             .ui.mini.compact.basic.button((click)='getTempToken(user)') 查看Token
         ng-template([ngIf]='!tokenOp')
           ng-template([ngIf]='!editing(user)')
-            .ui.mini.button((click)='showDetail(user)') 详情
-            .ui.mini.button((click)='edit(user)') 修改
-            .ui.mini.button((click)='messages(user)') 消息
+            ng-template([ngIf]='moreOp')
+              .ui.mini.button((click)='messages(user)') 消息
+              .ui.mini.button(*ngIf='currentUser.role==="R"', (click)='dropUser(user)') 删除
+            ng-template([ngIf]='!moreOp')
+              .ui.mini.button((click)='showDetail(user)') 详情
+              .ui.mini.button((click)='edit(user)') 修改
           ng-template([ngIf]='editing(user)')
             .ui.mini.button((click)='editingUser=null') 取消
             .ui.mini.primary.button((click)='save()') 保存
