@@ -46,7 +46,7 @@ table.ui.striped.table.form
               input(type="file", style="display: none", (change)="upload(rr)", #file='')
         td {{rr.current? '是':''}}
         td
-          .ui.tiny.compact.primary.button((click)='save(rr,vName.value,vCode.value,rNote.value)') 保存
+          .ui.tiny.compact.primary.button((click)='save(rr,vName? vName.value:rr.versionName,vCode? vCode.value:rr.versionCode,rNote.value)') 保存
           .ui.tiny.compact.button((click)='cancelEdit()') 取消
       ng-template([ngIf]='rr!==editing')
         td （{{rr.versionCode}}） {{rr.versionName}}

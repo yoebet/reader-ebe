@@ -80,6 +80,12 @@
     tr(*ngIf='user.memo')
       td 备注
       td {{user.memo}}
+    tr(*ngIf='user.preference')
+      td 设置
+      td
+        .prop(*ngIf='user.preference.baseVocabulary')
+          span.prop-name 基础词汇
+          | {{user.preference.baseVocabulary}}
     tr(*ngIf='counters')
       td 资源
       td

@@ -1,10 +1,12 @@
 const ServerDomain = 'yuwen-reading.net';
 
+const ServerRoot = `http://${ServerDomain}`;
+
 export const environment = {
   production: true,
   apiBase: '',
   staticBase: '',
-  selfBase: `http://${ServerDomain}/ee`,
-  webAppBase: `http://${ServerDomain}/ww`,
+  selfBase: `${ServerRoot}/ee`,
+  webAppBase: `${ServerRoot}/ww`,
   httpHeaders: {}
 };

@@ -28,6 +28,10 @@ export class BookService extends SorterService<Book> {
     this.wxMpBase = `${apiBase}/${this.apiA}/wx_mp`;
   }
 
+  listByCat(cat: string): Observable<Book[]> {
+    let url = `${this.baseUrl}?cat=${cat}`;
+    return super.list(url);
+  }
 
   backup(bookId: string): Observable<Book> {
     let url = `${this.baseUrl}/${bookId}/backup`;

@@ -8,7 +8,7 @@ export abstract class LoginBaseComponent implements OnInit {
 
   wxQrCodeInit = false;
 
-  wxState = "wxeeLTAI55Dra7SzFLUi";
+  wxState = "123";
   wxScope = 'snsapi_login';
 
   ngOnInit() {

@@ -118,7 +118,7 @@ export class BaseService<M extends Model> {
   protected extractErrorMessage(error: any): string {
     let ee = error.error;
     if (typeof ee === 'object') {
-      let message=ee.message;
+      let message = ee.message;
       if (message && typeof message === 'string') {
         return message;
       }
@@ -155,6 +155,10 @@ export class BaseService<M extends Model> {
         return this.handleError400(error);
       case 401:
         return this.handleError401(error);
+      case 413:
+        // {ok: 0, message: "request entity too large"}
+        alert('内容过大');
+        return EMPTY;
       case 461:
         return this.handleError461(error);
       case 500:

@@ -44,9 +44,9 @@ export class Book extends Model {
 
 
   static CategoryNames = {
-    Nov: '小说名著',
-    Tex: '英语教材',
-    Kid: '儿童文学',
+    Nov: '小说',
+    Tex: '教材',
+    Kid: '儿童',
     His: '历史',
     Poe: '诗歌',
     Oth: '其他'

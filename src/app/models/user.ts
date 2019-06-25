@@ -27,6 +27,8 @@ export class User extends Model {
 
   resourceCounts?: any; // {"order":0,"userWord":63,"comment":2,"note":2,"recUser":1,"editedBook":0}
 
+  preference?: any;
+
   static Roles = ['', 'A', 'E', 'P'];
 }
 

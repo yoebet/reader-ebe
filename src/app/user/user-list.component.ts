@@ -73,6 +73,7 @@ export class UserListComponent extends PageableListComponent implements OnInit {
         .subscribe(u => {
           if (u) {
             user.resourceCounts = u.resourceCounts;
+            user.preference = u.preference;
           }
         });
     }

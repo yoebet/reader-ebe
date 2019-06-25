@@ -27,9 +27,11 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   @ViewChild('newBookCode') newBookCodeEl: ElementRef;
   @ViewChild('newBookName') newBookNameEl: ElementRef;
   books: Book[] = [];
+  allBooks: Book[] = null;
   newBook: Book = null;
   privilegeOperations = false;
   showZh = true;
+  category: string;
 
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
@@ -59,17 +61,47 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bookService
-      .list()
-      .subscribe(books => this.books = books);
+    this.loadBooks();
     this.annoFamilyService
       .getCandidates()
       .subscribe(afs => this.annOptions = afs);
   }
 
+  loadBooks(cat = null) {
+    this.category = cat;
+    let obs;
+    if (cat) {
+      if (this.allBooks) {
+        this.books = this.allBooks.filter(b => b.category == cat);
+        return;
+      }
+      obs = this.bookService.listByCat(cat);
+    } else {
+      if (this.allBooks) {
+        this.books = this.allBooks;
+        return;
+      }
+      obs = this.bookService.list();
+    }
+    obs.subscribe(books => {
+      this.books = books;
+      if (!cat) {
+        this.allBooks = books;
+      }
+    });
+  }
 
   showListLink() {
-    let appLink = {path: 'books', title: '图书列表'} as AppLink;
+    let path = 'books';
+    let title = '图书列表';
+    if (this.category) {
+      path = `books/cat/${this.category}`;
+      let catName = this.categoryNames[this.category];
+      if (catName) {
+        title = `图书列表（${catName}）`;
+      }
+    }
+    let appLink = {path, title} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
   }
 

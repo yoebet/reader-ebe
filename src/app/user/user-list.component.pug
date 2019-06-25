@@ -35,7 +35,7 @@ table.ui.small.striped.table.form
       td
         ng-template([ngIf]='!editing(user)') {{user.phoneNumber}}
         ng-template([ngIf]='editing(user)')
-          input.input([(ngModel)]='editingUser.phoneNumber', placeholder='手机号', size="11")
+          input.input([(ngModel)]='editingUser.phoneNumber', placeholder='手机号', size="12")
       td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
         ng-template([ngIf]='user.lastLogin')
