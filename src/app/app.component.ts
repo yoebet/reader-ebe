@@ -39,9 +39,9 @@ export class AppComponent implements OnInit {
       .subscribe(([pathParams, queryParams]) => {
         console.log(queryParams);
 
-        let state = queryParams.get('state');
+        // let state = queryParams.get('state');
         let code = queryParams.get('code');
-        if (code && code.length >= 24 && state && state.startsWith('wxee')) {
+        if (code && code.length >= 24) {
           window.history.pushState({}, '', '/');
           this.sessionService.requestAccessTokenAndLogin(code)
             .subscribe(result => {

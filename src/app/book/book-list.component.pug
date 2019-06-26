@@ -5,7 +5,7 @@
       ng-template([ngIf]='currentUser.role==="R"')
         sui-checkbox([(ngModel)]='tuneOrder') 排序
         sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
-      .ui.horizontal.link.list
+      .ui.horizontal.link.list(*ngIf='currentUser.role==="A"||currentUser.role==="R"')
         a.item((click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list
