@@ -12,6 +12,15 @@ export abstract class PageableListComponent {
     this.doList(options);
   }
 
+  gotoPage(page) {
+    page = parseInt(page);
+    if (isNaN(page)) {
+      return;
+    }
+    this.page = page;
+    this.list();
+  }
+
   nextPage() {
     this.page++;
     this.list();

@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {SuiModalService} from "ng2-semantic-ui";
 
+import {StaticResource} from "../config";
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {BookService} from '../services/book.service';
@@ -27,6 +28,8 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   editNew = false;
   statusNames = Book.StatusNames;
   statusOptions = Book.Statuses;
+
+  bookChapsBase = StaticResource.BookChapsBase;
 
   constructor(private bookService: BookService,
               private chapService: ChapService,

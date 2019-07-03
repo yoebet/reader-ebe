@@ -3,6 +3,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
+import {StaticResource} from '../config';
 import {Book, BookContentPack} from '../models/book';
 import {BookService} from '../services/book.service';
 import {OpResult} from '../models/op-result';
@@ -25,6 +26,8 @@ export class BookPacksComponent implements OnInit {
   @Input() book: Book;
   packInfos: PackInfo[];
   executingPack: PackInfo = null;
+
+  bookPacksBase = StaticResource.BookPacksBase;
 
   constructor(private bookService: BookService,
               private modal: SuiModal<Book, string, string>) {

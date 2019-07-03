@@ -22,7 +22,7 @@ export class Chap extends Model {
 }
 
 export class ChapContentPack {
-  // file: string;
+  file: string;
   // jsonFile: string;
   // hash: string;
   size: number;

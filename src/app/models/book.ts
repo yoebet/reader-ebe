@@ -105,7 +105,7 @@ export class BookImage {
 
 export class BookContentPack {
   role?: string;
-  // file: string;
+  file: string;
   // hash: string;
   size: number;
   chaps: number;

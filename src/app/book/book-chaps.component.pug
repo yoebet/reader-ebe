@@ -42,7 +42,7 @@
         | 内容包：
         ng-template([ngIf]='chap.contentPack')
           .ui.small.label {{chap.contentPack.builtAt | date:'yyyy-M-d' }}
-          .ui.small.label {{chap.contentPack.size | fileSize}}
+          a.ui.small.label([href]='bookChapsBase+"/"+book._id+"/"+chap.contentPack.file') {{chap.contentPack.size | fileSize}}
           .ui.mini.compact.basic.button((click)='dropPack(chap)') 删除
         .ui.mini.primary.compact.basic.button((click)='buildPack(chap)') 创建
       ng-template([ngIf]="!tuneOrder&&!contentPack")

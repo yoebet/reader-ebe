@@ -21,7 +21,7 @@
             .ui.small.label {{pInfo.pack.builtAt | date:'yyyy-M-d' }}
           .item
             | 大小
-            .ui.small.label {{pInfo.pack.size | fileSize}}
+            a.ui.small.label([href]='bookPacksBase+"/"+pInfo.pack.file') {{pInfo.pack.size | fileSize}}
           .item
             | 章节
             .ui.small.label {{pInfo.pack.chaps}}

@@ -53,13 +53,17 @@ const BookImagesBase = `${ImagesBase}/book`;
 const BookImageNotSet = `${BookImagesBase}/missing.png`;
 const UserAvatarsBase = `${staticBase}/avatars`;
 const AppPackagesBase = `${staticBase}/apks`;
+const BookPacksBase = `${staticBase}/book-packs`;
+const BookChapsBase = `${staticBase}/book-chaps`;
 
 
 const StaticResource = {
   BookImagesBase,
   BookImageNotSet,
   UserAvatarsBase,
-  AppPackagesBase
+  AppPackagesBase,
+  BookPacksBase,
+  BookChapsBase
 };
 
 const DefaultHttpHeaders = Object.assign({'X-CL': 'E'}, environment.httpHeaders);

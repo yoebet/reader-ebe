@@ -25,7 +25,7 @@ export class UserService extends BaseService<User> {
 
 
   list(options): Observable<User[]> {
-    let {from, limit, manager, name} = options;
+    let {from, limit, manager, name, sortCT} = options;
     let url = `${this.baseUrl}?limit=${limit || 20}`;
     if (from) {
       url += `&from=${from}`;
@@ -35,6 +35,9 @@ export class UserService extends BaseService<User> {
     }
     if (manager) {
       url += '&manager';
+    }
+    if (sortCT) {
+      url += `&sortCT=${sortCT}`;
     }
     return super.list(url) as Observable<User[]>;
   }

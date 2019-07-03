@@ -14,7 +14,8 @@ import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'user-list',
-  templateUrl: './user-list.component.html'
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent extends PageableListComponent implements OnInit {
   users: User[];
@@ -24,6 +25,8 @@ export class UserListComponent extends PageableListComponent implements OnInit {
   searchName: string;
   tokenOp = false;
   moreOp = false;
+
+  sortCT: '1' | '-1' = '-1'; //create time
 
   roleOptions = User.Roles;
   avatarsBase = StaticResource.UserAvatarsBase;
@@ -45,6 +48,9 @@ export class UserListComponent extends PageableListComponent implements OnInit {
     if (this.searchName) {
       options.name = this.searchName;
     }
+    if (this.sortCT) {
+      options.sortCT = this.sortCT;
+    }
     this.userService
       .list(options)
       .subscribe(users => this.users = users);
@@ -52,6 +58,18 @@ export class UserListComponent extends PageableListComponent implements OnInit {
 
   ngOnInit() {
     this.list();
+  }
+
+  sortByCreateTime() {
+    if (!this.sortCT) {
+      this.sortCT = '1';
+    } else if (this.sortCT === '1') {
+      this.sortCT = '-1';
+    } else {
+      this.sortCT = '1';
+    }
+    this.page = 1;
+    this.doList({});
   }
 
   search() {
