@@ -21,7 +21,7 @@ export class SentenceAlignComponent {
   para: Para;
   paraSaver: ParaSaver;
 
-  endingPattern = /[.?!:;。．？！：；]+['"＇＂’” ]*\n?/g;
+  endingPattern = /[.?!:;。．？！：；……]+['"＇＂’” ]*\n?/g;
   endingPattern2 = /[，,]+['"＇＂’” ]*\n?/g;
   splitMark = '-=SPL=-';
   editingRow = null;

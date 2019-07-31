@@ -15,6 +15,7 @@ export class ParaFormComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
   @Input() para: Para;
   @Input() showTrans: boolean;
+  @Input() indentTrans: boolean;
   @Input() paraSaver: ParaSaver;
 
   constructor(public modalService: SuiModalService) {
@@ -49,16 +50,20 @@ export class ParaFormComponent implements OnInit {
   }
 
   splitParasByLflf() {
-    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver, splitPat: /\n\n+/};
-    this.modalService
-      .open(new ParaSplitModal(context))
-      // .onDeny((d) => {})
-      .onApprove((paras: Para[]) => {
-      });
+    this.splitParas(/\n\n+/);
   }
 
   splitParasByLf() {
-    let context: ParaSplitContext = {para: this.para, paraSaver: this.paraSaver, splitPat: /\n+/};
+    this.splitParas(/\n+/);
+  }
+
+  splitParas(splitPat) {
+    let context: ParaSplitContext = {
+      para: this.para,
+      paraSaver: this.paraSaver,
+      splitPat: splitPat,
+      indentTrans: this.indentTrans
+    };
     this.modalService
       .open(new ParaSplitModal(context))
       // .onDeny((d) => {})

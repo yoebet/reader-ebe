@@ -40,6 +40,19 @@ export class QuotedTextComponent implements OnChanges {
     }
   }
 
+  toggleTrans() {
+    if (!this.textTrans) {
+      return;
+    }
+    let quote = this.paraQuote;
+    let para = this.para;
+    if (!quote || !para || para._id !== quote.paraId) {
+      return;
+    }
+    let trans = this.highlight(para.trans, quote.sentenceId) || '';
+    this.sanitizedTrans = this.sanitizer.bypassSecurityTrustHtml(trans);
+  }
+
   loadText() {
     let quote = this.paraQuote;
     if (!quote || !quote.paraId) {
@@ -63,7 +76,7 @@ export class QuotedTextComponent implements OnChanges {
     }
     let holder = document.createElement('div');
     holder.innerHTML = html;
-    let selector = UIConstants.sentenceTagName + '[data-sid="' + sentenceId + '"]';
+    let selector = UIConstants.sentenceTagName + '[data-sid=' + sentenceId + ']';
     let sentenceEl = holder.querySelector(selector);
     if (sentenceEl) {
       sentenceEl.classList.add(UIConstants.highlightClass);

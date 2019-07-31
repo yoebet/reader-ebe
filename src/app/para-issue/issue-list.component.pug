@@ -4,7 +4,7 @@
 .ui.divided.list.issues(*ngIf='issues')
   .ui.item(*ngFor='let issue of issues')
     quoted-text([paraQuote]='{paraId: issue.paraId, sentenceId: issue.sentenceId}',
-    [textTrans] = 'false', [showTitle]='false')
+    [textTrans] = 'false', [showTitle]='true')
     pre.content {{issue.content}}
     .footer
       | {{issue.userNickName}}（{{issue.userName}}）

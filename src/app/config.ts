@@ -46,6 +46,12 @@ const SpecialAnnotations = {
 const DictHistoryCapacity = 20;
 const LatestAnnotationsCount = 8;
 
+
+const ParaContentSetting = {
+  TransIndentStr: '      '
+};
+
+
 const staticBase = environment.staticBase;
 
 const ImagesBase = `${staticBase}/images`;
@@ -82,6 +88,7 @@ export {
   SpecialAnnotations,
   DictHistoryCapacity,
   LatestAnnotationsCount,
+  ParaContentSetting,
   StaticResource,
   DefaultHttpHeaders,
   SelfBase,

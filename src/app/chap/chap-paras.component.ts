@@ -8,7 +8,10 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import * as Tether from 'tether';
 import * as Drop from 'tether-drop';
 
-import {DataAttrNames, DataAttrValues, LatestAnnotationsCount, UIConstants} from '../config';
+import {
+  DataAttrNames, DataAttrValues, LatestAnnotationsCount,
+  UIConstants, ParaContentSetting
+} from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
@@ -72,7 +75,7 @@ export class ChapParasComponent implements OnInit {
   showTrans = true;
   leftRight = true;
   clickToEdit = false;
-  continuousEditing = false;
+  continuousEditing = true;
   splitMode = false;
   annotating = false;
   annotateOnly = false;
@@ -80,6 +83,9 @@ export class ChapParasComponent implements OnInit {
   highlightSentence = true;
   annotatedWordsHover = true;
   paraOperations = false;
+
+  indentTrans = true;
+  indentStr = ParaContentSetting.TransIndentStr;
 
   annotationSet: AnnotationSet;
   contentContext: ContentContext;
@@ -502,6 +508,7 @@ export class ChapParasComponent implements OnInit {
   }
 
   private createManyAfterAndUpdate(para, newParas, onSaved = null) {
+    this.ensureIndent(newParas);
     this.paraService.createManyAfter(para, newParas)
       .subscribe((paras: Para[]) => {
         let index = this.chap.paras.findIndex(p => p._id === para._id);
@@ -520,6 +527,7 @@ export class ChapParasComponent implements OnInit {
   }
 
   private doUpdate(para, onSaved = null) {
+    this.ensureIndent([para]);
     let paraId = para._id;
     //deep clone
     para = JSON.parse(JSON.stringify(para));
@@ -560,7 +568,25 @@ export class ChapParasComponent implements OnInit {
       });
   }
 
+  private ensureIndent(paras) {
+    if (!this.indentTrans) {
+      return;
+    }
+    for (let para of paras) {
+      let trans = para.trans;
+      if (!trans || trans.startsWith(this.indentStr)) {
+        continue;
+      }
+      if (trans.includes("<")) {
+        continue;
+      }
+      trans = this.indentStr + trans;
+      para.trans = trans;
+    }
+  }
+
   private createMany(paras, onSaved = null) {
+    this.ensureIndent(paras);
     let obs;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
@@ -601,6 +627,7 @@ export class ChapParasComponent implements OnInit {
       return;
     }
 
+    this.ensureIndent([para]);
     let obs2;
     if (this.insertPos < this.chap.paras.length) {
       let target = this.chap.paras[this.insertPos];
