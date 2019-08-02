@@ -21,8 +21,8 @@ export class SentenceAlignComponent {
   para: Para;
   paraSaver: ParaSaver;
 
-  endingPattern = /[.?!:;。．？！：；……]+['"＇＂’” ]*\n?/g;
-  endingPattern2 = /[，,]+['"＇＂’” ]*\n?/g;
+  endingPattern = /[.?!:;。．？！：；…]+['"＇＂’”]* *\n?/g;
+  endingPattern2 = /[，,]+['"＇＂’”]*\n?/g;
   splitMark = '-=SPL=-';
   editingRow = null;
   editingPart = null;
@@ -36,8 +36,8 @@ export class SentenceAlignComponent {
   }
 
   setup() {
-    let contentSents = this.splitSentences(this.para.content || '', this.endingPattern);
-    let transSents = this.splitSentences(this.para.trans || '', this.endingPattern);
+    let contentSents = this.splitSentences(this.para.content || '', this.endingPattern, 'left');
+    let transSents = this.splitSentences(this.para.trans || '', this.endingPattern, 'right');
 
     let css = contentSents.filter(s => s.sid);
     let tss = transSents.filter(s => s.sid);
@@ -97,7 +97,7 @@ export class SentenceAlignComponent {
   }
 
 
-  private splitText(text: string, endingPattern) {
+  private splitText(text: string, endingPattern, part = 'left') {
     let holder = document.createElement('div');
     holder.innerHTML = text;
 
@@ -114,28 +114,41 @@ export class SentenceAlignComponent {
     sts = sts.filter(f => f.trim() !== '');
 
     if (endingPattern === this.endingPattern) {
-      for (let i = 1; i < sts.length; i++) {
-        let lastText = sts[i - 1];
-        let thisText = sts[i];
-        if (/['"’]\s*$/.test(lastText)) {
-          if (/^\s*(said|asked) /.test(thisText)) {
-            lastText = lastText + thisText;
-            sts[i - 1] = lastText;
-            sts[i] = '';
+      if (part === 'left') {
+        let lastIndex = 0;
+        for (let thisIndex = lastIndex + 1; thisIndex < sts.length; thisIndex++) {
+          let lastText = sts[lastIndex];
+          let thisText = sts[thisIndex];
+          let merged = false;
+          if (/['"’]\s*$/.test(lastText)) {
+            if (/^ *((he|she) +)?(said|asked|demanded) /.test(thisText)) {
+              sts[lastIndex] = lastText + thisText;
+              sts[thisIndex] = '';
+              merged = true;
+            }
+          }
+          if (/(Mrs?|Miss|Dr)\. *$/.test(lastText)) {
+            sts[lastIndex] = lastText + thisText;
+            sts[thisIndex] = '';
+            merged = true;
+          }
+          if (!merged) {
+            lastIndex = thisIndex;
           }
         }
       }
+
       sts = sts.filter(f => f.trim() !== '');
     }
 
     return sts;
   }
 
-  private splitSentences(text: string, endingPattern) {
+  private splitSentences(text: string, endingPattern, part) {
     text = text.replace(/<s-st[ >]/g, tagOpen => this.splitMark + tagOpen);
     text = text.replace(/<\/s-st>/g, tagClose => tagClose + this.splitMark);
 
-    let sts = this.splitText(text, endingPattern);
+    let sts = this.splitText(text, endingPattern, part);
 
     return sts.map(st => {
       let sentence: any = {text: st, sid: null};
@@ -201,7 +214,7 @@ export class SentenceAlignComponent {
 
     let text = row[part];
     let ep = finner ? this.endingPattern2 : this.endingPattern;
-    let sts = this.splitText(text, ep);
+    let sts = this.splitText(text, ep, part);
     if (sts.length === 1) {
       return;
     }
