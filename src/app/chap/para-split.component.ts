@@ -3,7 +3,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui'
 import {findIndex} from 'lodash';
 
-import {ParaContentSetting} from '../config'
+import {ParaSetting} from '../config';
 import {Para} from '../models/para';
 import {Row} from '../content-types/split-align';
 import {ParaSaver} from '../content-types/para-saver';
@@ -21,7 +21,7 @@ export class ParaSplitComponent {
   splitPat = null;
   splitBy2Lf: boolean;
   indentTrans: boolean;
-  indentStr = ParaContentSetting.TransIndentStr;
+  indentStr = ParaSetting.TransIndentStr;
 
   constructor(private modal: SuiModal<ParaSplitContext, Para[], string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
@@ -29,10 +29,12 @@ export class ParaSplitComponent {
     this.para = context.para;
     this.paraSaver = context.paraSaver;
     this.splitPat = context.splitPat;
-    this.splitBy2Lf = this.splitPat.source === '\\n\\n+';
+    this.splitBy2Lf = this.splitPat.source === ParaSetting.EmptyLineSplitter;
     this.indentTrans = context.indentTrans;
 
     let {content, trans} = this.para;
+    content = content.trim();
+    trans = trans.trim();
 
     let contents = content.split(this.splitPat);
     let transs = trans.split(this.splitPat);
@@ -42,6 +44,11 @@ export class ParaSplitComponent {
     for (let i = 0; i < length; i++) {
       let left = contents[i] || '';
       let right = transs[i] || '';
+      left = left.trim();
+      right = right.trim();
+      if (!left && !right) {
+        continue;
+      }
       if (this.indentTrans) {
         if (!right.startsWith(this.indentStr)) {
           right = this.indentStr + right;

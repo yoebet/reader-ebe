@@ -10,7 +10,7 @@ import * as Drop from 'tether-drop';
 
 import {
   DataAttrNames, DataAttrValues, LatestAnnotationsCount,
-  UIConstants, ParaContentSetting
+  UIConstants, ParaSetting
 } from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
@@ -85,7 +85,6 @@ export class ChapParasComponent implements OnInit {
   paraOperations = false;
 
   indentTrans = true;
-  indentStr = ParaContentSetting.TransIndentStr;
 
   annotationSet: AnnotationSet;
   contentContext: ContentContext;
@@ -468,17 +467,16 @@ export class ChapParasComponent implements OnInit {
     if (!this.splitMode) {
       return null;
     }
-    let splitter = /\n\n+/;
-    if (!splitter.test(para.content) &&
-      !splitter.test(para.trans)) {
+    let sp = ParaSetting.EmptyLineSplitter;
+    if (!sp.test(para.content) && !sp.test(para.trans)) {
       return null;
     }
 
     let parasCreateAfter = [];
-    let contents = para.content.split(splitter);
+    let contents = para.content.trimRight().split(sp);
     let transs = [];
     if (para.trans) {
-      transs = para.trans.split(splitter);
+      transs = para.trans.trimRight().split(sp);
     }
     let size = Math.max(contents.length, transs.length);
     para.content = contents[0] || '';
@@ -577,13 +575,14 @@ export class ChapParasComponent implements OnInit {
     }
     for (let para of paras) {
       let trans = para.trans;
-      if (!trans || trans.startsWith(this.indentStr)) {
+      if (!trans || trans.startsWith(ParaSetting.TransIndentStr)) {
         continue;
       }
       if (trans.includes("<")) {
         continue;
       }
-      trans = this.indentStr + trans;
+      trans = trans.trim();
+      trans = ParaSetting.TransIndentStr + trans;
       para.trans = trans;
     }
   }

@@ -1,6 +1,7 @@
 import {Component, Input, ViewChild, ElementRef, OnInit} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {ParaSetting} from '../config';
 import {Para} from '../models/para';
 import {ParaSplitContext, ParaSplitModal} from './para-split.component';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
@@ -50,11 +51,11 @@ export class ParaFormComponent implements OnInit {
   }
 
   splitParasByLflf() {
-    this.splitParas(/\n\n+/);
+    this.splitParas(ParaSetting.EmptyLineSplitter);
   }
 
   splitParasByLf() {
-    this.splitParas(/\n+/);
+    this.splitParas(ParaSetting.NewLineSplitter);
   }
 
   splitParas(splitPat) {

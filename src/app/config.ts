@@ -47,8 +47,10 @@ const DictHistoryCapacity = 20;
 const LatestAnnotationsCount = 8;
 
 
-const ParaContentSetting = {
-  TransIndentStr: '      '
+const ParaSetting = {
+  TransIndentStr: '      ',
+  EmptyLineSplitter: /(?:[　 	]*\n){2,}/,
+  NewLineSplitter: /[　 	]*\n/
 };
 
 
@@ -88,7 +90,7 @@ export {
   SpecialAnnotations,
   DictHistoryCapacity,
   LatestAnnotationsCount,
-  ParaContentSetting,
+  ParaSetting,
   StaticResource,
   DefaultHttpHeaders,
   SelfBase,

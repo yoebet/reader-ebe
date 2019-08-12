@@ -9,7 +9,7 @@ ng-template([ngIf]='currentUser')
         a.item((click)='filterStatus("R")', [ngClass]='{active:status=="R"}') 已上线
       .clearing
 
-.ui.header
+.ui.header.book-list-header
   .ui.right.floated.header.opers
     sui-checkbox([(ngModel)]='showZh') 中文
     ng-template([ngIf]='currentUser')
