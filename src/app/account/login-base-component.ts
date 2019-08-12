@@ -8,7 +8,7 @@ export abstract class LoginBaseComponent implements OnInit {
 
   wxQrCodeInit = false;
 
-  wxState = "123";
+  wxState = "wxrcee";
   wxScope = 'snsapi_login';
 
   ngOnInit() {
@@ -33,7 +33,6 @@ export abstract class LoginBaseComponent implements OnInit {
       scope: this.wxScope,
       redirect_uri: redirectUri,
       state: this.wxState,
-      // href: "https://yuwen-reading.net/ee/assets/wx-login.css",
       style: ""
     });
   }

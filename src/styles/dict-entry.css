@@ -52,7 +52,7 @@ span.pinyin {
 
 .ui.list.meaning-items {
   margin-top: 0;
-  margin-left: 2em !important;
+  /*margin-left: 2em !important;*/
 }
 
 .ui.list.meaning-items.smi {

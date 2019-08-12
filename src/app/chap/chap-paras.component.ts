@@ -75,7 +75,7 @@ export class ChapParasComponent implements OnInit {
   showTrans = true;
   leftRight = true;
   clickToEdit = false;
-  continuousEditing = true;
+  continuousEditing = false;
   splitMode = false;
   annotating = false;
   annotateOnly = false;
@@ -128,6 +128,9 @@ export class ChapParasComponent implements OnInit {
     if (chap) {
       if (!chap.paras) {
         chap.paras = [];
+      }
+      if (chap.paras.length === 0) {
+        this.insertPos = 0;
       }
       this.checkCommentsCount();
     }

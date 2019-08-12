@@ -119,22 +119,20 @@ export class SentenceAlignComponent {
         for (let thisIndex = lastIndex + 1; thisIndex < sts.length; thisIndex++) {
           let lastText = sts[lastIndex];
           let thisText = sts[thisIndex];
-          let merged = false;
           if (/['"’]\s*$/.test(lastText)) {
             if (/^ *((he|she) +)?(said|asked|demanded) /.test(thisText)) {
               sts[lastIndex] = lastText + thisText;
               sts[thisIndex] = '';
-              merged = true;
+              continue;
             }
           }
+          // Mrs. Arable said goodbye and thanked Dr. Dorian very much for his advice. She felt greatly relieved.
           if (/(Mrs?|Miss|Dr)\. *$/.test(lastText)) {
             sts[lastIndex] = lastText + thisText;
             sts[thisIndex] = '';
-            merged = true;
+            continue;
           }
-          if (!merged) {
-            lastIndex = thisIndex;
-          }
+          lastIndex = thisIndex;
         }
       }
 
@@ -219,33 +217,29 @@ export class SentenceAlignComponent {
       return;
     }
 
+    let addedRows = sts.length - 1;
+
     let fixIndex = findIndex(this.rows, r => r.fix, index + 1);
     if (fixIndex === -1) {
       fixIndex = this.rows.length;
     }
     let emptyRowCount = 0;
-    for (let i = fixIndex - 1; i > index; i--) {
-      let r = this.rows[i];
-      if (r[part] === '') {
+    for (let i = index + 1; i < fixIndex; i++) {
+      let row = this.rows[i];
+      if (row[part] == '') {
         emptyRowCount++;
+      } else {
+        sts.push(row[part]);
+        row[part] = '';
       }
     }
-    if (emptyRowCount > 0) {
-      for (let i = index + 1; i < fixIndex; i++) {
-        let row = this.rows[i];
-        if (row[part] !== '') {
-          sts.push(row[part]);
-          row[part] = '';
-        }
-      }
-    }
-    let newRowCount = sts.length - 1 - emptyRowCount;
+    let newRowCount = addedRows - emptyRowCount;
     if (newRowCount > 0) {
       let newRows = [];
       for (let i = 0; i < newRowCount; i++) {
         newRows.push(new SentenceRow());
       }
-      this.rows.splice(index + 1, 0, ...newRows);
+      this.rows.splice(fixIndex, 0, ...newRows);
     }
 
     let ri = index;

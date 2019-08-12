@@ -17,6 +17,7 @@ import {SortableListComponent} from "../common/sortable-list.component";
 import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
+import {ActivatedRoute, ParamMap} from "@angular/router";
 
 @Component({
   selector: 'book-list',
@@ -32,6 +33,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   privilegeOperations = false;
   showZh = true;
   category: string;
+  visib: string;
+  status: string;
 
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
@@ -56,39 +59,78 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   constructor(private bookService: BookService,
               private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
+              private route: ActivatedRoute,
               private modalService: SuiModalService) {
     super();
   }
 
   ngOnInit(): void {
-    this.loadBooks();
     this.annoFamilyService
       .getCandidates()
       .subscribe(afs => this.annOptions = afs);
+
+    this.route.queryParamMap.subscribe((params: ParamMap) => {
+        let cu = this.currentUser;
+        let isAdmin = cu && (cu.role === "A" || cu.role === "R");
+        let cat = params.get('cat');
+        let visib = params.get('visib');
+        let status = params.get('status');
+        if (cat) {
+          this.category = cat;
+        }
+        if (visib) {
+          this.visib = visib;
+        } else if (isAdmin) {
+          this.visib = 'pub';
+        }
+        if (status) {
+          this.status = status;
+        }
+
+        this.loadBooks();
+      }
+    );
   }
 
   loadBooks(cat = null) {
     this.category = cat;
-    let obs;
-    if (cat) {
+    let listOptions = {cat: this.category, visib: this.visib, status: this.status};
+    if (this.category) {
       if (this.allBooks) {
-        this.books = this.allBooks.filter(b => b.category == cat);
+        this.books = this.allBooks.filter(b => b.category == this.category);
         return;
       }
-      obs = this.bookService.listByCat(cat);
     } else {
       if (this.allBooks) {
         this.books = this.allBooks;
         return;
       }
-      obs = this.bookService.list();
     }
-    obs.subscribe(books => {
-      this.books = books;
-      if (!cat) {
-        this.allBooks = books;
-      }
-    });
+    this.bookService.list(listOptions)
+      .subscribe(books => {
+        this.books = books;
+        if (!this.category) {
+          this.allBooks = books;
+        }
+      });
+  }
+
+  filterVisib(visib) {
+    if (this.visib === visib) {
+      return;
+    }
+    this.visib = visib;
+    this.allBooks = null;
+    this.loadBooks();
+  }
+
+  filterStatus(status) {
+    if (this.status === status) {
+      return;
+    }
+    this.status = status;
+    this.allBooks = null;
+    this.loadBooks();
   }
 
   showListLink() {

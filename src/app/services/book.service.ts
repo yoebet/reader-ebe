@@ -18,6 +18,8 @@ import {SorterService} from './sorter.service';
 @Injectable()
 export class BookService extends SorterService<Book> {
 
+  bookUsersBase: string;
+  bookPacksBase: string;
   wxMpBase: string;
 
   constructor(protected http: HttpClient,
@@ -25,7 +27,22 @@ export class BookService extends SorterService<Book> {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/books`;
+    this.bookUsersBase = `${apiBase}/${this.apiA}/book_users`;
+    this.bookPacksBase = `${apiBase}/${this.apiA}/book_packs`;
     this.wxMpBase = `${apiBase}/${this.apiA}/wx_mp`;
+  }
+
+  list(options: any = {}): Observable<Book[]> {
+    let url = this.baseUrl;
+    let hasParam = false;
+    for (let name of ['cat', 'visib', 'status']) {
+      let value = options[name];
+      if (value) {
+        url += `${hasParam ? '&' : '?'}${name}=${value}`;
+        hasParam = true;
+      }
+    }
+    return super.list(url);
   }
 
   listByCat(cat: string): Observable<Book[]> {
@@ -51,71 +68,76 @@ export class BookService extends SorterService<Book> {
     return this.http.post<BookImage>(url, formData, this.httpOptions);
   }
 
+  /* book_users */
 
   getPrivilegedUsers(bookId: string): Observable<PrivilegedUsers> {
-    let url = `${this.baseUrl}/${bookId}/privilegedUsers`;
+    let url = `${this.bookUsersBase}/${bookId}/privilegedUsers`;
     return this.http.get<PrivilegedUsers>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
   getEditors(bookId: string): Observable<UserBook[]> {
-    let url = `${this.baseUrl}/${bookId}/editors`;
+    let url = `${this.bookUsersBase}/${bookId}/editors`;
     return this.http.get<UserBook[]>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
   setChiefEditor(bookId: string, userId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/chiefEditor/${userId}`;
+    let url = `${this.bookUsersBase}/${bookId}/chiefEditor/${userId}`;
     return this.postForOpResult(url);
   }
 
   addEditor(bookId: string, userId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/editor/${userId}`;
+    let url = `${this.bookUsersBase}/${bookId}/editor/${userId}`;
     return this.postForOpResult(url);
   }
 
   removeEditor(bookId: string, userId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/editor/${userId}`;
+    let url = `${this.bookUsersBase}/${bookId}/editor/${userId}`;
     return this.http.delete<OpResult>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
   addReader(bookId: string, userId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
+    let url = `${this.bookUsersBase}/${bookId}/reader/${userId}`;
     return this.postForOpResult(url);
   }
 
   removeReader(bookId: string, userId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/reader/${userId}`;
+    let url = `${this.bookUsersBase}/${bookId}/reader/${userId}`;
     return this.http.delete<OpResult>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
   checkCandidate(bookId: string, name: string): Observable<UserIdName> {
-    let url = `${this.baseUrl}/${bookId}/checkCandidate/${name}`;
+    let url = `${this.bookUsersBase}/${bookId}/checkCandidate/${name}`;
     return this.http.post<UserIdName>(url, null, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
+  /* book_packs */
+
   buildContentPack(bookId: string, role: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/buildContentPack`;
+    let url = `${this.bookPacksBase}/${bookId}/buildContentPack`;
     return this.postForOpResult(url, {role});
   }
 
   dropContentPack(bookId: string, role: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/dropContentPack`;
+    let url = `${this.bookPacksBase}/${bookId}/dropContentPack`;
     return this.postForOpResult(url, {role});
   }
 
   buildChapPacks(bookId: string, scope: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/buildChapPacks`;
+    let url = `${this.bookPacksBase}/${bookId}/buildChapPacks`;
     return this.postForOpResult(url, {scope});
   }
 
   dropChapPacks(bookId: string): Observable<OpResult> {
-    let url = `${this.baseUrl}/${bookId}/dropChapPacks`;
+    let url = `${this.bookPacksBase}/${bookId}/dropChapPacks`;
     return this.postForOpResult(url);
   }
+
+  /* url */
 
   shortUrl(longUrl: string, context = {}): Observable<any> {
     let url = `${this.wxMpBase}/shortUrl`;

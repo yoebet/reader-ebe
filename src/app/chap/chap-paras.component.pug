@@ -17,10 +17,9 @@ div(*ngIf='chap')
       button.ui.mini.button((click)='insertBefore()')
         i.add.icon
         | 插入
-      //sui-checkbox([(ngModel)]='continuousEditing') 连续插入/新增
+      sui-checkbox([(ngModel)]='continuousEditing') 连续增加
       sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='indentTrans') 中文缩进
-      sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
       sui-checkbox([(ngModel)]='paraOperations', (ngModelChange)='checkCommentsCount()') 操作
     .operations([hidden]='annotateOnly')
       .title
@@ -36,6 +35,7 @@ div(*ngIf='chap')
       button.ui.tiny.button((click)='alignSentences()')
         i.align.left.icon
         | 分句对齐
+      sui-checkbox([(ngModel)]='highlightSentence') 句子高亮
       sui-checkbox([(ngModel)]='annotating') 标注
 
     .annotations.operations(*ngIf='annotating')
