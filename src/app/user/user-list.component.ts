@@ -2,100 +2,36 @@ import {Component, OnInit} from '@angular/core';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {StaticResource} from '../config';
 import {User} from '../models/user';
-import {UserService} from '../services/user.service';
-import {PageableListComponent} from '../common/pageable-list.component';
+import {OpResult} from "../models/op-result";
+
+import {UsersComponent} from "./users.component";
 import {MessagesModal} from '../message/messages-popup.component';
 import {MessageScope} from '../message/message-scope';
-import {UserInfoModal} from "./user-info.component";
+
+import {UserService} from '../services/user.service';
 import {SessionService} from "../services/session.service";
-import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent extends PageableListComponent implements OnInit {
-  users: User[];
+export class UserListComponent extends UsersComponent implements OnInit {
   newUser: User;
   editingUser: User;
-  manager: false;
-  searchName: string;
   tokenOp = false;
   moreOp = false;
 
-  sortCT: '1' | '-1' = '-1'; //create time
 
   roleOptions = User.Roles;
-  avatarsBase = StaticResource.UserAvatarsBase;
 
-  constructor(private userService: UserService,
-              private sessionService: SessionService,
+  constructor(protected userService: UserService,
+              protected sessionService: SessionService,
               public modalService: SuiModalService) {
-    super();
+    super(userService, sessionService, modalService);
   }
 
-  get currentUser(): User {
-    return this.sessionService.currentUser;
-  }
-
-  doList(options: any) {
-    if (this.manager) {
-      options.manager = true;
-    }
-    if (this.searchName) {
-      options.name = this.searchName;
-    }
-    if (this.sortCT) {
-      options.sortCT = this.sortCT;
-    }
-    this.userService
-      .list(options)
-      .subscribe(users => this.users = users);
-  }
-
-  ngOnInit() {
-    this.list();
-  }
-
-  sortByCreateTime() {
-    if (!this.sortCT) {
-      this.sortCT = '1';
-    } else if (this.sortCT === '1') {
-      this.sortCT = '-1';
-    } else {
-      this.sortCT = '1';
-    }
-    this.page = 1;
-    this.doList({});
-  }
-
-  search() {
-    this.page = 1;
-    this.list();
-  }
-
-  searchReset() {
-    this.page = 1;
-    this.searchName = null;
-    this.manager = false;
-    this.list();
-  }
-
-  showDetail(user: User) {
-    this.modalService.open(new UserInfoModal(user));
-    if (!user.resourceCounts) {
-      this.userService.getDetail(user._id)
-        .subscribe(u => {
-          if (u) {
-            user.resourceCounts = u.resourceCounts;
-            user.preference = u.preference;
-          }
-        });
-    }
-  }
 
   edit(user) {
     this.editingUser = {
@@ -218,7 +154,4 @@ export class UserListComponent extends PageableListComponent implements OnInit {
       });
   }
 
-  userTracker(index, user) {
-    return user._id;
-  }
 }

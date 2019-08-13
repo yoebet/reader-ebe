@@ -7,6 +7,7 @@ import {ChapComponent} from './chap/chap.component';
 import {DictComponent} from './dict/dict.component';
 import {DictZhComponent} from './dict-zh/dict-zh.component';
 import {UserListComponent} from './user/user-list.component';
+import {UsersComponent} from './user/users.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
 import {UserComponent} from './user/user.component';
@@ -26,7 +27,8 @@ const routes: Routes = [
   {path: 'dict', component: DictComponent},
   {path: 'dict-c', component: DictComponent, data: {editSimple: false}},
   {path: 'dict-zh', component: DictZhComponent},
-  {path: 'users', component: UserListComponent},
+  {path: 'users', component: UsersComponent},
+  {path: 'users-admin', component: UserListComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'feedbacks', component: FeedbackListComponent},
   {path: 'issues', component: IssueListComponent},

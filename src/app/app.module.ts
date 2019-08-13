@@ -62,6 +62,7 @@ import {DictZhEntrySmiComponent} from './dict-zh/dict-zh-entry-smi.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
 import {UserListComponent} from './user/user-list.component';
+import {UsersComponent} from './user/users.component';
 import {UserComponent} from './user/user.component';
 import {UserInfoComponent} from './user/user-info.component';
 import {UserBookComponent} from './user/user-book.component';
@@ -117,6 +118,7 @@ import {AppLinkComponent} from './common/app-link.component';
     FeedbackListComponent,
     IssueListComponent,
     UserListComponent,
+    UsersComponent,
     UserComponent,
     UserInfoComponent,
     UserBookComponent,
