@@ -26,8 +26,7 @@ table.ui.small.striped.table.form
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
         img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='avatarsBase+"/"+user.avatarSetting.imgUrl')
-      td
-        a([routerLink]="['/users', user._id]") {{user.name}}
+      td {{user.name}}
       td {{user.nickName}}
       td {{user.phoneNumber}}
       td {{user | createdDate | date:'yyyy-MM-dd'}}
@@ -37,7 +36,7 @@ table.ui.small.striped.table.form
           ng-template([ngIf]='user.lastLogin.client') {{user.lastLogin.client}} &nbsp;
           ng-template([ngIf]='user.lastLogin.appVersion') {{user.lastLogin.appVersion}} &nbsp;
           ng-template([ngIf]='user.lastLogin.osVersion') {{user.lastLogin.osVersion}} &nbsp;
-      td
+      td.right.aligned
         .ui.mini.button((click)='showDetail(user)') 详情
     tr(*ngIf='!users||users.length===0')
       td(colspan='7') No Results.
@@ -52,5 +51,6 @@ table.ui.small.striped.table.form
             a.item.disabled {{page}}
             a.icon.item([ngClass]='{disabled:!users||users.length<pageSize}', (click)='nextPage()')
               i.right.chevron.icon
+        .clearing
 
 .ui.hidden.clearing.divider

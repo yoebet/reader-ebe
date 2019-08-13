@@ -14,45 +14,23 @@
   color: #00B5AD;
 }
 
-.splitted-para.row {
-  padding: 0 !important;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-}
-
-.splitted-para.row .column {
+.split-para.row .column {
   padding: 0 !important;
 }
 
-.splitted-para textarea {
-  border-radius: initial !important;
-  padding: 0.5rem !important;
-  border-color: #85B7D9 !important;
-  border-radius: 0.28rem !important;
+.split-para.row .fixit {
+  padding-top: 0.3rem;
 }
 
-.splitted-para .rowno {
-}
-
-.splitted-para.row.fix .para-text {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.splitted-para.row .fixit {
-  padding: 0.5rem;
-}
-
-.splitted-para.row .fixit sui-checkbox label {
+.split-para.row .fixit sui-checkbox label {
   font-weight: bold;
 }
 
-.splitted-para.row .para-text {
-  white-space: pre-wrap;
-  flex: 1;
-  padding: 0.5rem !important;
-  border: 1px solid white !important;
+.split-para.row .middle-column.column, .split-para.row .right-column.column {
+  padding-left: 0.3em !important;
+  padding-right: 0 !important;
 }
 
-.splitted-para.row .para-text :before,
-.splitted-para.row .para-text :after {
-  display: none;
+.split-para.row .right-buttons.item {
+  margin-right: -1em !important;
 }

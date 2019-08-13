@@ -9,28 +9,26 @@
   .ui.column.grid.form.para-split
     .row.split-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
       .two.wide.column
-        .ui.horizontal.list
-          .ui.item
-            .ui.mini.teal.label.rowno {{index+1}}
-            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
-              i.chevron.up.icon
-              | 合并
+        .ui.item
+          .ui.mini.teal.label.rowno {{index+1}}
+          button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
+            i.chevron.up.icon
+            | 合并
       .six.wide.column
         .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="left"&&!row.fix)', [innerHTML]='row.sanitizedLeft', (click)='editingRow=row;editingPart="left"')
         textarea(*ngIf='row===editingRow&&editingPart==="left"&&!row.fix', [(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)')
-      .one.wide.column
+      .one.wide.column.middle-column
         .fixit
           sui-checkbox([(ngModel)]='row.fix')
             | 固定
       .six.wide.column
         .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="right"&&!row.fix)', [innerHTML]='row.sanitizedRight', (click)='editingRow=row;editingPart="right"')
         textarea(*ngIf='row===editingRow&&editingPart==="right"&&!row.fix', [(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)')
-      .one.wide.column
-        .ui.horizontal.list
-          .ui.item
-            button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
-              i.chevron.up.icon
-              | 合并
+      .one.wide.column.right-column
+        .ui.item.right-buttons
+          button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
+            i.chevron.up.icon
+            | 合并
 .actions
   button.ui.tiny.button((click)="cancel()") 取消
   button.ui.tiny.primary.button((click)="completeAndSave()", autofocus='') 完成并保存

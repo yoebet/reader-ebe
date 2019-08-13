@@ -17,7 +17,8 @@
 
 .aligned-sentence.row .ui.button {
   margin-top: 3px;
-  margin-left: 3px;
+  /*margin-left: 3px;*/
+  display: block;
 }
 
 .ui.form textarea.content-text, .ui.form textarea.trans-text {
@@ -33,7 +34,7 @@
 }
 
 .aligned-sentence.row .fixit {
-  padding: 0.5rem;
+  padding-top: 0.3rem;
 }
 
 .aligned-sentence.row .fixit sui-checkbox label {
@@ -48,4 +49,13 @@
 .aligned-sentence.row .sentence :before,
 .aligned-sentence.row .sentence :after {
   display: none;
+}
+
+.aligned-sentence.row .middle-column.column, .aligned-sentence.row .right-column.column {
+  padding-left: 0.3em !important;
+  padding-right: 0 !important;
+}
+
+.aligned-sentence.row .right-buttons.item {
+  margin-right: -1em !important;
 }

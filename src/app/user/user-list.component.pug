@@ -94,6 +94,7 @@ table.ui.small.striped.table.form
             a.item.disabled {{page}}
             a.icon.item([ngClass]='{disabled:!users||users.length<pageSize}', (click)='nextPage()')
               i.right.chevron.icon
+        .clearing
 
 button.ui.tiny.basic.button([hidden]='newUser', (click)='editNew()') 创建用户
 .ui.small.form(*ngIf='newUser')
