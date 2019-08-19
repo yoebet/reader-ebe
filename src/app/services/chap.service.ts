@@ -36,6 +36,12 @@ export class ChapService extends SorterService<Chap> {
       .pipe(catchError(this.handleError));
   }
 
+  updateParasTrans(chapId: string, idTrans: any[]): Observable<OpResult> {
+    let url = `${this.baseUrl}/${chapId}/paras_trans`;
+    return this.http.post<OpResult>(url, idTrans, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
   buildContentPack(chapId: string): Observable<OpResult> {
     let url = `${this.baseUrl}/${chapId}/buildChapPack`;
     return this.postForOpResult(url);

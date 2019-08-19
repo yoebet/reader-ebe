@@ -148,7 +148,9 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   showLink(book) {
-    let appLink = {path: `books/${book._id}`, title: book.name} as AppLink;
+    let code = book.code.toLowerCase().replace(' ', '-');
+    let wxState = `rcwx${code}`;
+    let appLink = {path: `books/${book._id}`, title: book.name, wxState} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
   }
 

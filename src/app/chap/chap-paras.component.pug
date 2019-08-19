@@ -21,6 +21,12 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='indentTrans') 中文缩进
       sui-checkbox([(ngModel)]='paraOperations', (ngModelChange)='checkCommentsCount()') 操作
+      .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
+        | 批量
+        i.dropdown.icon
+        .menu(suiDropdownMenu='')
+          .item((click)='indentTransAll()') 缩进
+          .item((click)='patchTrans()') 补中文
     .operations([hidden]='annotateOnly')
       .title
         i.write.icon

@@ -18,6 +18,16 @@
   padding: 0 !important;
 }
 
+.split-para.row .ui.button {
+  margin-top: 3px;
+  /*margin-left: 3px;*/
+  display: block;
+}
+
+.split-para.row.fix .para-text {
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .split-para.row .fixit {
   padding-top: 0.3rem;
 }
@@ -32,5 +42,5 @@
 }
 
 .split-para.row .right-buttons.item {
-  margin-right: -1em !important;
+  margin-right: -3em !important;
 }

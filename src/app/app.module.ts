@@ -45,6 +45,7 @@ import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';
 import {ParaSplitComponent} from './chap/para-split.component';
+import {TransFillingComponent} from './chap/trans-filling.component';
 import {SentenceAlignComponent} from './content/sentence-align.component';
 import {ParaContentComponent} from './content/para-content.component';
 import {ParaCommentsComponent} from './content/para-comments.component';
@@ -101,6 +102,7 @@ import {AppLinkComponent} from './common/app-link.component';
     ChapParasComponent,
     ParaFormComponent,
     ParaSplitComponent,
+    TransFillingComponent,
     SentenceAlignComponent,
     ParaContentComponent,
     ParaCommentsComponent,
@@ -169,6 +171,7 @@ import {AppLinkComponent} from './common/app-link.component';
     BookUsersComponent,
     BookImageComponent,
     ParaSplitComponent,
+    TransFillingComponent,
     ParaCommentsComponent,
     SentenceAlignComponent,
     WordAnnosComponent,

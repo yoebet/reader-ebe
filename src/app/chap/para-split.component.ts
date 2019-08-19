@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui'
+import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui';
 import {findIndex} from 'lodash';
 
 import {ParaSetting} from '../config';
@@ -113,7 +113,6 @@ export class ParaSplitComponent {
     }
 
     if (preRow[part] && thisRow[part]) {
-      preRow[part] = preRow[part];
       if (this.splitBy2Lf) {
         preRow[part] = preRow[part] + '\n';
       }

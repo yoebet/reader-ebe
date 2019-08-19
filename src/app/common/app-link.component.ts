@@ -44,10 +44,11 @@ export class AppLinkComponent implements OnInit {
 
   resetWxUrl() {
     let encodedUrl = encodeURIComponent(this.url);
+    let state = encodeURIComponent(this.wxState);
     let scope = this.requestUserinfo ? 'snsapi_userinfo' : 'snsapi_base';
     this.wxUrl = `https://open.weixin.qq.com/connect/oauth2/authorize`
       + `?appid=${WX_CONFIG.mp_appId}&redirect_uri=${encodedUrl}`
-      + `&response_type=code&scope=${scope}&state=${this.wxState}#wechat_redirect`;
+      + `&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
     this.wxShortUrl = this.shortUrlMap[this.wxUrl];
   }
 

@@ -48,7 +48,7 @@ const LatestAnnotationsCount = 8;
 
 
 const ParaSetting = {
-  TransIndentStr: '      ',
+  TransIndentStr: '　　',
   EmptyLineSplitter: /(?:[　 	]*\n){2,}/,
   NewLineSplitter: /[　 	]*\n/
 };

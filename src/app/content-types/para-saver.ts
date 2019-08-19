@@ -4,5 +4,7 @@ export interface ParaSaver {
 
   saveSplit(paras, onSaved): void;
 
+  updateTrans(chap, idTrans, onSaved): void;
+
   cancelEdit();
 }

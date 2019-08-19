@@ -33,6 +33,7 @@ import {AnnoFamilyService} from '../services/anno-family.service';
 import {DictZhService} from '../services/dict-zh.service';
 import {ParaFormComponent} from './para-form.component';
 import {DictSimpleSmiComponent} from "../dict/dict-simple-smi.component";
+import {TransFillingContext, TransFilingModal} from "./trans-filling.component";
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {ParaCommentsModal} from '../content/para-comments.component';
 import {AppLink, AppLinkModal} from "../common/app-link.component";
@@ -137,6 +138,7 @@ export class ChapParasComponent implements OnInit {
     this.paraSaver = {
       save: this.save.bind(this),
       saveSplit: this.saveSplitPara.bind(this),
+      updateTrans: this.doUpdateParasTrans.bind(this),
       cancelEdit: this.cancelEdit.bind(this)
     };
   }
@@ -567,6 +569,82 @@ export class ChapParasComponent implements OnInit {
         this.unsavedChanges.delete(paraId);
         onSaved && onSaved();
       });
+  }
+
+  doUpdateParasTrans(chap, idTrans, onSaved = null) {
+
+    this.chapService.updateParasTrans(chap._id, idTrans)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          let message = opr.message || '保存失败';
+          console.error(message);
+          alert(message);
+          return;
+        }
+
+        let parasMap = new Map();
+        for (let p of chap.paras) {
+          parasMap.set(p._id, p);
+        }
+
+        for (let idt of idTrans) {
+          let {_id, trans} = idt;
+          let para = parasMap.get(_id);
+          if (para) {
+            para.trans = trans;
+          }
+        }
+
+        onSaved && onSaved();
+      });
+  }
+
+  patchTrans() {
+    let context: TransFillingContext = {
+      chap: this.chap,
+      paraSaver: this.paraSaver,
+      indentTrans: this.indentTrans
+    };
+    this.modalService
+      .open(new TransFilingModal(context))
+      .onApprove(p => {
+      });
+  }
+
+  indentTransAll() {
+    let chap = this.chap;
+    if (!chap || !chap.paras) {
+      return;
+    }
+    let paras = chap.paras;
+
+    let idTrans = [];
+    for (let para of paras) {
+      let {_id, trans} = para;
+      if (!trans) {
+        continue;
+      }
+      let newTrans;
+      if (trans.includes("<")) {
+        newTrans = trans.replace(/>\s*/, '>' + ParaSetting.TransIndentStr);
+      } else {
+        newTrans = ParaSetting.TransIndentStr + trans.trim();
+      }
+      if (newTrans !== trans) {
+        idTrans.push({_id, trans: newTrans});
+      }
+    }
+
+    if (idTrans.length === 0) {
+      alert('没有修改');
+      return;
+    }
+
+    if (!confirm("影响 " + idTrans.length + " 个段落，要保存吗？")) {
+      return;
+    }
+
+    this.doUpdateParasTrans(chap, idTrans);
   }
 
   private ensureIndent(paras) {

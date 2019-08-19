@@ -12,7 +12,7 @@ import {AnnotateResult} from '../anno/annotate-result';
 import {AnnotationSet, HighlightGroups} from '../anno/annotation-set';
 
 import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
-import {DictEntry, DictFields} from '../models/dict-entry';
+import {DictEntry, DictFields, SimpleMeaning} from '../models/dict-entry';
 import {DictZh} from '../models/dict-zh';
 import {Annotation} from '../models/annotation';
 import {Book} from '../models/book';
@@ -218,6 +218,11 @@ export class ParaContentComponent implements OnChanges {
           if (entry == null) {
             AnnotatorHelper.removeDropTagIfDummy(element);
             return;
+            // entry = new DictEntry();
+            // let mi = new SimpleMeaning();
+            // mi.exp = '(Not Found)';
+            // entry.simple = [mi];
+            // entry.word = oriForWord;
           }
           let dr = new DictRequest();
           dr.dictLang = 'en';
