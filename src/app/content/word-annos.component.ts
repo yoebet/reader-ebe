@@ -16,7 +16,7 @@ export class WordAnnosComponent implements OnInit {
   @Input() annotationSet: AnnotationSet;
   @Input() onTagRemoved: (el: HTMLElement) => void;
   @Input() onEditNote: (el: HTMLElement) => void;
-  @Input() onEditMeaning: (el: HTMLElement, forPhrase: { group: string, words: string } = null) => void;
+  @Input() onEditMeaning: (el: HTMLElement, forPhrase: { group: string, words: string }) => void;
   @Input() notifyChange: () => void;
   word: string;
   head: string;
@@ -34,6 +34,9 @@ export class WordAnnosComponent implements OnInit {
   set wordEl(_wordEl: HTMLElement) {
     this._wordEl = _wordEl;
     if (this.initialized && this.enabled) {
+      if (!this.annotationSet) {
+        return;
+      }
       this.parseAnnotations();
     }
   }
@@ -80,8 +83,6 @@ export class WordAnnosComponent implements OnInit {
 
       if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(value)) {
         let group = value;
-
-        console.log(group);
 
         let stEl = AnnotatorHelper.findSentence(this.wordEl, this.paraTextEl);
         if (!stEl) {
@@ -142,7 +143,7 @@ export class WordAnnosComponent implements OnInit {
   }
 
   editMeaning() {
-    this.onEditMeaning(this._wordEl);
+    this.onEditMeaning(this._wordEl, null);
   }
 
   editPhraseMeaning(phrase) {

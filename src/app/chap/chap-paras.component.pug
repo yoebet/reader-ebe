@@ -172,8 +172,11 @@ div(*ngIf='chap')
   #meanPopup.ui.small.basic.popup.form
     .ui.header 释义
     .inline.fields
-      label For
-      input.input([(ngModel)]="dictMean.word")
+      .eleven.wide.field
+        label For
+        input.input([(ngModel)]="dictMean.word")
+      .five.wide.field
+        button.ui.small.primary.button((click)='requestDictInMeanEditing()') 查词
     .inline.fields
       label 词性
       sui-select.selection([(ngModel)]="dictMean.pos", [options]="posOptions", valueField="abbr",

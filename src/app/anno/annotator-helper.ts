@@ -226,10 +226,6 @@ export class AnnotatorHelper {
   }
 
   static currentPhrase(wordEl, textEl) {
-    let stEl = this.findSentence(wordEl, textEl);
-    if (!stEl) {
-      stEl = textEl;
-    }
     let ds = wordEl.dataset;
     let group = ds[DataAttrNames.assoc];
     if (!group) {
@@ -237,6 +233,10 @@ export class AnnotatorHelper {
     }
     if (!DataAttrValues.phraPattern.test(group)) {
       return null;
+    }
+    let stEl = this.findSentence(wordEl, textEl);
+    if (!stEl) {
+      stEl = textEl;
     }
     let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
     let groupEls = stEl.querySelectorAll(groupSelector);

@@ -411,4 +411,24 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
   }
 
 
+  requestDictInMeanEditing() {
+    if (!this.meanRequest || !this.dictMean) {
+      return;
+    }
+    let callback = (selected: SelectedItem) => {
+      if (!selected || !selected.meaning) {
+        return;
+      }
+      if (selected.word) {
+        this.dictMean.word = selected.word;
+      }
+      this.dictMean.pos = selected.pos;
+      this.dictMean.meaning = selected.meaning;
+    };
+    let notFoundCallback = () => {
+      alert('Not Found');
+    };
+    this.meanRequest.onRequestDict(this.dictMean.word, callback, notFoundCallback);
+  }
+
 }

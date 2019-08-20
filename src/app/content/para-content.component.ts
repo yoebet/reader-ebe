@@ -204,34 +204,54 @@ export class ParaContentComponent implements OnChanges {
     if (!ar || !ar.wordEl) {
       return;
     }
-    let element: any = ar.wordEl;
-    let word = element.textContent;
+    let element = ar.wordEl as HTMLElement;
+
+    this.doSelectWordMeaning(element, null, side, triggerMethod);
+  }
+
+  private doSelectWordMeaning(element: HTMLElement,
+                              word: string,
+                              side: Side,
+                              triggerMethod = null,
+                              callback: (selected: SelectedItem) => void = null,
+                              notFoundCallback: () => void = null) {
+
+    let oriForWord;
+    if (word) {
+      oriForWord = word;
+    } else {
+      word = element.textContent;
+      oriForWord = element.dataset[DataAttrNames.word] || word;
+    }
 
     let oriPos = element.dataset[DataAttrNames.pos] || '';
     let oriMeaning = element.dataset[DataAttrNames.mean];
-    let oriForWord = element.dataset[DataAttrNames.word] || word;
     let forPhraseGroup = element.dataset[DataAttrNames.forPhraseGroup];
 
     let textEl = this.getTextEl(side);
 
-    let meaningItemCallback = (selected: SelectedItem) => {
-      if (selected) {
-        selected.forPhraseGroup = forPhraseGroup;
-      }
-      this.trySetMeaning(side, element, selected);
-    };
+    if (!callback) {
+      callback = (selected: SelectedItem) => {
+        if (selected) {
+          selected.forPhraseGroup = forPhraseGroup;
+        }
+        this.trySetMeaning(side, element, selected);
+      };
+    }
 
-    let handleNotFound = () => {
-      if (triggerMethod === 'RightClick') {
-        let mr = new MeaningRequest();
-        mr.wordElement = element;
-        mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning, forPhraseGroup} as SelectedItem;
-        mr.meaningItemCallback = meaningItemCallback;
-        this.meanRequest.emit(mr);
-      } else {
-        AnnotatorHelper.removeDropTagIfDummy(element);
-      }
-    };
+    if (!notFoundCallback) {
+      notFoundCallback = () => {
+        if (triggerMethod === 'RightClick') {
+          let mr = new MeaningRequest();
+          mr.wordElement = element;
+          mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning, forPhraseGroup} as SelectedItem;
+          mr.meaningItemCallback = callback;
+          this.meanRequest.emit(mr);
+        } else {
+          AnnotatorHelper.removeDropTagIfDummy(element);
+        }
+      };
+    }
 
     let lang = this.getTextLang(side);
     if (!lang || lang === Book.LangCodeEn) {
@@ -246,7 +266,7 @@ export class ParaContentComponent implements OnChanges {
       this.dictService.getEntry(oriForWord, options)
         .subscribe((entry: DictEntry) => {
           if (entry == null) {
-            handleNotFound();
+            notFoundCallback();
             return;
           }
           let dr = new DictRequest();
@@ -255,7 +275,7 @@ export class ParaContentComponent implements OnChanges {
           dr.dictEntry = entry;
           dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
           dr.relatedWords = null;
-          dr.meaningItemCallback = meaningItemCallback;
+          dr.meaningItemCallback = callback;
           if (oriForWord !== word) {
             dr.relatedWords = [word];
           }
@@ -275,7 +295,7 @@ export class ParaContentComponent implements OnChanges {
       this.dictZhService.getEntry(oriForWord)
         .subscribe((entry: DictZh) => {
           if (entry == null) {
-            handleNotFound();
+            notFoundCallback();
             return;
           }
           let dr = new DictRequest();
@@ -283,7 +303,7 @@ export class ParaContentComponent implements OnChanges {
           dr.wordElement = element;
           dr.dictEntry = entry;
           dr.initialSelected = {pos: oriPos, meaning: oriMeaning} as SelectedItem;
-          dr.meaningItemCallback = meaningItemCallback;
+          dr.meaningItemCallback = callback;
           this.dictRequest.emit(dr);
         });
     }
@@ -323,6 +343,11 @@ export class ParaContentComponent implements OnChanges {
         selected.forPhraseGroup = forPhrase.group;
       }
       this.trySetMeaning(side, element, selected);
+    };
+    mr.onRequestDict = (word: string,
+                        callback: (selected: SelectedItem) => void,
+                        notFoundCallback: () => void) => {
+      this.doSelectWordMeaning(element, word, side, null, callback, notFoundCallback);
     };
 
     this.meanRequest.emit(mr);

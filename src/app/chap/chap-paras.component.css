@@ -92,6 +92,7 @@
 #dictPopup {
   min-width: 300px;
   max-width: 400px;
+  z-index: 2000;
 }
 
 #notePopup.ui.form .field {

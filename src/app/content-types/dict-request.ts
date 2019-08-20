@@ -16,6 +16,9 @@ export class MeaningRequest {
   wordElement: Element;
   initialSelected: SelectedItem;
   meaningItemCallback: (selected: SelectedItem) => void;
+  onRequestDict: (word: string,
+                  callback: (selected: SelectedItem) => void,
+                  notFoundCallback: () => void) => void;
 }
 
 export class SelectedItem {
