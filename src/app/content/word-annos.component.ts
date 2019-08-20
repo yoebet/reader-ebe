@@ -76,12 +76,8 @@ export class WordAnnosComponent implements OnInit {
         this.meaning = {pos, mean, word: forWord, text};
         continue;
       }
-      if (name === DataAttrNames.note) {
-        this.note = value;
-        continue;
-      }
 
-      if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(value)) {
+      if (name === DataAttrNames.assoc) {
         let group = value;
 
         let stEl = AnnotatorHelper.findSentence(this.wordEl, this.paraTextEl);
@@ -96,36 +92,44 @@ export class WordAnnosComponent implements OnInit {
           continue;
         }
 
-        let meaningEl = null;
-        let meaning = null;
-        let phraseWord = words;
+        if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(group)) {
 
-        for (let el0 of els) {
-          let el = el0 as HTMLElement;
-          let ds = el.dataset;
-          let mean = ds[DataAttrNames.mean];
-          if (!mean) {
+          let meaningEl = null;
+          let meaning = null;
+          let phraseWord = words;
+
+          for (let el0 of els) {
+            let el = el0 as HTMLElement;
+            let ds = el.dataset;
+            let mean = ds[DataAttrNames.mean];
+            if (!mean) {
+              meaningEl = el;
+              continue;
+            }
+            let phraseGroup = ds[DataAttrNames.forPhraseGroup];
+            let forWord = ds[DataAttrNames.word];
+            if (forWord !== words && phraseGroup !== group) {
+              continue;
+            }
+            if (forWord) {
+              phraseWord = forWord;
+            }
+            meaning = mean;
             meaningEl = el;
-            continue;
+            break;
           }
-          let phraseGroup = ds[DataAttrNames.forPhraseGroup];
-          let forWord = ds[DataAttrNames.word];
-          if (forWord !== words && phraseGroup !== group) {
-            continue;
-          }
-          if (forWord) {
-            phraseWord = forWord;
-          }
-          meaning = mean;
-          meaningEl = el;
-          break;
-        }
 
-        if (!meaningEl) {
-          meaningEl = wordEl;
-        }
+          if (!meaningEl) {
+            meaningEl = wordEl;
+          }
 
-        this.phrase = {group, words, phraseWord, meaning, meaningEl};
+          this.phrase = {group, words, phraseWord, meaning, meaningEl};
+          continue;
+        }
+      }
+
+      if (name === DataAttrNames.note) {
+        this.note = value;
         continue;
       }
 

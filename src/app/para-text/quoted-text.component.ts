@@ -76,7 +76,7 @@ export class QuotedTextComponent implements OnChanges {
     }
     let holder = document.createElement('div');
     holder.innerHTML = html;
-    let selector = UIConstants.sentenceTagName + '[data-sid=' + sentenceId + ']';
+    let selector = UIConstants.sentenceTagName + '[data-sid="' + sentenceId + '"]';
     let sentenceEl = holder.querySelector(selector);
     if (sentenceEl) {
       sentenceEl.classList.add(UIConstants.highlightClass);

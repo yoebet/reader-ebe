@@ -1,9 +1,9 @@
-.ui.small.header {{head}}
+.ui.small.header
+  .ui.right.floated.circular.icon.compact.small.basic.button(*ngIf='!meaning', (click)='editMeaning()')
+    i.right.add.icon
+    | &nbsp;释义
+  | {{head}}
 .ui.list
-  .item(*ngIf='!meaning')
-    .ui.right.floated.circular.icon.compact.small.basic.button((click)='editMeaning()')
-      i.right.add.icon
-      | &nbsp;释义
   .item(*ngFor='let item of items')
     .ui.right.floated.circular.icon.compact.mini.button((click)='dropAnno(item)')
       i.right.close.icon

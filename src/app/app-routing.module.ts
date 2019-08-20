@@ -10,6 +10,7 @@ import {UserListComponent} from './user/user-list.component';
 import {UsersComponent} from './user/users.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
+import {CommentListComponent} from './para-comment/comment-list.component';
 import {UserComponent} from './user/user.component';
 import {CategoryListComponent} from './word-category/category-list.component';
 import {CategoryComponent} from './word-category/category.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path: 'users/:id', component: UserComponent},
   {path: 'feedbacks', component: FeedbackListComponent},
   {path: 'issues', component: IssueListComponent},
+  {path: 'comments', component: CommentListComponent},
   {path: 'word-categories', component: CategoryListComponent},
   {path: 'word-categories/:id', component: CategoryComponent},
   {path: 'annotations', component: AnnoFamilyListComponent},

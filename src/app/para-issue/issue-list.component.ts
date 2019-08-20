@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 
+import {SuiModalService} from 'ng2-semantic-ui';
+
+import {User} from '../models/user';
 import {ParaIssue, IssueStatuses, IssueStatusNames} from '../models/para-issue';
 import {ParaIssueService} from '../services/para-issue.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {User} from '../models/user';
 import {MessagesModal} from '../message/messages-popup.component';
 import {MessageScope} from '../message/message-scope';
-import {SuiModalService} from 'ng2-semantic-ui';
+
 
 @Component({
   selector: 'issue-list',

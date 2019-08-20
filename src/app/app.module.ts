@@ -19,6 +19,7 @@ import {UserBookService} from './services/user-book.service';
 import {UserMessageService} from './services/user-message.service';
 import {FeedbackService} from './services/feedback.service';
 import {ParaIssueService} from './services/para-issue.service';
+import {ParaCommentService} from './services/para-comment.service';
 import {WordCategoryService} from './services/word-category.service';
 import {AnnoFamilyService} from './services/anno-family.service';
 import {AnnoGroupService} from './services/anno-group.service';
@@ -62,6 +63,7 @@ import {DictZhEntryComponent} from './dict-zh/dict-zh-entry.component';
 import {DictZhEntrySmiComponent} from './dict-zh/dict-zh-entry-smi.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
+import {CommentListComponent} from './para-comment/comment-list.component';
 import {UserListComponent} from './user/user-list.component';
 import {UsersComponent} from './user/users.component';
 import {UserComponent} from './user/user.component';
@@ -119,6 +121,7 @@ import {AppLinkComponent} from './common/app-link.component';
     DictZhEntrySmiComponent,
     FeedbackListComponent,
     IssueListComponent,
+    CommentListComponent,
     UserListComponent,
     UsersComponent,
     UserComponent,
@@ -155,6 +158,7 @@ import {AppLinkComponent} from './common/app-link.component';
     UserMessageService,
     FeedbackService,
     ParaIssueService,
+    ParaCommentService,
     WordCategoryService,
     AnnoFamilyService,
     AnnoGroupService,

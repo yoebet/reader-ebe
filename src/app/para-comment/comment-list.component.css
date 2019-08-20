@@ -1,0 +1,9 @@
+.comments .footer {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.comments .title {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}

@@ -1,0 +1,22 @@
+.ui.header
+  | 评论
+
+.ui.divided.list.comments(*ngIf='comments')
+  .ui.item(*ngFor='let comment of comments')
+    quoted-text([paraQuote]='{paraId: comment.paraId, sentenceId: comment.sentenceId}',
+    [textTrans] = 'false', [showTitle]='true')
+    .title(*ngIf='comment.title') {{comment.title}}
+    pre.content.pre-wrap {{comment.content}}
+    .footer
+      | {{comment.userNickName}}
+      ng-template([ngIf]='comment.userName') （{{comment.userName}}）
+      | {{comment | createdDateString:'minute'}}
+
+.ui.right.floated.small.pagination.menu
+  a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+    i.left.chevron.icon
+  a.item.disabled {{page}}
+  a.icon.item([ngClass]='{disabled:!comments||comments.length<pageSize}', (click)='nextPage()')
+    i.right.chevron.icon
+
+.ui.hidden.clearing.divider

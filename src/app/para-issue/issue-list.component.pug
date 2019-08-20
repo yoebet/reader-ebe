@@ -5,7 +5,7 @@
   .ui.item(*ngFor='let issue of issues')
     quoted-text([paraQuote]='{paraId: issue.paraId, sentenceId: issue.sentenceId}',
     [textTrans] = 'false', [showTitle]='true')
-    pre.content {{issue.content}}
+    pre.content.pre-wrap {{issue.content}}
     .footer
       | {{issue.userNickName}}（{{issue.userName}}）
       | {{issue | createdDateString:'minute'}}
