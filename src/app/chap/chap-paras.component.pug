@@ -112,7 +112,8 @@ div(*ngIf='chap')
           (contentChange)="onContentChange(para,$event)",
           (contentCommand)="onContentCommand(para,$event)",
           (dictRequest)="onDictRequest($event)",
-          (noteRequest)="onNoteRequest($event)")
+          (noteRequest)="onNoteRequest($event)",
+          (meanRequest)="onMeanRequest($event)")
           .ui.right.floated.selection.horizontal.list.para-op(*ngIf='paraOperations')
             .item((click)='showComments(para)')
               i.comment.icon
@@ -167,3 +168,24 @@ div(*ngIf='chap')
         button.ui.button((click)='completeNoteEdit(null)') 取消
         .or
         button.ui.primary.button((click)='completeNoteEdit(noteTextarea.value)') 保存
+
+  #meanPopup.ui.small.basic.popup.form
+    .ui.header 释义
+    .inline.fields
+      label For
+      input.input([(ngModel)]="dictMean.word")
+    .inline.fields
+      label 词性
+      sui-select.selection([(ngModel)]="dictMean.pos", [options]="posOptions", valueField="abbr",
+      labelField="name", placeholder='词性', #posSelect='')
+        sui-select-option(*ngFor="let option of posSelect.filteredOptions", [value]="option")
+    .field
+      textarea.mean-textarea([(ngModel)]='dictMean.meaning', spellcheck='false', rows="2")
+    .field
+      button.ui.mini.compact.button((click)='completeMeanEdit("unset")')
+        i.remove.icon
+        | 删除
+      .ui.right.floated.mini.compact.buttons
+        button.ui.button((click)='completeMeanEdit("cancel")') 取消
+        .or
+        button.ui.primary.button((click)='completeMeanEdit()') 保存

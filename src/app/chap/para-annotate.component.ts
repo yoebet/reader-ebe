@@ -15,7 +15,7 @@ import {Annotation} from '../models/annotation';
 import {AnnotationGroup} from '../models/annotation-group';
 import {AnnotationSet} from '../anno/annotation-set';
 import {AnnotatorHelper} from '../anno/annotator-helper';
-import {DictRequest, SelectedItem} from '../content-types/dict-request';
+import {DictRequest, MeaningRequest, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {ContentContext} from '../content-types/content-context';
 
@@ -53,6 +53,10 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
   noteRequest: NoteRequest = null;
   noteTether = null;
   noteRequestNote = '';
+
+  meanRequest: MeaningRequest = null;
+  meanTether = null;
+  dictMean: SelectedItem = new SelectedItem();
 
 
   protected constructor(protected resolver: ComponentFactoryResolver,
@@ -348,6 +352,62 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
     let nr = this.noteRequest;
     this.closeNotePopup();
     nr.editNoteCallback(note);
+  }
+
+  protected closeMeanPopup() {
+    if (this.meanRequest) {
+      if (this.meanTether) {
+        this.meanTether.destroy();
+        this.meanTether = null;
+      }
+      let el = this.meanRequest.wordElement;
+      this.removeTetherClass(el);
+      this.meanRequest = null;
+      this.dictMean = new SelectedItem();
+    }
+  }
+
+  onMeanRequest(request: MeaningRequest) {
+    if (this.meanRequest) {
+      if (this.meanRequest.wordElement === request.wordElement) {
+        return;
+      }
+      this.completeMeanEdit();
+    }
+    this.meanRequest = request;
+    this.dictMean = JSON.parse(JSON.stringify(request.initialSelected));
+
+    let meanPopup = document.getElementById('meanPopup');
+    this.meanTether = new Tether({
+      element: meanPopup,
+      target: this.meanRequest.wordElement,
+      attachment: 'top center',
+      targetAttachment: 'bottom right',
+      constraints: [
+        {
+          to: 'window',
+          attachment: 'together',
+          pin: true
+        }
+      ],
+      classPrefix: UIConstants.tetherClassPrefixNoHyphen
+    });
+  }
+
+  completeMeanEdit(op: 'set' | 'unset' | 'cancel' = 'set') {
+    if (!this.meanRequest) {
+      return;
+    }
+    let mr = this.meanRequest;
+    let mean = this.dictMean;
+    this.closeMeanPopup();
+    if (op === 'cancel') {
+      mr.meaningItemCallback(null);
+    } else if (op === 'unset') {
+      mr.meaningItemCallback({meaning: ''} as SelectedItem);
+    } else {
+      mr.meaningItemCallback(mean);
+    }
   }
 
 

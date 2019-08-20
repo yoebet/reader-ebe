@@ -5,6 +5,7 @@ import {PopStateEvent} from '@angular/common/src/location/location';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
+import {DictEntry} from '../models/dict-entry';
 import {ContentContext} from '../content-types/content-context';
 
 import {ChapService} from "../services/chap.service";
@@ -40,6 +41,9 @@ export class ChapParasComponent extends ParaAnnotateComponent implements OnInit 
   annotateOnly = false;
   // editInplace = false;
   highlightSentence = true;
+
+  posOptions = DictEntry.POS;
+
 
   constructor(protected resolver: ComponentFactoryResolver,
               protected chapService: ChapService,

@@ -91,7 +91,7 @@
 
 #dictPopup {
   min-width: 300px;
-  max-width: 600px;
+  max-width: 400px;
 }
 
 #notePopup.ui.form .field {
@@ -102,6 +102,15 @@
   height: 150px;
   width: 250px;
   padding: 0.3em 0.5em
+}
+
+#meanPopup {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+#meanPopup label {
+  min-width: 2.1em;
 }
 
 .annotations.operations .ui.button.active {

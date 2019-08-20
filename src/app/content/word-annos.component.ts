@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {AnnotationSet} from '../anno/annotation-set';
-import {UIConstants, DataAttrNames} from '../config';
+import {DataAttrNames, DataAttrValues} from '../config';
 import {AnnotatorHelper} from '../anno/annotator-helper';
 
 @Component({
@@ -15,12 +15,15 @@ export class WordAnnosComponent implements OnInit {
   @Input() enabled: boolean;
   @Input() annotationSet: AnnotationSet;
   @Input() onTagRemoved: (el: HTMLElement) => void;
+  @Input() onEditNote: (el: HTMLElement) => void;
+  @Input() onEditMeaning: (el: HTMLElement, forPhrase: { group: string, words: string } = null) => void;
   @Input() notifyChange: () => void;
   word: string;
   head: string;
-  items: any[];
+  items: { dataName, dataValue, text }[];
+  phrase: { group, words, phraseWord, meaning, meaningEl };
   note: string;
-  meaning: any;
+  meaning: { pos, mean, word, text };
   private initialized = false;
 
 
@@ -43,6 +46,7 @@ export class WordAnnosComponent implements OnInit {
     this.items = [];
     this.note = null;
     this.meaning = null;
+    this.phrase = null;
     let wordEl = this._wordEl;
     if (!wordEl) {
       this.word = null;
@@ -55,13 +59,13 @@ export class WordAnnosComponent implements OnInit {
     let dataset = wordEl.dataset;
     for (let name in dataset) {
       let value = dataset[name];
-      if (name === DataAttrNames.mean) {
+      if (name === DataAttrNames.mean && !dataset[DataAttrNames.forPhraseGroup]) {
         let mean = value;
-        let forWord = wordEl.dataset[DataAttrNames.word];
+        let forWord = dataset[DataAttrNames.word];
         if (!forWord) {
           forWord = this.word;
         }
-        let pos = wordEl.dataset[DataAttrNames.pos] || '';
+        let pos = dataset[DataAttrNames.pos] || '';
         let text = mean;
         if (pos) {
           text = `${pos} ${mean}`;
@@ -73,25 +77,63 @@ export class WordAnnosComponent implements OnInit {
         this.note = value;
         continue;
       }
-      let text = this.annotationSet.annotationOutput(name, value);
-      if (!text) {
-        continue;
-      }
-      let item = {dataName: name, dataValue: value, text};
-      this.items.push(item);
 
-      /*if (name === DataAttrNames.assoc/!* && DataAttrValues.phraPattern.test(value)*!/) {
+      if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(value)) {
         let group = value;
 
-        let stEl = this.findSentence(this.wordEl);
+        console.log(group);
+
+        let stEl = AnnotatorHelper.findSentence(this.wordEl, this.paraTextEl);
         if (!stEl) {
           stEl = this.paraTextEl;
         }
         let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
         let groupEls = stEl.querySelectorAll(groupSelector);
         let els = Array.from(groupEls);
-        item.phrase = els.map((el: Element) => el.textContent).join(' ');
-      }*/
+        let words = els.map((el: Element) => el.textContent).join(' ');
+        if (words.indexOf(' ') == -1) {
+          continue;
+        }
+
+        let meaningEl = null;
+        let meaning = null;
+        let phraseWord = words;
+
+        for (let el0 of els) {
+          let el = el0 as HTMLElement;
+          let ds = el.dataset;
+          let mean = ds[DataAttrNames.mean];
+          if (!mean) {
+            meaningEl = el;
+            continue;
+          }
+          let phraseGroup = ds[DataAttrNames.forPhraseGroup];
+          let forWord = ds[DataAttrNames.word];
+          if (forWord !== words && phraseGroup !== group) {
+            continue;
+          }
+          if (forWord) {
+            phraseWord = forWord;
+          }
+          meaning = mean;
+          meaningEl = el;
+          break;
+        }
+
+        if (!meaningEl) {
+          meaningEl = wordEl;
+        }
+
+        this.phrase = {group, words, phraseWord, meaning, meaningEl};
+        continue;
+      }
+
+      let text = this.annotationSet.annotationOutput(name, value);
+      if (!text) {
+        continue;
+      }
+      let item = {dataName: name, dataValue: value, text};
+      this.items.push(item);
     }
 
     if (this.head.length > 20) {
@@ -99,30 +141,33 @@ export class WordAnnosComponent implements OnInit {
     }
   }
 
-  private findSentence(node): any {
-    do {
-      if (node instanceof Element) {
-        let el = node as Element;
-        if (el === this.paraTextEl) {
-          return null;
-        }
-        if (el.matches(UIConstants.sentenceTagName)) {
-          return el;
-        }
-      }
-      node = node.parentNode;
-    } while (node);
-    return null;
+  editMeaning() {
+    this.onEditMeaning(this._wordEl);
+  }
+
+  editPhraseMeaning(phrase) {
+    this.onEditMeaning(phrase.meaningEl, {words: phrase.words, group: phrase.group});
+  }
+
+  editNote() {
+    this.onEditNote(this._wordEl);
   }
 
   dropAnno(item) {
     let element = this._wordEl;
     let dataset = element.dataset;
-    if (item === 'meaning') {
+    if (item === 'phraseMeaning' || item === 'meaning') {
+      if (item === 'phraseMeaning') {
+        element = this.phrase.meaningEl;
+        dataset = element.dataset;
+        this.phrase = null;
+      } else if (item === 'meaning') {
+        this.meaning = null;
+      }
       delete dataset[DataAttrNames.pos];
       delete dataset[DataAttrNames.word];
       delete dataset[DataAttrNames.mean];
-      this.meaning = null;
+      delete dataset[DataAttrNames.forPhraseGroup];
     } else if (item === 'note') {
       delete dataset[DataAttrNames.note];
       this.note = null;

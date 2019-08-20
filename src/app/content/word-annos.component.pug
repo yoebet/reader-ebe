@@ -1,18 +1,34 @@
 .ui.small.header {{head}}
 .ui.list
+  .item(*ngIf='!meaning')
+    .ui.right.floated.circular.icon.compact.small.basic.button((click)='editMeaning()')
+      i.right.add.icon
+      | &nbsp;释义
   .item(*ngFor='let item of items')
     .ui.right.floated.circular.icon.compact.mini.button((click)='dropAnno(item)')
       i.right.close.icon
     span.yo([ngClass]='item.dataName') {{item.text}}
-  .item(*ngIf='meaning')
+  .item.meaning(*ngIf='meaning')
     .ui.right.floated.circular.icon.compact.mini.button((click)='dropAnno("meaning")')
       i.right.close.icon
     .item-head 释义：
-    .item-text
+    a.item-text((click)='editMeaning()')
       ng-template([ngIf]='word!==meaning.word') ({{meaning.word}}) &nbsp;
       | {{meaning.text}}
+  .item(*ngIf='phrase')
+    .item-head 词组 {{phrase.phraseWord}}
+    .item-text.pre-wrap
+      .ui.right.floated.circular.icon.compact.mini.button(*ngIf='phrase.meaning',
+      (click)='dropAnno("phraseMeaning")')
+        i.right.close.icon
+      .ui.right.floated.circular.icon.compact.small.basic.button(*ngIf='!phrase.meaning',
+      (click)='editPhraseMeaning(phrase)')
+        i.right.add.icon
+        | &nbsp;词组释义
+      a(*ngIf='phrase.meaning', (click)='editPhraseMeaning(phrase)') {{phrase.meaning}}
   .item(*ngIf='note')
     .ui.right.floated.circular.icon.compact.mini.button((click)='dropAnno("note")')
       i.right.close.icon
     .item-head 注：
-    .item-text.pre-wrap {{note}}
+    a.item-text.pre-wrap((click)='editNote()') {{note}}
+  //.clear

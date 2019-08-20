@@ -18,6 +18,7 @@ const DataAttrNames = {
   pos: 'pos',
   word: 'word',
   mean: 'mean',
+  forPhraseGroup: 'fpg',
   note: 'note',
   assoc: 'assoc'//关联组
 };

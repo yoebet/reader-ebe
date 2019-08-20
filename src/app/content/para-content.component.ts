@@ -57,6 +57,7 @@ export class ParaContentComponent implements OnChanges {
   @Output() contentCommand = new EventEmitter<string>();
   @Output() dictRequest = new EventEmitter<DictRequest>();
   @Output() noteRequest = new EventEmitter<NoteRequest>();
+  @Output() meanRequest = new EventEmitter<MeaningRequest>();
 
   _contentAnnotator: Annotator;
   _transAnnotator: Annotator;
@@ -163,25 +164,30 @@ export class ParaContentComponent implements OnChanges {
     let DataPos = DataAttrNames.pos;
     let DataMean = DataAttrNames.mean;
     let DataWord = DataAttrNames.word;
+    let DataFPG = DataAttrNames.forPhraseGroup;
 
     if (!selected.meaning) {
       // unset
       delete element.dataset[DataPos];
-      delete element.dataset[DataAttrNames.mean];
-      delete element.dataset[DataAttrNames.word];
+      delete element.dataset[DataMean];
+      delete element.dataset[DataWord];
+      delete element.dataset[DataFPG];
       let {changed, removed} = AnnotatorHelper.removeDropTagIfDummy(element);
       if (removed) {
         this.destroyAnnotatedWordsPopup(element);
       }
     } else {
-      if (selected.pos !== element.dataset[DataPos]) {
-        element.dataset[DataPos] = selected.pos || '';
+      if ((selected.pos || '') !== (element.dataset[DataPos] || '')) {
+        element.dataset[DataPos] = selected.pos;
       }
       if (selected.meaning !== element.dataset[DataMean]) {
         element.dataset[DataMean] = selected.meaning;
       }
-      if (selected.word && selected.word !== element.dataset[DataWord]) {
+      if (selected.word !== element.dataset[DataWord]) {
         element.dataset[DataWord] = selected.word;
+      }
+      if (selected.forPhraseGroup !== element.dataset[DataFPG]) {
+        element.dataset[DataFPG] = selected.forPhraseGroup;
       }
     }
 
@@ -201,14 +207,30 @@ export class ParaContentComponent implements OnChanges {
     let element: any = ar.wordEl;
     let word = element.textContent;
 
-    let oriPos = element.dataset[DataAttrNames.pos];
+    let oriPos = element.dataset[DataAttrNames.pos] || '';
     let oriMeaning = element.dataset[DataAttrNames.mean];
     let oriForWord = element.dataset[DataAttrNames.word] || word;
+    let forPhraseGroup = element.dataset[DataAttrNames.forPhraseGroup];
 
     let textEl = this.getTextEl(side);
 
     let meaningItemCallback = (selected: SelectedItem) => {
+      if (selected) {
+        selected.forPhraseGroup = forPhraseGroup;
+      }
       this.trySetMeaning(side, element, selected);
+    };
+
+    let handleNotFound = () => {
+      if (triggerMethod === 'RightClick') {
+        let mr = new MeaningRequest();
+        mr.wordElement = element;
+        mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning, forPhraseGroup} as SelectedItem;
+        mr.meaningItemCallback = meaningItemCallback;
+        this.meanRequest.emit(mr);
+      } else {
+        AnnotatorHelper.removeDropTagIfDummy(element);
+      }
     };
 
     let lang = this.getTextLang(side);
@@ -224,7 +246,7 @@ export class ParaContentComponent implements OnChanges {
       this.dictService.getEntry(oriForWord, options)
         .subscribe((entry: DictEntry) => {
           if (entry == null) {
-            AnnotatorHelper.removeDropTagIfDummy(element);
+            handleNotFound();
             return;
           }
           let dr = new DictRequest();
@@ -253,7 +275,7 @@ export class ParaContentComponent implements OnChanges {
       this.dictZhService.getEntry(oriForWord)
         .subscribe((entry: DictZh) => {
           if (entry == null) {
-            AnnotatorHelper.removeDropTagIfDummy(element);
+            handleNotFound();
             return;
           }
           let dr = new DictRequest();
@@ -268,14 +290,57 @@ export class ParaContentComponent implements OnChanges {
 
   }
 
-  addANote(side: Side, triggerMethod = null) {
+  addMeaning(side: Side) {
+    let ann = AnnotationSet.editMeaningAnnotation;
+    let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
+    if (!ar || !ar.wordEl) {
+      return;
+    }
+    let element = ar.wordEl as HTMLElement;
+
+    this.doAddMeaning(element, side);
+  }
+
+  private doAddMeaning(element: HTMLElement, side: Side, forPhrase: { group: string, words: string } = null) {
+
+    let word = element.textContent;
+    if (forPhrase) {
+      word = forPhrase.words;
+    }
+
+    let oriPos = element.dataset[DataAttrNames.pos];
+    let oriMeaning = element.dataset[DataAttrNames.mean];
+    let oriForWord = element.dataset[DataAttrNames.word] || word;
+
+    let mr = new MeaningRequest();
+    mr.wordElement = element;
+    mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning} as SelectedItem;
+    if (forPhrase) {
+      mr.initialSelected.forPhraseGroup = forPhrase.group;
+    }
+    mr.meaningItemCallback = (selected: SelectedItem) => {
+      if (selected && forPhrase) {
+        selected.forPhraseGroup = forPhrase.group;
+      }
+      this.trySetMeaning(side, element, selected);
+    };
+
+    this.meanRequest.emit(mr);
+  }
+
+  addNote(side: Side, triggerMethod = null) {
     let ann = AnnotationSet.addNoteAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
     if (!ar || !ar.wordEl) {
       return;
     }
+    let element = ar.wordEl as HTMLElement;
+    this.doAddNote(element, side);
+  }
+
+  private doAddNote(element: HTMLElement, side: Side) {
+
     let dataName = DataAttrNames.note;
-    let element: any = ar.wordEl;
     let oriNote = element.dataset[dataName];
 
     let editNoteCallback = (note: string) => {
@@ -318,7 +383,11 @@ export class ParaContentComponent implements OnChanges {
       return;
     }
     if (this.annotation.nameEn === SpecialAnnotations.AddANote.nameEn) {
-      this.addANote(side, triggerMethod);
+      this.addNote(side, triggerMethod);
+      return;
+    }
+    if (this.annotation.nameEn === SpecialAnnotations.EditMeaning.nameEn) {
+      this.addMeaning(side);
       return;
     }
     let ar: AnnotateResult = this.getAnnotator(side).annotate();
@@ -356,7 +425,7 @@ export class ParaContentComponent implements OnChanges {
     let triggerMethod = 'Click';
     if ($event.altKey) {
       triggerMethod = 'Alt_' + triggerMethod;
-      this.addANote(side, triggerMethod);
+      this.addNote(side, triggerMethod);
       return;
     }
     if ($event.ctrlKey || $event.metaKey) {
@@ -686,6 +755,13 @@ export class ParaContentComponent implements OnChanges {
     let notifyChange = () => {
       this.notifyChange(side);
     };
+    let onEditNote = (el: HTMLElement) => {
+      this.doAddNote(el, side);
+    };
+    let onEditMeaning = (el: HTMLElement, forPhrase: { group: string, words: string } = null) => {
+      this.doAddMeaning(el, side, forPhrase);
+    };
+
     let component = this;
 
     let content = function () {
@@ -693,6 +769,8 @@ export class ParaContentComponent implements OnChanges {
       wacr.instance.annotationSet = component.annotationSet;
       wacr.instance.enabled = component.annotatedWordsHover;
       wacr.instance.notifyChange = notifyChange;
+      wacr.instance.onEditNote = onEditNote;
+      wacr.instance.onEditMeaning = onEditMeaning;
       wacr.instance.wordEl = wordEl;
       return wacr.location.nativeElement;
     };

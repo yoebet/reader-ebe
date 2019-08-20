@@ -1,14 +1,27 @@
+:host {
+  display: block;
+  min-width: 150px;
+}
+
 .item {
   min-width: 6em;
+}
+
+.clear.item {
+  margin-top: 1em;
 }
 
 .item-head {
   font-weight: bold;
   color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.5em;
 }
 
 .item-text {
-  margin: 0.4em 0.4em 0.2em 1.5em;
+  margin: 0.5em 0.5em 0.5em 1.5em;
+  white-space: nowrap;
+  max-width: 400px;
+  display: block;
 }
 
 .ui.compact.icon.button {

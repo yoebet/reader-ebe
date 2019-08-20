@@ -5,7 +5,7 @@ export class DictRequest {
   dictLang: string;// en/zh
   wordElement: Element;
   dictEntry: DictEntry | DictZh;
-  initialSelected?: SelectedItem;
+  initialSelected: SelectedItem;
   relatedWords?: string[];
   meaningItemCallback: (selected: SelectedItem) => void;
 
@@ -14,12 +14,13 @@ export class DictRequest {
 
 export class MeaningRequest {
   wordElement: Element;
-  initialSelected?: SelectedItem;
+  initialSelected: SelectedItem;
   meaningItemCallback: (selected: SelectedItem) => void;
 }
 
 export class SelectedItem {
   word?: string;
-  pos?: string;
+  pos?: string = '';
   meaning?: string;
+  forPhraseGroup?: string;
 }
