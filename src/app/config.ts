@@ -34,17 +34,24 @@ const DataAttrValues = {
 
 const SpecialAnnotations = {
   SelectMeaning: {
-    name: '选词义',
+    dataName: DataAttrNames.mean,
+    name: '查词',
     nameEn: 'SelectMeaning'
   },
+  EditMeaning: {
+    dataName: DataAttrNames.mean,
+    name: '释义',
+    nameEn: 'EditMeaning'
+  },
   AddANote: {
-    name: '加注解',
+    dataName: DataAttrNames.note,
+    name: '加注',
     nameEn: 'AddANote'
   }
 };
 
 const DictHistoryCapacity = 20;
-const LatestAnnotationsCount = 8;
+const LatestAnnotationsCount = 6;
 
 
 const ParaSetting = {

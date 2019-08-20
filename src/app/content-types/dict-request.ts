@@ -12,6 +12,12 @@ export class DictRequest {
   simplePopup = false;
 }
 
+export class MeaningRequest {
+  wordElement: Element;
+  initialSelected?: SelectedItem;
+  meaningItemCallback: (selected: SelectedItem) => void;
+}
+
 export class SelectedItem {
   word?: string;
   pos?: string;

@@ -12,7 +12,7 @@ import {AnnotateResult} from '../anno/annotate-result';
 import {AnnotationSet, HighlightGroups} from '../anno/annotation-set';
 
 import {UIConstants, DataAttrNames, SpecialAnnotations} from '../config';
-import {DictEntry, DictFields, SimpleMeaning} from '../models/dict-entry';
+import {DictEntry, DictFields} from '../models/dict-entry';
 import {DictZh} from '../models/dict-zh';
 import {Annotation} from '../models/annotation';
 import {Book} from '../models/book';
@@ -20,7 +20,7 @@ import {Book} from '../models/book';
 import {DictService} from '../services/dict.service';
 import {DictZhService} from '../services/dict-zh.service';
 import {ChangeCallback} from '../content-types/change-notification';
-import {DictRequest, SelectedItem} from '../content-types/dict-request';
+import {DictRequest, MeaningRequest, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
 import {WordAnnosComponent} from './word-annos.component'
 import {ContentContext} from '../content-types/content-context';
@@ -146,6 +146,52 @@ export class ParaContentComponent implements OnChanges {
     }
   }
 
+  private trySetMeaning(side: Side, element, selected: SelectedItem) {
+
+    if (!selected) {
+      // cancel
+      let {changed, removed} = AnnotatorHelper.removeDropTagIfDummy(element);
+      if (changed) {
+        // this.onContentChange();
+        if (removed) {
+          this.destroyAnnotatedWordsPopup(element);
+        }
+      }
+      return;
+    }
+
+    let DataPos = DataAttrNames.pos;
+    let DataMean = DataAttrNames.mean;
+    let DataWord = DataAttrNames.word;
+
+    if (!selected.meaning) {
+      // unset
+      delete element.dataset[DataPos];
+      delete element.dataset[DataAttrNames.mean];
+      delete element.dataset[DataAttrNames.word];
+      let {changed, removed} = AnnotatorHelper.removeDropTagIfDummy(element);
+      if (removed) {
+        this.destroyAnnotatedWordsPopup(element);
+      }
+    } else {
+      if (selected.pos !== element.dataset[DataPos]) {
+        element.dataset[DataPos] = selected.pos || '';
+      }
+      if (selected.meaning !== element.dataset[DataMean]) {
+        element.dataset[DataMean] = selected.meaning;
+      }
+      if (selected.word && selected.word !== element.dataset[DataWord]) {
+        element.dataset[DataWord] = selected.word;
+      }
+    }
+
+    this.notifyChange(side);
+    if (this.annotatedWordsHoverSetup) {
+      let textEl = this.getTextEl(side);
+      this.setupPopup(element, textEl);
+    }
+  }
+
   selectWordMeaning(side: Side, triggerMethod = null) {
     let ann = AnnotationSet.selectMeaningAnnotation;
     let ar: AnnotateResult = this.getAnnotator(side, ann).annotate();
@@ -162,45 +208,7 @@ export class ParaContentComponent implements OnChanges {
     let textEl = this.getTextEl(side);
 
     let meaningItemCallback = (selected: SelectedItem) => {
-
-      if (!selected) {
-        // cancel
-        let {changed, removed} = AnnotatorHelper.removeDropTagIfDummy(element);
-        if (changed) {
-          // this.onContentChange();
-          if (removed) {
-            this.destroyAnnotatedWordsPopup(element);
-          }
-        }
-        return;
-      }
-
-      if (!selected.meaning) {
-        // unset
-        // delete element.dataset[DataAttrNames.mid];
-        delete element.dataset[DataAttrNames.pos];
-        delete element.dataset[DataAttrNames.mean];
-        delete element.dataset[DataAttrNames.word];
-        let {changed, removed} = AnnotatorHelper.removeDropTagIfDummy(element);
-        if (removed) {
-          this.destroyAnnotatedWordsPopup(element);
-        }
-      } else {
-        if (selected.pos !== oriPos) {
-          element.dataset[DataAttrNames.pos] = selected.pos || '';
-        }
-        if (selected.meaning !== oriMeaning) {
-          element.dataset[DataAttrNames.mean] = selected.meaning;
-        }
-        if (selected.word && selected.word !== oriForWord) {
-          element.dataset[DataAttrNames.word] = selected.word;
-        }
-      }
-
-      this.notifyChange(side);
-      if (this.annotatedWordsHoverSetup) {
-        this.setupPopup(element, textEl);
-      }
+      this.trySetMeaning(side, element, selected);
     };
 
     let lang = this.getTextLang(side);
@@ -218,11 +226,6 @@ export class ParaContentComponent implements OnChanges {
           if (entry == null) {
             AnnotatorHelper.removeDropTagIfDummy(element);
             return;
-            // entry = new DictEntry();
-            // let mi = new SimpleMeaning();
-            // mi.exp = '(Not Found)';
-            // entry.simple = [mi];
-            // entry.word = oriForWord;
           }
           let dr = new DictRequest();
           dr.dictLang = 'en';
@@ -306,7 +309,7 @@ export class ParaContentComponent implements OnChanges {
     nr.wordElement = element;
     nr.note = oriNote || '';
     nr.editNoteCallback = editNoteCallback;
-    this.noteRequest.emit(nr)
+    this.noteRequest.emit(nr);
   }
 
   private doAnnotate(side: Side, triggerMethod = null) {
