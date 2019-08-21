@@ -116,11 +116,8 @@ export class ReleaseListComponent implements OnInit {
     if (!confirm('设置为当前最新版本？')) {
       return;
     }
-    if (rr.current) {
-      return;
-    }
     this.releaseService
-      .setCurrentVersion(this.platform, rr.versionCode)
+      .setCurrentVersion(rr._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
@@ -132,6 +129,41 @@ export class ReleaseListComponent implements OnInit {
           }
         }
         rr.current = true;
+      });
+  }
+
+  setPreview(rr: AppRelease) {
+    if (!confirm('设置为预览版吗（测试版可升级）？')) {
+      return;
+    }
+    this.releaseService
+      .setPreview(rr._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        for (let r of this.releases) {
+          if (r.preview) {
+            r.preview = false;
+          }
+        }
+        rr.preview = true;
+      });
+  }
+
+  unsetPreview(rr: AppRelease) {
+    if (!confirm('要取消预览吗？')) {
+      return;
+    }
+    this.releaseService
+      .unsetPreview(rr._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        rr.preview = false;
       });
   }
 

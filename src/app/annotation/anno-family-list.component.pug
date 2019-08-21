@@ -9,6 +9,7 @@ table.ui.small.striped.table.form
       th 名称
       th 说明
       th 状态
+      th 版本
       th
   tbody
     tr(*ngFor='let family of families; trackBy: tracker')
@@ -21,6 +22,7 @@ table.ui.small.striped.table.form
         .field(*ngIf='editing(family)')
           textarea([(ngModel)]="editingFamily.description", rows='2')
       td {{family.status}}
+      td {{family.version}}
       td.right.aligned
         ng-template([ngIf]='editing(family)')
           .ui.mini.button((click)='editingFamily=null') 取消
@@ -30,3 +32,4 @@ table.ui.small.striped.table.form
             button.ui.tiny.button((click)='clone(family)') 复制
             button.ui.tiny.button((click)='remove(family)') 删除
           button.ui.tiny.button((click)='edit(family)') 修改
+          button.ui.tiny.button((click)='incVersion(family)') 版本+

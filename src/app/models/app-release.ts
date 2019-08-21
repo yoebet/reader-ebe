@@ -9,6 +9,7 @@ export class AppRelease extends Model {
   releaseNote: string;
   packageInfo: PackageInfo;
   current: boolean;
+  preview: boolean;
 
   status: string; // { N: normal, L: Locked, A: Archived}
 }

@@ -130,6 +130,22 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
       });
   }
 
+  incVersion(cat) {
+    this.wordCategoryService.incVersion(cat._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        if (!cat.version) {
+          cat.version = 1;
+        } else {
+          cat.version++;
+        }
+        alert('版本号已增加');
+      });
+  }
+
   recount(cat) {
     if (!confirm('要重新统计吗？')) {
       return;

@@ -11,6 +11,7 @@ table.ui.striped.table.form
       th 更新说明
       th 安装文件
       th 当前最新
+      th 预览版
       th
   tbody
     tr(*ngIf='newRelease')
@@ -20,6 +21,7 @@ table.ui.striped.table.form
       td
       td
         textarea(rows='3', [(ngModel)]='newRelease.releaseNote', placeholder='更新说明')
+      td
       td
       td
       td
@@ -45,6 +47,7 @@ table.ui.striped.table.form
               | 上传
               input(type="file", style="display: none", (change)="upload(rr)", #file='')
         td {{rr.current? '是':''}}
+        td {{rr.preview? '是':''}}
         td
           .ui.tiny.compact.primary.button((click)='save(rr,vName? vName.value:rr.versionName,vCode? vCode.value:rr.versionCode,rNote.value)') 保存
           .ui.tiny.compact.button((click)='cancelEdit()') 取消
@@ -60,14 +63,21 @@ table.ui.striped.table.form
             | &nbsp;&nbsp;
             a(href="{{appPackagesBase+'/'+rr.packageInfo.file}}") 下载
         td {{rr.current? '是':''}}
+        td {{rr.preview? '是':''}}
         td
           ng-template([ngIf]='rr.status!=="L"')
             a((click)='edit(rr)', href='javascript:') 修改
             | &nbsp;&nbsp;
             a((click)='lock(rr)', href='javascript:') 锁定
-            ng-template([ngIf]='idx<3&&!rr.current&&rr.packageInfo')
+            ng-template([ngIf]='!rr.current&&idx<3&&rr.packageInfo')
               | &nbsp;&nbsp;
               a((click)='setCurrent(rr)', href='javascript:') 设为最新
+            ng-template([ngIf]='!rr.preview&&idx<3&&rr.packageInfo')
+              | &nbsp;&nbsp;
+              a((click)='setPreview(rr)', href='javascript:') 设为预览
+            ng-template([ngIf]='rr.preview')
+              | &nbsp;&nbsp;
+              a((click)='unsetPreview(rr)', href='javascript:') 取消预览
           ng-template([ngIf]='rr.status==="L"')
             a((click)='archive(rr)', href='javascript:') 隐藏
             | &nbsp;&nbsp;

@@ -14,6 +14,7 @@ table.ui.small.striped.table.form
       th 基于
       th 增加词汇
       th 总词汇量
+      th 版本
       th
   tbody
     tr(*ngFor='let cat of categories; trackBy: tracker; first as first; last as last')
@@ -40,6 +41,7 @@ table.ui.small.striped.table.form
         ng-template([ngIf]='!cat.isFrequency') + {{cat.wordCount}}
       td.right.aligned
         ng-template([ngIf]='!cat.isFrequency') {{cat.extendedWordCount}}
+      td.right.aligned {{cat.version}}
       td.right.aligned
         ng-template([ngIf]='editing(cat)')
           .ui.mini.button((click)='editingCat=null') 取消
@@ -48,20 +50,22 @@ table.ui.small.striped.table.form
           ng-template([ngIf]="tuneOrder")
             button.ui.tiny.button(*ngIf='!first', (click)='moveUp(cat)')
               i.angle.arrow.up.icon
-              | up
+              | 上
             button.ui.tiny.button(*ngIf='!last', (click)='moveDown(cat)')
               i.angle.arrow.down.icon
-              | down
+              | 下
             button.ui.tiny.button(*ngIf='!first', (click)='moveTop(cat)')
               i.angle.double.up.icon
-              | top
+              | 顶
             button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(cat)')
               i.angle.double.down.icon
-              | bottom
+              | 底
           ng-template([ngIf]="!tuneOrder")
             button.ui.tiny.button((click)='edit(cat)') 修改
+            button.ui.tiny.button((click)='incVersion(cat)') 版本+
             button.ui.tiny.button(*ngIf='recountOperation&&!cat.isFrequency', (click)='recount(cat)') 统计
             button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
+
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click)='editNew()') 新增

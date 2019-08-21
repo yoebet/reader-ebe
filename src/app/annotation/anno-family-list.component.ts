@@ -16,12 +16,12 @@ export class AnnoFamilyListComponent implements OnInit {
 
   operations = false;
 
-  constructor(private annotationFamilyService: AnnoFamilyService,
+  constructor(private annoService: AnnoFamilyService,
               private router: Router) {
   }
 
   ngOnInit() {
-    this.annotationFamilyService.list()
+    this.annoService.list()
       .subscribe(families => {
         this.families = families;
       });
@@ -37,7 +37,7 @@ export class AnnoFamilyListComponent implements OnInit {
 
   save() {
     let editingFamily = this.editingFamily;
-    this.annotationFamilyService.update(editingFamily)
+    this.annoService.update(editingFamily)
       .subscribe(opr => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
@@ -49,11 +49,27 @@ export class AnnoFamilyListComponent implements OnInit {
       });
   }
 
+  incVersion(af) {
+    this.annoService.incVersion(af._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        if (!af.version) {
+          af.version = 1;
+        } else {
+          af.version++;
+        }
+        alert('版本号已增加');
+      });
+  }
+
   remove(af) {
     if (!confirm('Are You Sure?')) {
       return;
     }
-    this.annotationFamilyService
+    this.annoService
       .remove(af._id)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
@@ -68,7 +84,7 @@ export class AnnoFamilyListComponent implements OnInit {
     if (!confirm('... To Clone?')) {
       return;
     }
-    this.annotationFamilyService.clone(af._id).subscribe(clonedFamily => {
+    this.annoService.clone(af._id).subscribe(clonedFamily => {
       if (!clonedFamily) {
         alert('Fail To Clone.');
         return;

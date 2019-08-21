@@ -26,8 +26,18 @@ export class ReleaseService extends BaseService<AppRelease> {
     return super.list(url);
   }
 
-  setCurrentVersion(platform: string, versionCode: number): Observable<OpResult> {
-    let url = `${this.baseUrl}/setCurrent/${platform}/${versionCode}`;
+  setCurrentVersion(id: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${id}/setCurrent`;
+    return this.postForOpResult(url);
+  }
+
+  setPreview(id: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${id}/setPreview`;
+    return this.postForOpResult(url);
+  }
+
+  unsetPreview(id: string): Observable<OpResult> {
+    let url = `${this.baseUrl}/${id}/unsetPreview`;
     return this.postForOpResult(url);
   }
 
