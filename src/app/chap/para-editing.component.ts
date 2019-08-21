@@ -313,7 +313,7 @@ export abstract class ParaEditingComponent {
       });
   }
 
-  doUpdateParasTrans(chap, idTrans, onSaved = null) {
+  protected doUpdateParasTrans(chap, idTrans, onSaved = null) {
 
     this.chapService.updateParasTrans(chap._id, idTrans)
       .subscribe((opr: OpResult) => {
@@ -515,8 +515,21 @@ export abstract class ParaEditingComponent {
       });
   }
 
-  mergeUp(para): void {
-    para = para || this.selectedPara;
+  protected checkMerge() {
+    let para = this.selectedPara;
+    if (!para) {
+      return null;
+    }
+    if (this.chap.status === 'R') {
+      if (!confirm('本章内容已上线，确定要合并吗？')) {
+        return null;
+      }
+    }
+    return para;
+  }
+
+  mergeUp(): void {
+    let para = this.checkMerge();
     if (!para) {
       return;
     }
@@ -530,8 +543,8 @@ export abstract class ParaEditingComponent {
     this.saveMerge(targetPara, para);
   }
 
-  mergeDown(para): void {
-    para = para || this.selectedPara;
+  mergeDown(): void {
+    let para = this.checkMerge();
     if (!para) {
       return;
     }
