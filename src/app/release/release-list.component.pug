@@ -30,9 +30,8 @@ table.ui.striped.table.form
     tr(*ngFor='let rr of releases; index as idx; trackBy: releaseTracker')
       ng-template([ngIf]='rr===editing')
         td
-          ng-template([ngIf]='!rr.packageInfo')
-            input.field.version-name([value]="rr.versionCode", placeholder='序号', #vCode='', type="number", size="4")
-            input.field.version-name([value]="rr.versionName", placeholder='版本号', #vName='', size="10")
+          input.field.version-code([hidden]='rr.packageInfo', [value]="rr.versionCode", placeholder='序号', #vCode='', type="number", size="4")
+          input.field.version-name([hidden]='rr.packageInfo', [value]="rr.versionName", placeholder='版本号', #vName='', size="10")
           ng-template([ngIf]='rr.packageInfo') （{{rr.versionCode}}） {{rr.versionName}}
         td {{rr | createdDateString:'yyyy-M-d' }}
         td
@@ -49,7 +48,7 @@ table.ui.striped.table.form
         td {{rr.current? '是':''}}
         td {{rr.preview? '是':''}}
         td
-          .ui.tiny.compact.primary.button((click)='save(rr,vName? vName.value:rr.versionName,vCode? vCode.value:rr.versionCode,rNote.value)') 保存
+          .ui.tiny.compact.primary.button((click)='save(rr,vName.value,vCode.value,rNote.value)') 保存
           .ui.tiny.compact.button((click)='cancelEdit()') 取消
       ng-template([ngIf]='rr!==editing')
         td （{{rr.versionCode}}） {{rr.versionName}}
@@ -72,7 +71,7 @@ table.ui.striped.table.form
             ng-template([ngIf]='!rr.current&&idx<3&&rr.packageInfo')
               | &nbsp;&nbsp;
               a((click)='setCurrent(rr)', href='javascript:') 设为最新
-            ng-template([ngIf]='!rr.preview&&idx<3&&rr.packageInfo')
+            ng-template([ngIf]='!rr.preview&&!rr.current&&idx<3&&rr.packageInfo')
               | &nbsp;&nbsp;
               a((click)='setPreview(rr)', href='javascript:') 设为预览
             ng-template([ngIf]='rr.preview')

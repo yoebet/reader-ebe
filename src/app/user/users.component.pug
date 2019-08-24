@@ -8,41 +8,30 @@
       button.ui.tiny.button((click)="search()") 查找
       button.ui.tiny.button((click)="searchReset()") 全部
 
-table.ui.small.striped.table.form
+table.ui.small.striped.unstackable.table.form
   thead
     tr
       th
       th 登录名
       th 昵称
-      th 手机号
       th
         a((click)='sortByCreateTime()', href='javascript:')
           i.sort.up.middle.aligned.icon(*ngIf='sortCT==="1"')
           i.sort.down.icon(*ngIf='sortCT==="-1"')
           | 注册于
-      th 上次登录
-      th
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
         img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='avatarsBase+"/"+user.avatarSetting.imgUrl')
-      td {{user.name}}
-      td {{user.nickName}}
-      td {{user.phoneNumber}}
-      td {{user | createdDate | date:'yyyy-MM-dd'}}
       td
-        ng-template([ngIf]='user.lastLogin')
-          ng-template([ngIf]='user.lastLogin.time') {{user.lastLogin.time.substr(0,10)}} &nbsp;
-          ng-template([ngIf]='user.lastLogin.client') {{user.lastLogin.client}} &nbsp;
-          ng-template([ngIf]='user.lastLogin.appVersion') {{user.lastLogin.appVersion}} &nbsp;
-          ng-template([ngIf]='user.lastLogin.osVersion') {{user.lastLogin.osVersion}} &nbsp;
-      td.right.aligned
-        .ui.mini.button((click)='showDetail(user)') 详情
+        a((click)='showDetail(user)', href='javascript:') {{user.name}}
+      td {{user.nickName}}
+      td {{user | createdDate | date:'yyyy-MM-dd'}}
     tr(*ngIf='!users||users.length===0')
-      td(colspan='7') No Results.
+      td(colspan='4') No Results.
   tfoot
     tr
-      th(colspan='7')
+      th(colspan='4')
         .pager
           input.page-input(type="number", #pi='', (change)='gotoPage(pi.value);pi.value=""')
           .ui.right.floated.mini.pagination.menu

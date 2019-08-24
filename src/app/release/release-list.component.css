@@ -1,3 +1,7 @@
-input.field.version-name {
+input.field.version-code, input.field.version-name {
   width: 6em;
+}
+
+input.field.version-name {
+  margin-left: 0.3em;
 }
