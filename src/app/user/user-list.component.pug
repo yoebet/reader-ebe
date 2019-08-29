@@ -7,7 +7,7 @@
     sui-checkbox([(ngModel)]='moreOp') 更多操作
   .fields
     .inline.field
-      input([(ngModel)]='searchName', placeholder='Name')
+      input.search-name([(ngModel)]='searchName', placeholder='Name')
       sui-checkbox([(ngModel)]='manager') 管理人员
       button.ui.tiny.button((click)="search()") 查找
       button.ui.tiny.button((click)="searchReset()") 全部

@@ -410,11 +410,18 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
     }
   }
 
+  onDictMeanWordKeyup($event) {
+    if ($event.keyCode === 13) {
+      $event.stopPropagation();
+      this.requestDictInMeanEditing();
+    }
+  }
 
   requestDictInMeanEditing() {
     if (!this.meanRequest || !this.dictMean) {
       return;
     }
+    this.dictMean.word = this.dictMean.word.trim();
     let callback = (selected: SelectedItem) => {
       if (!selected || !selected.meaning) {
         return;

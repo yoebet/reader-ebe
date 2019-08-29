@@ -174,7 +174,7 @@ div(*ngIf='chap')
     .inline.fields
       .eleven.wide.field
         label For
-        input.input([(ngModel)]="dictMean.word")
+        input.input([(ngModel)]="dictMean.word", (keyup)='onDictMeanWordKeyup($event)')
       .five.wide.field
         button.ui.small.primary.button((click)='requestDictInMeanEditing()') 查词
     .inline.fields

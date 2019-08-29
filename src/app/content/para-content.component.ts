@@ -246,6 +246,11 @@ export class ParaContentComponent implements OnChanges {
           mr.wordElement = element;
           mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning, forPhraseGroup} as SelectedItem;
           mr.meaningItemCallback = callback;
+          mr.onRequestDict = (word2: string,
+                              callback: (selected: SelectedItem) => void,
+                              notFoundCallback: () => void) => {
+            this.doSelectWordMeaning(element, word2, side, null, callback, notFoundCallback);
+          };
           this.meanRequest.emit(mr);
         } else {
           AnnotatorHelper.removeDropTagIfDummy(element);

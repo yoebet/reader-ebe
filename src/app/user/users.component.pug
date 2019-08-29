@@ -4,7 +4,7 @@
 .ui.small.form
   .fields
     .inline.field
-      input([(ngModel)]='searchName', placeholder='Name')
+      input.search-name([(ngModel)]='searchName', placeholder='Name')
       button.ui.tiny.button((click)="search()") 查找
       button.ui.tiny.button((click)="searchReset()") 全部
 
@@ -18,7 +18,7 @@ table.ui.small.striped.unstackable.table.form
         a((click)='sortByCreateTime()', href='javascript:')
           i.sort.up.middle.aligned.icon(*ngIf='sortCT==="1"')
           i.sort.down.icon(*ngIf='sortCT==="-1"')
-          | 注册于
+          | 日期
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
       td
@@ -26,7 +26,7 @@ table.ui.small.striped.unstackable.table.form
       td
         a((click)='showDetail(user)', href='javascript:') {{user.name}}
       td {{user.nickName}}
-      td {{user | createdDate | date:'yyyy-MM-dd'}}
+      td {{user | createdDate | date:'MM-dd'}}
     tr(*ngIf='!users||users.length===0')
       td(colspan='4') No Results.
   tfoot

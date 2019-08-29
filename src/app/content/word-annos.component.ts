@@ -88,9 +88,6 @@ export class WordAnnosComponent implements OnInit {
         let groupEls = stEl.querySelectorAll(groupSelector);
         let els = Array.from(groupEls);
         let words = els.map((el: Element) => el.textContent).join(' ');
-        if (words.indexOf(' ') == -1) {
-          continue;
-        }
 
         if (name === DataAttrNames.assoc && DataAttrValues.phraPattern.test(group)) {
 
