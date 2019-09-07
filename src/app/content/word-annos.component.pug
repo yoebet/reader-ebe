@@ -16,6 +16,8 @@
       ng-template([ngIf]='word!==meaning.word') ({{meaning.word}}) &nbsp;
       | {{meaning.text}}
   .item(*ngIf='phrase')
+    .ui.right.floated.circular.icon.compact.mini.button((click)='dropAnno("phrase")')
+      i.right.close.icon
     .item-head 词组 {{phrase.phraseWord}}
     .item-text.pre-wrap
       .ui.right.floated.circular.icon.compact.mini.button(*ngIf='phrase.meaning',

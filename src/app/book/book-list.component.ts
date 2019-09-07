@@ -177,6 +177,9 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
   editNew() {
     this.newBook = new Book();
+    if (this.annOptions && this.annOptions.length > 0) {
+      this.newBook.annotationFamilyId = this.annOptions[0]._id;
+    }
   }
 
   cancelEdit() {

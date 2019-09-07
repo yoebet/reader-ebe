@@ -414,6 +414,9 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
     if ($event.keyCode === 13) {
       $event.stopPropagation();
       this.requestDictInMeanEditing();
+    } else if ($event.key === 'Escape') {
+      $event.stopPropagation();
+      this.completeMeanEdit("cancel");
     }
   }
 

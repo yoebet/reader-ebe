@@ -368,6 +368,9 @@ export abstract class ParaEditingComponent {
       }
       let newTrans;
       if (trans.includes("<")) {
+        if (trans.startsWith(ParaSetting.TransIndentStr + '<')) {
+          continue;
+        }
         newTrans = trans.replace(/>\s*/, '>' + ParaSetting.TransIndentStr);
       } else {
         newTrans = ParaSetting.TransIndentStr + trans.trim();

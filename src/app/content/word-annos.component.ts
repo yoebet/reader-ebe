@@ -158,8 +158,12 @@ export class WordAnnosComponent implements OnInit {
   dropAnno(item) {
     let element = this._wordEl;
     let dataset = element.dataset;
-    if (item === 'phraseMeaning' || item === 'meaning') {
-      if (item === 'phraseMeaning') {
+    if (item === 'phrase' || item === 'phraseMeaning' || item === 'meaning') {
+      if (item === 'phrase') {
+        delete dataset[DataAttrNames.assoc];
+        this.meaning = null;
+        this.phrase = null;
+      } else if (item === 'phraseMeaning') {
         element = this.phrase.meaningEl;
         dataset = element.dataset;
         this.phrase = null;
