@@ -13,7 +13,7 @@ import {UserService} from '../services/user.service';
 import {SessionService} from "../services/session.service";
 
 @Component({
-  selector: 'user-list',
+  selector: 'users-admin',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })

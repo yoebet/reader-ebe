@@ -1,0 +1,20 @@
+.ui.header
+  .ui.right.floated.small.compact.menu
+    a.item((click)='stat("User")', [ngClass]='{active:type==="User"}') 用户
+    a.item((click)='stat("Word")', [ngClass]='{active:type==="Word"}') 词汇
+    a.item((click)='stat("Note")', [ngClass]='{active:type==="Note"}') 笔记
+    a.item((click)='stat("UserWord")', [ngClass]='{active:type==="UserWord"}') 词汇（7天）
+  .clearing
+  | 统计
+
+table.ui.small.striped.unstackable.table.form
+  thead
+    tr
+      th Group
+      th Count
+  tbody
+    tr(*ngFor='let group of groups')
+      td {{group.group}}
+      td {{group.count}}
+
+.ui.hidden.clearing.divider

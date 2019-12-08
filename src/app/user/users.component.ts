@@ -10,7 +10,7 @@ import {UserInfoModal} from "./user-info.component";
 import {SessionService} from "../services/session.service";
 
 @Component({
-  selector: 'users-admin',
+  selector: 'user-list',
   templateUrl: './users.component.html',
   styleUrls: ['./user-list.component.css']
 })

@@ -20,6 +20,7 @@ import {LoginComponent} from './account/login.component';
 import {MyMessagesComponent} from './account/my-messages.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
+import {UserStatComponent} from "./user/user-stat.component";
 
 const routes: Routes = [
   {path: 'books', component: BookListComponent},
@@ -41,7 +42,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'my-messages', component: MyMessagesComponent},
   {path: 'releases', component: ReleaseListComponent},
-  {path: 'orders', component: OrderListComponent}
+  {path: 'orders', component: OrderListComponent},
+  {path: 'stat', component: UserStatComponent}
 ];
 
 @NgModule({

@@ -1,13 +1,11 @@
-ng-template([ngIf]='currentUser')
-  ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
-    .ui.header
-      .ui.right.floated.small.compact.menu
-        a.item((click)='filterVisib("pub")', [ngClass]='{active:visib==="pub"}') 公开
-        a.item((click)='filterVisib("pri")', [ngClass]='{active:visib==="pri"}') 私有
-      .ui.right.floated.small.compact.menu
-        a.item((click)='filterStatus("E")', [ngClass]='{active:status=="E"}') 编辑中
-        a.item((click)='filterStatus("R")', [ngClass]='{active:status=="R"}') 已上线
-      .clearing
+.ui.header(*ngIf='currentUser&&(currentUser.role==="A"||currentUser.role==="R")')
+  .ui.right.floated.small.compact.menu
+    a.item((click)='filterVisib("pub")', [ngClass]='{active:visib==="pub"}') 公开
+    a.item((click)='filterVisib("pri")', [ngClass]='{active:visib==="pri"}') 私有
+  .ui.right.floated.small.compact.menu
+    a.item((click)='filterStatus("E")', [ngClass]='{active:status==="E"}') 编辑中
+    a.item((click)='filterStatus("R")', [ngClass]='{active:status==="R"}') 已上线
+  .clearing
 
 .ui.header.book-list-header
   .ui.right.floated.header.opers

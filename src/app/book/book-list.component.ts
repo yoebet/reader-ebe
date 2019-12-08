@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, ParamMap} from "@angular/router";
 
 import {StaticResource} from '../config';
 import {SuiModalService} from 'ng2-semantic-ui';
@@ -17,7 +18,6 @@ import {SortableListComponent} from "../common/sortable-list.component";
 import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
-import {ActivatedRoute, ParamMap} from "@angular/router";
 
 @Component({
   selector: 'book-list',

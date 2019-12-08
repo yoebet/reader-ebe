@@ -156,6 +156,10 @@ export class BaseService<M extends Model> {
       url: '...'/null
     }
     */
+    if (typeof error === 'undefined') {
+      alert('没有结果');
+      return EMPTY;
+    }
     switch (error.status) {
       case 400:
         return this.handleError400(error);

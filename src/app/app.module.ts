@@ -80,6 +80,8 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
 import {AppLinkComponent} from './common/app-link.component';
+import {UserStatComponent} from "./user/user-stat.component";
+import {UserStatService} from "./services/user-stat.service";
 
 
 @NgModule({
@@ -143,7 +145,8 @@ import {AppLinkComponent} from './common/app-link.component';
     MessagesPopupComponent,
     ReleaseListComponent,
     OrderListComponent,
-    AppLinkComponent
+    AppLinkComponent,
+    UserStatComponent
   ],
   providers: [
     AppService,
@@ -164,7 +167,8 @@ import {AppLinkComponent} from './common/app-link.component';
     AnnoGroupService,
     ReleaseService,
     PriceLabelPipe,
-    OrderService
+    OrderService,
+    UserStatService
   ],
   entryComponents: [
     LoginPopupComponent,

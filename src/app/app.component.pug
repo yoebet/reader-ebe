@@ -11,6 +11,7 @@
           a.item(routerLink='/issues', routerLinkActive='active') 纠错
           a.item(routerLink='/users', routerLinkActive='active') 用户
           ng-template([ngIf]='currentUser.role==="R"')
+            a.item(routerLink='/stat', routerLinkActive='active') 统计
             a.item(routerLink='/orders', routerLinkActive='active') 订单
             a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
             a.item(routerLink='/comments', routerLinkActive='active') 评论
