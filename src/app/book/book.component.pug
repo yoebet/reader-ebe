@@ -9,29 +9,34 @@ div(*ngIf='book')
         .menu(suiDropdownMenu='')
           .item((click)='showForm()') 修改
           .item((click)='showUsers()') 人员
-          .item((click)='showPacks()') 内容包
-          .item((click)='showLink()') 微信链接
+          ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+            .item((click)='showPacks()') 内容包
+            .item((click)='showLink()') 微信链接
 
-    .name-author
-      .book-name {{book.name}}
-      .author(*ngIf='book.author')
-        span.author-by by
-        | {{book.author}}
-    .zh-name-author(*ngIf='book.zhName')
-      .book-name {{book.zhName}}
-      .author(*ngIf='book.zhAuthor')
-        span.author-by by
-        | {{book.zhAuthor}}
-    .props
-      .prop
-        span.prop-name 代号
-        | {{book.code}}
-      .prop
-        span.prop-name 分类
-        | {{categoryNames[book.category]}}
-      .prop
-        span.prop-name 状态
-        | {{statusNames[book.status]}}
+    img.ui.tiny.left.floated.image(*ngIf='book.image',
+    [src]='book.image? bookImagesBase+"/"+book.image.file: bookImageNotSet',
+    [ngClass]='{disabled: !book.image}', (click)='showImage(book)')
+    .content
+      .name-author
+        .book-name {{book.name}}
+        .author(*ngIf='book.author')
+          span.author-by by
+          | {{book.author}}
+      .zh-name-author(*ngIf='book.zhName')
+        .book-name {{book.zhName}}
+        .author(*ngIf='book.zhAuthor')
+          span.author-by by
+          | {{book.zhAuthor}}
+      .props
+        .prop
+          span.prop-name 代号
+          | {{book.code}}
+        .prop
+          span.prop-name 分类
+          | {{categoryNames[book.category]}}
+        .prop
+          span.prop-name 状态
+          | {{statusNames[book.status]}}
 
   .ui.hidden.clearing.divider
 

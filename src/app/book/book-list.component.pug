@@ -56,16 +56,16 @@ table.ui.striped.table
         ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         ng-template([ngIf]="tuneOrder")
-          button.ui.mini.button(*ngIf='!first', (click)='moveUp(book)')
+          button.ui.mini.compact.button(*ngIf='!first', (click)='moveUp(book)')
             i.angle.arrow.up.icon
             | 上
-          button.ui.mini.button(*ngIf='!last', (click)='moveDown(book)')
+          button.ui.mini.compact.button(*ngIf='!last', (click)='moveDown(book)')
             i.angle.arrow.down.icon
             | 下
-          button.ui.mini.button(*ngIf='!first', (click)='moveTop(book)')
+          button.ui.mini.compact.button(*ngIf='!first', (click)='moveTop(book)')
             i.angle.double.up.icon
             | 顶
-          button.ui.mini.button(*ngIf='!last', (click)='moveBottom(book)')
+          button.ui.mini.compact.button(*ngIf='!last', (click)='moveBottom(book)')
             i.angle.double.down.icon
             | 底
         ng-template([ngIf]="!tuneOrder")
@@ -75,13 +75,13 @@ table.ui.striped.table
             a((click)='showForm(book)', href='javascript:') 修改
             | &nbsp;&nbsp;
             a((click)='showUsers(book)', href='javascript:') 人员
-            | &nbsp;&nbsp;
-            a((click)='showLink(book)', href='javascript:') 链接
           ng-template([ngIf]="privilegeOperations")
+            a((click)='showLink(book)', href='javascript:') 链接
+            | &nbsp;&nbsp;
             a((click)='showPacks(book)', href='javascript:') 内容包
             | &nbsp;&nbsp;
             button.ui.tiny.compact.button((click)='backup(book)') 复制
-            button.ui.tiny.button((click)='remove(book)') 删除
+            button.ui.tiny.compact.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
       td(colspan='7') No Results.
 

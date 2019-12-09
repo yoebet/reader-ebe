@@ -12,6 +12,10 @@ import {BookInfoModal} from './book-info.component';
 import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
 import {AppLink, AppLinkModal} from "../common/app-link.component";
+import {SessionService} from "../services/session.service";
+import {User} from "../models/user";
+import {StaticResource} from "../config";
+import {BookImageModal} from "./book-image.component";
 
 @Component({
   selector: 'book-detail',
@@ -22,8 +26,15 @@ export class BookComponent implements OnInit {
   book: Book;
   statusNames = Book.StatusNames;
   categoryNames = Book.CategoryNames;
+  bookImagesBase = StaticResource.BookImagesBase;
+  bookImageNotSet = StaticResource.BookImageNotSet;
+
+  get currentUser(): User {
+    return this.sessionService.currentUser;
+  }
 
   constructor(private bookService: BookService,
+              private sessionService: SessionService,
               private route: ActivatedRoute,
               private location: Location,
               public modalService: SuiModalService) {
@@ -39,6 +50,10 @@ export class BookComponent implements OnInit {
 
   showDetail() {
     this.modalService.open(new BookInfoModal(this.book));
+  }
+
+  showImage(book: Book) {
+    this.modalService.open(new BookImageModal(book));
   }
 
   showForm() {

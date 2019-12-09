@@ -10,6 +10,8 @@ import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
 import {SortableListComponent} from '../common/sortable-list.component';
 import {AppLink, AppLinkModal} from "../common/app-link.component";
+import {SessionService} from "../services/session.service";
+import {User} from "../models/user";
 
 @Component({
   selector: 'book-chaps',
@@ -31,8 +33,13 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
 
   bookChapsBase = StaticResource.BookChapsBase;
 
+  get currentUser(): User {
+    return this.sessionService.currentUser;
+  }
+
   constructor(private bookService: BookService,
               private chapService: ChapService,
+              private sessionService: SessionService,
               private modalService: SuiModalService) {
     super();
   }
