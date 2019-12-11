@@ -18,12 +18,14 @@ export class BookExpsComponent implements OnInit {
   books: Book[];
   showZh = true;
 
+  onAddExpBook: (book: Book) => void;
+
   bookImagesBase = StaticResource.BookImagesBase;
   bookImageNotSet = StaticResource.BookImageNotSet;
 
   constructor(private bookService: BookService,
-              private modal: SuiModal<Book, string, string>) {
-    // this.book = modal.context;
+              private modal: SuiModal<(book: Book) => void, string, string>) {
+    this.onAddExpBook = modal.context;
   }
 
   ngOnInit(): void {
@@ -44,6 +46,9 @@ export class BookExpsComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
+        book.editorRole = 'Editor';
+        alert('已成为该书编辑');
+        this.onAddExpBook(book);
       });
   }
 
@@ -53,9 +58,9 @@ export class BookExpsComponent implements OnInit {
 }
 
 
-export class BookExpsModal extends ComponentModalConfig<Book> {
-  constructor(book: Book) {
-    super(BookExpsComponent, book, false);
+export class BookExpsModal extends ComponentModalConfig<(book: Book) => void> {
+  constructor(onAddExpBook: (book: Book) => void) {
+    super(BookExpsComponent, onAddExpBook, false);
     this.size = ModalSize.Tiny;
     // this.isFullScreen = true;
     this.mustScroll = false;

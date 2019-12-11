@@ -95,7 +95,6 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
   loadBooks(cat = null) {
     this.category = cat;
-    let listOptions = {cat: this.category, visib: this.visib, status: this.status};
     if (this.category) {
       if (this.allBooks) {
         this.books = this.allBooks.filter(b => b.category == this.category);
@@ -107,6 +106,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
         return;
       }
     }
+    let listOptions = {cat: this.category, visib: this.visib, status: this.status};
     this.bookService.list(listOptions)
       .subscribe(books => {
         this.books = books;
@@ -148,8 +148,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     this.modalService.open(new AppLinkModal(appLink));
   }
 
-  showExpBooks(book: Book) {
-    this.modalService.open(new BookExpsModal(book));
+  showExpBooks() {
+    this.modalService.open(new BookExpsModal(this.onAddExpBook.bind(this)));
   }
 
   showLink(book) {
@@ -230,7 +230,10 @@ export class BookListComponent extends SortableListComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.books = this.books.filter(b => b !== book);
+        if (this.allBooks) {
+          this.allBooks = this.allBooks.filter(b => b !== book);
+          this.loadBooks(this.category);
+        }
       });
   }
 
@@ -278,8 +281,19 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       });
   }
 
+  onAddExpBook(book: Book): void {
+    if (!this.allBooks) {
+      return;
+    }
+    let eb = this.allBooks.find(b => b._id === book._id);
+    if (!eb) {
+      this.allBooks.push(book);
+      this.loadBooks(this.category);
+    }
+  }
+
   removeExpBook(book) {
-    if (!confirm('Remove The Book?')) {
+    if (!confirm('要移除该书吗？')) {
       return;
     }
     this.bookService.removeExpBook(book._id)
@@ -288,7 +302,10 @@ export class BookListComponent extends SortableListComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.books = this.books.filter(b => b !== book);
+        if (this.allBooks) {
+          this.allBooks = this.allBooks.filter(b => b !== book);
+          this.loadBooks(this.category);
+        }
       });
   }
 

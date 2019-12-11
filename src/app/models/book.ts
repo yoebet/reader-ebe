@@ -43,6 +43,8 @@ export class Book extends Model {
 
   chaps: Chap[];
 
+  editorRole: string;
+
 
   static CategoryNames = {
     Nov: '小说',

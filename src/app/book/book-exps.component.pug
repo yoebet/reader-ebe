@@ -18,7 +18,8 @@
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
         td
-          button.ui.mini.compact.primary.button((click)='toBeEditor(book)') 选择
+          button.ui.mini.compact.primary.button(*ngIf='!book.editorRole', (click)='toBeEditor(book)') 选择
+          i.disabled.check.icon(*ngIf='book.editorRole')
 
 .actions
   button.ui.tiny.button((click)="close()", autofocus='') 关闭
