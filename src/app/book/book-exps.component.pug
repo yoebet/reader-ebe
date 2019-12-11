@@ -1,0 +1,24 @@
+.ui.header
+  | 选择图书
+  .sub.header
+    .tip 以下是用于体验编辑的图书。编辑的内容将会定期恢复
+.ui.content
+  table.ui.striped.small.compact.table
+    thead
+      tr
+        th
+        th 书名
+        th 操作
+    tbody
+      tr(*ngFor='let book of books; trackBy: bookTracker')
+        td
+          img.ui.mini.image(*ngIf='book.image', [src]='bookImagesBase+"/"+book.image.file')
+          img.ui.mini.image.disabled(*ngIf='!book.image', [src]='bookImageNotSet')
+        td
+          .enname {{book.name}}
+          .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
+        td
+          button.ui.mini.compact.primary.button((click)='toBeEditor(book)') 选择
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

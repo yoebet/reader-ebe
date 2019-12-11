@@ -4,8 +4,8 @@ span.tip {
   font-weight: normal;
 }
 
-.sub.header span.tip {
-  font-size: 0.9em;
+.sub.header .tip {
+  font-size: 0.8em;
   margin-top: 0.5em;
 }
 

@@ -14,8 +14,9 @@
       ng-template([ngIf]='currentUser.role==="R"')
         sui-checkbox([(ngModel)]='tuneOrder') 排序
         sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
-      .ui.horizontal.link.list(*ngIf='currentUser.role==="A"||currentUser.role==="R"')
-        a.item((click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
+      .ui.horizontal.link.list
+        a.item(*ngIf='currentUser.role==="A"||currentUser.role==="R"', (click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
+        a.item((click)='showExpBooks(book)', href='javascript:') &nbsp;&nbsp;编辑体验
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
     a.item((click)='loadBooks(null)', [ngClass]='{disabled:category==null}') 全部
@@ -52,8 +53,9 @@ table.ui.striped.table
       //td {{categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td
-        .ui.mini.teal.tag.label(*ngIf="book.isFree") 免费
-        ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
+        ng-template([ngIf]="!book.editExperiment")
+          .ui.mini.teal.tag.label(*ngIf="book.isFree") 免费
+          ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         ng-template([ngIf]="tuneOrder")
           button.ui.mini.compact.button(*ngIf='!first', (click)='moveUp(book)')
@@ -71,16 +73,23 @@ table.ui.striped.table
         ng-template([ngIf]="!tuneOrder")
           ng-template([ngIf]="!privilegeOperations")
             a((click)='showDetail(book)', href='javascript:') 详情
-            | &nbsp;&nbsp;
-            a((click)='showForm(book)', href='javascript:') 修改
-            | &nbsp;&nbsp;
-            a((click)='showUsers(book)', href='javascript:') 人员
+            ng-template([ngIf]="!book.editExperiment")
+              | &nbsp;&nbsp;
+              a((click)='showForm(book)', href='javascript:') 修改
+              | &nbsp;&nbsp;
+              a((click)='showUsers(book)', href='javascript:') 人员
+            ng-template([ngIf]="book.editExperiment")
+              | &nbsp;&nbsp;
+              a((click)='removeExpBook(book)', href='javascript:') 移除
           ng-template([ngIf]="privilegeOperations")
             a((click)='showLink(book)', href='javascript:') 链接
             | &nbsp;&nbsp;
             a((click)='showPacks(book)', href='javascript:') 内容包
             | &nbsp;&nbsp;
-            button.ui.tiny.compact.button((click)='backup(book)') 复制
+            //button.ui.tiny.compact.button((click)='backup(book)') 复制
+            button.ui.tiny.compact.button(*ngIf='!book.editExperiment', (click)='createExpBook(book)',
+            suiPopup, popupText="用于编辑体验") 克隆
+            button.ui.tiny.compact.button(*ngIf='book.editExperiment', (click)='syncExpBook(book)') 同步
             button.ui.tiny.compact.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
       td(colspan='7') No Results.

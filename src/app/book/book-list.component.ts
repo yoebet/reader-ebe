@@ -18,6 +18,7 @@ import {SortableListComponent} from "../common/sortable-list.component";
 import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
+import {BookExpsModal} from "./book-exps.component";
 
 @Component({
   selector: 'book-list',
@@ -147,6 +148,10 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     this.modalService.open(new AppLinkModal(appLink));
   }
 
+  showExpBooks(book: Book) {
+    this.modalService.open(new BookExpsModal(book));
+  }
+
   showLink(book) {
     let code = book.code.toLowerCase().replace(' ', '-');
     let wxState = `rcwx${code}`;
@@ -233,14 +238,58 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     if (!confirm('... To Backup The Book?')) {
       return;
     }
-    this.bookService.backup(book._id).subscribe(clonedBook => {
-      if (!clonedBook) {
-        alert('Fail To Backup.');
-        return;
-      }
-      let index = this.books.indexOf(book);
-      this.books.splice(index + 1, 0, clonedBook);
-    });
+    this.bookService.backup(book._id)
+      .subscribe(clonedBook => {
+        if (!clonedBook || !clonedBook.name) {
+          alert('Fail To Backup.');
+          return;
+        }
+        let index = this.books.indexOf(book);
+        this.books.splice(index + 1, 0, clonedBook);
+      });
+  }
+
+  createExpBook(book: Book) {
+    if (!confirm('To Clone The Book?')) {
+      return;
+    }
+    this.bookService.createExpBook(book._id)
+      .subscribe(clonedBook => {
+        if (!clonedBook || !clonedBook.name) {
+          alert('Fail To Clone.');
+          return;
+        }
+        let index = this.books.indexOf(book);
+        this.books.splice(index + 1, 0, clonedBook);
+      });
+  }
+
+  syncExpBook(book: Book) {
+    if (!confirm('To Sync The Book?')) {
+      return;
+    }
+    this.bookService.syncExpBook(book._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        alert('ok');
+      });
+  }
+
+  removeExpBook(book) {
+    if (!confirm('Remove The Book?')) {
+      return;
+    }
+    this.bookService.removeExpBook(book._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        this.books = this.books.filter(b => b !== book);
+      });
   }
 
   bookTracker(index, book) {

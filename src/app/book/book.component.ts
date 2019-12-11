@@ -16,6 +16,7 @@ import {SessionService} from "../services/session.service";
 import {User} from "../models/user";
 import {StaticResource} from "../config";
 import {BookImageModal} from "./book-image.component";
+import {OpResult} from "../models/op-result";
 
 @Component({
   selector: 'book-detail',
@@ -73,6 +74,33 @@ export class BookComponent implements OnInit {
     let bookId = this.book._id;
     let appLink = {path: `books/${bookId}`, title: this.book.name, context: {bookId: bookId}} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
+  }
+
+  createExpBook() {
+    if (!confirm('To Clone The Book?')) {
+      return;
+    }
+    this.bookService.createExpBook(this.book._id)
+      .subscribe((book: Book) => {
+        if (book && book.name) {
+          alert('OK. ' + book.name);
+          return;
+        }
+      });
+  }
+
+  syncExpBook() {
+    if (!confirm('To Sync The Book?')) {
+      return;
+    }
+    this.bookService.syncExpBook(this.book._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        alert('ok');
+      });
   }
 
   goBack(): void {

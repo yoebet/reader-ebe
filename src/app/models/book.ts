@@ -33,6 +33,7 @@ export class Book extends Model {
   slogan: string;
   introduction: string;
   tags: string;
+  editExperiment: boolean = false;
 
   annotationFamilyId: string;
 

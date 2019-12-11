@@ -73,6 +73,11 @@ export class BaseService<M extends Model> {
       catchError(this.handleError));
   }
 
+  protected postForModel(url, body = null): Observable<M> {
+    return this.http.post<M>(url, body, this.httpOptions).pipe(
+      catchError(this.handleError));
+  }
+
   incVersion(id: string): Observable<OpResult> {
     const url = `${this.baseUrl}/${id}/incVersion`;
     return this.http.post<OpResult>(url, null, this.httpOptions).pipe(

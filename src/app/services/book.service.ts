@@ -20,6 +20,8 @@ export class BookService extends SorterService<Book> {
 
   bookUsersBase: string;
   bookPacksBase: string;
+  bookExpsBase: string;
+  expsAdminBase: string;
   wxMpBase: string;
 
   constructor(protected http: HttpClient,
@@ -29,6 +31,8 @@ export class BookService extends SorterService<Book> {
     this.baseUrl = `${apiBase}/${this.apiA}/books`;
     this.bookUsersBase = `${apiBase}/${this.apiA}/book_users`;
     this.bookPacksBase = `${apiBase}/${this.apiA}/book_packs`;
+    this.bookExpsBase = `${apiBase}/${this.apiA}/book_exps`;
+    this.expsAdminBase = `${apiBase}/${this.apiA}/book_exps_a`;
     this.wxMpBase = `${apiBase}/${this.apiA}/wx_mp`;
   }
 
@@ -48,12 +52,6 @@ export class BookService extends SorterService<Book> {
   listByCat(cat: string): Observable<Book[]> {
     let url = `${this.baseUrl}?cat=${cat}`;
     return super.list(url);
-  }
-
-  backup(bookId: string): Observable<Book> {
-    let url = `${this.baseUrl}/${bookId}/backup`;
-    return this.http.post<Book>(url, null, this.httpOptions)
-      .pipe(catchError(this.handleError));
   }
 
   setALLChapsStatus(bookId: string, status: string): Observable<OpResult> {
@@ -144,6 +142,58 @@ export class BookService extends SorterService<Book> {
     let data = Object.assign({url: longUrl}, context);
     return this.http.post<any>(url, data, this.httpOptions)
       .pipe(catchError(this.handleError));
+  }
+
+  /* edit experiment admin */
+
+  createExpBook(oriBookId: string): Observable<Book> {
+    let url = `${this.expsAdminBase}/${oriBookId}/createExp`;
+    return this.postForModel(url);
+  }
+
+  syncExpBook(bookId: string): Observable<OpResult> {
+    let url = `${this.expsAdminBase}/${bookId}/syncExpBook`;
+    return this.postForOpResult(url);
+  }
+
+  syncExpChap(bookId: string, chapId: string): Observable<OpResult> {
+    let url = `${this.expsAdminBase}/${bookId}/syncExpChap/${chapId}`;
+    return this.postForOpResult(url);
+  }
+
+  syncExpOriChap(bookId: string, oriChapId: string): Observable<OpResult> {
+    let url = `${this.expsAdminBase}/${bookId}/syncExpOriChap/${oriChapId}`;
+    return this.postForOpResult(url);
+  }
+
+  dropExpChap(bookId: string, chapId: string): Observable<OpResult> {
+    let url = `${this.expsAdminBase}/${bookId}/dropExpChap/${chapId}`;
+    return this.http.delete<OpResult>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
+  }
+
+  backup(bookId: string): Observable<Book> {
+    let url = `${this.expsAdminBase}/${bookId}/backup`;
+    return this.http.post<Book>(url, null, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  /* edit experiment */
+
+  experimentBooks(): Observable<Book[]> {
+    let url = `${this.bookExpsBase}/`;
+    return super.list(url);
+  }
+
+  addExpBook(bookId: string): Observable<OpResult> {
+    let url = `${this.bookExpsBase}/${bookId}/add`;
+    return this.postForOpResult(url);
+  }
+
+  removeExpBook(bookId: string): Observable<OpResult> {
+    let url = `${this.bookExpsBase}/${bookId}/remove`;
+    return this.postForOpResult(url);
+
   }
 
 }

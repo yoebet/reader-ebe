@@ -82,6 +82,7 @@ import {OrderListComponent} from './order/order-list.component';
 import {AppLinkComponent} from './common/app-link.component';
 import {UserStatComponent} from "./user/user-stat.component";
 import {UserStatService} from "./services/user-stat.service";
+import {BookExpsComponent} from "./book/book-exps.component";
 
 
 @NgModule({
@@ -146,7 +147,8 @@ import {UserStatService} from "./services/user-stat.service";
     ReleaseListComponent,
     OrderListComponent,
     AppLinkComponent,
-    UserStatComponent
+    UserStatComponent,
+    BookExpsComponent
   ],
   providers: [
     AppService,
@@ -185,7 +187,8 @@ import {UserStatService} from "./services/user-stat.service";
     WordAnnosComponent,
     DictSimpleSmiComponent,
     MessagesPopupComponent,
-    AppLinkComponent
+    AppLinkComponent,
+    BookExpsComponent
   ],
   bootstrap: [AppComponent]
 })
