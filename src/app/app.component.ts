@@ -64,8 +64,7 @@ export class AppComponent implements OnInit {
 
   private checkLogin() {
     this.sessionService.checkLogin()
-      .subscribe(a => {
-      });
+      .subscribe();
   }
 
   logout() {

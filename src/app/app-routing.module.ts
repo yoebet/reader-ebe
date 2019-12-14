@@ -21,8 +21,10 @@ import {MyMessagesComponent} from './account/my-messages.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
 import {UserStatComponent} from "./user/user-stat.component";
+import {HomeComponent} from "./home.component";
 
 const routes: Routes = [
+  {path: '', pathMatch: 'full', component: HomeComponent},
   {path: 'books', component: BookListComponent},
   {path: 'books/:id', component: BookComponent},
   {path: 'chaps/:id', component: ChapComponent},

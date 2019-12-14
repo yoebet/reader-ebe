@@ -83,6 +83,7 @@ import {AppLinkComponent} from './common/app-link.component';
 import {UserStatComponent} from "./user/user-stat.component";
 import {UserStatService} from "./services/user-stat.service";
 import {BookExpsComponent} from "./book/book-exps.component";
+import {HomeComponent} from "./home.component";
 
 
 @NgModule({
@@ -95,6 +96,7 @@ import {BookExpsComponent} from "./book/book-exps.component";
   ],
   declarations: [
     AppComponent,
+    HomeComponent,
     BookListComponent,
     BookComponent,
     BookInfoComponent,

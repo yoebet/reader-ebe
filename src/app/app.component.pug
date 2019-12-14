@@ -1,7 +1,7 @@
 #main
   #header
     .ui.stackable.secondary.pointing.menu.container
-      a.item(routerLink='/') Home
+      a.item(routerLink='') Home
       ng-template([ngIf]='currentUser')
         a.item(routerLink='/books', routerLinkActive='active') 图书
         ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')

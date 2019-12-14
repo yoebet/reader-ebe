@@ -20,7 +20,7 @@ div(*ngIf='chap')
       sui-checkbox([(ngModel)]='continuousEditing') 连续增加
       sui-checkbox([(ngModel)]='splitMode') 空行分段
       sui-checkbox([(ngModel)]='indentTrans') 中文缩进
-      sui-checkbox([(ngModel)]='paraOperations', (ngModelChange)='checkCommentsCount()') 操作
+      sui-checkbox(*ngIf='_book&&!_book.editExperiment', [(ngModel)]='paraOperations', (ngModelChange)='checkCommentsCount()') 操作
       .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
         | 批量
         i.dropdown.icon
