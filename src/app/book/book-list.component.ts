@@ -1,9 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
-import {StaticResource} from '../config';
+import {combineLatest} from 'rxjs/';
+
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {StaticResource} from '../config';
 import {Book} from '../models/book';
 import {AnnotationFamily} from '../models/annotation-family';
 import {BookService} from '../services/book.service';
@@ -70,27 +72,31 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       .getCandidates()
       .subscribe(afs => this.annOptions = afs);
 
-    this.route.queryParamMap.subscribe((params: ParamMap) => {
-        let cu = this.currentUser;
-        let isAdmin = cu && (cu.role === 'A' || cu.role === 'R');
-        let cat = params.get('cat');
-        let visib = params.get('visib');
-        let status = params.get('status');
-        if (cat) {
-          this.category = cat;
-        }
-        if (visib) {
-          this.visib = visib;
-        } else if (isAdmin) {
-          this.visib = 'pub';
-        }
-        if (status) {
-          this.status = status;
-        }
+    combineLatest(this.route.paramMap, this.route.queryParamMap)
+      .subscribe(([pathParams, params]) => {
 
-        this.loadBooks();
-      }
-    );
+          let cu = this.currentUser;
+          let isAdmin = cu && (cu.role === 'A' || cu.role === 'R');
+
+          let cat = pathParams.get('cat') || params.get('cat') || this.category;
+          let visib = pathParams.get('vis') || params.get('vis') || this.visib;
+          let status = params.get('status');
+          if (cat) {
+            this.category = cat;
+          }
+          if (visib) {
+            this.visib = visib;
+            this.allBooks = null;
+          } else if (isAdmin) {
+            this.visib = 'pub';
+          }
+          if (status) {
+            this.status = status;
+          }
+
+          this.loadBooks(this.category);
+        }
+      );
   }
 
   loadBooks(cat = null) {

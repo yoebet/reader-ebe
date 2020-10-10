@@ -58,8 +58,8 @@ export class Book extends Model {
 
   label: string;
 
-  contentLang: string = Book.LangCodeEn;
-  transLang: string = Book.LangCodeZh;
+  contentLang = Book.LangCodeEn;
+  transLang = Book.LangCodeZh;
   category: string;
   description: string;
 

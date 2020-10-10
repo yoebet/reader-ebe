@@ -26,6 +26,8 @@ import {HomeComponent} from './home.component';
 const routes: Routes = [
   {path: '', pathMatch: 'full', component: HomeComponent},
   {path: 'books', component: BookListComponent},
+  {path: 'books/cat/:cat', component: BookListComponent},
+  {path: 'books/vis/:vis', component: BookListComponent},
   {path: 'books/:id', component: BookComponent},
   {path: 'chaps/:id', component: ChapComponent},
   {path: 'dict', component: DictComponent},

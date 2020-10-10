@@ -1,7 +1,7 @@
 .ui.header(*ngIf='currentUser&&(currentUser.role==="A"||currentUser.role==="R")')
   .ui.right.floated.small.compact.menu
-    a.item((click)='filterVisib("pub")', [ngClass]='{active:visib==="pub"}') 公开
-    a.item((click)='filterVisib("pri")', [ngClass]='{active:visib==="pri"}') 私有
+    a.item([routerLink]="['/books/vis', 'pub']", [ngClass]='{active:visib==="pub"}') 公开
+    a.item([routerLink]="['/books/vis', 'pri']", [ngClass]='{active:visib==="pri"}') 私有
   .ui.right.floated.small.compact.menu
     a.item((click)='filterStatus("E")', [ngClass]='{active:status==="E"}') 编辑中
     a.item((click)='filterStatus("R")', [ngClass]='{active:status==="R"}') 已上线

@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {DOCUMENT} from '@angular/common';
 
-import {combineLatest} from 'rxjs/';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {StaticResource} from './config';
@@ -35,9 +34,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    combineLatest(this.route.paramMap, this.route.queryParamMap)
-      .subscribe(([pathParams, queryParams]) => {
-        console.log(queryParams);
+    this.route.queryParamMap
+      .subscribe(queryParams => {
+        // console.log(queryParams);
 
         // let state = queryParams.get('state');
         let code = queryParams.get('code');
