@@ -3,14 +3,14 @@ import {Component, OnInit} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {User} from '../models/user';
-import {OpResult} from "../models/op-result";
+import {OpResult} from '../models/op-result';
 
-import {UsersComponent} from "./users.component";
+import {UsersComponent} from './users.component';
 import {MessagesModal} from '../message/messages-popup.component';
 import {MessageScope} from '../message/message-scope';
 
 import {UserService} from '../services/user.service';
-import {SessionService} from "../services/session.service";
+import {SessionService} from '../services/session.service';
 
 @Component({
   selector: 'users-admin',

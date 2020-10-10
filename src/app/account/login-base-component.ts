@@ -1,5 +1,5 @@
-import {OnInit} from "@angular/core";
-import {SelfBase, WX_CONFIG} from "../config";
+import {OnInit} from '@angular/core';
+import {SelfBase, WX_CONFIG} from '../config';
 
 
 export abstract class LoginBaseComponent implements OnInit {
@@ -8,7 +8,7 @@ export abstract class LoginBaseComponent implements OnInit {
 
   wxQrCodeInit = false;
 
-  wxState = "wxrcee";
+  wxState = 'wxrcee';
   wxScope = 'snsapi_login';
 
   ngOnInit() {
@@ -19,9 +19,9 @@ export abstract class LoginBaseComponent implements OnInit {
 
   protected genWxAuthLink(): string {
     let wxRedirectUri = encodeURIComponent(SelfBase);
-    return "https://open.weixin.qq.com/connect/qrconnect" +
-      "?appid=" + WX_CONFIG.appId + "&redirect_uri=" + wxRedirectUri +
-      "&response_type=code&scope=" + this.wxScope + "&state=" + this.wxState + "#wechat_redirect";
+    return 'https://open.weixin.qq.com/connect/qrconnect' +
+      '?appid=' + WX_CONFIG.appId + '&redirect_uri=' + wxRedirectUri +
+      '&response_type=code&scope=' + this.wxScope + '&state=' + this.wxState + '#wechat_redirect';
   }
 
   protected doGenWxQrCode(containerId) {
@@ -33,17 +33,17 @@ export abstract class LoginBaseComponent implements OnInit {
       scope: this.wxScope,
       redirect_uri: redirectUri,
       state: this.wxState,
-      style: ""
+      style: ''
     });
   }
 
   protected genWxQrCode() {
     this.wxQrCodeInit = true;
-    this.doGenWxQrCode("login_container");
+    this.doGenWxQrCode('login_container');
   }
 
   switchToWx() {
-    this.loginMethod = "wx";
+    this.loginMethod = 'wx';
     if (!this.wxQrCodeInit) {
       this.genWxQrCode();
     }

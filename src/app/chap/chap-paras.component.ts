@@ -8,11 +8,11 @@ import {Book} from '../models/book';
 import {DictEntry} from '../models/dict-entry';
 import {ContentContext} from '../content-types/content-context';
 
-import {ChapService} from "../services/chap.service";
+import {ChapService} from '../services/chap.service';
 import {ParaService} from '../services/para.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {DictZhService} from '../services/dict-zh.service';
-import {ParaAnnotateComponent} from "./para-annotate.component";
+import {ParaAnnotateComponent} from './para-annotate.component';
 
 
 @Component({

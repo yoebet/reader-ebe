@@ -83,7 +83,7 @@ export class UserBookComponent implements OnInit {
       return;
     }
     let ub = this.userBook;
-    ub.chaps = ub.chaps.filter(c => c != cp);
+    ub.chaps = ub.chaps.filter(c => c !== cp);
     ub.chapsCount = ub.chaps.length;
     this.edited = true;
   }

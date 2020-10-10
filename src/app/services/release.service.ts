@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../environments/environment';

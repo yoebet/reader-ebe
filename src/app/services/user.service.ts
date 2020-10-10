@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {environment} from '../../environments/environment';
 import {User, UserIdName} from '../models/user';
 import {UserBook} from '../models/user-book';
 import {OpResult} from '../models/op-result';

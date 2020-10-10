@@ -9,13 +9,13 @@ import {OpResult} from '../models/op-result';
 import {ChangeCallback, ChangeNotification, ContentFields} from '../content-types/change-notification';
 import {ParaSaver} from '../content-types/para-saver';
 
-import {ChapService} from "../services/chap.service";
+import {ChapService} from '../services/chap.service';
 import {ParaService} from '../services/para.service';
 import {ParaFormComponent} from './para-form.component';
-import {TransFillingContext, TransFilingModal} from "./trans-filling.component";
+import {TransFillingContext, TransFilingModal} from './trans-filling.component';
 import {SentenceAlignContext, SentenceAlignModal} from '../content/sentence-align.component';
 import {ParaCommentsModal} from '../content/para-comments.component';
-import {AppLink, AppLinkModal} from "../common/app-link.component";
+import {AppLink, AppLinkModal} from '../common/app-link.component';
 
 
 export abstract class ParaEditingComponent {
@@ -285,7 +285,9 @@ export abstract class ParaEditingComponent {
         this.editingPara = null;
       }
       this.unsavedChanges.delete(paraId);
-      onSaved && onSaved();
+      if (onSaved) {
+        onSaved();
+      }
       return;
     }
     if (para.content === currentPara.content) {
@@ -309,7 +311,9 @@ export abstract class ParaEditingComponent {
         }
 
         this.unsavedChanges.delete(paraId);
-        onSaved && onSaved();
+        if (onSaved) {
+          onSaved();
+        }
       });
   }
 
@@ -337,7 +341,9 @@ export abstract class ParaEditingComponent {
           }
         }
 
-        onSaved && onSaved();
+        if (onSaved) {
+          onSaved();
+        }
       });
   }
 
@@ -367,7 +373,7 @@ export abstract class ParaEditingComponent {
         continue;
       }
       let newTrans;
-      if (trans.includes("<")) {
+      if (trans.includes('<')) {
         if (trans.startsWith(ParaSetting.TransIndentStr + '<')) {
           continue;
         }
@@ -385,7 +391,7 @@ export abstract class ParaEditingComponent {
       return;
     }
 
-    if (!confirm("影响 " + idTrans.length + " 个段落，要保存吗？")) {
+    if (!confirm('影响 ' + idTrans.length + ' 个段落，要保存吗？')) {
       return;
     }
 
@@ -401,7 +407,7 @@ export abstract class ParaEditingComponent {
       if (!trans || trans.startsWith(ParaSetting.TransIndentStr)) {
         continue;
       }
-      if (trans.includes("<")) {
+      if (trans.includes('<')) {
         continue;
       }
       trans = trans.trim();
@@ -429,7 +435,9 @@ export abstract class ParaEditingComponent {
         this.insertPos = null;
       }
 
-      onSaved && onSaved();
+      if (onSaved) {
+        onSaved();
+      }
     });
   }
 
@@ -476,7 +484,9 @@ export abstract class ParaEditingComponent {
         this.insertPos = null;
       }
 
-      onSaved && onSaved();
+      if (onSaved) {
+        onSaved();
+      }
     });
   }
 

@@ -41,7 +41,7 @@
       }
     ],
     "no-arg": true,
-    "no-bitwise": true,
+//    "no-bitwise": true,
     "no-console": [
       true,
       "debug",
@@ -84,7 +84,7 @@
       true,
       "single"
     ],
-    "radix": true,
+//    "radix": true,
     "semicolon": [
       true,
       "always"

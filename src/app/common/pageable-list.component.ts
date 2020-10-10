@@ -27,7 +27,7 @@ export abstract class PageableListComponent {
   }
 
   previousPage() {
-    if (this.page == 1) {
+    if (this.page === 1) {
       return;
     }
     this.page--;

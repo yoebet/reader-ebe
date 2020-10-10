@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 import {StaticResource} from '../config';
 import {SuiModalService} from 'ng2-semantic-ui';
@@ -14,11 +14,11 @@ import {BookFormModal} from './book-form.component';
 import {BookImageModal} from './book-image.component';
 import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
-import {SortableListComponent} from "../common/sortable-list.component";
+import {SortableListComponent} from '../common/sortable-list.component';
 import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
-import {BookExpsModal} from "./book-exps.component";
+import {BookExpsModal} from './book-exps.component';
 
 @Component({
   selector: 'book-list',
@@ -72,7 +72,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
     this.route.queryParamMap.subscribe((params: ParamMap) => {
         let cu = this.currentUser;
-        let isAdmin = cu && (cu.role === "A" || cu.role === "R");
+        let isAdmin = cu && (cu.role === 'A' || cu.role === 'R');
         let cat = params.get('cat');
         let visib = params.get('visib');
         let status = params.get('status');
@@ -97,7 +97,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     this.category = cat;
     if (this.category) {
       if (this.allBooks) {
-        this.books = this.allBooks.filter(b => b.category == this.category);
+        this.books = this.allBooks.filter(b => b.category === this.category);
         return;
       }
     } else {

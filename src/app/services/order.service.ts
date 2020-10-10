@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {Observable} from "rxjs/index";
+import {Observable} from 'rxjs/';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {environment} from '../../environments/environment';
 import {Order} from '../models/order';
 
 import {BaseService} from './base.service';

@@ -57,12 +57,12 @@ export class DictSimpleComponent extends DictBaseComponent {
     let oriMeanings = oriEntry.simple;
     let ori = JSON.stringify(oriMeanings);
     let current = JSON.stringify(em);
-    return current != ori;
+    return current !== ori;
   }
 
   saveEdit(entry?, thenGotoWord?: string) {
     if (!entry) {
-      entry = this.entry
+      entry = this.entry;
     }
     if (!this.everEdited(entry)) {
       this.cancelEdit();
@@ -125,7 +125,7 @@ export class DictSimpleComponent extends DictBaseComponent {
   }
 
   importMeaningItem(item: SimpleMeaning, from) {
-    if (this.editingMeanings.find(m => m.pos == item.pos && m.exp == item.exp)) {
+    if (this.editingMeanings.find(m => m.pos === item.pos && m.exp === item.exp)) {
       alert('释义已存在');
       return;
     }

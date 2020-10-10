@@ -5,7 +5,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {Order} from '../models/order';
 import {OrderService} from '../services/order.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {OpResult} from "../models/op-result";
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'order-list',

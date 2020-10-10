@@ -11,12 +11,12 @@ import {BookFormModal} from './book-form.component';
 import {BookInfoModal} from './book-info.component';
 import {BookPacksModal} from './book-packs.component';
 import {BookUsersModal} from './book-users.component';
-import {AppLink, AppLinkModal} from "../common/app-link.component";
-import {SessionService} from "../services/session.service";
-import {User} from "../models/user";
-import {StaticResource} from "../config";
-import {BookImageModal} from "./book-image.component";
-import {OpResult} from "../models/op-result";
+import {AppLink, AppLinkModal} from '../common/app-link.component';
+import {SessionService} from '../services/session.service';
+import {User} from '../models/user';
+import {StaticResource} from '../config';
+import {BookImageModal} from './book-image.component';
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'book-detail',

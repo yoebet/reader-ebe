@@ -1,10 +1,10 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {map} from 'rxjs/operators';
 
+import {environment} from '../../environments/environment';
 import {DefaultHttpHeaders} from '../config';
 import {User} from '../models/user';
 import {OpResult} from '../models/op-result';

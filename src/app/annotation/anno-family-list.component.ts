@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 
 import {AnnotationFamily} from '../models/annotation-family';
 import {AnnoFamilyService} from '../services/anno-family.service';
@@ -16,8 +15,7 @@ export class AnnoFamilyListComponent implements OnInit {
 
   operations = false;
 
-  constructor(private annoService: AnnoFamilyService,
-              private router: Router) {
+  constructor(private annoService: AnnoFamilyService) {
   }
 
   ngOnInit() {

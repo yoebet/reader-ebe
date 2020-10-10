@@ -3,11 +3,58 @@ import {Chap} from './chap';
 import {UserBook} from './user-book';
 
 export class Book extends Model {
+
+  static CategoryNames = {
+    Nov: '小说',
+    Tex: '教材',
+    Kid: '儿童',
+    His: '历史',
+    Poe: '诗歌',
+    Oth: '其他'
+  };
+
+  static Categories = ['Nov', 'Tex', 'Kid', 'His', 'Poe', 'Oth'].map(k => {
+    return {value: k, label: Book.CategoryNames[k]};
+  });
+
+  static LangCodeEn = 'En';
+  static LangCodeZh = 'Zh';
+  static LangCodeZc = 'Zc';
+
+  static LangTypes = [
+    {value: Book.LangCodeEn, label: '英文'},
+    {value: Book.LangCodeZh, label: '中文'},
+    {value: Book.LangCodeZc, label: '文言文/诗词'}
+  ];
+
+  static StatusNames = {
+    E: '编辑中',
+    C: '校对中',
+    R: '已上线',
+    B: '备份'
+  };
+
+
+  static Statuses = ['E', 'C', 'R'].map(k => {
+    return {value: k, label: Book.StatusNames[k]};
+  });
+
+  static BookContentPackRoles = {
+    Editor: 'e',
+    Reader: 'r',
+    Public: 'p'
+  };
+
+  static PricingModes = [
+    {value: 'B', label: '整书'},
+    {value: 'C', label: '按章节'}
+  ];
+
   code: string;
   name: string;
-  zhName: string = '';
-  author: string = '';
-  zhAuthor: string = '';
+  zhName = '';
+  author = '';
+  zhAuthor = '';
 
   label: string;
 
@@ -16,7 +63,7 @@ export class Book extends Model {
   category: string;
   description: string;
 
-  status: string = 'E';
+  status = 'E';
   isPrivate: boolean;
 
   chiefEditorId: string;
@@ -33,7 +80,7 @@ export class Book extends Model {
   slogan: string;
   introduction: string;
   tags: string;
-  editExperiment: boolean = false;
+  editExperiment = false;
 
   annotationFamilyId: string;
 
@@ -46,56 +93,9 @@ export class Book extends Model {
   editorRole: string;
 
 
-  static CategoryNames = {
-    Nov: '小说',
-    Tex: '教材',
-    Kid: '儿童',
-    His: '历史',
-    Poe: '诗歌',
-    Oth: '其他'
-  };
-
-
-  static Categories = ['Nov', 'Tex', 'Kid', 'His', 'Poe', 'Oth'].map(k => {
-    return {value: k, label: Book.CategoryNames[k]}
-  });
-
-  static LangCodeEn = 'En';
-  static LangCodeZh = 'Zh';
-  static LangCodeZc = 'Zc';
-
-  static LangTypes = [
-    {value: Book.LangCodeEn, label: '英文'},
-    {value: Book.LangCodeZh, label: '中文'},
-    {value: Book.LangCodeZc, label: '文言文/诗词'}
-  ];
-
   static isChineseText(lang) {
     return lang === Book.LangCodeZh || lang === Book.LangCodeZc;
   }
-
-  static StatusNames = {
-    E: '编辑中',
-    C: '校对中',
-    R: '已上线',
-    B: '备份'
-  };
-
-
-  static Statuses = ['E', 'C', 'R'].map(k => {
-    return {value: k, label: Book.StatusNames[k]}
-  });
-
-  static BookContentPackRoles = {
-    Editor: 'e',
-    Reader: 'r',
-    Public: 'p'
-  };
-
-  static PricingModes = [
-    {value: 'B', label: '整书'},
-    {value: 'C', label: '按章节'}
-  ];
 
 }
 

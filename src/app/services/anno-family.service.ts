@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {of as observableOf, Observable} from 'rxjs';
+import {of as observableOf, Observable} from 'rxjs/';
 import {catchError, map} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {BaseService} from './base.service';
+import {environment} from '../../environments/environment';
 import {AnnotationFamily} from '../models/annotation-family';
 import {AnnotationSet} from '../anno/annotation-set';
+import {BaseService} from './base.service';
 
 @Injectable()
 export class AnnoFamilyService extends BaseService<AnnotationFamily> {

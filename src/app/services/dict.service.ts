@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {tap} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {environment} from '../../environments/environment';
 import {DictHistoryCapacity} from '../config';
 import {DictEntry, DictFields} from '../models/dict-entry';
 import {BaseService} from './base.service';

@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {of as observableOf, combineLatest as observableCombineLatest, Observable} from 'rxjs';
+import {of as observableOf, combineLatest as observableCombineLatest, Observable} from 'rxjs/';
 import {map, catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {environment} from '../../environments/environment';
 import {Chap} from '../models/chap';
 import {Para} from '../models/para';
 import {ParaComment} from '../models/para-comment';

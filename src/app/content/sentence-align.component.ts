@@ -70,7 +70,7 @@ export class SentenceAlignComponent {
       let cs = contentSents[ci];
       let ts = transSents[ti];
       let row = new SentenceRow();
-      if (cs && ts && cs.sid == ts.sid) {
+      if (cs && ts && cs.sid === ts.sid) {
         row.left = cs.text;
         row.right = ts.text;
         row.sid = cs.sid;
@@ -81,7 +81,7 @@ export class SentenceAlignComponent {
         ti++;
       } else {
         if (cs && ts && cs.sid && ts.sid) {
-          console.log("Shouldn't Happen.");
+          console.log('Shouldn\'t Happen.');
           break;
         }
         if (cs && !cs.sid) {
@@ -191,7 +191,7 @@ export class SentenceAlignComponent {
     }
     let last = this.rows[lastIndex];
     last[part] = '';
-    if (last.left == '' && last.right == '') {
+    if (last.left === '' && last.right === '') {
       this.rows.splice(lastIndex, 1);
     }
   }
@@ -204,7 +204,7 @@ export class SentenceAlignComponent {
     }
 
     if (this.editingRow !== null && this.editingPart === part) {
-      let editingIndex = this.rows.findIndex(row => row === this.editingRow);
+      let editingIndex = this.rows.findIndex(row2 => row2 === this.editingRow);
       if (editingIndex >= index) {
         this.endEdit(index, part);
       }
@@ -225,12 +225,12 @@ export class SentenceAlignComponent {
     }
     let emptyRowCount = 0;
     for (let i = index + 1; i < fixIndex; i++) {
-      let row = this.rows[i];
-      if (row[part] == '') {
+      let row2 = this.rows[i];
+      if (row2[part] === '') {
         emptyRowCount++;
       } else {
-        sts.push(row[part]);
-        row[part] = '';
+        sts.push(row2[part]);
+        row2[part] = '';
       }
     }
     let newRowCount = addedRows - emptyRowCount;

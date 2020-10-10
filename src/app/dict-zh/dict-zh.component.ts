@@ -19,7 +19,7 @@ export class DictZhComponent {
   dictSearch = (key: string) => {
     let o = this.dictService.search(key.trim());
     return o.toPromise();
-  };
+  }
 
   constructor(private dictService: DictZhService) {
   }

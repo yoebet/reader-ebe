@@ -101,7 +101,7 @@ export class DictEntrySmiComponent extends DictBaseComponent implements AfterVie
 
   clickMeaningItem(pos, mi: MeaningItem | SimpleMeaning | string) {
     let exp = (typeof mi === 'string') ? mi : mi.exp;
-    if (this.selectedItem && pos == this.selectedItem.pos && exp === this.selectedItem.meaning) {
+    if (this.selectedItem && pos === this.selectedItem.pos && exp === this.selectedItem.meaning) {
       this.selectedItem.meaning = null;
     } else {
       this.selectedItem = {pos, meaning: exp};

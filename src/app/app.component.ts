@@ -1,12 +1,12 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
-import {DOCUMENT} from "@angular/common";
+import {DOCUMENT} from '@angular/common';
 
-import {combineLatest} from 'rxjs';
+import {combineLatest} from 'rxjs/';
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {StaticResource} from "./config";
+import {StaticResource} from './config';
 import {User} from './models/user';
 import {OpResult} from './models/op-result';
 import {AppService} from './services/app.service';

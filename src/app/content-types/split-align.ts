@@ -2,8 +2,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 export class Row {
   static sanitizer: DomSanitizer;
-  _left: string = '';
-  _right: string = '';
+  _left = '';
+  _right = '';
   _sanitizedLeft;
   _sanitizedRight;
   fix = false;
@@ -28,14 +28,14 @@ export class Row {
 
   get sanitizedLeft() {
     if (!this._sanitizedLeft) {
-      this._sanitizedLeft = Row.sanitizer.bypassSecurityTrustHtml(this._left)
+      this._sanitizedLeft = Row.sanitizer.bypassSecurityTrustHtml(this._left);
     }
     return this._sanitizedLeft;
   }
 
   get sanitizedRight() {
     if (!this._sanitizedRight) {
-      this._sanitizedRight = Row.sanitizer.bypassSecurityTrustHtml(this._right)
+      this._sanitizedRight = Row.sanitizer.bypassSecurityTrustHtml(this._right);
     }
     return this._sanitizedRight;
   }

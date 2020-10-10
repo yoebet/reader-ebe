@@ -61,6 +61,9 @@ export class WordAnnosComponent implements OnInit {
 
     let dataset = wordEl.dataset;
     for (let name in dataset) {
+      if(!dataset.hasOwnProperty(name)){
+        continue;
+      }
       let value = dataset[name];
       if (name === DataAttrNames.mean && !dataset[DataAttrNames.forPhraseGroup]) {
         let mean = value;
@@ -69,11 +72,11 @@ export class WordAnnosComponent implements OnInit {
           forWord = this.word;
         }
         let pos = dataset[DataAttrNames.pos] || '';
-        let text = mean;
+        let text0 = mean;
         if (pos) {
-          text = `${pos} ${mean}`;
+          text0 = `${pos} ${mean}`;
         }
-        this.meaning = {pos, mean, word: forWord, text};
+        this.meaning = {pos, mean, word: forWord, text: text0};
         continue;
       }
 
@@ -189,7 +192,7 @@ export class WordAnnosComponent implements OnInit {
 
     this.notifyChange();
 
-    if (!this.note && !this.meaning && (!this.items || this.items.length == 0)) {
+    if (!this.note && !this.meaning && (!this.items || this.items.length === 0)) {
       let {removed} = AnnotatorHelper.removeDropTagIfDummy(element);
       if (removed) {
         this.onTagRemoved(element);

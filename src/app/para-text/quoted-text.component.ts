@@ -58,7 +58,7 @@ export class QuotedTextComponent implements OnChanges {
     if (!quote || !quote.paraId) {
       return;
     }
-    if (this.para && this.para._id == quote.paraId) {
+    if (this.para && this.para._id === quote.paraId) {
       this.highlightSentence(this.para, quote.sentenceId);
       return;
     }

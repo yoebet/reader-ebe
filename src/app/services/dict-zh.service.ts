@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {of as observableOf, Observable} from 'rxjs';
+import {of as observableOf, Observable} from 'rxjs/';
 import {map, tap, catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';

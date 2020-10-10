@@ -6,7 +6,7 @@ import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config
 import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 import {OpResult} from '../models/op-result';
-import {StaticResource} from "../config";
+import {StaticResource} from '../config';
 
 @Component({
   selector: 'book-exps',

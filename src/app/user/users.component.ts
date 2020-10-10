@@ -6,8 +6,8 @@ import {StaticResource} from '../config';
 import {User} from '../models/user';
 import {UserService} from '../services/user.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {UserInfoModal} from "./user-info.component";
-import {SessionService} from "../services/session.service";
+import {UserInfoModal} from './user-info.component';
+import {SessionService} from '../services/session.service';
 
 @Component({
   selector: 'user-list',

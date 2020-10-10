@@ -78,7 +78,7 @@ export class ParaSplitComponent {
     }
     for (let i = fixIndex - 1; i > index; i--) {
       let r = this.rows[i];
-      if (r[part] == '' && addedRowCount > 0) {
+      if (r[part] === '' && addedRowCount > 0) {
         addedRowCount--;
       }
     }
@@ -131,7 +131,7 @@ export class ParaSplitComponent {
     }
     let last = this.rows[lastIndex];
     last[part] = '';
-    if (last.left == '' && last.right == '') {
+    if (last.left === '' && last.right === '') {
       this.rows.splice(lastIndex, 1);
     }
   }

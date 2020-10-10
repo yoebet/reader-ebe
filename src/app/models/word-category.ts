@@ -1,6 +1,14 @@
 import {Model} from './model';
 
 export class WordCategory extends Model {
+
+  static DictOperators = [
+    {value: '', label: '='},
+    {value: 'gt', label: '>'},
+    {value: 'lt', label: '<'},
+    {value: 'ne', label: '<>'}
+  ];
+
   code: string;
   name: string;
   dictKey: string;
@@ -12,11 +20,4 @@ export class WordCategory extends Model {
   extendedWordCount: number;
 
   extend: WordCategory;
-
-  static DictOperators = [
-    {value: '', label: '='},
-    {value: 'gt', label: '>'},
-    {value: 'lt', label: '<'},
-    {value: 'ne', label: '<>'}
-  ];
 }

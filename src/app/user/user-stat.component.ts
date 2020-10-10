@@ -3,9 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {User} from '../models/user';
-import {SessionService} from "../services/session.service";
-import {UserStatService} from "../services/user-stat.service";
-import {GroupStat} from "../models/group-stat";
+import {SessionService} from '../services/session.service';
+import {UserStatService} from '../services/user-stat.service';
+import {GroupStat} from '../models/group-stat';
 
 @Component({
   selector: 'user-stat',

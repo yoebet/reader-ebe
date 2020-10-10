@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {catchError, map} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {environment} from '../../environments/environment';
 import {User} from '../models/user';
+import {GroupStat} from '../models/group-stat';
 
 import {BaseService} from './base.service';
-import {GroupStat} from "../models/group-stat";
 
 @Injectable()
 export class UserStatService extends BaseService<User> {

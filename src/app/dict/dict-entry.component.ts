@@ -5,12 +5,12 @@ import {
 import {max} from 'lodash';
 import * as Drop from 'tether-drop';
 
-import {UIConstants} from "../config";
+import {UIConstants} from '../config';
 import {DictEntry, PosMeanings, MeaningItem, PosTags} from '../models/dict-entry';
 import {DictService} from '../services/dict.service';
 import {OpResult} from '../models/op-result';
 import {DictBaseComponent} from './dict-base.component';
-import {DictSimpleSmiComponent} from "./dict-simple-smi.component";
+import {DictSimpleSmiComponent} from './dict-simple-smi.component';
 
 @Component({
   selector: 'dict-entry',
@@ -105,12 +105,12 @@ export class DictEntryComponent extends DictBaseComponent {
     let oriMeanings = oriEntry.complete;
     let ori = JSON.stringify(oriMeanings);
     let current = JSON.stringify(ecm);
-    return current != ori;
+    return current !== ori;
   }
 
   saveEdit(entry?, thenGotoWord?: string) {
     if (!entry) {
-      entry = this.entry
+      entry = this.entry;
     }
     if (!this.everEdited(entry)) {
       this.cancelEdit();
@@ -196,7 +196,7 @@ export class DictEntryComponent extends DictBaseComponent {
       return;
     }
     let complete = this.editingCompleteMeanings;
-    if (complete.find(pm => pm.pos == newPos.pos)) {
+    if (complete.find(pm => pm.pos === newPos.pos)) {
       alert('词性已存在');
       return;
     }
@@ -247,7 +247,7 @@ export class DictEntryComponent extends DictBaseComponent {
     }
     let items = posMeanings.items;
     if (items) {
-      let existed = items.find(item => item.exp === exp);
+      let existed = items.find(it => it.exp === exp);
       if (existed) {
         return;
       }

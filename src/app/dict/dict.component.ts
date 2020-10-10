@@ -46,7 +46,7 @@ export class DictComponent {
   dictSearch = (key: string) => {
     let o = this.dictService.search(key.trim(), this.searchOptions);
     return o.toPromise();
-  };
+  }
 
   constructor(private dictService: DictService,
               private route: ActivatedRoute) {

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 
 import {SessionService} from '../services/session.service';
 import {OpResult} from '../models/op-result';
-import {LoginBaseComponent} from "./login-base-component";
+import {LoginBaseComponent} from './login-base-component';
 
 @Component({
   selector: 'login-form',

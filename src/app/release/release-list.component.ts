@@ -41,7 +41,8 @@ export class ReleaseListComponent implements OnInit {
       rr.versionCode = latest.versionCode + 1;
       rr.versionName = latest.versionName.replace(
         /\d+$/,
-        d => '' + (+d + 1))
+        d => '' + (+d + 1)
+      );
     }
 
     this.newRelease = rr;

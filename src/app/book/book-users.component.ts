@@ -25,6 +25,15 @@ export class BookUsersComponent implements OnInit {
     this.book = modal.context;
   }
 
+  private static newBookUser(idName: UserIdName, bookId: string): UserBook {
+    let ub = new UserBook();
+    ub.userId = idName._id;
+    ub.userName = idName.name;
+    ub.userNickName = idName.nickName;
+    ub.bookId = bookId;
+    return ub;
+  }
+
   ngOnInit(): void {
     if (!this.book) {
       return;
@@ -33,15 +42,6 @@ export class BookUsersComponent implements OnInit {
       .subscribe((pUsers: PrivilegedUsers) => {
         this.pUsers = pUsers;
       });
-  }
-
-  private newBookUser(idName: UserIdName, bookId: string): UserBook {
-    let ub = new UserBook();
-    ub.userId = idName._id;
-    ub.userName = idName.name;
-    ub.userNickName = idName.nickName;
-    ub.bookId = bookId;
-    return ub;
   }
 
   addEditor(name) {
@@ -65,7 +65,7 @@ export class BookUsersComponent implements OnInit {
               alert(opr.message || 'Fail');
               return;
             }
-            let ub = this.newBookUser(idName, book._id);
+            let ub = BookUsersComponent.newBookUser(idName, book._id);
             this.pUsers.editors.push(ub);
             this.addingEditor = false;
           });
@@ -113,7 +113,7 @@ export class BookUsersComponent implements OnInit {
               alert(opr.message || 'Fail');
               return;
             }
-            let ub = this.newBookUser(idName, book._id);
+            let ub = BookUsersComponent.newBookUser(idName, book._id);
             this.pUsers.readers.push(ub);
             this.addingReader = false;
           });

@@ -112,7 +112,7 @@ export class UserComponent implements OnInit {
           alert(opr.message || 'Fail');
           return;
         }
-        this.userBooks = this.userBooks.filter(ub => ub != userBook);
+        this.userBooks = this.userBooks.filter(ub => ub !== userBook);
       });
   }
 

@@ -63,7 +63,7 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
   filterStr(cat) {
     let opLabel = this.operatorsMap.get(cat.dictOperator);
     let opStr = cat.dictOperator ? opLabel : ':';
-    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue
+    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue;
   }
 
   gotoDetail(category: WordCategory): void {
@@ -163,12 +163,15 @@ export class CategoryListComponent extends SortableListComponent implements OnIn
         }
         let updatedNames = [];
         for (let code in updated) {
+          if(!updated.hasOwnProperty(code)){
+            continue;
+          }
           let {wordCount, extendedWordCount} = updated[code];
-          let cat = this.categories.find(wc => wc.code === code);
-          if (cat) {
-            cat.wordCount = wordCount;
-            cat.extendedWordCount = extendedWordCount;
-            updatedNames.push(cat.name);
+          let cat2 = this.categories.find(wc => wc.code === code);
+          if (cat2) {
+            cat2.wordCount = wordCount;
+            cat2.extendedWordCount = extendedWordCount;
+            updatedNames.push(cat2.name);
           }
         }
         alert('已更新 ' + updatedNames.join(','));

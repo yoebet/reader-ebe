@@ -3,12 +3,12 @@ import {Para} from './para';
 
 export class Chap extends Model {
   name: string;
-  zhName: string = '';
+  zhName = '';
   bookId: string;
   no: number;
   // originalId: string;
 
-  status: string = 'E';
+  status = 'E';
 
   isFree: boolean;
   price: number; // cents

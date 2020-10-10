@@ -1,6 +1,6 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import {Observable, EMPTY, throwError} from 'rxjs';
+import {Observable, EMPTY, throwError} from 'rxjs/';
 import {catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';
@@ -12,6 +12,8 @@ import {OpResult} from '../models/op-result';
 import {LoginModal} from '../account/login-popup.component';
 
 export class BaseService<M extends Model> {
+
+  private static loginModal: ActiveModal<string, string, string> = null;
 
   protected httpOptions = {
     headers: new HttpHeaders(DefaultHttpHeaders),
@@ -89,8 +91,6 @@ export class BaseService<M extends Model> {
   }
 
   protected handleError = (err) => this._handleError(err);
-
-  private static loginModal: ActiveModal<string, string, string> = null;
 
   protected handleError400(error: any) {
     let message = this.extractErrorMessage(error);

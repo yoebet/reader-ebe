@@ -22,7 +22,7 @@ import {DictZhService} from '../services/dict-zh.service';
 import {ChangeCallback} from '../content-types/change-notification';
 import {DictRequest, MeaningRequest, SelectedItem} from '../content-types/dict-request';
 import {NoteRequest} from '../content-types/note-request';
-import {WordAnnosComponent} from './word-annos.component'
+import {WordAnnosComponent} from './word-annos.component';
 import {ContentContext} from '../content-types/content-context';
 
 
@@ -247,9 +247,9 @@ export class ParaContentComponent implements OnChanges {
           mr.initialSelected = {word: oriForWord, pos: oriPos, meaning: oriMeaning, forPhraseGroup} as SelectedItem;
           mr.meaningItemCallback = callback;
           mr.onRequestDict = (word2: string,
-                              callback: (selected: SelectedItem) => void,
-                              notFoundCallback: () => void) => {
-            this.doSelectWordMeaning(element, word2, side, null, callback, notFoundCallback);
+                              cb: (selected: SelectedItem) => void,
+                              notFoundCB: () => void) => {
+            this.doSelectWordMeaning(element, word2, side, null, cb, notFoundCB);
           };
           this.meanRequest.emit(mr);
         } else {
@@ -349,10 +349,10 @@ export class ParaContentComponent implements OnChanges {
       }
       this.trySetMeaning(side, element, selected);
     };
-    mr.onRequestDict = (word: string,
+    mr.onRequestDict = (word2: string,
                         callback: (selected: SelectedItem) => void,
                         notFoundCallback: () => void) => {
-      this.doSelectWordMeaning(element, word, side, null, callback, notFoundCallback);
+      this.doSelectWordMeaning(element, word2, side, null, callback, notFoundCallback);
     };
 
     this.meanRequest.emit(mr);

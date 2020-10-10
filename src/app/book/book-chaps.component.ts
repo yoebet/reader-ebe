@@ -1,17 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {SuiModalService} from "ng2-semantic-ui";
+import {SuiModalService} from 'ng2-semantic-ui';
 
-import {StaticResource} from "../config";
+import {StaticResource} from '../config';
 import {Book} from '../models/book';
 import {Chap} from '../models/chap';
 import {BookService} from '../services/book.service';
 import {ChapService} from '../services/chap.service';
 import {OpResult} from '../models/op-result';
 import {SortableListComponent} from '../common/sortable-list.component';
-import {AppLink, AppLinkModal} from "../common/app-link.component";
-import {SessionService} from "../services/session.service";
-import {User} from "../models/user";
+import {AppLink, AppLinkModal} from '../common/app-link.component';
+import {SessionService} from '../services/session.service';
+import {User} from '../models/user';
 
 @Component({
   selector: 'book-chaps',

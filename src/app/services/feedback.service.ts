@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 
 import {Observable} from 'rxjs';
 
+import {environment} from '../../environments/environment';
 import {UserFeedback} from '../models/user-feedback';
 import {BaseService} from './base.service';
 import {SuiModalService} from 'ng2-semantic-ui';

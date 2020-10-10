@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
-import {DOCUMENT} from "@angular/common";
+import {DOCUMENT} from '@angular/common';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 

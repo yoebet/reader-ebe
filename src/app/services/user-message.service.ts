@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {SuiModalService} from 'ng2-semantic-ui';
+
+import {Observable} from 'rxjs/';
+
 import {environment} from '../../environments/environment';
-
-import {Observable} from 'rxjs';
-
+import {OpResult} from '../models/op-result';
 import {UserMessage} from '../models/user-message';
 import {BaseService} from './base.service';
-import {OpResult} from '../models/op-result';
-import {SuiModalService} from 'ng2-semantic-ui';
 
 @Injectable()
 export class UserMessageService extends BaseService<UserMessage> {

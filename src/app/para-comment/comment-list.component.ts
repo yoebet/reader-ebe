@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {ParaComment} from '../models/para-comment';
-import {ParaCommentService} from "../services/para-comment.service";
+import {ParaCommentService} from '../services/para-comment.service';
 import {PageableListComponent} from '../common/pageable-list.component';
 
 

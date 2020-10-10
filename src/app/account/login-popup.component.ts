@@ -5,7 +5,7 @@ import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 
 import {SessionService} from '../services/session.service';
 import {OpResult} from '../models/op-result';
-import {LoginBaseComponent} from "./login-base-component";
+import {LoginBaseComponent} from './login-base-component';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class LoginPopupComponent extends LoginBaseComponent {
   protected genWxQrCode() {
     this.wxQrCodeInit = true;
     setTimeout(() => {
-      this.doGenWxQrCode("login_popup_container");
+      this.doGenWxQrCode('login_popup_container');
     }, 10);
   }
 

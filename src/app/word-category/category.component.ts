@@ -39,7 +39,7 @@ export class CategoryComponent implements OnInit {
   filterStr(cat) {
     let opLabel = this.operatorsMap.get(cat.dictOperator);
     let opStr = cat.dictOperator ? opLabel : ':';
-    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue
+    return cat.dictKey + ' ' + opStr + ' ' + cat.dictValue;
   }
 
   fetchSamples() {

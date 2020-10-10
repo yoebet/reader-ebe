@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 import {catchError} from 'rxjs/operators';
 
 import {SuiModalService} from 'ng2-semantic-ui';

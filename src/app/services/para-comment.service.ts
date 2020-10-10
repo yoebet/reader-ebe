@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {BaseService} from './base.service';
-import {ParaComment} from "../models/para-comment";
+import {ParaComment} from '../models/para-comment';
 
 @Injectable()
 export class ParaCommentService extends BaseService<ParaComment> {

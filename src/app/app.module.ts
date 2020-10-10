@@ -80,10 +80,10 @@ import {MessagesPopupComponent} from './message/messages-popup.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
 import {AppLinkComponent} from './common/app-link.component';
-import {UserStatComponent} from "./user/user-stat.component";
-import {UserStatService} from "./services/user-stat.service";
-import {BookExpsComponent} from "./book/book-exps.component";
-import {HomeComponent} from "./home.component";
+import {UserStatComponent} from './user/user-stat.component';
+import {UserStatService} from './services/user-stat.service';
+import {BookExpsComponent} from './book/book-exps.component';
+import {HomeComponent} from './home.component';
 
 
 @NgModule({
