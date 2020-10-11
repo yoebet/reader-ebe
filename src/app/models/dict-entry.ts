@@ -86,6 +86,13 @@ export class DictEntry extends Model {
     if (categories.haici) {
       tags.push(`海词 ${categories.haici}星`);
     }
+    if (categories.ox5k) {
+      if (categories.ox5k < 5) {
+        tags.push('牛津 3000');
+      } else {
+        tags.push('牛津 5000');
+      }
+    }
     let wordFreqs = ['coca', 'bnc', 'anc'];
     for (let freqName of wordFreqs) {
       let rank = categories[freqName];
