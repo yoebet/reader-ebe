@@ -37,6 +37,14 @@
 @import url('styles/para-text.css');
 @import url('styles/annotations.css');
 
+@media only screen and (min-width: 1500px) {
+  .ui.container {
+    width: 1427px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
 #main {
   min-height: calc(100% - 82px);
 }
@@ -57,7 +65,7 @@
   background-color: #FAFAFA;
 }
 
-#icp-text {
+#icp-text, #icp-text a {
   color: rgba(0, 0, 0, .4);
   font-size: 0.8em;
 }
