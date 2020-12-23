@@ -84,6 +84,8 @@ import {UserStatComponent} from './user/user-stat.component';
 import {UserStatService} from './services/user-stat.service';
 import {BookExpsComponent} from './book/book-exps.component';
 import {HomeComponent} from './home.component';
+import {BookCategoryService} from './services/book-category.service';
+import {BookCategoriesComponent} from './book-category/book-categories.component';
 
 
 @NgModule({
@@ -150,7 +152,8 @@ import {HomeComponent} from './home.component';
     OrderListComponent,
     AppLinkComponent,
     UserStatComponent,
-    BookExpsComponent
+    BookExpsComponent,
+    BookCategoriesComponent
   ],
   providers: [
     AppService,
@@ -172,7 +175,8 @@ import {HomeComponent} from './home.component';
     ReleaseService,
     PriceLabelPipe,
     OrderService,
-    UserStatService
+    UserStatService,
+    BookCategoryService
   ],
   entryComponents: [
     LoginPopupComponent,

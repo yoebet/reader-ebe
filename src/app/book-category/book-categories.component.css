@@ -1,0 +1,7 @@
+.field.category-name input {
+  max-width: 8em;
+}
+
+.inline.fields.category input {
+  max-width: 6em;
+}

@@ -1,0 +1,67 @@
+.ui.header
+  | 图书分类
+  .ui.right.floated.header
+    sui-checkbox([(ngModel)]='tuneOrder') 排序
+    sui-checkbox([(ngModel)]='removeOperation') 删除
+
+table.ui.small.striped.table.form
+  thead
+    tr
+      th Code
+      th 名称
+      th 单独列表
+      th
+  tbody
+    tr(*ngFor='let cat of categories; trackBy: tracker; first as first; last as last')
+      td
+        ng-template([ngIf]='!editing(cat)') {{cat.code}}
+        ng-template([ngIf]='editing(cat)')
+          input.input([(ngModel)]='editingCat.code', placeholder='Code')
+      td
+        ng-template([ngIf]='!editing(cat)') {{cat.name}}
+        ng-template([ngIf]='editing(cat)')
+          input.input([(ngModel)]='editingCat.name', placeholder='名称')
+      td
+        ng-template([ngIf]='!editing(cat)') {{cat.listing? '是':''}}
+        ng-template([ngIf]='editing(cat)')
+          sui-checkbox([(ngModel)]='editingCat.listing') 单独列表
+      td.right.aligned
+        ng-template([ngIf]='editing(cat)')
+          .ui.mini.button((click)='editingCat=null') 取消
+          .ui.mini.primary.button((click)='save()') 保存
+        ng-template([ngIf]='!editing(cat)')
+          ng-template([ngIf]="tuneOrder")
+            button.ui.tiny.button(*ngIf='!first', (click)='moveUp(cat)')
+              i.angle.arrow.up.icon
+              | 上
+            button.ui.tiny.button(*ngIf='!last', (click)='moveDown(cat)')
+              i.angle.arrow.down.icon
+              | 下
+            button.ui.tiny.button(*ngIf='!first', (click)='moveTop(cat)')
+              i.angle.double.up.icon
+              | 顶
+            button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(cat)')
+              i.angle.double.down.icon
+              | 底
+          ng-template([ngIf]="!tuneOrder")
+            button.ui.tiny.button((click)='edit(cat)') 修改
+            button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
+
+
+.ui.hidden.clearing.divider
+button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click)='editNew()') 新增
+.ui.small.form(*ngIf='newCategory')
+  .field
+    h3.ui.header 新分类
+    .fields
+      .four.wide.field
+        input([(ngModel)]="newCategory.code", placeholder='Code')
+      .four.wide.field
+        input([(ngModel)]="newCategory.name", placeholder='名称')
+      .four.wide.field
+        sui-checkbox([(ngModel)]='newCategory.listing') 单独列表
+  .field.ui.right.floated.header
+    button.ui.tiny.button((click)="cancelEditNew()") 取消
+    button.ui.tiny.primary.button((click)="add()") 保存
+
+.ui.hidden.clearing.divider

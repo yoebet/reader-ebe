@@ -5,6 +5,7 @@
       ng-template([ngIf]='currentUser')
         a.item(routerLink='/books', routerLinkActive='active') 图书
         ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+          a.item(routerLink='/book-categories', routerLinkActive='active') 分类
           a.item(routerLink='/dict', routerLinkActive='active') 词典
           a.item(routerLink='/word-categories', routerLinkActive='active') 词书
           a.item(routerLink='/annotations', routerLinkActive='active') 标注
