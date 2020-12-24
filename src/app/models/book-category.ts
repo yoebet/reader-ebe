@@ -21,5 +21,5 @@ export class BookCategory extends Model {
 
   type: string;
 
-  booksCount: number;
+  booksCount?: number;
 }

@@ -12,16 +12,17 @@ import {AnnotationFamily} from '../models/annotation-family';
 import {BookService} from '../services/book.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
-import {BookInfoModal} from './book-info.component';
-import {BookFormModal} from './book-form.component';
-import {BookImageModal} from './book-image.component';
-import {BookPacksModal} from './book-packs.component';
-import {BookUsersModal} from './book-users.component';
+import {BookInfoModal} from '../book/book-info.component';
+import {BookFormModal} from '../book/book-form.component';
+import {BookImageModal} from '../book/book-image.component';
+import {BookPacksModal} from '../book/book-packs.component';
+import {BookUsersModal} from '../book/book-users.component';
 import {SortableListComponent} from '../common/sortable-list.component';
 import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {BookExpsModal} from './book-exps.component';
+import {BookCategoryService} from '../services/book-category.service';
 
 @Component({
   selector: 'book-list',
@@ -47,6 +48,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   bookImageNotSet = StaticResource.BookImageNotSet;
 
   annOptions: AnnotationFamily[];
+  categoryOptions: BookCategory[];
 
   get currentUser(): User {
     return this.sessionService.currentUser;
@@ -61,6 +63,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   constructor(private bookService: BookService,
+              private categoryService: BookCategoryService,
               private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
               private route: ActivatedRoute,
@@ -69,9 +72,11 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.annoFamilyService
-      .getCandidates()
+    this.annoFamilyService.getCandidates()
       .subscribe(afs => this.annOptions = afs);
+
+    this.categoryService.listOptions()
+      .subscribe(cs => this.categoryOptions = cs);
 
     combineLatest(this.route.paramMap, this.route.queryParamMap)
       .subscribe(([pathParams, params]) => {
@@ -175,7 +180,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   showForm(book: Book) {
-    let context = {book, annOptions: this.annOptions};
+    let context = {book, annOptions: this.annOptions, categoryOptions: this.categoryOptions};
     this.modalService.open(new BookFormModal(context));
   }
 

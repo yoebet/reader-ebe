@@ -22,6 +22,11 @@ export class BookCategoryService extends SorterService<BookCategory> {
   }
 
 
+  listOptions(): Observable<BookCategory[]> {
+    let url = `${this.baseUrl}/list/options`;
+    return super.list(url);
+  }
+
   findBooks(cat: string): Observable<BookBasic[]> {
     let url = `${this.baseUrl}/${cat}/booksBasic`;
     return this.http.get<BookBasic[]>(url, this.httpOptions).pipe(

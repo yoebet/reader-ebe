@@ -28,7 +28,7 @@
       .field
         label 类别
         sui-select.selection([(ngModel)]="editing.category", [options]="categoryOptions",
-        valueField="value", labelField="label", placeholder='类别', #categorySelect='')
+        valueField="code", labelField="name", placeholder='类别', #categorySelect='')
           sui-select-option(*ngFor="let option of categorySelect.filteredOptions", [value]="option")
       .field
         label 状态

@@ -51,6 +51,14 @@ table.ui.small.striped.table.form
               button.ui.tiny.button((click)='edit(cat)') 修改
               button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
 
+    tr(*ngIf='noCategory')
+      td
+      td {{noCategory.name}}
+      td
+      td.right.aligned
+        a((click)='showBooks(noCategory)' href='javascript:') {{noCategory.booksCount}}
+      td.right.aligned
+
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newCategory', (click)='editNew()') 新增

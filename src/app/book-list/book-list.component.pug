@@ -20,10 +20,7 @@
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
     a.item((click)='loadBooks(null)', [ngClass]='{disabled:category==null}') 全部
-    a.item((click)='loadBooks("Nov")', [ngClass]='{disabled:category=="Nov"}') 小说
-    a.item((click)='loadBooks("Tex")', [ngClass]='{disabled:category=="Tex"}') 教材
-    a.item((click)='loadBooks("Kid")', [ngClass]='{disabled:category=="Kid"}') 儿童
-    a.item((click)='loadBooks("Oth")', [ngClass]='{disabled:category=="Oth"}') 其他
+    a.item(*ngFor='let cat of categoryOptions', (click)='loadBooks(cat.code)', [ngClass]='{disabled:category==cat.code}') {{cat.name}}
 
 table.ui.striped.table
   thead

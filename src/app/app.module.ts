@@ -34,7 +34,7 @@ import {FileSizePipe} from './pipes/file-size.pipe';
 import {SecondsToHmsPipe} from './pipes/seconds-to-hms.pipe';
 
 import {AppComponent} from './app.component';
-import {BookListComponent} from './book/book-list.component';
+import {BookListComponent} from './book-list/book-list.component';
 import {BookComponent} from './book/book.component';
 import {BookInfoComponent} from './book/book-info.component';
 import {BookFormComponent} from './book/book-form.component';
@@ -82,7 +82,7 @@ import {OrderListComponent} from './order/order-list.component';
 import {AppLinkComponent} from './common/app-link.component';
 import {UserStatComponent} from './user/user-stat.component';
 import {UserStatService} from './services/user-stat.service';
-import {BookExpsComponent} from './book/book-exps.component';
+import {BookExpsComponent} from './book-list/book-exps.component';
 import {HomeComponent} from './home.component';
 import {BookCategoryService} from './services/book-category.service';
 import {BookCategoriesComponent} from './book-category/book-categories.component';

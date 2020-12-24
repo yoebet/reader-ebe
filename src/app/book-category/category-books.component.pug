@@ -1,14 +1,17 @@
 .ui.header
-  | 分类：{{category?.name}}
+  | 分类：
+  ng-template([ngIf]='category') {{category.name}}（{{category.code}}）
 .ui.content
   table.ui.striped.small.compact.table
     thead
       tr
         th #
-        th 书名
+        th Code
+        th Name
     tbody
       tr(*ngFor='let book of books; index as index')
         td.right.aligned {{index+1}}
+        td {{book.code}}
         td
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}

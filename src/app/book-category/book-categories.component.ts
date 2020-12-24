@@ -16,6 +16,8 @@ import {SuiModalService} from 'ng2-semantic-ui';
 export class BookCategoriesComponent extends SortableListComponent implements OnInit {
 
   categories: BookCategory[];
+  noCategory: BookCategory;
+
   newCategory: BookCategory;
   editingCat: BookCategory;
 
@@ -37,6 +39,11 @@ export class BookCategoriesComponent extends SortableListComponent implements On
   getCategories() {
     this.bookCategoryService.list()
       .subscribe(categories => {
+        if (categories.length > 0) {
+          if (!categories[categories.length - 1].code) {
+            this.noCategory = categories.pop();
+          }
+        }
         this.categories = categories;
       });
   }

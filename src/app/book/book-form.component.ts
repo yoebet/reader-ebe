@@ -13,6 +13,7 @@ import {User, UserIdName} from '../models/user';
 import {SessionService} from '../services/session.service';
 import {UserBook} from '../models/user-book';
 import {BookCategory} from '../models/book-category';
+import {BookCategoryService} from '../services/book-category.service';
 
 @Component({
   selector: 'book-form',
@@ -21,13 +22,14 @@ import {BookCategory} from '../models/book-category';
 })
 export class BookFormComponent implements OnInit {
   @Input() book: Book;
+
   editing: Book;
 
   langOptions = Book.LangTypes;
   statusOptions = Book.Statuses;
-  categoryOptions = BookCategory.Categories;
 
   annOptions: AnnotationFamily[];
+  categoryOptions: BookCategory[];
   settingChiefEditor = false;
   editors: UserBook[];
 
@@ -44,6 +46,7 @@ export class BookFormComponent implements OnInit {
   }
 
   constructor(private bookService: BookService,
+              private categoryService: BookCategoryService,
               private sessionService: SessionService,
               private annoFamilyService: AnnoFamilyService,
               private priceLabelPipe: PriceLabelPipe,
@@ -51,39 +54,60 @@ export class BookFormComponent implements OnInit {
     let context = modal.context;
     this.book = context.book;
     this.annOptions = context.annOptions;
+    this.categoryOptions = context.categoryOptions;
   }
 
   ngOnInit(): void {
     this.edit();
     if (!this.annOptions) {
-      this.annoFamilyService
-        .getCandidates()
+      this.annoFamilyService.getCandidates()
         .subscribe(afs => this.annOptions = afs);
+    }
+    if (!this.categoryOptions) {
+      this.categoryService.listOptions()
+        .subscribe(cs => this.categoryOptions = cs);
     }
   }
 
   save(): void {
-    this.editing.name = this.editing.name.trim();
-    if (!this.editing.name) {
+    let editing = this.editing;
+    editing.name = editing.name.trim();
+    if (!editing.name) {
       return;
     }
-    this.bookService.update(this.editing)
+    if (editing.category !== this.book.category) {
+      let cat = this.categoryOptions.find(c => c.code === editing.category);
+      if (cat) {
+        editing.categoryName = cat.name;
+      }
+    }
+    this.bookService.update(editing)
       .subscribe((opr: OpResult) => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
           return;
         }
-        Object.assign(this.book, this.editing);
+        Object.assign(this.book, editing);
         this.editing = null;
         this.close();
       });
   }
 
   edit(): void {
+    // {"zhName":"小王子","author":"Saint-Exupéry","zhAuthor":"","contentLang":"En","transLang":"Zh","status":"R","editExperiment":false,
+    // "_id":"5d306bf6fd4cce366314ae3a","name":"The Little Prince","code":"TLP","isFree":true,"pricingMode":"B","version":7,
+    // "createdAt":"2019-07-18T12:54:14.686Z","category":"Nov-Other","priceLabel":"免费",
+    // "image":{"file":"40b90c73d0abbb0b96e0aa1b7d8bd2dd.jpg","type":"image/jpeg","size":8216,"uploadedAt":"2019-07-18T13:01:18.882Z"},
+    // "chiefEditorId":"5d12e39a89c5215720151954","chiefEditorName":"小艾","chapsComplete":true,
+    // "contentPacks":{"p":{"file":"b6e80af2d6fac4f48d62d24223a90e76.tgz","size":94367,"chaps":28,"builtAt":"2019-07-28T15:39:56.624Z"}},
+    // "categoryName":"名著·其他"}
     let editing = new Book();
     Object.assign(editing, this.book);
     delete editing.chaps;
     delete editing.updatedAt;
+    delete editing.createdAt;
+    delete editing.image;
+    delete editing.contentPacks;
     this.editing = editing;
   }
 
@@ -155,6 +179,7 @@ export class BookFormComponent implements OnInit {
 export class BookFormContext {
   book: Book;
   annOptions?: AnnotationFamily[];
+  categoryOptions?: BookCategory[];
 }
 
 export class BookFormModal extends ComponentModalConfig<BookFormContext> {
