@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 
 import {combineLatest} from 'rxjs/';
 
@@ -18,7 +18,6 @@ import {BookImageModal} from '../book/book-image.component';
 import {BookPacksModal} from '../book/book-packs.component';
 import {BookUsersModal} from '../book/book-users.component';
 import {SortableListComponent} from '../common/sortable-list.component';
-import {AppLinkModal, AppLink} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {BookExpsModal} from './book-exps.component';
@@ -32,10 +31,10 @@ import {BookCategoryService} from '../services/book-category.service';
 export class BookListComponent extends SortableListComponent implements OnInit {
   @ViewChild('newBookCode') newBookCodeEl: ElementRef;
   @ViewChild('newBookName') newBookNameEl: ElementRef;
+
   books: Book[] = [];
   allBooks: Book[] = null;
   newBook: Book = null;
-  privilegeOperations = false;
   showZh = true;
   category: string;
   visib: string;
@@ -62,12 +61,12 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     return this.bookService;
   }
 
-  constructor(private bookService: BookService,
-              private categoryService: BookCategoryService,
-              private sessionService: SessionService,
-              private annoFamilyService: AnnoFamilyService,
-              private route: ActivatedRoute,
-              private modalService: SuiModalService) {
+  constructor(protected bookService: BookService,
+              protected categoryService: BookCategoryService,
+              protected sessionService: SessionService,
+              protected annoFamilyService: AnnoFamilyService,
+              protected route: ActivatedRoute,
+              protected modalService: SuiModalService) {
     super();
   }
 
@@ -128,47 +127,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       });
   }
 
-  filterVisib(visib) {
-    if (this.visib === visib) {
-      return;
-    }
-    this.visib = visib;
-    this.allBooks = null;
-    this.loadBooks();
-  }
-
-  filterStatus(status) {
-    if (this.status === status) {
-      return;
-    }
-    this.status = status;
-    this.allBooks = null;
-    this.loadBooks();
-  }
-
-  showListLink() {
-    let path = 'books';
-    let title = '图书列表';
-    if (this.category) {
-      path = `books/cat/${this.category}`;
-      let catName = this.categoryNames[this.category];
-      if (catName) {
-        title = `图书列表（${catName}）`;
-      }
-    }
-    let appLink = {path, title} as AppLink;
-    this.modalService.open(new AppLinkModal(appLink));
-  }
-
   showExpBooks() {
     this.modalService.open(new BookExpsModal(this.onAddExpBook.bind(this)));
-  }
-
-  showLink(book) {
-    let code = book.code.toLowerCase().replace(' ', '-');
-    let wxState = `rcwx${code}`;
-    let appLink = {path: `books/${book._id}`, title: book.name, wxState} as AppLink;
-    this.modalService.open(new AppLinkModal(appLink));
   }
 
   showDetail(book: Book) {
@@ -228,68 +188,6 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       .subscribe(newBook => {
         this.books.push(newBook);
         this.newBook = null;
-      });
-  }
-
-  remove(book: Book): void {
-    if (!confirm('Are You Sure?')) {
-      return;
-    }
-    this.bookService
-      .remove(book._id)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        if (this.allBooks) {
-          this.allBooks = this.allBooks.filter(b => b !== book);
-          this.loadBooks(this.category);
-        }
-      });
-  }
-
-  backup(book: Book): void {
-    if (!confirm('... To Backup The Book?')) {
-      return;
-    }
-    this.bookService.backup(book._id)
-      .subscribe(clonedBook => {
-        if (!clonedBook || !clonedBook.name) {
-          alert('Fail To Backup.');
-          return;
-        }
-        let index = this.books.indexOf(book);
-        this.books.splice(index + 1, 0, clonedBook);
-      });
-  }
-
-  createExpBook(book: Book) {
-    if (!confirm('To Clone The Book?')) {
-      return;
-    }
-    this.bookService.createExpBook(book._id)
-      .subscribe(clonedBook => {
-        if (!clonedBook || !clonedBook.name) {
-          alert('Fail To Clone.');
-          return;
-        }
-        let index = this.books.indexOf(book);
-        this.books.splice(index + 1, 0, clonedBook);
-      });
-  }
-
-  syncExpBook(book: Book) {
-    if (!confirm('To Sync The Book?')) {
-      return;
-    }
-    this.bookService.syncExpBook(book._id)
-      .subscribe((opr: OpResult) => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        alert('ok');
       });
   }
 

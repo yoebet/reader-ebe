@@ -64,8 +64,8 @@ import {DictZhEntrySmiComponent} from './dict-zh/dict-zh-entry-smi.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
 import {CommentListComponent} from './para-comment/comment-list.component';
+import {UsersAdminComponent} from './user/users-admin.component';
 import {UserListComponent} from './user/user-list.component';
-import {UsersComponent} from './user/users.component';
 import {UserComponent} from './user/user.component';
 import {UserInfoComponent} from './user/user-info.component';
 import {UserBookComponent} from './user/user-book.component';
@@ -87,6 +87,7 @@ import {HomeComponent} from './home.component';
 import {BookCategoryService} from './services/book-category.service';
 import {BookCategoriesComponent} from './book-category/book-categories.component';
 import {CategoryBooksComponent} from './book-category/category-books.component';
+import {BooksAdminComponent} from './book-list/books-admin.component';
 
 
 @NgModule({
@@ -101,6 +102,7 @@ import {CategoryBooksComponent} from './book-category/category-books.component';
     AppComponent,
     HomeComponent,
     BookListComponent,
+    BooksAdminComponent,
     BookComponent,
     BookInfoComponent,
     BookFormComponent,
@@ -130,8 +132,8 @@ import {CategoryBooksComponent} from './book-category/category-books.component';
     FeedbackListComponent,
     IssueListComponent,
     CommentListComponent,
+    UsersAdminComponent,
     UserListComponent,
-    UsersComponent,
     UserComponent,
     UserInfoComponent,
     UserBookComponent,

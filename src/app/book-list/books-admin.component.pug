@@ -1,7 +1,20 @@
+.ui.header
+  .ui.right.floated.small.compact.menu
+    a.item([routerLink]="['/books-admin/vis', 'pub']", [ngClass]='{active:visib==="pub"}') 公开
+    a.item([routerLink]="['/books-admin/vis', 'pri']", [ngClass]='{active:visib==="pri"}') 私有
+  .ui.right.floated.small.compact.menu
+    a.item((click)='filterStatus("E")', [ngClass]='{active:status==="E"}') 编辑中
+    a.item((click)='filterStatus("R")', [ngClass]='{active:status==="R"}') 已上线
+  .clearing
+
 .ui.header.book-list-header
   .ui.right.floated.header.opers
     sui-checkbox([(ngModel)]='showZh') 中文
+    ng-template([ngIf]='currentUser&&currentUser.role==="R"')
+      sui-checkbox([(ngModel)]='tuneOrder') 排序
+      sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
     .ui.horizontal.list
+      a.item((click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
       a.item((click)='showExpBooks(book)', href='javascript:') &nbsp;&nbsp;编辑体验
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
@@ -16,6 +29,7 @@ table.ui.striped.table
       th 书名
       th 作者
       th 类别
+      th 编辑
       th 状态
       th 定价
       th
@@ -34,6 +48,7 @@ table.ui.striped.table
         .enname {{book.author}}
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
       td {{book.categoryName||categoryNames[book.category]}}
+      td {{book.chiefEditorName}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td
         ng-template([ngIf]="book.editExperiment")
@@ -42,14 +57,44 @@ table.ui.striped.table
           .ui.mini.teal.tag.label(*ngIf="book.isFree") 免费
           ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
-        a((click)='showDetail(book)', href='javascript:') 详情
-        ng-template([ngIf]="!book.editExperiment")
-          | &nbsp;&nbsp;
-          a((click)='showForm(book)', href='javascript:') 修改
-          | &nbsp;&nbsp;
-          a((click)='showUsers(book)', href='javascript:') 人员
+        ng-template([ngIf]="tuneOrder")
+          button.ui.mini.compact.button(*ngIf='!first', (click)='moveUp(book)')
+            i.angle.arrow.up.icon
+            | 上
+          button.ui.mini.compact.button(*ngIf='!last', (click)='moveDown(book)')
+            i.angle.arrow.down.icon
+            | 下
+          button.ui.mini.compact.button(*ngIf='!first', (click)='moveTop(book)')
+            i.angle.double.up.icon
+            | 顶
+          button.ui.mini.compact.button(*ngIf='!last', (click)='moveBottom(book)')
+            i.angle.double.down.icon
+            | 底
+        ng-template([ngIf]="!tuneOrder")
+          ng-template([ngIf]="!privilegeOperations")
+            a((click)='showDetail(book)', href='javascript:') 详情
+            ng-template([ngIf]="!book.editExperiment")
+              | &nbsp;&nbsp;
+              a((click)='showForm(book)', href='javascript:') 修改
+              | &nbsp;&nbsp;
+              a((click)='showUsers(book)', href='javascript:') 人员
+            ng-template([ngIf]="book.editExperiment")
+              | &nbsp;&nbsp;
+              a((click)='showForm(book)', href='javascript:') 修改
+              | &nbsp;&nbsp;
+              a(*ngIf='book.editorRole', (click)='removeExpBook(book)', href='javascript:') 移除
+          ng-template([ngIf]="privilegeOperations")
+            a((click)='showLink(book)', href='javascript:') 链接
+            | &nbsp;&nbsp;
+            a((click)='showPacks(book)', href='javascript:') 内容包
+            | &nbsp;&nbsp;
+            //button.ui.tiny.compact.button((click)='backup(book)') 复制
+            button.ui.tiny.compact.button(*ngIf='!book.editExperiment', (click)='createExpBook(book)',
+            suiPopup, popupText="用于编辑体验") 克隆
+            button.ui.tiny.compact.button(*ngIf='book.editExperiment', (click)='syncExpBook(book)') 同步
+            button.ui.tiny.compact.button((click)='remove(book)') 删除
     tr(*ngIf='!books||books.length===0')
-      td(colspan='8') No Results.
+      td(colspan='9') No Results.
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增
@@ -61,16 +106,16 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
         input([(ngModel)]='newBook.code', #newBookCode='', placeholder='Code')
       .four.wide.field
         sui-select.selection.book-annos([(ngModel)]="newBook.annotationFamilyId", [options]="annOptions",
-          valueField="_id", labelField="name", placeholder='标注', #annSelect='')
+        valueField="_id", labelField="name", placeholder='标注', #annSelect='')
           sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
       .eight.wide.inline.field
         label 语言
         sui-select.selection.book-lang([(ngModel)]="newBook.contentLang", [options]="langOptions",
-          valueField="value", labelField="label", placeholder='（原文）', #contentLangSelect='')
+        valueField="value", labelField="label", placeholder='（原文）', #contentLangSelect='')
           sui-select-option(*ngFor="let option of contentLangSelect.filteredOptions", [value]="option")
         | &nbsp;&nbsp; - &nbsp;&nbsp;
         sui-select.selection.book-lang([(ngModel)]="newBook.transLang", [options]="langOptions",
-          valueField="value", labelField="label", placeholder='（对照）', #transLangSelect='')
+        valueField="value", labelField="label", placeholder='（对照）', #transLangSelect='')
           sui-select-option(*ngFor="let option of transLangSelect.filteredOptions", [value]="option")
   .fields
     .twelve.wide.field

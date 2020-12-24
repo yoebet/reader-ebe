@@ -5,12 +5,14 @@
       ng-template([ngIf]='currentUser')
         a.item(routerLink='/books', routerLinkActive='active') 图书
         ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+          //a.item(routerLink='/books-admin', routerLinkActive='active') 图书-A
           a.item(routerLink='/book-categories', routerLinkActive='active') 分类
           a.item(routerLink='/dict', routerLinkActive='active') 词典
           a.item(routerLink='/word-categories', routerLinkActive='active') 词书
           a.item(routerLink='/annotations', routerLinkActive='active') 标注
           a.item(routerLink='/issues', routerLinkActive='active') 纠错
           a.item(routerLink='/users', routerLinkActive='active') 用户
+          //a.item(routerLink='/users-admin', routerLinkActive='active') 用户-A
           ng-template([ngIf]='currentUser.role==="R"')
             a.item(routerLink='/stat', routerLinkActive='active') 统计
             a.item(routerLink='/orders', routerLinkActive='active') 订单

@@ -6,8 +6,8 @@ import {BookComponent} from './book/book.component';
 import {ChapComponent} from './chap/chap.component';
 import {DictComponent} from './dict/dict.component';
 import {DictZhComponent} from './dict-zh/dict-zh.component';
+import {UsersAdminComponent} from './user/users-admin.component';
 import {UserListComponent} from './user/user-list.component';
-import {UsersComponent} from './user/users.component';
 import {FeedbackListComponent} from './user-feedback/feedback-list.component';
 import {IssueListComponent} from './para-issue/issue-list.component';
 import {CommentListComponent} from './para-comment/comment-list.component';
@@ -23,20 +23,23 @@ import {OrderListComponent} from './order/order-list.component';
 import {UserStatComponent} from './user/user-stat.component';
 import {HomeComponent} from './home.component';
 import {BookCategoriesComponent} from './book-category/book-categories.component';
+import {BooksAdminComponent} from './book-list/books-admin.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', component: HomeComponent},
   {path: 'books', component: BookListComponent},
-  {path: 'book-categories', component: BookCategoriesComponent},
   {path: 'books/cat/:cat', component: BookListComponent},
-  {path: 'books/vis/:vis', component: BookListComponent},
   {path: 'books/:id', component: BookComponent},
+  {path: 'books-admin', component: BooksAdminComponent},
+  {path: 'books-admin/cat/:cat', component: BooksAdminComponent},
+  {path: 'books-admin/vis/:vis', component: BooksAdminComponent},
+  {path: 'book-categories', component: BookCategoriesComponent},
   {path: 'chaps/:id', component: ChapComponent},
   {path: 'dict', component: DictComponent},
   {path: 'dict-c', component: DictComponent, data: {editSimple: false}},
   {path: 'dict-zh', component: DictZhComponent},
-  {path: 'users', component: UsersComponent},
-  {path: 'users-admin', component: UserListComponent},
+  {path: 'users', component: UserListComponent},
+  {path: 'users-admin', component: UsersAdminComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'feedbacks', component: FeedbackListComponent},
   {path: 'issues', component: IssueListComponent},
