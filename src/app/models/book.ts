@@ -2,20 +2,15 @@ import {Model} from './model';
 import {Chap} from './chap';
 import {UserBook} from './user-book';
 
-export class Book extends Model {
+export class BookBasic extends Model {
+  code: string;
+  name: string;
+  zhName = '';
+  author = '';
+  zhAuthor = '';
+}
 
-  static CategoryNames = {
-    Nov: '小说',
-    Tex: '教材',
-    Kid: '儿童',
-    His: '历史',
-    Poe: '诗歌',
-    Oth: '其他'
-  };
-
-  static Categories = ['Nov', 'Tex', 'Kid', 'His', 'Poe', 'Oth'].map(k => {
-    return {value: k, label: Book.CategoryNames[k]};
-  });
+export class Book extends BookBasic {
 
   static LangCodeEn = 'En';
   static LangCodeZh = 'Zh';
@@ -50,17 +45,12 @@ export class Book extends Model {
     {value: 'C', label: '按章节'}
   ];
 
-  code: string;
-  name: string;
-  zhName = '';
-  author = '';
-  zhAuthor = '';
-
   label: string;
 
   contentLang = Book.LangCodeEn;
   transLang = Book.LangCodeZh;
   category: string;
+  categoryName: string;
   description: string;
 
   status = 'E';

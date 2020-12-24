@@ -12,6 +12,7 @@ import {AnnoFamilyService} from '../services/anno-family.service';
 import {User, UserIdName} from '../models/user';
 import {SessionService} from '../services/session.service';
 import {UserBook} from '../models/user-book';
+import {BookCategory} from '../models/book-category';
 
 @Component({
   selector: 'book-form',
@@ -24,7 +25,7 @@ export class BookFormComponent implements OnInit {
 
   langOptions = Book.LangTypes;
   statusOptions = Book.Statuses;
-  categoryOptions = Book.Categories;
+  categoryOptions = BookCategory.Categories;
 
   annOptions: AnnotationFamily[];
   settingChiefEditor = false;

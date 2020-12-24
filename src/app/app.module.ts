@@ -86,6 +86,7 @@ import {BookExpsComponent} from './book/book-exps.component';
 import {HomeComponent} from './home.component';
 import {BookCategoryService} from './services/book-category.service';
 import {BookCategoriesComponent} from './book-category/book-categories.component';
+import {CategoryBooksComponent} from './book-category/category-books.component';
 
 
 @NgModule({
@@ -153,7 +154,8 @@ import {BookCategoriesComponent} from './book-category/book-categories.component
     AppLinkComponent,
     UserStatComponent,
     BookExpsComponent,
-    BookCategoriesComponent
+    BookCategoriesComponent,
+    CategoryBooksComponent
   ],
   providers: [
     AppService,
@@ -194,7 +196,8 @@ import {BookCategoriesComponent} from './book-category/book-categories.component
     DictSimpleSmiComponent,
     MessagesPopupComponent,
     AppLinkComponent,
-    BookExpsComponent
+    BookExpsComponent,
+    CategoryBooksComponent
   ],
   bootstrap: [AppComponent]
 })

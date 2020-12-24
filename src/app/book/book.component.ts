@@ -6,6 +6,7 @@ import {switchMap} from 'rxjs/operators';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
+import {BookCategory} from '../models/book-category';
 import {BookService} from '../services/book.service';
 import {BookFormModal} from './book-form.component';
 import {BookInfoModal} from './book-info.component';
@@ -26,7 +27,7 @@ import {OpResult} from '../models/op-result';
 export class BookComponent implements OnInit {
   book: Book;
   statusNames = Book.StatusNames;
-  categoryNames = Book.CategoryNames;
+  categoryNames = BookCategory.CategoryNames;
   bookImagesBase = StaticResource.BookImagesBase;
   bookImageNotSet = StaticResource.BookImageNotSet;
 

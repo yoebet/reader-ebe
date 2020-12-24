@@ -2,9 +2,13 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SuiModalService} from 'ng2-semantic-ui';
 
+import {catchError} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
+
 import {environment} from '../../environments/environment';
 import {SorterService} from './sorter.service';
 import {BookCategory} from '../models/book-category';
+import {BookBasic} from '../models/book';
 
 @Injectable()
 export class BookCategoryService extends SorterService<BookCategory> {
@@ -17,5 +21,11 @@ export class BookCategoryService extends SorterService<BookCategory> {
     this.baseUrl = `${apiBase}/${this.apiA}/book_categories`;
   }
 
+
+  findBooks(cat: string): Observable<BookBasic[]> {
+    let url = `${this.baseUrl}/${cat}/booksBasic`;
+    return this.http.get<BookBasic[]>(url, this.httpOptions).pipe(
+      catchError(this.handleError));
+  }
 
 }

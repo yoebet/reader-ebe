@@ -1,0 +1,17 @@
+.ui.header
+  | 分类：{{category?.name}}
+.ui.content
+  table.ui.striped.small.compact.table
+    thead
+      tr
+        th #
+        th 书名
+    tbody
+      tr(*ngFor='let book of books; index as index')
+        td.right.aligned {{index+1}}
+        td
+          .enname {{book.name}}
+          .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

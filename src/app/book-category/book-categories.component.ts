@@ -5,6 +5,8 @@ import {OpResult} from '../models/op-result';
 import {SortableListComponent} from '../common/sortable-list.component';
 import {BookCategoryService} from '../services/book-category.service';
 import {BookCategory} from '../models/book-category';
+import {CategoryBooksModal} from './category-books.component';
+import {SuiModalService} from 'ng2-semantic-ui';
 
 @Component({
   selector: 'book-categories',
@@ -20,7 +22,7 @@ export class BookCategoriesComponent extends SortableListComponent implements On
   removeOperation = false;
 
   constructor(private bookCategoryService: BookCategoryService,
-              private router: Router) {
+              private modalService: SuiModalService) {
     super();
   }
 
@@ -99,6 +101,10 @@ export class BookCategoriesComponent extends SortableListComponent implements On
         Object.assign(category, editingCat);
         this.editingCat = null;
       });
+  }
+
+  showBooks(cat) {
+    this.modalService.open(new CategoryBooksModal(cat));
   }
 
 

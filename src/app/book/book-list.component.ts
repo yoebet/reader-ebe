@@ -7,6 +7,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 
 import {StaticResource} from '../config';
 import {Book} from '../models/book';
+import {BookCategory} from '../models/book-category';
 import {AnnotationFamily} from '../models/annotation-family';
 import {BookService} from '../services/book.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
@@ -41,7 +42,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
-  categoryNames = Book.CategoryNames;
+  categoryNames = BookCategory.CategoryNames;
   bookImagesBase = StaticResource.BookImagesBase;
   bookImageNotSet = StaticResource.BookImageNotSet;
 

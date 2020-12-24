@@ -10,6 +10,7 @@ table.ui.small.striped.table.form
       th Code
       th 名称
       th 单独列表
+      th 图书数
       th
   tbody
     tr(*ngFor='let cat of categories; trackBy: tracker; first as first; last as last')
@@ -26,26 +27,29 @@ table.ui.small.striped.table.form
         ng-template([ngIf]='editing(cat)')
           sui-checkbox([(ngModel)]='editingCat.listing') 单独列表
       td.right.aligned
-        ng-template([ngIf]='editing(cat)')
-          .ui.mini.button((click)='editingCat=null') 取消
-          .ui.mini.primary.button((click)='save()') 保存
-        ng-template([ngIf]='!editing(cat)')
-          ng-template([ngIf]="tuneOrder")
-            button.ui.tiny.button(*ngIf='!first', (click)='moveUp(cat)')
-              i.angle.arrow.up.icon
-              | 上
-            button.ui.tiny.button(*ngIf='!last', (click)='moveDown(cat)')
-              i.angle.arrow.down.icon
-              | 下
-            button.ui.tiny.button(*ngIf='!first', (click)='moveTop(cat)')
-              i.angle.double.up.icon
-              | 顶
-            button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(cat)')
-              i.angle.double.down.icon
-              | 底
-          ng-template([ngIf]="!tuneOrder")
-            button.ui.tiny.button((click)='edit(cat)') 修改
-            button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
+        a((click)='showBooks(cat)' href='javascript:') {{cat.booksCount}}
+      td.right.aligned
+        ng-template([ngIf]='cat.code')
+          ng-template([ngIf]='editing(cat)')
+            .ui.mini.button((click)='editingCat=null') 取消
+            .ui.mini.primary.button((click)='save()') 保存
+          ng-template([ngIf]='!editing(cat)')
+            ng-template([ngIf]="tuneOrder")
+              button.ui.tiny.button(*ngIf='!first', (click)='moveUp(cat)')
+                i.angle.arrow.up.icon
+                | 上
+              button.ui.tiny.button(*ngIf='!last', (click)='moveDown(cat)')
+                i.angle.arrow.down.icon
+                | 下
+              button.ui.tiny.button(*ngIf='!first', (click)='moveTop(cat)')
+                i.angle.double.up.icon
+                | 顶
+              button.ui.tiny.button(*ngIf='!last', (click)='moveBottom(cat)')
+                i.angle.double.down.icon
+                | 底
+            ng-template([ngIf]="!tuneOrder")
+              button.ui.tiny.button((click)='edit(cat)') 修改
+              button.ui.tiny.button(*ngIf='removeOperation', (click)='remove(cat)') 删除
 
 
 .ui.hidden.clearing.divider
