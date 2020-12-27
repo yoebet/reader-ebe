@@ -11,10 +11,6 @@ export class BookCategory extends Model {
     Oth: '其他'
   };
 
-  static Categories = ['Nov', 'Tex', 'Kid', 'His', 'Poe', 'Oth'].map(k => {
-    return {value: k, label: BookCategory.CategoryNames[k]};
-  });
-
   code: string;
   name: string;
   listing = true;

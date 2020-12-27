@@ -14,8 +14,8 @@
       sui-checkbox([(ngModel)]='tuneOrder') 排序
       sui-checkbox([(ngModel)]='privilegeOperations', [isDisabled]='tuneOrder') 更多操作
     .ui.horizontal.list
-      a.item((click)='showListLink(book)', href='javascript:') &nbsp;&nbsp;微信链接
-      a.item((click)='showExpBooks(book)', href='javascript:') &nbsp;&nbsp;编辑体验
+      a.item((click)='showListLink()', href='javascript:') &nbsp;&nbsp;微信链接
+      a.item((click)='showExpBooks()', href='javascript:') &nbsp;&nbsp;编辑体验
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
     a.item((click)='loadBooks(null)', [ngClass]='{disabled:category==null}') 全部
