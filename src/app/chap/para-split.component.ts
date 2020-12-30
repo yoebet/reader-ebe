@@ -23,6 +23,8 @@ export class ParaSplitComponent {
   indentTrans: boolean;
   indentStr = ParaSetting.TransIndentStr;
 
+  saving = false;
+
   constructor(private modal: SuiModal<ParaSplitContext, Para[], string>, private sanitizer: DomSanitizer) {
     Row.sanitizer = this.sanitizer;
     let context = modal.context;
@@ -153,6 +155,8 @@ export class ParaSplitComponent {
     this.para.trans = paras[0].trans;
     //keep other fields
     paras[0] = this.para;
+
+    this.saving = true;
 
     this.paraSaver.saveSplit(paras, () => {
       this.modal.approve(paras);

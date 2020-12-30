@@ -31,4 +31,4 @@
             | 合并
 .actions
   button.ui.tiny.button((click)="cancel()") 取消
-  button.ui.tiny.primary.button((click)="completeAndSave()", autofocus='') 完成并保存
+  button.ui.tiny.primary.button((click)="completeAndSave()", [ngClass]='{disabled: saving}', autofocus='') 完成并保存

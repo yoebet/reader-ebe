@@ -64,16 +64,20 @@ export class TransFillingComponent {
 
     let splitPat = lf2 ? ParaSetting.EmptyLineSplitter : ParaSetting.NewLineSplitter;
     let transs = trans.split(splitPat);
+    transs = transs.filter(t => t);
     if (transs.length === 1) {
       return;
+    }
+
+    for (let ri = index + 1; ri < fixIndex; ri++) {
+      let row2 = this.rows[ri];
+      transs.push(row2.right);
+      row2.right = '';
     }
 
     let length = transs.length;
     for (let i = 0; i < length; i++) {
       let right = transs[i];
-      if (!right) {
-        continue;
-      }
       right = right.trim();
       if (this.indentTrans) {
         right = this.indentStr + right;

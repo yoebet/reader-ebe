@@ -98,6 +98,8 @@ export class BookCategoriesComponent extends SortableListComponent implements On
 
   save() {
     let editingCat = this.editingCat;
+    delete editingCat.updatedAt;
+    delete editingCat.createdAt;
     this.bookCategoryService.update(editingCat)
       .subscribe(opr => {
         if (opr.ok === 0) {
