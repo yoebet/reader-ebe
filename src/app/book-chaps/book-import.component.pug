@@ -6,7 +6,7 @@
     .ui.tiny.form
       .field
         label 粘贴文本：
-        textarea([(ngModel)]="bookText", rows="30")
+        textarea([(ngModel)]="bookText", rows="25")
       .field
         button.ui.right.floated.tiny.button((click)='goToStepSplitChaps()') 下一步（分章节）
         .clearing
@@ -30,6 +30,7 @@
         .ui.ordered.celled.selection.list
           .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
             .right.floated.header
+              button.ui.tiny.compact.button((click)='showChapText(chapHolder)') 文本
               button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 分章节
             .content.chap-title
               .pre-wrap {{chapHolder.titleLine}}
@@ -40,7 +41,7 @@
 
       .field
         button.ui.tiny.button((click)='goBackStepPasteBookText()') 上一步（粘贴文本）
-        button.ui.right.floated.tiny.button((click)='goToStepEditChaps()', [disabled]='!chapHolders') 下一步（编辑章节）
+        button.ui.right.floated.tiny.button((click)='goToStepEditChaps()', [disabled]='!chapHolders') 下一步（编辑标题/分段）
 
   //div(*ngIf='step==="edit-chaps"')
     .ui.tiny.form

@@ -1,0 +1,19 @@
+.ui.small.header
+  | 章节文本
+  .sub.header(*ngIf='chapTitle')
+    .tip {{chapTitle}}
+
+.ui.content
+  .ui.tiny.form
+    .field
+      label 文本
+      textarea(*ngIf='editing', [(ngModel)]="chapText", rows="20")
+      .pre-wrap(*ngIf='!editing') {{chapText}}
+    .field
+      button.ui.right.floated.tiny.button(*ngIf='allowEdit&&!editing', (click)='edit()') 编辑
+      button.ui.right.floated.tiny.button(*ngIf='editing', (click)='completeEdit()') 查看
+      .clearing
+
+.actions
+  button.ui.tiny.button((click)='cancelAndClose()') 取消
+  button.ui.tiny.primary.button((click)='close()') 完成
