@@ -15,3 +15,7 @@
 .status-form {
   padding-top: 1em;
 }
+
+.ui.selection.list > .item {
+  padding: 0.2143em 0;
+}

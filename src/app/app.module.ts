@@ -41,7 +41,7 @@ import {BookFormComponent} from './book/book-form.component';
 import {BookPacksComponent} from './book/book-packs.component';
 import {BookUsersComponent} from './book/book-users.component';
 import {BookImageComponent} from './book/book-image.component';
-import {BookChapsComponent} from './book/book-chaps.component';
+import {BookChapsComponent} from './book-chaps/book-chaps.component';
 import {ChapComponent} from './chap/chap.component';
 import {ChapParasComponent} from './chap/chap-paras.component';
 import {ParaFormComponent} from './chap/para-form.component';

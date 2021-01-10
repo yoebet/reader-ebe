@@ -21,7 +21,7 @@
 
   | 章节
 
-.ui.celled.list(*ngIf='book')
+.ui.celled.selection.list(*ngIf='book')
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     .right.floated.header([hidden]="chap===editingChap")
       .ui.mini.teal.tag.label(*ngIf="chap.isFree") 免费

@@ -94,13 +94,6 @@ export class BookFormComponent implements OnInit {
   }
 
   edit(): void {
-    // {"zhName":"小王子","author":"Saint-Exupéry","zhAuthor":"","contentLang":"En","transLang":"Zh","status":"R","editExperiment":false,
-    // "_id":"5d306bf6fd4cce366314ae3a","name":"The Little Prince","code":"TLP","isFree":true,"pricingMode":"B","version":7,
-    // "createdAt":"2019-07-18T12:54:14.686Z","category":"Nov-Other","priceLabel":"免费",
-    // "image":{"file":"40b90c73d0abbb0b96e0aa1b7d8bd2dd.jpg","type":"image/jpeg","size":8216,"uploadedAt":"2019-07-18T13:01:18.882Z"},
-    // "chiefEditorId":"5d12e39a89c5215720151954","chiefEditorName":"小艾","chapsComplete":true,
-    // "contentPacks":{"p":{"file":"b6e80af2d6fac4f48d62d24223a90e76.tgz","size":94367,"chaps":28,"builtAt":"2019-07-28T15:39:56.624Z"}},
-    // "categoryName":"名著·其他"}
     let editing = new Book();
     Object.assign(editing, this.book);
     delete editing.chaps;
