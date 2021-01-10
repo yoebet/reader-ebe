@@ -31,7 +31,7 @@ export class ParaSplitComponent {
     this.para = context.para;
     this.paraSaver = context.paraSaver;
     this.splitPat = context.splitPat;
-    this.splitBy2Lf = this.splitPat.source === ParaSetting.EmptyLineSplitter;
+    this.splitBy2Lf = this.splitPat.source === ParaSetting.EmptyLineSplitter.source;
     this.indentTrans = context.indentTrans;
 
     let {content, trans} = this.para;

@@ -8,16 +8,16 @@
     .field
       label 英文
       .two.fields
-        .twelve.wide.field
+        .ten.wide.field
           input([(ngModel)]='editing.name', placeholder='Book Name')
-        .four.wide.field
+        .six.wide.field
           input([(ngModel)]='editing.author', placeholder='Author')
     .field
       label 中文
       .two.fields
-        .twelve.wide.field
+        .ten.wide.field
           input([(ngModel)]='editing.zhName', placeholder='书名')
-        .four.wide.field
+        .six.wide.field
           input([(ngModel)]='editing.zhAuthor', placeholder='作者')
 
     h4.ui.dividing.grey.header 基本信息
@@ -97,6 +97,7 @@
       textarea(rows='2', [(ngModel)]='editing.description')
     .inline.field
       label 主编辑
+      | &nbsp;
       ng-template([ngIf]='!admin')
         | {{book.chiefEditorName}}
       ng-template([ngIf]='admin')

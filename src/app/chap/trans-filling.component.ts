@@ -88,6 +88,9 @@ export class TransFillingComponent {
         row2.right = right;
       } else {
         let row2 = this.rows[fixIndex - 1];
+        if (row2.right && right) {
+          right = '\n' + right;
+        }
         row2.right = row2.right + right;
       }
     }

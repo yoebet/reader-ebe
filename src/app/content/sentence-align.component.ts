@@ -114,13 +114,19 @@ export class SentenceAlignComponent {
     sts = sts.filter(f => f.trim() !== '');
 
     if (endingPattern === this.endingPattern) {
-      if (part === 'left') {
-        let lastIndex = 0;
-        for (let thisIndex = lastIndex + 1; thisIndex < sts.length; thisIndex++) {
-          let lastText = sts[lastIndex];
-          let thisText = sts[thisIndex];
+      let lastIndex = 0;
+      for (let thisIndex = lastIndex + 1; thisIndex < sts.length; thisIndex++) {
+        let lastText = sts[lastIndex];
+        let thisText = sts[thisIndex];
+        let thisTrimmedText = thisText.trim();
+        if (thisTrimmedText.length <= 2 && /[A-Z]?\./.test(thisTrimmedText)) {
+          sts[lastIndex] = lastText + thisText;
+          sts[thisIndex] = '';
+          continue;
+        }
+        if (part === 'left') {
           if (/['"’]\s*$/.test(lastText)) {
-            if (/^ *((he|she) +)?(said|asked|demanded) /.test(thisText)) {
+            if (/^ *((he|she|I) +)?(said|asked|demanded) /.test(thisText)) {
               sts[lastIndex] = lastText + thisText;
               sts[thisIndex] = '';
               continue;
@@ -132,8 +138,8 @@ export class SentenceAlignComponent {
             sts[thisIndex] = '';
             continue;
           }
-          lastIndex = thisIndex;
         }
+        lastIndex = thisIndex;
       }
 
       sts = sts.filter(f => f.trim() !== '');
