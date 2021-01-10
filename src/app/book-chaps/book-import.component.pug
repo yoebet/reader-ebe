@@ -1,0 +1,58 @@
+.ui.small.header
+  | 图书导入 （{{book.code}}）
+
+.ui.content
+  div(*ngIf='step==="paste-book-text"')
+    .ui.tiny.form
+      .field
+        label 粘贴文本：
+        textarea([(ngModel)]="bookText", rows="30")
+      .field
+        button.ui.right.floated.tiny.button((click)='goToStepSplitChaps()') 下一步（分章节）
+        .clearing
+
+  div(*ngIf='step==="split-chaps"')
+    .ui.tiny.form
+      .field
+        label 文本
+        | 长度：{{bookTextStat.length}}， 行数（非空行）：{{bookTextStat.nonEmptyLineCount}}
+      .field
+        .two.fields
+          .ten.column.field
+            label 标题行 模式
+            input([(ngModel)]='chapTitleLinePattern')
+          .six.column.field
+            label &nbsp;
+            button.ui.tiny.button((click)='splitChaps()', [disabled]='!chapTitleLinePattern') 分章节
+
+      .field(*ngIf='chapHolders')
+        label 章节
+        .ui.ordered.celled.selection.list
+          .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
+            .right.floated.header
+              button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 分章节
+            .content.chap-title
+              .pre-wrap {{chapHolder.titleLine}}
+            .content.chap-text
+              .summary
+                | 内容长度：{{chapHolder.textStat.length}}， 行数（非空行）：{{chapHolder.textStat.nonEmptyLineCount}}
+              .text.pre-wrap {{chapHolder.textStat.textSummary}}
+
+      .field
+        button.ui.tiny.button((click)='goBackStepPasteBookText()') 上一步（粘贴文本）
+        button.ui.right.floated.tiny.button((click)='goToStepEditChaps()', [disabled]='!chapHolders') 下一步（编辑章节）
+
+  //div(*ngIf='step==="edit-chaps"')
+    .ui.tiny.form
+      .field(*ngIf='chapHolders')
+        | 章节
+        .ui.celled.selection.list()
+          .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
+            .right.floated.header
+              button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 标题
+            .content.pre-wrap {{chapHolder.chapTitle}}
+      .right.floated.field
+        button.ui.tiny.button((click)='edit(chap)') 保存
+
+.actions
+  button.ui.tiny.button((click)='close()') 关闭

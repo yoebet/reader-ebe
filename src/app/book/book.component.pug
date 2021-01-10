@@ -3,8 +3,9 @@ div(*ngIf='book')
     .ui.right.floated.sub.header
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
-      .ui.pointing.dropdown.tiny.button(*ngIf='currentUser.role==="A"||currentUser.role==="R"||!book.editExperiment',
-      suiDropdown='', autoClose='outsideClick')
+      .ui.pointing.dropdown.tiny.button(
+        *ngIf='currentUser&&(currentUser.role==="A"||currentUser.role==="R"||!book.editExperiment)',
+        suiDropdown='', autoClose='outsideClick')
         | 操作
         i.dropdown.icon
         .menu(suiDropdownMenu='')
@@ -13,14 +14,14 @@ div(*ngIf='book')
           ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
             .item((click)='showPacks()') 内容包
             .item((click)='showLink()') 微信链接
-          ng-template([ngIf]='!book.editExperiment')
-            .item((click)='createExpBook()', suiPopup, popupInverted, popupText="用于编辑体验") 克隆
+            ng-template([ngIf]='!book.editExperiment')
+              .item((click)='createExpBook()', suiPopup, popupInverted, popupText="用于编辑体验") 克隆
           ng-template([ngIf]='book.editExperiment')
             .item((click)='syncExpBook()') 同步
 
     img.ui.tiny.left.floated.image(*ngIf='book.image',
-    [src]='book.image? bookImagesBase+"/"+book.image.file: bookImageNotSet',
-    [ngClass]='{disabled: !book.image}', (click)='showImage(book)')
+      [src]='book.image? bookImagesBase+"/"+book.image.file: bookImageNotSet',
+      [ngClass]='{disabled: !book.image}', (click)='showImage(book)')
     .content
       .name-author
         .book-name {{book.name}}

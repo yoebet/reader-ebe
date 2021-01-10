@@ -81,12 +81,14 @@
         .field
           label 状态
           sui-select.selection([ngModel]="chap.status", [options]="statusOptions",
-          valueField="value", labelField="label", placeholder='状态', #statusSelect='')
+            valueField="value", labelField="label", placeholder='状态', #statusSelect='')
             sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
         .field
           sui-checkbox.toggle([(ngModel)]="editingChapFree") 免费
 
   .ui.hidden.clearing.divider
+
+  button.ui.tiny.basic.button(*ngIf='currentUser.role==="A"||currentUser.role==="R"', (click)='showBookImport();') 从文本导入
   button.ui.right.floated.tiny.basic.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
   .ui.small.form(*ngIf='editNew')
     .field

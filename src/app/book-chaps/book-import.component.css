@@ -1,0 +1,19 @@
+.chap-title, .chap-text {
+  padding: .5em;
+}
+
+.chap-title {
+  font-weight: bold;
+}
+
+.chap-text {
+  margin-left: 2em;
+}
+
+.chap-text .summary {
+  font-style: italic;
+}
+
+.chap-text .text {
+  margin-top: 1em;
+}

@@ -12,6 +12,7 @@ import {SortableListComponent} from '../common/sortable-list.component';
 import {AppLink, AppLinkModal} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
+import {BookImportModal} from './book-import.component';
 
 @Component({
   selector: 'book-chaps',
@@ -239,6 +240,11 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
     let chapId = chap._id;
     let appLink = {path: `chaps/${chapId}`, title: chap.name, context: {chapId}} as AppLink;
     this.modalService.open(new AppLinkModal(appLink));
+  }
+
+  showBookImport() {
+    let context = {book: this.book};
+    this.modalService.open(new BookImportModal(context));
   }
 
   chapTracker(index, chap) {
