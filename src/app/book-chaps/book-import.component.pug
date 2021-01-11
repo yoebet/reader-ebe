@@ -19,21 +19,21 @@
       .field
         .two.fields
           .ten.column.field
-            label 标题行 模式
-            input([(ngModel)]='chapTitleLinePattern')
+            label 标题行模式（在全文中）
+            input([(ngModel)]='chapTitleLinePattern', placeholder='^Chapter \\d+ .+$   -or-   /^CHAPTER \\d+ .+$/i')
           .six.column.field
             label &nbsp;
-            button.ui.tiny.button((click)='splitChaps()', [disabled]='!chapTitleLinePattern') 分章节
+            button.ui.tiny.primary.button((click)='splitChaps()', [disabled]='!chapTitleLinePattern') 分章节
 
       .field(*ngIf='chapHolders')
-        label 章节
+        label 章节（{{chapHolders.length}}）
         .ui.ordered.celled.selection.list
           .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
             .right.floated.header
-              button.ui.tiny.compact.button((click)='showChapText(chapHolder)') 文本
-              button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 分章节
-            .content.chap-title
-              .pre-wrap {{chapHolder.titleLine}}
+              button.ui.tiny.compact.button((click)='editChapText(chapHolder)') 文本
+              button.ui.tiny.compact.button((click)='removeChap(chapHolder)') 移除
+            .content
+              .chap-title.pre-wrap {{chapHolder.chapTitle||chapHolder.titleLine}}
             .content.chap-text
               .summary
                 | 内容长度：{{chapHolder.textStat.length}}， 行数（非空行）：{{chapHolder.textStat.nonEmptyLineCount}}
@@ -41,19 +41,54 @@
 
       .field
         button.ui.tiny.button((click)='goBackStepPasteBookText()') 上一步（粘贴文本）
-        button.ui.right.floated.tiny.button((click)='goToStepEditChaps()', [disabled]='!chapHolders') 下一步（编辑标题/分段）
+        button.ui.right.floated.tiny.button((click)='goToStepSplitParas()', [disabled]='!chapHolders') 下一步（分段）
 
-  //div(*ngIf='step==="edit-chaps"')
+
+  div(*ngIf='step==="split-paras"')
     .ui.tiny.form
+      .field
+        .two.fields
+          .ten.column.field
+            label 标题模式（在标题行中）（如有捕获组，取第1组）
+            input([(ngModel)]='chapTitlePattern', placeholder='.*   -or-   \.([A-Z].*)')
+          .six.column.field
+            label &nbsp;
+            button.ui.tiny.primary.button((click)='extractChapTitles()', [disabled]='!chapTitlePattern||!chapHolders') 提取标题
+            button.ui.tiny.button((click)='resetChapTitles()', [disabled]='!chapHolders') 重设标题
+      .field
+        .two.fields
+          .ten.column.field
+            label 分段
+            sui-radio-button(name='paraSplitPat', [(ngModel)]='splitParaBy2Lf', [value]='true') 空行分段
+            sui-radio-button(name='paraSplitPat', [(ngModel)]='splitParaBy2Lf', [value]='false') 换行分段
+          .six.column.field
+            label &nbsp;
+            button.ui.tiny.primary.button((click)='splitParas()', [disabled]='!chapHolders') 分段
+
       .field(*ngIf='chapHolders')
-        | 章节
-        .ui.celled.selection.list()
+        label 章节（{{chapHolders.length}}）
+        .ui.ordered.celled.selection.list
           .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
             .right.floated.header
-              button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 标题
-            .content.pre-wrap {{chapHolder.chapTitle}}
-      .right.floated.field
-        button.ui.tiny.button((click)='edit(chap)') 保存
+              ng-template([ngIf]='chapHolder!==editingChapTitle')
+                //button.ui.tiny.compact.button((click)='showChapText(chapHolder)') 文本
+                button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 标题
+                button.ui.tiny.compact.button((click)='showParas(chapHolder)') 段落
+              ng-template([ngIf]='chapHolder===editingChapTitle')
+                button.ui.tiny.compact.button((click)='completeEditChapTitle()') 完成
+            .content
+              .chap-title.pre-wrap(*ngIf='chapHolder!==editingChapTitle') {{chapHolder.chapTitle||chapHolder.titleLine}}
+              textarea.ten.wide.field(*ngIf='chapHolder===editingChapTitle', [(ngModel)]='chapHolder.chapTitle', rows='2')
+            .content.chap-text
+              .summary
+                | 内容长度：{{chapHolder.textStat.length}}， 行数（非空行）：{{chapHolder.textStat.nonEmptyLineCount}}
+                ng-template([ngIf]='chapHolder.paraTexts')
+                  | ， 段落数：{{chapHolder.paraTexts.length}}
+              .text.pre-wrap {{chapHolder.textStat.textSummary}}
+
+      .field
+        button.ui.tiny.button((click)='goBackStepSplitChaps()') 上一步（分章节）
+        button.ui.right.floated.tiny.primary.button((click)='saveAll()', [disabled]='!chapHolders') 保存
 
 .actions
   button.ui.tiny.button((click)='close()') 关闭

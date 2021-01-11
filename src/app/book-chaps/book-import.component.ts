@@ -6,6 +6,8 @@ import {Book} from '../models/book';
 import {ChapService} from '../services/chap.service';
 import {ParaService} from '../services/para.service';
 import {ChapTextEditContext, ChapTextEditModal} from './chap-text-edit.component';
+import {ParaSetting} from '../config';
+import {ChapTextSplitContext, ChapTextSplitModal} from './chap-text-split.component';
 
 
 interface TextStat {
@@ -20,6 +22,8 @@ interface ChapHolder {
   titleLine: string;
   chapTitle?: string;
   textStat: TextStat;
+
+  paraTexts?: string[];
 }
 
 const ChapSplitter = '-2345-CS-YW-';
@@ -40,7 +44,11 @@ export class BookImportComponent implements OnInit {
   bookTextStat: TextStat;
   chapHolders: ChapHolder[];
 
-  step: 'paste-book-text' | 'split-chaps' | 'edit-chaps' | 'save-chaps' = 'paste-book-text';
+  editingChapTitle: ChapHolder;
+
+  splitParaBy2Lf = true;
+
+  step: 'paste-book-text' | 'split-chaps' | 'split-paras' | 'save-chaps' = 'paste-book-text';
 
 
   constructor(private chapService: ChapService,
@@ -193,25 +201,43 @@ export class BookImportComponent implements OnInit {
       'Laura Needham is a secretary in the executive offices of a large manufacturing company. As a good office secretary, Laura knows that all phone calls must be answered promptly and handled efficiently. She knows that a secretary must be pleasant and helpful, no matter how busy she is or what kind of mood she may be in. She knows she must keep calm if a caller gets impatient or becomes angry; also, of course, she knows she can never allow herself to lose her temper. If she does not have the information the caller asks for, she must know who does have the information. Finally, she knows that one of her most important responsibilities is to "screen" telephone calls and to know which calls to refer to her boss, which calls to refer to other people, and which calls to handle herself.\n' +
       '\n' +
       'A well-handled telephone call will give the caller a good impression of the company he or she is dealing with. For this reason, an office secretary who can handle telephone calls cheerfully, tactfully, and efficiently is a valuable asset to any organization.\n';
-    this.chapTitleLinePattern = '\\d+\\. .+\\r?\\n';
+
+    this.chapTitleLinePattern = '/\\d+\\. .+\\r?\\n/g';
   }
 
   ngOnInit(): void {
   }
 
-  editChapTitle(chapHolder) {
-
+  editChapTitle(chapHolder: ChapHolder) {
+    this.editingChapTitle = chapHolder;
+    if (!chapHolder.chapTitle) {
+      chapHolder.chapTitle = chapHolder.titleLine;
+    }
   }
 
-  edit(chap) {
-
+  completeEditChapTitle() {
+    this.editingChapTitle = null;
   }
 
   splitChaps() {
 
     console.log('>>>>');
 
-    let regex = new RegExp(this.chapTitleLinePattern, 'g');
+    let pattern = this.chapTitleLinePattern;
+    let flags = 'g';
+    if (pattern.startsWith('/')) {
+      pattern = pattern.substr(1);
+      let lsi = pattern.lastIndexOf('/');
+      if (lsi > 0) {
+        flags = pattern.substr(lsi + 1);
+        pattern = pattern.substr(0, lsi);
+        if (flags.indexOf('g') === -1) {
+          flags = 'g' + flags;
+        }
+      }
+    }
+
+    let regex = new RegExp(pattern, flags);
 
     let text = this.bookText.replace(regex, ((tl, args) => `${ChapSplitter}${tl}${ChapTitleSplitter}`));
 
@@ -259,6 +285,60 @@ export class BookImportComponent implements OnInit {
     return stat;
   }
 
+  removeChap(chapHolder) {
+    if (!confirm('要移除吗？')) {
+      return;
+    }
+    let index = this.chapHolders.indexOf(chapHolder);
+    this.chapHolders.splice(index, 1);
+  }
+
+  extractChapTitles() {
+    if (!this.chapTitlePattern || !this.chapHolders) {
+      return;
+    }
+    for (let ch of this.chapHolders) {
+      let matcher = ch.titleLine.match(this.chapTitlePattern);
+      if (matcher) {
+        ch.chapTitle = matcher[1] || matcher[0];
+      }
+    }
+  }
+
+  resetChapTitles() {
+    if (!this.chapHolders) {
+      return;
+    }
+    for (let ch of this.chapHolders) {
+      ch.chapTitle = null;
+    }
+  }
+
+
+  splitParas() {
+    if (!this.chapHolders) {
+      return;
+    }
+    let splitPat = this.splitParaBy2Lf ? ParaSetting.EmptyLineSplitter : ParaSetting.NewLineSplitter;
+    for (let ch of this.chapHolders) {
+      ch.paraTexts = ch.chapText.split(splitPat).filter(t => t);
+    }
+  }
+
+  showParas(chapHolder: ChapHolder) {
+    let context = new ChapTextSplitContext();
+    context.paraTexts = chapHolder.paraTexts;
+    context.chapText = chapHolder.chapText;
+    context.splitPat = this.splitParaBy2Lf ? ParaSetting.EmptyLineSplitter : ParaSetting.NewLineSplitter;
+
+    this.modalService.open(new ChapTextSplitModal(context))
+      .onApprove((paras: string[]) => {
+        if (paras) {
+          chapHolder.paraTexts = paras;
+        }
+      });
+  }
+
   goBackStepPasteBookText() {
     this.step = 'paste-book-text';
   }
@@ -272,17 +352,27 @@ export class BookImportComponent implements OnInit {
     this.step = 'split-chaps';
   }
 
-  goToStepEditChaps() {
-    this.step = 'edit-chaps';
+  goToStepSplitParas() {
+    this.step = 'split-paras';
   }
 
 
-  save() {
+  saveAll() {
     this.modal.approve('');
   }
 
   showChapText(chapHolder: ChapHolder) {
     let context = new ChapTextEditContext();
+    context.allowEdit = false;
+    context.chapText = chapHolder.chapText;
+    context.chapTitle = chapHolder.chapTitle || chapHolder.titleLine;
+
+    this.modalService.open(new ChapTextEditModal(context));
+  }
+
+  editChapText(chapHolder: ChapHolder) {
+    let context = new ChapTextEditContext();
+    context.directEdit = true;
     context.chapText = chapHolder.chapText;
     context.chapTitle = chapHolder.chapTitle || chapHolder.titleLine;
 

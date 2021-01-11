@@ -90,6 +90,7 @@ import {CategoryBooksComponent} from './book-category/category-books.component';
 import {BooksAdminComponent} from './book-list/books-admin.component';
 import {BookImportComponent} from './book-chaps/book-import.component';
 import {ChapTextEditComponent} from './book-chaps/chap-text-edit.component';
+import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
 
 
 @NgModule({
@@ -161,7 +162,8 @@ import {ChapTextEditComponent} from './book-chaps/chap-text-edit.component';
     BookCategoriesComponent,
     CategoryBooksComponent,
     BookImportComponent,
-    ChapTextEditComponent
+    ChapTextEditComponent,
+    ChapTextSplitComponent
   ],
   providers: [
     AppService,
@@ -205,7 +207,8 @@ import {ChapTextEditComponent} from './book-chaps/chap-text-edit.component';
     BookExpsComponent,
     CategoryBooksComponent,
     BookImportComponent,
-    ChapTextEditComponent
+    ChapTextEditComponent,
+    ChapTextSplitComponent
   ],
   bootstrap: [AppComponent]
 })

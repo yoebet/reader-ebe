@@ -66,7 +66,7 @@ export class ParaSplitComponent {
   onKeyup(index, part, $event) {
     $event.stopPropagation();
     let textarea = $event.target;
-    if ($event.keyCode !== 13) {
+    if ($event.code !== 'Enter') {
       return;
     }
     let texts = textarea.value.split(this.splitPat);

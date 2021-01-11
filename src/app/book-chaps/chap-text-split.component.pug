@@ -1,0 +1,23 @@
+.ui.header.para-split-header
+  | 分段
+  span.tip
+    | （按
+    span.split-by-lflf(*ngIf='splitBy2Lf') 空行
+    span.split-by-lf(*ngIf='!splitBy2Lf') 换行
+    | ）
+.ui.content
+  .ui.column.grid.form.para-split
+    .row.split-para(*ngFor='let row of rows; index as index; first as first')
+      .one.wide.column
+        .ui.mini.teal.label.rowno {{index+1}}
+      .thirteen.wide.column
+        .para-text.content-text(*ngIf='row!==editingRow', [innerHTML]='row.sanitizedLeft', (click)='editingRow=row;')
+        textarea(*ngIf='row===editingRow', [(ngModel)]='row.left', (keyup)='onKeyup(index, $event)')
+      .two.wide.column
+        button.ui.right.floated.mini.basic.button(*ngIf='!first', (click)='moveUp(index, $event)')
+          i.chevron.up.icon
+          | 合并
+
+.actions
+  button.ui.tiny.button((click)="cancel()") 取消
+  button.ui.tiny.primary.button((click)="completeAndSave()", [ngClass]='{disabled: saving}', autofocus='') 完成
