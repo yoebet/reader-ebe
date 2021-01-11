@@ -133,6 +133,12 @@ export class TransFillingComponent {
     this.editingRow = null;
   }
 
+  clearTrans() {
+    for (let row of this.rows) {
+      row.right = '';
+    }
+  }
+
   cancel() {
     this.modal.deny('');
   }

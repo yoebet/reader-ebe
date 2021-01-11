@@ -70,12 +70,15 @@
         .ui.ordered.celled.selection.list
           .item(*ngFor='let chapHolder of chapHolders; first as first; last as last')
             .right.floated.header
-              ng-template([ngIf]='chapHolder!==editingChapTitle')
-                //button.ui.tiny.compact.button((click)='showChapText(chapHolder)') 文本
-                button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 标题
-                button.ui.tiny.compact.button((click)='showParas(chapHolder)') 段落
-              ng-template([ngIf]='chapHolder===editingChapTitle')
-                button.ui.tiny.compact.button((click)='completeEditChapTitle()') 完成
+              ng-template([ngIf]='chapHolder.saved')
+                label.ui.mini.basic.label 已保存
+              ng-template([ngIf]='!chapHolder.saved')
+                ng-template([ngIf]='chapHolder!==editingChapTitle')
+                  //button.ui.tiny.compact.button((click)='showChapText(chapHolder)') 文本
+                  button.ui.tiny.compact.button((click)='editChapTitle(chapHolder)') 标题
+                  button.ui.tiny.compact.button((click)='showParas(chapHolder)') 段落
+                ng-template([ngIf]='chapHolder===editingChapTitle')
+                  button.ui.tiny.compact.button((click)='completeEditChapTitle()') 完成
             .content
               .chap-title.pre-wrap(*ngIf='chapHolder!==editingChapTitle') {{chapHolder.chapTitle||chapHolder.titleLine}}
               textarea.ten.wide.field(*ngIf='chapHolder===editingChapTitle', [(ngModel)]='chapHolder.chapTitle', rows='2')
