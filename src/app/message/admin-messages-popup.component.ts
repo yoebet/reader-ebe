@@ -1,36 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 
 import {MessageScope} from './message-scope';
-import {UserMessage} from '../models/user-message';
 import {UserMessageService} from '../services/user-message.service';
 import {SessionService} from '../services/session.service';
-import {User} from '../models/user';
 import {OpResult} from '../models/op-result';
-import {UserFeedback} from '../models/user-feedback';
-import {ParaIssue} from '../models/para-issue';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
+import {UserMessagesPopupComponent} from './user-messages-popup.component';
 
 @Component({
   selector: 'messages-popup',
-  templateUrl: './messages-popup.component.html',
-  styleUrls: ['./messages-popup.component.css']
+  templateUrl: '../message/user-messages-popup.component.html',
+  styleUrls: ['../message/user-messages-popup.component.css']
 })
-export class MessagesPopupComponent implements OnInit {
-  scope: MessageScope;
-  messages: UserMessage[];
+export class AdminMessagesPopupComponent extends UserMessagesPopupComponent {
 
-  newMessage: UserMessage;
-
-  constructor(private userMessageService: UserMessageService,
-              private sessionService: SessionService,
-              private modal: SuiModal<MessageScope, string, string>) {
-    this.scope = modal.context;
+  constructor(protected userMessageService: UserMessageService,
+              protected sessionService: SessionService,
+              protected modal: SuiModal<MessageScope, string, string>) {
+    super(userMessageService, sessionService, modal);
   }
 
-  get currentUser(): User {
-    return this.sessionService.currentUser;
-  }
 
   ngOnInit() {
     let scope = this.scope;
@@ -52,36 +42,6 @@ export class MessagesPopupComponent implements OnInit {
     }
   }
 
-  markRed(message: UserMessage) {
-    this.userMessageService.markAsRead(message._id)
-      .subscribe(opr => {
-        if (opr.ok === 0) {
-          alert(opr.message || 'Fail');
-          return;
-        }
-        message.readFlag = true;
-      });
-  }
-
-  editNew() {
-    let message = new UserMessage();
-    let scope = this.scope;
-    if (!scope.receiver) {
-      return;
-    }
-    message.receiverId = scope.receiver._id;
-    if (scope.sessionId) {
-      message.sessionId = scope.sessionId;
-    }
-    if (scope.sendAsRole) {
-      message.sendAsRole = scope.sendAsRole;
-    }
-    this.newMessage = message;
-  }
-
-  cancel() {
-    this.newMessage = null;
-  }
 
   send() {
     let message = this.newMessage;
@@ -92,11 +52,9 @@ export class MessagesPopupComponent implements OnInit {
     let replyForType = this.scope.replyForType;
     let replyFor = this.scope.replyFor;
     let service = this.userMessageService;
-    let obs = null;
+    let obs;
 
-    if (replyForType === 'UserMessage') {
-      obs = service.replyMessage(replyFor._id, message);
-    } else if (replyForType === 'UserFeedback') {
+    if (replyForType === 'UserFeedback') {
       obs = service.replyFeedback(replyFor._id, message);
     } else if (replyForType === 'ParaIssue') {
       obs = service.replyIssue(replyFor._id, message);
@@ -129,15 +87,11 @@ export class MessagesPopupComponent implements OnInit {
     });
   }
 
-  close() {
-    this.modal.approve('');
-  }
-
 }
 
-export class MessagesModal extends ComponentModalConfig<MessageScope> {
+export class AdminMessagesModal extends ComponentModalConfig<MessageScope> {
   constructor(scope: MessageScope) {
-    super(MessagesPopupComponent, scope, false);
+    super(AdminMessagesPopupComponent, scope, false);
     this.size = ModalSize.Tiny;
     // this.isFullScreen = true;
     this.mustScroll = true;

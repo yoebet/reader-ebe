@@ -7,13 +7,13 @@ import {PageableListComponent} from '../common/pageable-list.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {UserMessage} from '../models/user-message';
-import {MessagesModal} from '../message/messages-popup.component';
-import {MessageScope} from '../message/message-scope';
+import {MessageScope} from './message-scope';
+import {UserMessagesModal} from './user-messages-popup.component';
 
 @Component({
   selector: 'my-messages',
   templateUrl: './my-messages.component.html',
-  styleUrls: ['./my-messages.component.css']
+  styleUrls: ['./user-messages-popup.component.css']
 })
 export class MyMessagesComponent extends PageableListComponent implements OnInit {
   messages: UserMessage[];
@@ -38,8 +38,8 @@ export class MyMessagesComponent extends PageableListComponent implements OnInit
     this.list();
   }
 
-  markRed(message: UserMessage) {
-    this.userMessageService.markAsRead(message._id)
+  markAsRed(message: UserMessage) {
+    this.userMessageService.markAsRed(message._id)
       .subscribe(opr => {
         if (opr.ok === 0) {
           alert(opr.message || 'Fail');
@@ -49,7 +49,12 @@ export class MyMessagesComponent extends PageableListComponent implements OnInit
       });
   }
 
-  sessionMessages(message: UserMessage) {
+  showMessagesWithUser(message: UserMessage) {
+    console.log(message);
+    let cu = this.currentUser;
+    if (!cu) {
+      return;
+    }
     let scope = new MessageScope();
     if (message.sessionId) {
       scope.sessionId = message.sessionId;
@@ -57,7 +62,6 @@ export class MyMessagesComponent extends PageableListComponent implements OnInit
     scope.replyForType = 'UserMessage';
     scope.replyFor = message;
     let receiver = new User();
-    let cu = this.currentUser;
     if (cu._id === message.receiverId) {
       receiver._id = message.senderId;
       receiver.name = message.senderName;
@@ -67,10 +71,10 @@ export class MyMessagesComponent extends PageableListComponent implements OnInit
       receiver.name = message.receiverName;
       receiver.nickName = message.receiverNickName;
     } else {
-      receiver = null;
+      return;
     }
     scope.receiver = receiver;
-    this.modalService.open(new MessagesModal(scope))
+    this.modalService.open(new UserMessagesModal(scope))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

@@ -32,9 +32,18 @@ export class UserMessageService extends BaseService<UserMessage> {
     return super.list(url) as Observable<UserMessage[]>;
   }
 
+  receivedMessages(options): Observable<UserMessage[]> {
+    let {from, limit} = options;
+    let url = `${this.baseUrl}/receivedMessages?limit=${limit}`;
+    if (from) {
+      url += `&from=${from}`;
+    }
+    return super.list(url) as Observable<UserMessage[]>;
+  }
+
   messagesWith(userId: string, options = null): Observable<UserMessage[]> {
     if (!options) {
-      options = {limit: 8};
+      options = {limit: 30};
     }
     let {from, limit} = options;
     let url = `${this.baseUrl}/with/${userId}?limit=${limit}`;
@@ -49,35 +58,28 @@ export class UserMessageService extends BaseService<UserMessage> {
     return super.list(url) as Observable<UserMessage[]>;
   }
 
-  markAsRead(messageId: string): Observable<OpResult> {
-    let url = this.baseUrl + '/markAsRead/' + messageId;
+  markAsRed(messageId: string): Observable<OpResult> {
+    let url = this.baseUrl + '/markAsRed/' + messageId;
     return this.postForOpResult(url);
   }
 
   sendMessage(message: UserMessage): Observable<OpResult> {
-    let {subject, content, receiverId, sessionId, sendAsRole} = message;
+    let {content, receiverId, sessionId, sendAsRole} = message;
     let url = this.baseUrl + '/send/';
     return this.postForOpResult(url,
-      {subject, content, receiverId, sessionId, sendAsRole});
-  }
-
-  replyMessage(messageId: string, message: UserMessage): Observable<OpResult> {
-    let {subject, content, sendAsRole} = message;
-    let url = this.baseUrl + '/reply/' + messageId;
-    return this.postForOpResult(url,
-      {subject, content, sendAsRole});
+      {content, receiverId, sessionId, sendAsRole});
   }
 
   replyIssue(issueId: string, message: UserMessage): Observable<OpResult> {
     let url = this.adminBaseUrl + '/replyIssue/' + issueId;
     return this.postForOpResult(url,
-      {subject: message.subject, content: message.content});
+      {content: message.content});
   }
 
   replyFeedback(feedbackId: string, message: UserMessage): Observable<OpResult> {
     let url = this.adminBaseUrl + '/replyFeedback/' + feedbackId;
     return this.postForOpResult(url,
-      {subject: message.subject, content: message.content});
+      {content: message.content});
   }
 
 }

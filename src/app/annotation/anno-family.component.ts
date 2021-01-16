@@ -187,7 +187,7 @@ export class AnnoFamilyComponent extends SortableListComponent implements OnInit
     this.groupService.create(this.newGroup)
       .subscribe(group => {
         if (group['ok'] === 0) {
-          alert(group['message'] || 'Fail');
+          alert(group['message-admin'] || 'Fail');
           return;
         }
         this.family.groups.push(group);

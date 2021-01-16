@@ -1,0 +1,25 @@
+.messages .subject {
+  font-weight: bold;
+}
+
+.ui.item.user-message {
+  padding-top: 1em;
+}
+
+.user-message .received-message {
+  margin-right: 32px;
+}
+
+.user-message .sent-message {
+  margin-left: 32px;
+}
+
+.content.red {
+  color: rgba(0, 0, 0, .6);
+}
+
+.messages .footer {
+  margin-top: 1em;
+  font-size: 0.8em;
+  color: gray;
+}

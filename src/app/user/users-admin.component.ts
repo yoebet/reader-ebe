@@ -6,11 +6,12 @@ import {User} from '../models/user';
 import {OpResult} from '../models/op-result';
 
 import {UserListComponent} from './user-list.component';
-import {MessagesModal} from '../message/messages-popup.component';
+import {AdminMessagesModal} from '../message/admin-messages-popup.component';
 import {MessageScope} from '../message/message-scope';
 
 import {UserService} from '../services/user.service';
 import {SessionService} from '../services/session.service';
+import {SenderRoles} from '../models/user-message';
 
 @Component({
   selector: 'users-admin',
@@ -79,7 +80,7 @@ export class UsersAdminComponent extends UserListComponent implements OnInit {
           return;
         }
         if (u['ok'] === 0) {
-          alert(u['message']);
+          alert(u['message-admin']);
           return;
         }
         this.users.push(u);
@@ -90,8 +91,9 @@ export class UsersAdminComponent extends UserListComponent implements OnInit {
   messages(user: User) {
     let scope = new MessageScope();
     scope.receiver = user;
+    scope.sendAsRole = SenderRoles.Admin;
     this.modalService
-      .open(new MessagesModal(scope))
+      .open(new AdminMessagesModal(scope))
       // .onDeny((d) => {})
       .onApprove((r) => {
       });

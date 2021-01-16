@@ -6,7 +6,7 @@ import {User} from '../models/user';
 import {ParaIssue, IssueStatuses, IssueStatusNames} from '../models/para-issue';
 import {ParaIssueService} from '../services/para-issue.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {MessagesModal} from '../message/messages-popup.component';
+import {AdminMessagesModal} from '../message/admin-messages-popup.component';
 import {MessageScope} from '../message/message-scope';
 
 
@@ -57,7 +57,7 @@ export class IssueListComponent extends PageableListComponent implements OnInit 
     receiver.name = issue.userName;
     receiver.nickName = issue.userNickName;
     scope.receiver = receiver;
-    this.modalService.open(new MessagesModal(scope))
+    this.modalService.open(new AdminMessagesModal(scope))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

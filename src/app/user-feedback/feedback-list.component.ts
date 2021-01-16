@@ -5,7 +5,7 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {UserFeedback} from '../models/user-feedback';
 import {FeedbackService} from '../services/feedback.service';
 import {PageableListComponent} from '../common/pageable-list.component';
-import {MessagesModal} from '../message/messages-popup.component';
+import {AdminMessagesModal} from '../message/admin-messages-popup.component';
 import {MessageScope} from '../message/message-scope';
 import {User} from '../models/user';
 
@@ -42,7 +42,7 @@ export class FeedbackListComponent extends PageableListComponent implements OnIn
     receiver.name = feedback.userName;
     receiver.nickName = feedback.userNickName;
     scope.receiver = receiver;
-    this.modalService.open(new MessagesModal(scope))
+    this.modalService.open(new AdminMessagesModal(scope))
     // .onDeny((d) => {})
     // .onApprove((r) => {})
     ;

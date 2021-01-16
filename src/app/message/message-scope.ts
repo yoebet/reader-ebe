@@ -4,9 +4,10 @@ import {ParaIssue} from '../models/para-issue';
 import {UserMessage} from '../models/user-message';
 
 export class MessageScope {
-  sessionId: string = null;
   receiver: User = null;
-  replyForType: string = null;
+  replyForType: 'UserMessage' | 'UserFeedback' | 'ParaIssue' | null;
   replyFor: UserMessage | UserFeedback | ParaIssue = null;
-  sendAsRole: string;
+
+  sessionId?: string = null;
+  sendAsRole?: string;
 }

@@ -75,8 +75,8 @@ import {AnnoFamilyListComponent} from './annotation/anno-family-list.component';
 import {AnnoFamilyComponent} from './annotation/anno-family.component';
 import {LoginComponent} from './account/login.component';
 import {LoginPopupComponent} from './account/login-popup.component';
-import {MyMessagesComponent} from './account/my-messages.component';
-import {MessagesPopupComponent} from './message/messages-popup.component';
+import {MyMessagesComponent} from './message/my-messages.component';
+import {AdminMessagesPopupComponent} from './message/admin-messages-popup.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
 import {AppLinkComponent} from './common/app-link.component';
@@ -91,6 +91,7 @@ import {BooksAdminComponent} from './book-list/books-admin.component';
 import {BookImportComponent} from './book-chaps/book-import.component';
 import {ChapTextEditComponent} from './book-chaps/chap-text-edit.component';
 import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
+import {UserMessagesPopupComponent} from './message/user-messages-popup.component';
 
 
 @NgModule({
@@ -153,7 +154,7 @@ import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
     LoginComponent,
     LoginPopupComponent,
     MyMessagesComponent,
-    MessagesPopupComponent,
+    AdminMessagesPopupComponent,
     ReleaseListComponent,
     OrderListComponent,
     AppLinkComponent,
@@ -163,7 +164,8 @@ import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
     CategoryBooksComponent,
     BookImportComponent,
     ChapTextEditComponent,
-    ChapTextSplitComponent
+    ChapTextSplitComponent,
+    UserMessagesPopupComponent
   ],
   providers: [
     AppService,
@@ -202,13 +204,14 @@ import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
     SentenceAlignComponent,
     WordAnnosComponent,
     DictSimpleSmiComponent,
-    MessagesPopupComponent,
+    AdminMessagesPopupComponent,
     AppLinkComponent,
     BookExpsComponent,
     CategoryBooksComponent,
     BookImportComponent,
     ChapTextEditComponent,
-    ChapTextSplitComponent
+    ChapTextSplitComponent,
+    UserMessagesPopupComponent
   ],
   bootstrap: [AppComponent]
 })

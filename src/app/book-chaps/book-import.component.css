@@ -1,3 +1,8 @@
+.sub.header .tip {
+  font-size: 0.7em;
+  margin-top: 0.5em;
+}
+
 .chap-title, .chap-text {
   padding: .5em;
 }

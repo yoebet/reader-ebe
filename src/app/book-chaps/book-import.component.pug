@@ -1,5 +1,7 @@
 .ui.small.header
   | 图书导入 （{{book.code}}）
+  .sub.header
+    .tip （须理解正则表达式）
 
 .ui.content
   div(*ngIf='step==="paste-book-text"')
@@ -8,7 +10,7 @@
         label 粘贴文本：
         textarea([(ngModel)]="bookText", rows="25")
       .field
-        button.ui.right.floated.tiny.button((click)='goToStepSplitChaps()') 下一步（分章节）
+        button.ui.right.floated.tiny.button((click)='goToStepSplitChaps()', [disabled]='!bookText') 下一步（分章节）
         .clearing
 
   div(*ngIf='step==="split-chaps"')
@@ -50,7 +52,7 @@
         .two.fields
           .ten.column.field
             label 标题模式（在标题行中）（如有捕获组，取第1组）
-            input([(ngModel)]='chapTitlePattern', placeholder='.*   -or-   \.([A-Z].*)')
+            input([(ngModel)]='chapTitlePattern', placeholder='.*   -or-   \\.([A-Z].*)')
           .six.column.field
             label &nbsp;
             button.ui.tiny.primary.button((click)='extractChapTitles()', [disabled]='!chapTitlePattern||!chapHolders') 提取标题

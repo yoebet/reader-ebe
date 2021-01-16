@@ -4,7 +4,7 @@
 .ui.divided.list.feedbacks(*ngIf='feedbacks')
   .ui.item(*ngFor='let feedback of feedbacks')
     .subject(*ngIf='feedback.subject') {{feedback.subject}}
-    pre.content {{feedback.content}}
+    .pre-wrap.content {{feedback.content}}
     .footer
       | {{feedback.userNickName}}（{{feedback.userName}}）
       | {{feedback | createdDateString:'minute'}}

@@ -2,7 +2,7 @@ import {Model} from './model';
 
 export class UserMessage extends Model {
   category: string;
-  subject: string;
+  // subject: string;
   content: string;
   receiverId: string;
   receiverName: string;
@@ -18,6 +18,7 @@ export class UserMessage extends Model {
   replied: boolean;
 }
 
+export const SenderRoles = {'System': 'S', 'Admin': 'A', 'Editor': 'E'};
 
 export const MessageCategories = {
   'MessageReply': 'MR',

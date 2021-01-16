@@ -17,7 +17,7 @@ import {CategoryComponent} from './word-category/category.component';
 import {AnnoFamilyListComponent} from './annotation/anno-family-list.component';
 import {AnnoFamilyComponent} from './annotation/anno-family.component';
 import {LoginComponent} from './account/login.component';
-import {MyMessagesComponent} from './account/my-messages.component';
+import {MyMessagesComponent} from './message/my-messages.component';
 import {ReleaseListComponent} from './release/release-list.component';
 import {OrderListComponent} from './order/order-list.component';
 import {UserStatComponent} from './user/user-stat.component';

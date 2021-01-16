@@ -4,17 +4,20 @@
 .ui.content
   ng-template([ngIf]='currentUser&&messages')
     .ui.divided.list.messages
-      .ui.item(*ngFor='let message of messages')
-        .ui([ngClass]='message.senderName===currentUser.name? "right floated":""')
-          .subject(*ngIf='message.subject') {{message.subject}}
-          pre.content {{message.content}}
+      .ui.item.user-message(*ngFor='let message of messages')
+        .ui.received-message(*ngIf='message.senderId!==currentUser._id')
+          .pre-wrap.content([ngClass]='message.readFlag? "red":""') {{message.content}}
           .footer
-            | {{message.senderName===currentUser.name? "我":message.senderNickName}}
-            | &nbsp; -> &nbsp;
-            | {{message.receiverName===currentUser.name? "我":message.receiverNickName}}
+            | {{message.senderNickName}} &nbsp; -> &nbsp; 我
             | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
-            | &nbsp; | &nbsp;{{message.receiverName===currentUser.name? '':'对方'}}{{message.readFlag? '已读':'未读'}}
-            a(*ngIf='message.receiverName===currentUser.name&&!message.readFlag', (click)='markRed(message)') &nbsp; 标记为已读
+            | &nbsp; | &nbsp;{{message.readFlag? '已读':'未读'}}
+            a(*ngIf='!message.readFlag', (click)='markAsRed(message)') &nbsp; 标记为已读
+        .ui.sent-message.right.floated(*ngIf='message.senderId===currentUser._id')
+          .pre-wrap.content([ngClass]='message.readFlag? "red":""') {{message.content}}
+          .footer.right.floated
+            | 我 &nbsp; -> &nbsp; {{message.receiverNickName}}
+            | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
+            | &nbsp; | &nbsp;对方{{message.readFlag? '已读':'未读'}}
         .clearing
     .ui.hidden.clearing.divider
 
@@ -23,7 +26,7 @@
     .clearing
 
   .ui.small.form(*ngIf='newMessage')
-    .field
+    //.field
       input([(ngModel)]='newMessage.subject', placeholder='主题（可为空）')
     .field
       textarea([(ngModel)]='newMessage.content', rows='4', placeholder='内容')
