@@ -153,10 +153,13 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   editNew() {
-    this.newBook = new Book();
+    let newBook = new Book();
+    newBook.contentLang = Book.LangCodeEn;
+    newBook.transLang = Book.LangCodeZh;
     if (this.annOptions && this.annOptions.length > 0) {
-      this.newBook.annotationFamilyId = this.annOptions[0]._id;
+      newBook.annotationFamilyId = this.annOptions[0]._id;
     }
+    this.newBook = newBook;
   }
 
   cancelEdit() {

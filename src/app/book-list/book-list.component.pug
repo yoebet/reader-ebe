@@ -60,10 +60,15 @@ button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='e
       .four.wide.field
         input([(ngModel)]='newBook.code', #newBookCode='', placeholder='Code')
       .four.wide.field
+        sui-select.selection([(ngModel)]="newBook.category", [options]="categoryOptions",
+          valueField="code", labelField="name", placeholder='类别', #categorySelect='')
+          sui-select-option(*ngFor="let option of categorySelect.filteredOptions", [value]="option")
+      .four.wide.inline.fields
+        label 标注
         sui-select.selection.book-annos([(ngModel)]="newBook.annotationFamilyId", [options]="annOptions",
           valueField="_id", labelField="name", placeholder='标注', #annSelect='')
           sui-select-option(*ngFor="let option of annSelect.filteredOptions", [value]="option")
-      .eight.wide.inline.field
+      //.four.wide.inline.field
         label 语言
         sui-select.selection.book-lang([(ngModel)]="newBook.contentLang", [options]="langOptions",
           valueField="value", labelField="label", placeholder='（原文）', #contentLangSelect='')

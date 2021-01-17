@@ -9,6 +9,7 @@ import {User} from '../models/user';
 import {UserMessage} from '../models/user-message';
 import {MessageScope} from './message-scope';
 import {UserMessagesModal} from './user-messages-popup.component';
+import {OpResult} from '../models/op-result';
 
 @Component({
   selector: 'my-messages',
@@ -46,6 +47,23 @@ export class MyMessagesComponent extends PageableListComponent implements OnInit
           return;
         }
         message.readFlag = true;
+      });
+  }
+
+  remove(message: UserMessage): void {
+    if (!confirm('Are You Sure?')) {
+      return;
+    }
+    this.userMessageService
+      .remove(message._id)
+      .subscribe((opr: OpResult) => {
+        if (opr.ok === 0) {
+          alert(opr.message || 'Fail');
+          return;
+        }
+        if (this.messages) {
+          this.messages = this.messages.filter(m => m !== message);
+        }
       });
   }
 

@@ -101,7 +101,7 @@ sui-multi-select i.list.icon {
 }
 
 .ui.selection.dropdown.book-annos, .ui.selection.dropdown.book-lang {
-  min-width: 8em;
+  min-width: 12em;
 }
 
 .ui.search .prompt {

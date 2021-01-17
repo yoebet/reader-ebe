@@ -17,6 +17,7 @@
         | 我 &nbsp; -> &nbsp; {{message.receiverNickName}}
         | &nbsp; | &nbsp;{{message | createdDateString:'minute'}}
         | &nbsp; | &nbsp;对方{{message.readFlag? '已读':'未读'}}
+        a(*ngIf='!message.readFlag', (click)='remove(message)') &nbsp; 删除
         a((click)='showMessagesWithUser(message)') &nbsp; 会话
     .clearing
 

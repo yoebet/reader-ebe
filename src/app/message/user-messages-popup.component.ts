@@ -8,6 +8,7 @@ import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {OpResult} from '../models/op-result';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
+import {Book} from '../models/book';
 
 @Component({
   selector: 'user-messages-popup',
@@ -20,6 +21,14 @@ export class UserMessagesPopupComponent implements OnInit {
 
   newMessage: UserMessage;
 
+  setMessages = messages => {
+    if (messages && messages.length > 0) {
+      this.messages = messages.reverse();
+    } else {
+      this.editNew();
+    }
+  }
+
   constructor(protected userMessageService: UserMessageService,
               protected sessionService: SessionService,
               protected modal: SuiModal<MessageScope, string, string>) {
@@ -30,18 +39,11 @@ export class UserMessagesPopupComponent implements OnInit {
     return this.sessionService.currentUser;
   }
 
+
   ngOnInit() {
     let scope = this.scope;
-
     this.userMessageService.messagesWith(scope.receiver._id)
-      .subscribe(
-        (messages) => {
-          if (messages && messages.length > 0) {
-            this.messages = messages;
-          } else {
-            this.editNew();
-          }
-        });
+      .subscribe(this.setMessages);
   }
 
   markAsRed(message: UserMessage) {

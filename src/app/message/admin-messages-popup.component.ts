@@ -26,17 +26,10 @@ export class AdminMessagesPopupComponent extends UserMessagesPopupComponent {
     let scope = this.scope;
     let service = this.userMessageService;
 
-    let setMessages = (messages) => {
-      if (messages && messages.length > 0) {
-        this.messages = messages;
-      } else {
-        this.editNew();
-      }
-    };
     if (scope.sessionId) {
-      service.sessionMessages(scope.sessionId).subscribe(setMessages);
+      service.sessionMessages(scope.sessionId).subscribe(this.setMessages);
     } else if (scope.receiver) {
-      service.messagesWith(scope.receiver._id).subscribe(setMessages);
+      service.messagesWith(scope.receiver._id).subscribe(this.setMessages);
     } else {
       this.editNew();
     }
