@@ -5,6 +5,7 @@ export abstract class SortableListComponent {
   tuneOrder = false;
 
   abstract get modelList();
+
   abstract get sortableService();
 
   protected move(model, dir: string) {
@@ -52,7 +53,11 @@ export abstract class SortableListComponent {
           list[thisPos] = list[targetPos];
           list[targetPos] = model;
         }
+        this.onMoveDone();
       });
+  }
+
+  protected onMoveDone() {
   }
 
   moveUp(model) {

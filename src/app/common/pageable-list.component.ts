@@ -1,5 +1,5 @@
 export abstract class PageableListComponent {
-  page = 1;
+  page = 1; // 1 based
   pageSize = 10;
 
   abstract doList(options: any);
@@ -7,7 +7,7 @@ export abstract class PageableListComponent {
   list() {
     let options: any = {limit: this.pageSize};
     if (this.page > 1) {
-      options.from = (this.page - 1) * this.pageSize + 1;
+      options.from = (this.page - 1) * this.pageSize + 1; // query param: 1 based
     }
     this.doList(options);
   }

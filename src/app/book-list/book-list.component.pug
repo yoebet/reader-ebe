@@ -20,7 +20,7 @@ table.ui.striped.table
       th 定价
       th
   tbody
-    tr(*ngFor='let book of books; trackBy: bookTracker')
+    tr(*ngFor='let book of paginatedBooks; trackBy: bookTracker')
       td
         a((click)='showImage(book)', href='javascript:')
           img.ui.tiny.image(*ngIf='book.image', [src]='bookImagesBase+"/"+book.image.file')
@@ -43,13 +43,28 @@ table.ui.striped.table
           ng-template([ngIf]="!book.isFree") {{book.priceLabel}}
       td.right.aligned
         a((click)='showDetail(book)', href='javascript:') 详情
+        | &nbsp;&nbsp;
+        a((click)='showForm(book)', href='javascript:') 修改
         ng-template([ngIf]="!book.editExperiment")
           | &nbsp;&nbsp;
-          a((click)='showForm(book)', href='javascript:') 修改
-          | &nbsp;&nbsp;
           a((click)='showUsers(book)', href='javascript:') 人员
-    tr(*ngIf='!books||books.length===0')
+        ng-template([ngIf]="book.editExperiment")
+          | &nbsp;&nbsp;
+          a(*ngIf='book.editorRole', (click)='removeExpBook(book)', href='javascript:') 移除
+    tr(*ngIf='!paginatedBooks||paginatedBooks.length===0')
       td(colspan='8') No Results.
+  tfoot(*ngIf='books&&books.length>=pageSize')
+    tr
+      th.ui.small.form(colspan='8')
+        .pager
+          input.ui.mini.input.page-input(type="number", #pi='', (change)='gotoPage(pi.value);pi.value=""')
+          .ui.right.floated.mini.pagination.menu
+            a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
+              i.left.chevron.icon
+            a.item.disabled {{page}}
+            a.icon.item([ngClass]='{disabled:!paginatedBooks||paginatedBooks.length<pageSize}', (click)='nextPage()')
+              i.right.chevron.icon
+        .clearing
 
 .ui.hidden.clearing.divider
 button.ui.right.floated.tiny.basic.primary.button([hidden]='newBook', (click)='editNew()') 新增

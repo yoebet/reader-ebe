@@ -3,12 +3,3 @@
     max-width: 12em !important;
   }
 }
-
-.pager {
-  float: right;
-}
-
-input.page-input {
-  width: 5em !important;
-  margin-right: 0.2em;
-}

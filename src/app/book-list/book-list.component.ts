@@ -40,6 +40,10 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   visib: string;
   status: string;
 
+  page = 1; // 1 based
+  pageSize = 10;
+  paginatedBooks: Book[];
+
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
   categoryNames = BookCategory.CategoryNames;
@@ -105,15 +109,18 @@ export class BookListComponent extends SortableListComponent implements OnInit {
   }
 
   loadBooks(cat = null) {
+    this.page = 1;
     this.category = cat;
     if (this.category) {
       if (this.allBooks) {
         this.books = this.allBooks.filter(b => b.category === this.category);
+        this.resetPaginatedBooks();
         return;
       }
     } else {
       if (this.allBooks) {
         this.books = this.allBooks;
+        this.resetPaginatedBooks();
         return;
       }
     }
@@ -124,7 +131,60 @@ export class BookListComponent extends SortableListComponent implements OnInit {
         if (!this.category) {
           this.allBooks = books;
         }
+        this.resetPaginatedBooks();
       });
+  }
+
+  protected onMoveDone() {
+    this.resetPaginatedBooks();
+  }
+
+  resetPaginatedBooks() {
+    if (!this.books) {
+      this.paginatedBooks = [];
+      return;
+    }
+    let booksCount = this.books.length;
+    let from = (this.page - 1) * this.pageSize;
+    let to = from + this.pageSize;
+    if (from > booksCount) {
+      from = booksCount;
+    }
+    if (to > booksCount) {
+      to = booksCount;
+    }
+    this.paginatedBooks = this.books.slice(from, to);
+  }
+
+  gotoPage(page) {
+    page = parseInt(page);
+    if (isNaN(page)) {
+      return;
+    }
+    this.page = page;
+    this.resetPaginatedBooks();
+  }
+
+  nextPage() {
+    if (!this.paginatedBooks) {
+      return;
+    }
+    if (this.paginatedBooks.length < this.pageSize) {
+      return;
+    }
+    this.page++;
+    this.resetPaginatedBooks();
+  }
+
+  previousPage() {
+    if (!this.paginatedBooks) {
+      return;
+    }
+    if (this.page === 1) {
+      return;
+    }
+    this.page--;
+    this.resetPaginatedBooks();
   }
 
   showExpBooks() {
