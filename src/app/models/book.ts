@@ -67,6 +67,9 @@ export class Book extends BookBasic {
   pricePerChap: number;
   priceLabel: string;
 
+  releasedAt: string;
+  flags: number;
+
   slogan: string;
   introduction: string;
   tags: string;
