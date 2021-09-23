@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "puggy": "pug src -P -w",
+    "serve": "ng serve",
     "start": "npm run puggy & ng serve",
     "build": "ng build --prod --base-href /ee/",
     "test": "ng test",

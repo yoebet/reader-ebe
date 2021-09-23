@@ -79,16 +79,17 @@ export class BookImportComponent implements OnInit {
 
   splitChaps() {
 
-    console.log('>>>>');
-
     let pattern = this.chapTitleLinePattern;
-    let flags = 'g';
+    let flags = 'gm';
     if (pattern.startsWith('/')) {
       pattern = pattern.substr(1);
       let lsi = pattern.lastIndexOf('/');
       if (lsi > 0) {
         flags = pattern.substr(lsi + 1);
         pattern = pattern.substr(0, lsi);
+        if (flags.indexOf('m') === -1) {
+          flags = 'm' + flags;
+        }
         if (flags.indexOf('g') === -1) {
           flags = 'g' + flags;
         }
@@ -155,8 +156,20 @@ export class BookImportComponent implements OnInit {
     if (!this.chapTitlePattern || !this.chapHolders) {
       return;
     }
+    let pattern = this.chapTitlePattern;
+    let flags = '';
+    if (pattern.startsWith('/')) {
+      pattern = pattern.substr(1);
+      let lsi = pattern.lastIndexOf('/');
+      if (lsi > 0) {
+        flags = pattern.substr(lsi + 1);
+        pattern = pattern.substr(0, lsi);
+      }
+    }
+    let regex = new RegExp(pattern, flags);
+
     for (let ch of this.chapHolders) {
-      let matcher = ch.titleLine.match(this.chapTitlePattern);
+      let matcher = ch.titleLine.match(regex);
       if (matcher) {
         ch.chapTitle = matcher[1] || matcher[0];
       }

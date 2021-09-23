@@ -119,7 +119,7 @@ export class SentenceAlignComponent {
         let lastText = sts[lastIndex];
         let thisText = sts[thisIndex];
         let thisTrimmedText = thisText.trim();
-        if (thisTrimmedText.length <= 2 && /[A-Z]?\./.test(thisTrimmedText)) {
+        if (thisTrimmedText.length <= 2 && /[a-zA-Z]?\./.test(thisTrimmedText)) {
           sts[lastIndex] = lastText + thisText;
           sts[thisIndex] = '';
           continue;

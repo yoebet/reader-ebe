@@ -90,7 +90,9 @@ table.ui.striped.table
             suiPopup, popupText="用于编辑体验") 克隆
             button.ui.tiny.compact.button(*ngIf='book.editExperiment', (click)='syncExpBook(book)') 同步
             button.ui.tiny.compact.button((click)='remove(book)') 删除
-  tfoot
+    tr(*ngIf='!books||books.length===0')
+      td(colspan='9') No Results.
+  tfoot(*ngIf='books&&books.length>=pageSize')
     tr
       th.ui.small.form(colspan='9')
         .pager

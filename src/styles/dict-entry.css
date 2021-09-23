@@ -8,7 +8,12 @@
   font-size: 1.4em;
 }
 
-.entry-word, .categories, .phonetics {
+.categories {
+  display: block;
+  margin-top: .5em;
+}
+
+.entry-word, .phonetics {
   display: inline;
   vertical-align: text-bottom;
 }

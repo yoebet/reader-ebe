@@ -22,7 +22,8 @@
         .two.fields
           .ten.column.field
             label 标题行模式（在全文中）
-            input([(ngModel)]='chapTitleLinePattern', placeholder='^Chapter \\d+ .+$   -or-   /^CHAPTER \\d+ .+$/i')
+            span.pat-exam 示例： ^Chapter \d+ .+$   -or-   /^CHAPTER \d+ .+$/i   -or-   /^\d\d$/m   -or-   ^[IVXL]+$
+            input([(ngModel)]='chapTitleLinePattern', placeholder='自动加flag: gm')
           .six.column.field
             label &nbsp;
             button.ui.tiny.primary.button((click)='splitChaps()', [disabled]='!chapTitleLinePattern') 分章节
@@ -52,7 +53,8 @@
         .two.fields
           .ten.column.field
             label 标题模式（在标题行中）（如有捕获组，取第1组）
-            input([(ngModel)]='chapTitlePattern', placeholder='.*   -or-   \\.([A-Z].*)')
+            span.pat-exam 示例：.*   -or-   \.([A-Z].*)   -or-   /CHAPTER \d+/i
+            input([(ngModel)]='chapTitlePattern', placeholder='')
           .six.column.field
             label &nbsp;
             button.ui.tiny.primary.button((click)='extractChapTitles()', [disabled]='!chapTitlePattern||!chapHolders') 提取标题

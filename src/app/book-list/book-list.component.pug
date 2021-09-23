@@ -51,7 +51,7 @@ table.ui.striped.table
         ng-template([ngIf]="book.editExperiment")
           | &nbsp;&nbsp;
           a(*ngIf='book.editorRole', (click)='removeExpBook(book)', href='javascript:') 移除
-    tr(*ngIf='!paginatedBooks||paginatedBooks.length===0')
+    tr(*ngIf='!books||books.length===0')
       td(colspan='8') No Results.
   tfoot(*ngIf='books&&books.length>=pageSize')
     tr
