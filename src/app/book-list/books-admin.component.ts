@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {SuiModalService} from 'ng2-semantic-ui';
 
@@ -28,8 +28,9 @@ export class BooksAdminComponent extends BookListComponent implements OnInit {
               protected sessionService: SessionService,
               protected annoFamilyService: AnnoFamilyService,
               protected route: ActivatedRoute,
+              protected router: Router,
               protected modalService: SuiModalService) {
-    super(bookService,categoryService,sessionService,annoFamilyService,route,modalService);
+    super(bookService, categoryService, sessionService, annoFamilyService, route, router, modalService);
   }
 
   filterVisib(visib) {
@@ -38,7 +39,7 @@ export class BooksAdminComponent extends BookListComponent implements OnInit {
     }
     this.visib = visib;
     this.allBooks = null;
-    this.loadBooks();
+    this.loadBooks(true);
   }
 
   filterStatus(status) {
@@ -47,7 +48,7 @@ export class BooksAdminComponent extends BookListComponent implements OnInit {
     }
     this.status = status;
     this.allBooks = null;
-    this.loadBooks();
+    this.loadBooks(true);
   }
 
   showListLink() {
@@ -84,7 +85,7 @@ export class BooksAdminComponent extends BookListComponent implements OnInit {
         }
         if (this.allBooks) {
           this.allBooks = this.allBooks.filter(b => b !== book);
-          this.loadBooks(this.category);
+          this.loadBooks();
         }
       });
   }

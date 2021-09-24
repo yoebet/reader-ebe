@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {combineLatest} from 'rxjs/';
 
@@ -70,6 +70,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
               protected sessionService: SessionService,
               protected annoFamilyService: AnnoFamilyService,
               protected route: ActivatedRoute,
+              protected router: Router,
               protected modalService: SuiModalService) {
     super();
   }
@@ -90,36 +91,64 @@ export class BookListComponent extends SortableListComponent implements OnInit {
           let cat = pathParams.get('cat') || params.get('cat') || this.category;
           let visib = pathParams.get('vis') || params.get('vis') || this.visib;
           let status = params.get('status');
-          if (cat) {
+
+          let changed = false;
+          if (cat && this.category !== cat) {
             this.category = cat;
+            changed = true;
           }
           if (visib) {
             this.visib = visib;
             this.allBooks = null;
+            if (this.visib !== visib) {
+              changed = true;
+            }
           } else if (isAdmin) {
             this.visib = 'pub';
           }
-          if (status) {
+          if (status && this.status !== status) {
             this.status = status;
+            changed = true;
           }
 
-          this.loadBooks(this.category);
+          let page = (params.get('page') && parseInt(params.get('page'))) || 1;
+          if (changed) {
+            this.page = page;
+            this.loadBooks();
+            return;
+          }
+
+          if (this.page !== page) {
+            this.page = page;
+            if (this.books && this.books.length > 0) {
+              this.resetPaginatedBooks();
+              return;
+            }
+          }
+
+          this.loadBooks();
         }
       );
   }
 
-  loadBooks(cat = null) {
-    this.page = 1;
-    this.category = cat;
+  loadBooks(resetPage = false) {
     if (this.category) {
       if (this.allBooks) {
         this.books = this.allBooks.filter(b => b.category === this.category);
+        if (resetPage && this.page !== 1) {
+          this.resetPage(1);
+          return;
+        }
         this.resetPaginatedBooks();
         return;
       }
     } else {
       if (this.allBooks) {
         this.books = this.allBooks;
+        if (resetPage && this.page !== 1) {
+          this.resetPage(1);
+          return;
+        }
         this.resetPaginatedBooks();
         return;
       }
@@ -131,8 +160,18 @@ export class BookListComponent extends SortableListComponent implements OnInit {
         if (!this.category) {
           this.allBooks = books;
         }
+        if (resetPage && this.page !== 1) {
+          this.resetPage(1);
+          return;
+        }
         this.resetPaginatedBooks();
       });
+  }
+
+
+  filterCat(cat = null) {
+    this.category = cat;
+    this.loadBooks(true);
   }
 
   protected onMoveDone() {
@@ -156,13 +195,29 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     this.paginatedBooks = this.books.slice(from, to);
   }
 
+  resetPage(page) {
+    if (page === 1) {
+      let ppage = this.route.snapshot.queryParamMap.get('page');
+      if (ppage) {
+        page = null;
+      }
+    }
+    this.router.navigate([], {queryParams: {page}})
+      .then(value => {
+      });
+  }
+
   gotoPage(page) {
     page = parseInt(page);
     if (isNaN(page)) {
       return;
     }
-    this.page = page;
-    this.resetPaginatedBooks();
+    if (page < 1) {
+      page = 1;
+    }
+    // this.page = page;
+    // this.resetPaginatedBooks();
+    this.resetPage(page);
   }
 
   nextPage() {
@@ -172,8 +227,9 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     if (this.paginatedBooks.length < this.pageSize) {
       return;
     }
-    this.page++;
-    this.resetPaginatedBooks();
+    // this.page++;
+    // this.resetPaginatedBooks();
+    this.resetPage(this.page + 1);
   }
 
   previousPage() {
@@ -183,8 +239,9 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     if (this.page === 1) {
       return;
     }
-    this.page--;
-    this.resetPaginatedBooks();
+    // this.page--;
+    // this.resetPaginatedBooks();
+    this.resetPage(this.page - 1);
   }
 
   showExpBooks() {
@@ -261,7 +318,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     let eb = this.allBooks.find(b => b._id === book._id);
     if (!eb) {
       this.allBooks.push(book);
-      this.loadBooks(this.category);
+      this.loadBooks();
     }
   }
 
@@ -277,7 +334,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
         }
         if (this.allBooks) {
           this.allBooks = this.allBooks.filter(b => b !== book);
-          this.loadBooks(this.category);
+          this.loadBooks();
         }
       });
   }

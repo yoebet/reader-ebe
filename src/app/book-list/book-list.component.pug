@@ -5,8 +5,8 @@
       a.item((click)='showExpBooks()', href='javascript:') &nbsp;&nbsp;编辑体验
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
-    a.item((click)='loadBooks(null)', [ngClass]='{disabled:category==null}') 全部
-    a.item(*ngFor='let cat of categoryOptions', (click)='loadBooks(cat.code)', [ngClass]='{disabled:category==cat.code}') {{cat.name}}
+    a.item((click)='filterCat(null)', [ngClass]='{disabled:category==null}') 全部
+    a.item(*ngFor='let cat of categoryOptions', (click)='filterCat(cat.code)', [ngClass]='{disabled:category==cat.code}') {{cat.name}}
 
 table.ui.striped.table
   thead
@@ -57,7 +57,7 @@ table.ui.striped.table
     tr
       th.ui.small.form(colspan='8')
         .pager
-          input.ui.mini.input.page-input(type="number", #pi='', (change)='gotoPage(pi.value);pi.value=""')
+          input.ui.mini.input.page-input(type="number", min='1', #pi='', (change)='gotoPage(pi.value);pi.value=""')
           .ui.right.floated.mini.pagination.menu
             a.icon.item([ngClass]='{disabled:page===1}', (click)='previousPage()')
               i.left.chevron.icon
