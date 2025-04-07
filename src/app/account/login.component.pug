@@ -1,6 +1,6 @@
 .form.login
   h3.header.login-header
-    .ui.right.floated.horizontal.small.link.list.login-methods
+    //.ui.right.floated.horizontal.small.link.list.login-methods
       a.item((click)='loginMethod="pass"', [ngClass]='{active: loginMethod==="pass"}') 密码登录
       a.item((click)='switchToWx()', [ngClass]='{active: loginMethod==="wx"}') 微信登录
     | 请登录

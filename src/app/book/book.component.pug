@@ -13,7 +13,7 @@ div(*ngIf='book')
           .item((click)='showUsers()') 人员
           ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
             .item((click)='showPacks()') 内容包
-            .item((click)='showLink()') 微信链接
+            //.item((click)='showLink()') 微信链接
             ng-template([ngIf]='!book.editExperiment')
               .item((click)='createExpBook()', suiPopup, popupInverted, popupText="用于编辑体验") 克隆
           ng-template([ngIf]='book.editExperiment')

@@ -4,7 +4,7 @@
     sui-checkbox(*ngIf='!contentPack', [(ngModel)]='tuneOrder') 排序
     ng-template([ngIf]="!tuneOrder&&!contentPack")
       sui-checkbox([(ngModel)]='showRemove') 删除
-      sui-checkbox(*ngIf='currentUser.role==="A"||currentUser.role==="R"', [(ngModel)]='wxLink') 微信链接
+      //sui-checkbox(*ngIf='currentUser.role==="A"||currentUser.role==="R"', [(ngModel)]='wxLink') 微信链接
       .ui.pointing.dropdown.tiny.button(suiDropdown='', autoClose='outsideClick')
         | 设置状态
         i.dropdown.icon

@@ -1,5 +1,5 @@
 .ui.small.blue.header
-  .ui.right.floated.horizontal.small.link.list.login-methods
+  //.ui.right.floated.horizontal.small.link.list.login-methods
     a.item((click)='loginMethod="pass"', [ngClass]='{active: loginMethod==="pass"}') 密码登录
     a.item((click)='switchToWx()', [ngClass]='{active: loginMethod==="wx"}') 微信登录
   | 登录
@@ -16,7 +16,7 @@ ng-template([ngIf]='loginMethod==="pass"')
     .ui.tiny.button((click)='cancel()') 取消
     .ui.tiny.primary.button((click)='login(name.value, pass.value)') 登录
 
-ng-template([ngIf]='loginMethod==="wx"')
+//ng-template([ngIf]='loginMethod==="wx"')
   .ui.content
     #login_popup_container &nbsp;
     p
