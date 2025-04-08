@@ -40,10 +40,6 @@ export class DictEntry extends Model {
   //   }
   //   ]
   complete?: PosMeanings[] = [];
-  readonly simpleHc?: SimpleMeaning[];
-  readonly simpleYd?: SimpleMeaning[];
-  readonly completeHc?: RefPosMeanings[];
-  readonly completeYd?: RefPosMeanings[];
   categories: any = {};
   phonetics?: any;
   forms?: any;

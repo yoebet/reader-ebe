@@ -21,9 +21,9 @@ import {ContentContext} from '../content-types/content-context';
 
 import {ParaService} from '../services/para.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
-import {DictSimpleSmiComponent} from "../dict/dict-simple-smi.component";
-import {ParaEditingComponent} from "./para-editing.component";
-import {ChapService} from "../services/chap.service";
+import {DictSimpleSmiComponent} from '../dict/dict-simple-smi.component';
+import {ParaEditingComponent} from './para-editing.component';
+import {ChapService} from '../services/chap.service';
 
 
 export abstract class ParaAnnotateComponent extends ParaEditingComponent {
@@ -416,7 +416,7 @@ export abstract class ParaAnnotateComponent extends ParaEditingComponent {
       this.requestDictInMeanEditing();
     } else if ($event.key === 'Escape') {
       $event.stopPropagation();
-      this.completeMeanEdit("cancel");
+      this.completeMeanEdit('cancel');
     }
   }
 

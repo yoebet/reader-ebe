@@ -16,11 +16,8 @@
 
   .ui.clearing.divider
   sui-tabset
-    //.ui.pointing.secondary.menu
     .ui.top.attached.tabular.menu
       a.item(suiTabHeader='co', [(isActive)]="coTabActive") 释义
-      a.item(*ngIf='entry.simpleYd', suiTabHeader='yd') 释义（yd）
-      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（hc）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
     .ui.bottom.attached.segment(suiTabContent='co')
 
@@ -123,38 +120,6 @@
               span.meaning-item
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 | {{item.exp}}
-    .ui.bottom.attached.segment(*ngIf='entry.simpleYd', suiTabContent='yd')
-      .ui.list(*ngIf='!entry.completeYd')
-        .ui.item(*ngFor='let item of entry.simpleYd')
-          | {{item.pos}} {{item.exp}}
-      sui-accordion(*ngIf='entry.completeYd', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.completeYd')
-          .pos-header(title='')
-            i.dropdown.icon
-            | {{pm.pos}}
-            | {{pm.exp}}
-          .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of pm.items')
-              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(pm.pos,item)')
-                i.add.icon
-                | 加入
-              span.meaning-item {{item}}
-    .ui.bottom.attached.segment(*ngIf='entry.simpleHc', suiTabContent='hc')
-      .ui.list(*ngIf='!entry.completeHc')
-        .ui.item(*ngFor='let item of entry.simpleHc')
-          | {{item.pos}} {{item.exp}}
-      sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.completeHc')
-          .pos-header(title='')
-            i.dropdown.icon
-            | {{pm.pos}}
-            | {{pm.exp}}
-          .ui.ordered.selection.divided.list.meaning-items(content='')
-            .ui.item(*ngFor='let item of pm.items')
-              .ui.right.floated.mini.compact.button((click)='adoptMeaningItem(pm.pos,item)')
-                i.add.icon
-                | 加入
-              span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items
         a.ui.item(*ngFor='let phrase of entry.phrases', (click)='clickPhrase(phrase,$event)')

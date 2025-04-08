@@ -23,34 +23,6 @@
     .ui.clearing.divider
 
     sui-accordion([closeOthers]='false')
-      sui-accordion-panel(*ngIf='entry.simpleHc', [isOpen]='true')
-        .pos-header(title='')
-          .ui.right.floated.sub.header(*ngIf='editing&&editingMeanings')
-            .ui.mini.button((click)='useMeanings(entry.simpleHc,$event)')
-              i.refresh.icon
-              | 完全采用
-          i.dropdown.icon
-          | 参考（HC）
-        .ui.selection.divided.list.meaning-items(content='')
-          .ui.item(*ngFor='let item of entry.simpleHc')
-            .ui.right.floated.basic.mini.compact.button(*ngIf='editing&&editingMeanings', (click)='importMeaningItem(item,"hc")')
-              i.add.icon
-              | 加入
-            | {{item.pos}} {{item.exp}}
-      //sui-accordion-panel(*ngIf='entry.simpleYd', [isOpen]='true')
-        .pos-header(title='')
-          .ui.right.floated.sub.header(*ngIf='editing&&editingMeanings')
-            .ui.mini.button((click)='useMeanings(entry.simpleYd,$event)')
-              i.refresh.icon
-              | 完全采用
-          i.dropdown.icon
-          | 参考（YD）
-        .ui.selection.divided.list.meaning-items(content='')
-          .ui.item(*ngFor='let item of entry.simpleYd')
-            .ui.right.floated.basic.mini.compact.button(*ngIf='editing&&editingMeanings', (click)='importMeaningItem(item,"yd")')
-              i.add.icon
-              | 加入
-            | {{item.pos}} {{item.exp}}
       sui-accordion-panel(*ngIf='editing&&editingMeanings', [isOpen]='true')
         .pos-header(title='')
           .ui.right.floated.sub.header

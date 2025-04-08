@@ -19,10 +19,8 @@
     //.ui.pointing.secondary.menu
     .ui.top.attached.tabular.menu
       a.item(suiTabHeader='co') 释义
-      a.item(*ngIf='entry.simpleHc', suiTabHeader='hc') 释义（参考）
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语
     .ui.bottom.attached.segment(suiTabContent='co')
-
       sui-accordion([closeOthers]='false')
         .ui.selection.divided.list(*ngIf='entry.simple')
           .ui.item(*ngFor='let item of entry.simple',
@@ -40,23 +38,6 @@
               span.meaning-item
                 span.ui.small.label(*ngFor='let tag of item.tags') {{tagLabelMap[tag]}}
                 | {{item.exp}}
-    .ui.bottom.attached.segment(*ngIf='entry.simpleHc', suiTabContent='hc')
-      .ui.selection.divided.list(*ngIf='!entry.completeHc')
-        .ui.item(*ngFor='let item of entry.simpleHc',
-        [ngClass]='{"selected-item":selectedItem&&item.pos===selectedItem.pos&&item.exp===selectedItem.meaning}',
-        (click)='clickMeaningItem(item.pos,item)')
-          | {{item.pos}} {{item.exp}}
-      sui-accordion(*ngIf='entry.completeHc', [closeOthers]='false')
-        sui-accordion-panel.pos-meanings(*ngFor='let pm of entry.completeHc')
-          .pos-header(title='')
-            i.dropdown.icon
-            | {{pm.pos}}
-            | {{pm.exp}}
-          .ui.ordered.selection.divided.list.meaning-items.smi(content='')
-            .ui.item(*ngFor='let item of pm.items',
-            [ngClass]='{"selected-item":selectedItem&&pm.pos===selectedItem.pos&&item===selectedItem.meaning}',
-            (click)='clickMeaningItem(pm.pos,item)')
-              span.meaning-item {{item}}
     .ui.bottom.attached.segment(*ngIf='entry.phrases', suiTabContent='ph')
       .ui.ordered.list.meaning-items.smi
         a.ui.item(*ngFor='let phrase of entry.phrases', (click)='goto(phrase)')
