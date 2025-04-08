@@ -6,7 +6,7 @@
     "puggy": "pug src -P -w",
     "serve": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve",
     "start": "npm run puggy & ng serve",
-    "build": "ng build --prod --base-href /ee/",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider & ng build --prod --base-href /ee/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "core-js": "^2.5.4",
-    "lodash": "^4.17.11",
+    "lodash": "4.17.21",
     "moment": "^2.19.3",
     "ng2-semantic-ui": "^0.9.7",
     "rxjs": "~6.3.3",
@@ -54,6 +54,6 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "^3.2.2"
+    "typescript": "~3.2.2"
   }
 }

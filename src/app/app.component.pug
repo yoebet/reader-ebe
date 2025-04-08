@@ -24,7 +24,7 @@
       .right.menu
         a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
         .item(*ngIf='currentUser')
-          img.ui.avatar.image(*ngIf='currentUser.avatarSetting&&currentUser.avatarSetting.imgUrl', [src]='avatarsBase+"/"+currentUser.avatarSetting.imgUrl')
+          //img.ui.avatar.image(*ngIf='currentUser.avatarSetting&&currentUser.avatarSetting.imgUrl', [src]='avatarsBase+"/"+currentUser.avatarSetting.imgUrl')
           | {{currentUser.nickName}} &nbsp;&nbsp;
           a(routerLink='/my-messages', routerLinkActive='active') 消息
           a((click)='logout()', href='javascript:') &nbsp;&nbsp;退出
