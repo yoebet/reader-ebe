@@ -46,6 +46,8 @@ export class DictEntry extends Model {
   baseForm?: string;
   phrases?: string[];
   simpleEdited: string;
+  pronPathUk?: string;
+  pronPathUs?: string;
 
 
   static isId(idOrWord): boolean {

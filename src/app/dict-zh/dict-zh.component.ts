@@ -41,18 +41,26 @@ export class DictZhComponent {
     this.searchInput.optionsLookup = this.dictSearch;
   }
 
-  onSearchInputKeyup($event) {
-    if ($event.which !== 13) {
-      return;
-    }
+  private checkAndSelect(): boolean {
     let searchInput = this.searchInput;
     let results = searchInput.results;
     let query = searchInput.query;
     for (let entry of results) {
       if (entry.word === query) {
         searchInput.select(entry);
-        break;
+        return true;
       }
+    }
+    return false;
+  }
+
+  onSearchInputKeyup($event) {
+    if ($event.which !== 13) {
+      return;
+    }
+    const selected = this.checkAndSelect();
+    if (!selected) {
+      setTimeout(() => this.checkAndSelect(), 300);
     }
   }
 

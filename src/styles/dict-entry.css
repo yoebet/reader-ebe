@@ -22,9 +22,13 @@
   padding-right: 1em;
 }
 
-.phonetics * {
-  vertical-align: middle;
+.phonetics .pron-play {
+  cursor: pointer;
 }
+
+/*.phonetics * {*/
+/*  vertical-align: middle;*/
+/*}*/
 
 span.pinyin {
   margin-left: 0.8em;

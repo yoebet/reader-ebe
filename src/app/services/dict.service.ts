@@ -16,11 +16,15 @@ export class DictService extends BaseService<DictEntry> {
 
   private _entryHistory: DictEntry[] = [];
 
+  readonly pronsBase: string;
+
   constructor(protected http: HttpClient,
               protected modalService: SuiModalService) {
     super(http, modalService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/dict`;
+    // this.pronsBase = `${environment.staticBase}/pron`;
+    this.pronsBase = `${apiBase}/${this.apiB}/dict/pron`;
   }
 
   get entryHistory(): DictEntry[] {
@@ -112,6 +116,11 @@ export class DictService extends BaseService<DictEntry> {
             this.pushHistory(entry);
           }
         }));
+  }
+
+  loadPronFile(path: string) {
+    return this.http.get(`${this.pronsBase}/${path}`,
+      {observe: 'body', responseType: 'arraybuffer'});
   }
 
 }

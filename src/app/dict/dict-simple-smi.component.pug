@@ -1,6 +1,6 @@
 ng-template([ngIf]='entry')
   .ui.small.header
-    dict-phonetics.ui.right.floated.tiny.header([phonetics]='entry.phonetics')
+    dict-phonetics.ui.right.floated.tiny.header([entry]='entry')
     | {{word}}
   .ui.list
     .ui.item(*ngFor='let item of entry.simple')

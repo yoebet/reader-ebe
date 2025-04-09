@@ -2,7 +2,7 @@
   .ui.header.entry-header
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
-    dict-phonetics([phonetics]='entry.phonetics')
+    dict-phonetics([entry]='entry')
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
   .clearing
@@ -16,7 +16,6 @@
 
   .ui.clearing.divider
   sui-tabset
-    //.ui.pointing.secondary.menu
     .ui.top.attached.tabular.menu
       a.item(suiTabHeader='co') 释义
       a.item(*ngIf='entry.phrases', suiTabHeader='ph') 短语

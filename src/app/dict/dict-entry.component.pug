@@ -2,7 +2,7 @@
   .ui.header.entry-header
     .ui.right.floated.sub.header
     .entry-word {{entry.word}}
-    dict-phonetics([phonetics]='entry.phonetics')
+    dict-phonetics([entry]='entry')
     .categories
       label.ui.small.label(*ngFor='let cat of categoryTags') {{cat}}
   .clearing
