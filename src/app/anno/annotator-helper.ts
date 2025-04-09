@@ -103,9 +103,13 @@ export class AnnotatorHelper {
 
     if (!trimResult.trimRight) {
       let tryEnd = wordEnd + 1;
-      while (tryEnd <= text.length && tryEnd - wordStart >= 2 && tryEnd - wordStart <= 4) {
+      while (tryEnd <= text.length && tryEnd - wordStart <= 4) {
         if (!charPattern.test(text.charAt(tryEnd))) {
           break;
+        }
+        if(tryEnd - wordStart < 2){
+          tryEnd++;
+          continue;
         }
         word = text.substring(wordStart, tryEnd);
         if (zhPhrases.checkIsPhrase(word)) {
@@ -121,6 +125,10 @@ export class AnnotatorHelper {
         if (!charPattern.test(text.charAt(tryStart))) {
           break;
         }
+        if(wordEnd - tryStart < 2){
+          tryStart--;
+          continue;
+        }
         word = text.substring(tryStart, wordEnd);
         if (zhPhrases.checkIsPhrase(word)) {
           return [tryStart, wordEnd];
@@ -133,7 +141,10 @@ export class AnnotatorHelper {
     if (!trimResult.trimLeft && !trimResult.trimRight) {
       if (wordEnd - wordStart < 2) {
         let pos = wordStart;
-        for (let [s, e] of [[pos - 1, pos + 2], [pos - 1, pos + 3], [pos - 2, pos + 2]]) {
+        for (let [s, e] of [
+          [pos - 1, pos + 1], [pos - 1, pos + 2],
+          [pos - 1, pos + 3], [pos - 2, pos + 2]
+        ]) {
           if (s > 0 && e <= text.length) {
             word = text.substring(s, e);
             if (zhPhrases.checkIsPhrase(word)) {
@@ -163,7 +174,7 @@ export class AnnotatorHelper {
       element.removeAttribute('class');
     }
     if (!element.hasAttributes()) {
-      //remove tag
+      // remove tag
       let pp = element.parentNode;
       while (element.firstChild) {
         pp.insertBefore(element.firstChild, element);
@@ -192,7 +203,7 @@ export class AnnotatorHelper {
       }
     }
     if (!el.hasAttributes()) {
-      //remove tag
+      // remove tag
       let pp = el.parentNode;
       if (!pp) {
         return result;
@@ -226,6 +237,10 @@ export class AnnotatorHelper {
   }
 
   static currentPhrase(wordEl, textEl) {
+    let stEl = this.findSentence(wordEl, textEl);
+    if (!stEl) {
+      stEl = textEl;
+    }
     let ds = wordEl.dataset;
     let group = ds[DataAttrNames.assoc];
     if (!group) {
@@ -233,10 +248,6 @@ export class AnnotatorHelper {
     }
     if (!DataAttrValues.phraPattern.test(group)) {
       return null;
-    }
-    let stEl = this.findSentence(wordEl, textEl);
-    if (!stEl) {
-      stEl = textEl;
     }
     let groupSelector = `[data-${DataAttrNames.assoc}=${group}]`;
     let groupEls = stEl.querySelectorAll(groupSelector);
