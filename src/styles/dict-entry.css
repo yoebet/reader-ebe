@@ -20,6 +20,7 @@
 
 .phonetics {
   padding-right: 1em;
+  display: inline-block;
 }
 
 .phonetics .pron-play {

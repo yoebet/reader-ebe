@@ -118,9 +118,4 @@ export class DictService extends BaseService<DictEntry> {
         }));
   }
 
-  loadPronFile(path: string) {
-    return this.http.get(`${this.pronsBase}/${path}`,
-      {observe: 'body', responseType: 'arraybuffer'});
-  }
-
 }
