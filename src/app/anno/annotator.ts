@@ -183,8 +183,13 @@ export class Annotator {
         [wordStart, wordEnd] = AnnotatorHelper.extendWholeWord(
           nodeText, this.charPattern, wordStart, wordEnd);
       } else if (Book.isChineseText(this.lang)) {
-        [wordStart, wordEnd] = AnnotatorHelper.extendZhPhrases(
-          nodeText, this.charPattern, wordStart, wordEnd, this.zhPhrases);
+        if (wordStart === wordEnd) {
+          [wordStart, wordEnd] = AnnotatorHelper.extendZhPhrases(
+            nodeText, this.charPattern, wordStart, wordEnd, this.zhPhrases);
+        }
+        if (wordStart === wordEnd) {
+          wordEnd += 1;
+        }
       }
     }
     if (wordStart === wordEnd) {
