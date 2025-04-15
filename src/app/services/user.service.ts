@@ -12,13 +12,15 @@ import {UserBook} from '../models/user-book';
 import {OpResult} from '../models/op-result';
 
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class UserService extends BaseService<User> {
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/users`;
   }

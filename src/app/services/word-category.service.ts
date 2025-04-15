@@ -8,6 +8,7 @@ import {Observable} from 'rxjs/';
 import {environment} from '../../environments/environment';
 import {SorterService} from './sorter.service';
 import {WordCategory} from '../models/word-category';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class WordCategoryService extends SorterService<WordCategory> {
@@ -15,8 +16,9 @@ export class WordCategoryService extends SorterService<WordCategory> {
   userBaseUrl: string;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/word_categories`;
     this.userBaseUrl = `${apiBase}/${this.apiB}/word_categories`;

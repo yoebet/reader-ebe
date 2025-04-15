@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-
-import {of as observableOf, Observable} from 'rxjs/';
-import {map, tap, catchError} from 'rxjs/operators';
-
+import {Observable, of as observableOf} from 'rxjs/';
+import {catchError, map, tap} from 'rxjs/operators';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {DictHistoryCapacity} from '../config';
@@ -11,6 +9,7 @@ import {environment} from '../../environments/environment';
 import {ZhPhrases} from '../anno/zh-phrases';
 import {DictZh} from '../models/dict-zh';
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class DictZhService extends BaseService<DictZh> {
@@ -19,8 +18,9 @@ export class DictZhService extends BaseService<DictZh> {
   private phrases: ZhPhrases;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/dict_zh`;
   }

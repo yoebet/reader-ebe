@@ -8,13 +8,15 @@ import {SuiModalService} from 'ng2-semantic-ui';
 
 import {BaseService} from './base.service';
 import {ParaComment} from '../models/para-comment';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class ParaCommentService extends BaseService<ParaComment> {
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/para_comments`;
   }

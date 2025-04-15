@@ -9,13 +9,15 @@ import {environment} from '../../environments/environment';
 import {OpResult} from '../models/op-result';
 import {AppRelease, PackageInfo} from '../models/app-release';
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class ReleaseService extends BaseService<AppRelease> {
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/releases`;
   }

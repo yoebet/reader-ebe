@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-
 import {Observable, of} from 'rxjs/';
-import {map, catchError} from 'rxjs/operators';
-
+import {catchError, map} from 'rxjs/operators';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {environment} from '../../environments/environment';
@@ -12,6 +10,7 @@ import {ParaIdCount} from '../models/para';
 import {OpResult} from '../models/op-result';
 
 import {SorterService} from './sorter.service';
+import {SessionService} from './session.service';
 
 
 @Injectable()
@@ -21,8 +20,9 @@ export class ChapService extends SorterService<Chap> {
   protected baseUrlUserEnd: string;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.bookBaseUrl = `${apiBase}/${this.apiA}/books`;
     this.baseUrl = `${apiBase}/${this.apiA}/chaps`;

@@ -82,6 +82,15 @@ const StaticResource = {
   BookChapsBase
 };
 
+const HeaderPrefix = 'X-';
+
+const HeaderNames = {
+  UserName: HeaderPrefix + 'UN',
+  UserToken: HeaderPrefix + 'UT',
+  NameTokenDigest: HeaderPrefix + 'NTD',
+  Client: HeaderPrefix + 'CL'
+};
+
 const DefaultHttpHeaders = Object.assign({'X-CL': 'E'}, environment.httpHeaders);
 const SelfBase = environment.selfBase;
 const WebAppBase = environment.webAppBase;
@@ -100,6 +109,7 @@ export {
   LatestAnnotationsCount,
   ParaSetting,
   StaticResource,
+  HeaderNames,
   DefaultHttpHeaders,
   SelfBase,
   WebAppBase,

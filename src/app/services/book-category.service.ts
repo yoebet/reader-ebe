@@ -9,14 +9,16 @@ import {environment} from '../../environments/environment';
 import {SorterService} from './sorter.service';
 import {BookCategory} from '../models/book-category';
 import {BookBasic} from '../models/book';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class BookCategoryService extends SorterService<BookCategory> {
 
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/book_categories`;
   }

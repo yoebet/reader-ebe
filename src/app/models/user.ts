@@ -18,6 +18,7 @@ export class User extends Model {
   province?: string;
   city?: string;
   wxUnionid?: string;
+  accessToken?: string;
 
   rc: string;
   frc?: string;

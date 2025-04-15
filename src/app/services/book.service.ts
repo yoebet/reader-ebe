@@ -13,6 +13,7 @@ import {UserIdName} from '../models/user';
 import {UserBook} from '../models/user-book';
 
 import {SorterService} from './sorter.service';
+import {SessionService} from './session.service';
 
 
 @Injectable()
@@ -25,8 +26,9 @@ export class BookService extends SorterService<Book> {
   wxMpBase: string;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/books`;
     this.bookUsersBase = `${apiBase}/${this.apiA}/book_users`;

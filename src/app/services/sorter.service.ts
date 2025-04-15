@@ -8,12 +8,14 @@ import {SuiModalService} from 'ng2-semantic-ui';
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 export class SorterService<M extends Model> extends BaseService<M> {
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
   }
 
   protected createBeforeOrAfter(target: M | string, model: M, pos: string): Observable<M> {

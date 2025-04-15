@@ -13,6 +13,7 @@ import {ParaComment} from '../models/para-comment';
 import {SorterService} from './sorter.service';
 import {ChapService} from './chap.service';
 import {BookService} from './book.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class ParaService extends SorterService<Para> {
@@ -23,8 +24,9 @@ export class ParaService extends SorterService<Para> {
   constructor(protected http: HttpClient,
               protected modalService: SuiModalService,
               private bookService: BookService,
-              private chapService: ChapService) {
-    super(http, modalService);
+              private chapService: ChapService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.chapBaseUrl = `${apiBase}/${this.apiA}/chaps`;
     this.baseUrl = `${apiBase}/${this.apiA}/paras`;

@@ -8,6 +8,7 @@ import {environment} from '../../environments/environment';
 import {OpResult} from '../models/op-result';
 import {UserMessage} from '../models/user-message';
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class UserMessageService extends BaseService<UserMessage> {
@@ -15,8 +16,9 @@ export class UserMessageService extends BaseService<UserMessage> {
   adminBaseUrl: string;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiB}/user_messages`;
     this.adminBaseUrl = `${apiBase}/${this.apiA}/messages`;

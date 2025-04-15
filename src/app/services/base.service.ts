@@ -10,15 +10,16 @@ import {DefaultHttpHeaders} from '../config';
 import {Model} from '../models/model';
 import {OpResult} from '../models/op-result';
 import {LoginModal} from '../account/login-popup.component';
+import {SessionService} from './session.service';
 
 export class BaseService<M extends Model> {
 
   private static loginModal: ActiveModal<string, string, string> = null;
 
-  protected httpOptions = {
-    headers: new HttpHeaders(DefaultHttpHeaders),
-    withCredentials: true
-  };
+  // protected httpOptions = {
+  //   headers: new HttpHeaders(DefaultHttpHeaders),
+  //   withCredentials: true
+  // };
 
   protected apiA = 'api-a';
 
@@ -27,7 +28,12 @@ export class BaseService<M extends Model> {
   protected baseUrl: string;
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+  }
+
+  protected get httpOptions() {
+    return this.sessionService.getHttpOptions();
   }
 
   list(url: string = null): Observable<M[]> {

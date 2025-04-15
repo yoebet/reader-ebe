@@ -9,13 +9,15 @@ import {environment} from '../../environments/environment';
 import {Order} from '../models/order';
 
 import {BaseService} from './base.service';
+import {SessionService} from './session.service';
 
 @Injectable()
 export class OrderService extends BaseService<Order> {
 
   constructor(protected http: HttpClient,
-              protected modalService: SuiModalService) {
-    super(http, modalService);
+              protected modalService: SuiModalService,
+              protected sessionService: SessionService) {
+    super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/orders`;
   }
