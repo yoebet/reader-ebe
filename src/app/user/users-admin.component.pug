@@ -15,7 +15,7 @@
 table.ui.small.striped.table.form
   thead
     tr
-      th
+      //th
       th 登录名
       th 昵称
       th 手机号
@@ -31,7 +31,7 @@ table.ui.small.striped.table.form
         ng-template([ngIf]='tokenOp') 临时Token
   tbody
     tr(*ngFor='let user of users; trackBy: userTracker')
-      td
+      //td
         img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='avatarsBase+"/"+user.avatarSetting.imgUrl')
       td
         a([routerLink]="['/users', user._id]") {{user.name}}
@@ -61,12 +61,13 @@ table.ui.small.striped.table.form
           ng-template([ngIf]='user.tokenObj')
             ng-template([ngIf]='user.tokenObj.token')
               | {{user.tokenObj.token}} &nbsp;
-              i.clock.icon
-              | ttl {{user.tokenObj.ttl | hms}}
+              ng-template([ngIf]='user.tokenObj.ttl')
+                i.clock.icon
+                | ttl {{user.tokenObj.ttl | hms}} &nbsp;
               .ui.mini.compact.button((click)='dropTempToken(user)') 删除Token
               .ui.mini.compact.primary.button((click)='refreshTempToken(user)') 刷新Token
             ng-template([ngIf]='!user.tokenObj.token')
-              | 无
+              | 无 &nbsp;
               .ui.mini.compact.primary.button((click)='genTempToken(user)') 生成Token
           ng-template([ngIf]='!user.tokenObj')
             .ui.mini.compact.basic.button((click)='getTempToken(user)') 查看Token
@@ -82,10 +83,10 @@ table.ui.small.striped.table.form
             .ui.mini.button((click)='editingUser=null') 取消
             .ui.mini.primary.button((click)='save()') 保存
     tr(*ngIf='!users||users.length===0')
-      td(colspan='9') No Results.
+      td(colspan='8') No Results.
   tfoot
     tr
-      th(colspan='9')
+      th(colspan='8')
         .pager
           input.page-input(type="number", #pi='', (change)='gotoPage(pi.value);pi.value=""')
           .ui.right.floated.mini.pagination.menu

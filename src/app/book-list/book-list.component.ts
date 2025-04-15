@@ -302,8 +302,8 @@ export class BookListComponent extends SortableListComponent implements OnInit {
     book.author = book.author.trim();
     book.zhName = book.zhName.trim();
     book.zhAuthor = book.zhAuthor.trim();
-    book.isFree = false;
-    book.pricingMode = 'B';
+    // book.isFree = false;
+    // book.pricingMode = 'B';
     this.bookService.create(book)
       .subscribe(newBook => {
         this.books.push(newBook);

@@ -12,59 +12,9 @@ div(*ngIf='userBook')
     .item
       dt 加入于
       dd {{userBook | createdDateString}}
-    .item
-      dt 章节数
-      dd
-        | {{userBook.isAllChaps? 'ALL': userBook.chapsCount}} &nbsp;&nbsp;
-        ng-template([ngIf]='editing')
-          sui-checkbox([(ngModel)]='userBook.isAllChaps') 全部章节
-
-  ng-template([ngIf]='!userBook.isAllChaps')
-    h5 章节
-    table.ui.small.compact.striped.table
-      thead
-        tr
-          th 标题
-          //th 角色
-          th
-      tbody
-        tr(*ngFor='let cp of userBook.chaps')
-          td.pre-wrap {{getChap(cp.chapId).name}}
-          //td
-            ng-template([ngIf]='!editing') {{cp.role}}
-            ng-template([ngIf]='editing')
-              sui-select.selection.book-role([(ngModel)]='cp.role', [options]='bookRoleOptions', placeholder='Role For Book', #chapRoleSelect='')
-                sui-select-option(*ngFor='let option of chapRoleSelect.filteredOptions', [value]='option')
-          td.right.aligned
-            button.ui.mini.button((click)='removeChap(cp)') 移除
-        tr(*ngIf='!userBook.chaps||userBook.chaps.length===0')
-          td(colspan='2') None.
-
-    div(*ngIf='newChaps')
-      h5 新增
-      table.ui.small.compact.selectable.table.new-chaps
-        thead
-          tr
-            th 章节标题
-            //th 角色
-            th.center.aligned
-              i.checkmark.icon
-              | 选择
-        tbody
-          tr(*ngFor='let chap of newChaps', [ngClass]='{selected:chap.selected}')
-            td.pre-wrap {{chap.chapName}}
-            //td
-              sui-select.selection.book-role([(ngModel)]='chap.role', [options]='bookRoleOptions', placeholder='Role For Chapter', #chapRoleSelect2='')
-                sui-select-option(*ngFor='let option of chapRoleSelect2.filteredOptions', [value]='option')
-            td.center.aligned.selectable((click)='chap.selected=!chap.selected')
-              i.green.checkmark.icon(*ngIf='chap.selected')
-          tr(*ngIf='newChaps.length===0')
-            td(colspan='2') No More Chapters.
-    .ui.hidden.clearing.divider
 
   .ui.right.floated.header
     .ui.small.basic.button(*ngIf='!editing', (click)='edit()') 修改
-    .ui.small.basic.button(*ngIf='!userBook.isAllChaps&&!newChaps', (click)='addChaps()') 增加章节
     .ui.small.button(*ngIf='edited', (click)='reset()') 重置
     .ui.small.primary.button(*ngIf='edited', (click)='save()') 保存
   .ui.small.button((click)='cancel()') 返回

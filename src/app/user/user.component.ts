@@ -68,7 +68,6 @@ export class UserComponent implements OnInit {
     if (this.allBooks) {
       ecb();
       this.newUserBook = new UserBook();
-      this.newUserBook.isAllChaps = true;
       return;
     }
     this.bookService.list()
@@ -79,7 +78,6 @@ export class UserComponent implements OnInit {
         }
         ecb();
         this.newUserBook = new UserBook();
-        this.newUserBook.isAllChaps = true;
       });
   }
 
@@ -119,7 +117,7 @@ export class UserComponent implements OnInit {
 
   addUserBooks() {
     let nub = this.newUserBook;
-    let ubs = {isAllChaps: nub.isAllChaps, role: nub.role} as any;
+    let ubs = {role: nub.role} as any;
     let bookIds = this.candidateBooks.filter(b => b.selected).map(b => b.bookId);
     if (bookIds.length === 0) {
       return;
@@ -132,7 +130,7 @@ export class UserComponent implements OnInit {
           return;
         }
         for (let bookId of ubs.bookIds) {
-          let ub = {isAllChaps: ubs.isAllChaps, role: ubs.role, bookId} as UserBook;
+          let ub = {role: ubs.role, bookId} as UserBook;
           ub.book = this.allBooks.find(b => b._id === bookId);
           this.userBooks.push(ub);
         }
@@ -177,7 +175,6 @@ export class UserComponent implements OnInit {
   updateUserBook(userBook) {
     if (userBook && this.editingUserBook) {
       this.editingUserBook.role = userBook.role;
-      this.editingUserBook.isAllChaps = userBook.isAllChaps;
       this.editingUserBook.chapsCount = userBook.chapsCount;
     }
     this.editingUserBook = null;

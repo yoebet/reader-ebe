@@ -54,7 +54,7 @@ export class UserService extends BaseService<User> {
       catchError(this.handleError));
   }
 
-  addBooks(userId: string, ubs: { isAllChaps?, role?, bookIds: string[] }): Observable<OpResult> {
+  addBooks(userId: string, ubs: { role?, bookIds: string[] }): Observable<OpResult> {
     let url = `${this.baseUrl}/${userId}/addBooks`;
     return this.postForOpResult(url, ubs);
   }

@@ -93,13 +93,13 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
 
   edit(chap: Chap): void {
     this.editingChap = chap;
-    this.editingChapFree = this.editingChap.isFree;
+    // this.editingChapFree = this.editingChap.isFree;
     this.editChapStatus = false;
   }
 
   editStatus(chap: Chap): void {
     this.editingChap = chap;
-    this.editingChapFree = this.editingChap.isFree;
+    // this.editingChapFree = this.editingChap.isFree;
     this.editChapStatus = true;
   }
 
@@ -123,9 +123,9 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   }
 
   saveChapStatus(chap: Chap, status: string): void {
-    let isFree = this.editingChapFree;
-    console.log(isFree);
-    let chapAltered = {status, isFree} as Chap;
+    // let isFree = this.editingChapFree;
+    // console.log(isFree);
+    let chapAltered = {status} as Chap;
     chapAltered._id = chap._id;
     this.chapService.update(chapAltered).subscribe((opr: OpResult) => {
       if (opr.ok === 0) {
@@ -133,7 +133,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
         return;
       }
       chap.status = status;
-      chap.isFree = isFree;
+      // chap.isFree = isFree;
       this.editingChap = null;
     });
   }

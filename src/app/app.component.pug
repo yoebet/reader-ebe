@@ -9,7 +9,7 @@
           a.item(routerLink='/books-admin', routerLinkActive='active') 图书
         ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
           a.item(routerLink='/book-categories', routerLinkActive='active') 分类
-          a.item(routerLink='/dict', routerLinkActive='active') 词典
+          //a.item(routerLink='/dict', routerLinkActive='active') 词典
           a.item(routerLink='/word-categories', routerLinkActive='active') 词书
           a.item(routerLink='/annotations', routerLinkActive='active') 标注
           a.item(routerLink='/issues', routerLinkActive='active') 纠错
@@ -17,7 +17,7 @@
           //a.item(routerLink='/users-admin', routerLinkActive='active') 用户-A
           ng-template([ngIf]='currentUser.role==="R"')
             a.item(routerLink='/stat', routerLinkActive='active') 统计
-            a.item(routerLink='/orders', routerLinkActive='active') 订单
+            //a.item(routerLink='/orders', routerLinkActive='active') 订单
             a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
             a.item(routerLink='/comments', routerLinkActive='active') 评论
             //a.item(routerLink='/releases', routerLinkActive='active') APP
@@ -26,7 +26,7 @@
         .item(*ngIf='currentUser')
           //img.ui.avatar.image(*ngIf='currentUser.avatarSetting&&currentUser.avatarSetting.imgUrl', [src]='avatarsBase+"/"+currentUser.avatarSetting.imgUrl')
           | {{currentUser.nickName}} &nbsp;&nbsp;
-          a(routerLink='/my-messages', routerLinkActive='active') 消息
+          //a(routerLink='/my-messages', routerLinkActive='active') 消息
           a((click)='logout()', href='javascript:') &nbsp;&nbsp;退出
 
   .ui.container

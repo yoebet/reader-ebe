@@ -30,7 +30,7 @@ table.ui.striped.table
       th 类别
       th 编辑
       th 状态
-      th 定价
+      //th 定价
       th
   tbody
     tr(*ngFor='let book of paginatedBooks; trackBy: bookTracker')
@@ -49,7 +49,7 @@ table.ui.striped.table
       td {{book.categoryName||categoryNames[book.category]}}
       td {{book.chiefEditorName}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
-      td
+      //td
         ng-template([ngIf]="book.editExperiment")
           .ui.mini.gray.tag.label 编辑体验
         ng-template([ngIf]="!book.editExperiment")

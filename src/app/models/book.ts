@@ -61,11 +61,11 @@ export class Book extends BookBasic {
 
   chapsComplete: boolean;
 
-  isFree: boolean;
-  pricingMode: string; // B,C
-  price: number; // cents
-  pricePerChap: number;
-  priceLabel: string;
+  // isFree: boolean;
+  // pricingMode: string; // B,C
+  // price: number; // cents
+  // pricePerChap: number;
+  // priceLabel: string;
 
   releasedAt: string;
   flags: number;

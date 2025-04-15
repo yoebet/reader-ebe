@@ -22,7 +22,6 @@ export class UserBookComponent implements OnInit {
   allChapsMap: Map<string, Chap>;
   edited = false;
   editing = false;
-  newChaps: any[];
   bookRoleOptions = UserBook.Roles;
 
   constructor(private bookService: BookService,
@@ -43,9 +42,6 @@ export class UserBookComponent implements OnInit {
         for (let chap of this.allChaps) {
           this.allChapsMap.set(chap._id, chap);
         }
-        if (!ub.chaps) {
-          ub.chaps = [];
-        }
         this.savedUserBook = JSON.parse(JSON.stringify(ub));
         this.userBook = ub;
         this.edit();
@@ -60,7 +56,6 @@ export class UserBookComponent implements OnInit {
     this.userBook = JSON.parse(JSON.stringify(this.savedUserBook));
     this.edited = false;
     this.editing = false;
-    this.newChaps = null;
   }
 
   edit() {
@@ -68,53 +63,14 @@ export class UserBookComponent implements OnInit {
     this.edited = true;
   }
 
-  addChaps() {
-    let candidates = this.allChaps.filter(chap =>
-      this.userBook.chaps.find(c => c.chapId === chap._id) == null
-    );
-    this.newChaps = candidates.map(chap => {
-      return {chapId: chap._id, chapName: chap.name, role: '', selected: false};
-    });
-    this.edited = true;
-  }
-
-  removeChap(cp) {
-    if (!confirm('Are You Sure?')) {
-      return;
-    }
-    let ub = this.userBook;
-    ub.chaps = ub.chaps.filter(c => c !== cp);
-    ub.chapsCount = ub.chaps.length;
-    this.edited = true;
-  }
-
   save(complete = false) {
     let ub = this.userBook;
-    if (!ub.chaps) {
-      ub.chaps = [];
-    }
-    if (this.newChaps) {
-      let selectedChaps = this.newChaps.filter(c => c.selected);
-      for (let c of selectedChaps) {
-        ub.chaps.push({chapId: c.chapId, role: c.role});
-      }
-      ub.chaps.sort((c1, c2) => {
-        let chap1 = this.allChapsMap.get(c1.chapId);
-        let chap2 = this.allChapsMap.get(c2.chapId);
-        if (!chap1 || !chap2) {
-          return -1;
-        }
-        return (chap1.no || 0) - (chap2.no || 0);
-      });
-    }
-    ub.chapsCount = ub.chaps.length;
     ub.acquireMethod = UserBook.AcquireMethods.Bestow;
     this.ubService.update(ub).subscribe(opr => {
       if (opr.ok === 0) {
         alert(opr.message || 'Fail');
         return;
       }
-      this.newChaps = null;
       this.edited = false;
       this.editing = false;
       this.savedUserBook = JSON.parse(JSON.stringify(ub));

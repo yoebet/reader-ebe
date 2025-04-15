@@ -1,7 +1,7 @@
 .ui.header.book-list-header
   .ui.right.floated.header.opers
     sui-checkbox([(ngModel)]='showZh') 中文
-    .ui.horizontal.list
+    //.ui.horizontal.list
       a.item((click)='showExpBooks()', href='javascript:') &nbsp;&nbsp;编辑体验
   | 图书&nbsp;&nbsp;
   .ui.small.compact.horizontal.list.cat-list
@@ -17,7 +17,7 @@ table.ui.striped.table
       th 作者
       th 类别
       th 状态
-      th 定价
+      //th 定价
       th
   tbody
     tr(*ngFor='let book of paginatedBooks; trackBy: bookTracker')
@@ -35,7 +35,7 @@ table.ui.striped.table
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
       td {{book.categoryName||categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
-      td
+      //td
         ng-template([ngIf]="book.editExperiment")
           .ui.mini.gray.tag.label 编辑体验
         ng-template([ngIf]="!book.editExperiment")

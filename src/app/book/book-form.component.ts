@@ -149,20 +149,20 @@ export class BookFormComponent implements OnInit {
     this.doSetChiefEditor(editor.userId, editor.userNickName);
   }
 
-  updatePriceLabel() {
-    let book = this.editing;
-    if (book.isFree) {
-      book.priceLabel = '免费';
-      return;
-    }
-    let pipe = this.priceLabelPipe;
-    if (book.pricingMode === 'B') {
-      book.priceLabel = pipe.transform({price: book.price});
-    } else if (book.pricingMode === 'C') {
-      let priceLabel = pipe.transform({price: book.pricePerChap});
-      book.priceLabel = `${priceLabel}/章`;
-    }
-  }
+  // updatePriceLabel() {
+  //   let book = this.editing;
+  //   if (book.isFree) {
+  //     book.priceLabel = '免费';
+  //     return;
+  //   }
+  //   let pipe = this.priceLabelPipe;
+  //   if (book.pricingMode === 'B') {
+  //     book.priceLabel = pipe.transform({price: book.price});
+  //   } else if (book.pricingMode === 'C') {
+  //     let priceLabel = pipe.transform({price: book.pricePerChap});
+  //     book.priceLabel = `${priceLabel}/章`;
+  //   }
+  // }
 
   close() {
     this.modal.approve('');
