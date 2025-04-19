@@ -27,7 +27,7 @@ table.ui.striped.table
           img.ui.tiny.image.disabled(*ngIf='!book.image', [src]='bookImageNotSet')
       td {{book.code}}
       td
-        a([routerLink]="['/books', book._id]")
+        a([routerLink]="['/books', book.id]")
           .enname {{book.name}}
           .zhname(*ngIf='showZh && book.zhName') {{book.zhName}}
       td

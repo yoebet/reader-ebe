@@ -1,6 +1,6 @@
 div(*ngIf='user')
   .ui.header
-    img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='userAvatarsBase+"/"+user.avatarSetting.imgUrl')
+    //img.ui.mini.image(*ngIf='user.avatarSetting&&user.avatarSetting.imgUrl', [src]='userAvatarsBase+"/"+user.avatarSetting.imgUrl')
     | {{user.name}} （{{user.nickName}}）
   ng-template([ngIf]='!editingUserBook')
     .ui.list

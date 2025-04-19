@@ -53,7 +53,7 @@
           button.ui.tiny.compact.button((click)='edit(chap)') 标题
           button.ui.tiny.compact.button((click)='editStatus(chap)') 状态
 
-    a([routerLink]="['/chaps', chap._id]", [hidden]="chap===editingChap&&!editChapStatus")
+    a([routerLink]="['/chaps', chap.id]", [hidden]="chap===editingChap&&!editChapStatus")
       .pre-wrap {{chap.name}}
       .zhname.pre-wrap(*ngIf="showZh && chap.zhName") {{chap.zhName}}
 
@@ -88,7 +88,9 @@
 
   .ui.hidden.clearing.divider
 
-  button.ui.tiny.basic.button(*ngIf='currentUser.role==="A"||currentUser.role==="R"', (click)='showBookImport();') 从文本导入
+  ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+    button.ui.tiny.basic.primary.button((click)='showBookImport();') 从文本导入
+    p &nbsp;
   button.ui.right.floated.tiny.basic.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
   .ui.small.form(*ngIf='editNew')
     .field

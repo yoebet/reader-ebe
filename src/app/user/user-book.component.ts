@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {combineLatest} from 'rxjs';
+import {combineLatest} from 'rxjs/';
 
 import {Chap} from '../models/chap';
 import {Book} from '../models/book';
