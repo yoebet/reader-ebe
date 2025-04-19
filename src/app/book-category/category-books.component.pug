@@ -1,6 +1,7 @@
 .ui.header
-  | 分类：
-  ng-template([ngIf]='category') {{category.name}}（{{category.code}}）
+  ng-template([ngIf]='category')
+    | {{category.name}}
+    ng-template([ngIf]='category.code') （{{category.code}}）
 .ui.content
   table.ui.striped.small.compact.table
     thead
