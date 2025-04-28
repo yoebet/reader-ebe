@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "puggy": "pug src -P -w",
-    "serve": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve --proxy-config proxy-local.conf.json",
     "start": "npm run puggy & ng serve",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider & ng build --prod --base-href /ee/",
     "test": "ng test",

@@ -1,0 +1,10 @@
+{
+  "/api-*": {
+    "target": "18.139.41.36:3000",
+    "changeOrigin": true
+  },
+  "/pron": {
+    "target": "18.139.41.36:2025",
+    "changeOrigin": true
+  }
+}

@@ -88,10 +88,12 @@
 
   .ui.hidden.clearing.divider
 
-  ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
-    button.ui.tiny.basic.primary.button((click)='showBookImport();') 从文本导入
-    p &nbsp;
-  button.ui.right.floated.tiny.basic.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
+  //ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
+
+  .ui.header
+    button.ui.small.basic.primary.button((click)='showBookImport();') 从文本导入
+    button.ui.right.floated.small.primary.button([hidden]='editNew', (click)='editNew=true;') 新增
+
   .ui.small.form(*ngIf='editNew')
     .field
       label 新章节
@@ -104,4 +106,5 @@
     .field.ui.right.floated.header
       button.ui.tiny.button((click)="editNew=false") 取消
       button.ui.tiny.primary.button((click)="add(newChapName.value,newZhName.value)") 保存
-    .ui.hidden.clearing.divider
+
+  .ui.hidden.clearing.divider

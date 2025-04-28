@@ -7,6 +7,7 @@ const ServerDomain = 'yuwen-reading.net';
 
 
 const ServerRoot = 'http://localhost:3000';
+// const ServerRoot = 'http://18.139.41.36:3000';
 // const ServerRoot = `https://${ServerDomain}`;
 // const ServerRoot = `http://${ServerDomain}`;
 
@@ -14,6 +15,7 @@ export const environment = {
   production: false,
   apiBase: ServerRoot,
   staticBase: `http://localhost`,
+  // staticBase: `http://18.139.41.36:2025`,
   selfBase: `http://${ServerDomain}/ee`,
   webAppBase: `http://${ServerDomain}/ww`,
   httpHeaders: {
