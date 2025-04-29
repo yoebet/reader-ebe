@@ -95,6 +95,7 @@ import {UserMessagesPopupComponent} from './message/user-messages-popup.componen
 import {WordStatService} from './services/word-stat.service';
 import {WordStatComponent} from './book/word-stat.component';
 import {MessageDialogComponent} from './common/message-dialog.component';
+import {WanUnitNumPipe} from './pipes/wan-unit-num.pipe';
 
 
 @NgModule({
@@ -170,7 +171,8 @@ import {MessageDialogComponent} from './common/message-dialog.component';
     ChapTextSplitComponent,
     UserMessagesPopupComponent,
     WordStatComponent,
-    MessageDialogComponent
+    MessageDialogComponent,
+    WanUnitNumPipe
   ],
   providers: [
     AppService,

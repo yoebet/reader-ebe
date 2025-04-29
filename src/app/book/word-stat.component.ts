@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { ComponentModalConfig, SuiModal } from 'ng2-semantic-ui';
-import { ModalSize } from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
-import { WordStat } from '../models/word-stat';
+import {Component} from '@angular/core';
+import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
+import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
+import {WordStat} from '../models/word-stat';
 
 interface WordStatContext {
   stat: WordStat;
@@ -21,11 +21,11 @@ export class WordStatComponent {
   words: string[];
   catNames = {
     cet4: 'CET4',
-    cet6: 'CET6',
-    ielts: '雅思',
-    gre: 'GRE',
-    pro: '英专',
-    beyond: '(Beyond)',
+    cet6: 'CET6 (CET4+)',
+    ielts: '雅思 (CET6+)',
+    gre: 'GRE (CET6+)',
+    pro: '英专 (CET6+)',
+    // beyond: '(Beyond)',
   };
 
   constructor(private modal: SuiModal<WordStatContext, string, string>) {
