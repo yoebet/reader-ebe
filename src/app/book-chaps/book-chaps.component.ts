@@ -13,6 +13,8 @@ import {AppLink, AppLinkModal} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {BookImportModal} from './book-import.component';
+import {WordStatService} from '../services/word-stat.service';
+import {WordStatModal} from '../book/word-stat.component';
 
 @Component({
   selector: 'book-chaps',
@@ -27,7 +29,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   showZh = true;
   editingChap: Chap;
   editChapStatus = false;
-  editingChapFree;
+  // editingChapFree;
   editNew = false;
   statusNames = Book.StatusNames;
   statusOptions = Book.Statuses;
@@ -40,6 +42,7 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
 
   constructor(private bookService: BookService,
               private chapService: ChapService,
+              private wordStatService: WordStatService,
               private sessionService: SessionService,
               private modalService: SuiModalService) {
     super();
@@ -245,6 +248,16 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
   showBookImport() {
     let context = {book: this.book};
     this.modalService.open(new BookImportModal(context));
+  }
+
+  async showChapStat(chap: Chap) {
+    let stat = chap.stat;
+    if (!stat) {
+      stat = await this.wordStatService.getChapStat(chap._id).toPromise();
+    }
+    if (stat) {
+      this.modalService.open(new WordStatModal({ stat, title: chap.name }));
+    }
   }
 
   chapTracker(index, chap) {

@@ -7,10 +7,11 @@ import {Book} from '../models/book';
 import {BookService} from '../services/book.service';
 import {AnnoFamilyService} from '../services/anno-family.service';
 import {OpResult} from '../models/op-result';
-import {AppLinkModal, AppLink} from '../common/app-link.component';
+import {AppLink, AppLinkModal} from '../common/app-link.component';
 import {SessionService} from '../services/session.service';
 import {BookCategoryService} from '../services/book-category.service';
 import {BookListComponent} from './book-list.component';
+import {WordStatService} from '../services/word-stat.service';
 
 @Component({
   selector: 'books-admin',
@@ -27,10 +28,14 @@ export class BooksAdminComponent extends BookListComponent implements OnInit {
               protected categoryService: BookCategoryService,
               protected sessionService: SessionService,
               protected annoFamilyService: AnnoFamilyService,
+              protected wordStatService: WordStatService,
               protected route: ActivatedRoute,
               protected router: Router,
               protected modalService: SuiModalService) {
-    super(bookService, categoryService, sessionService, annoFamilyService, route, router, modalService);
+    super(bookService, categoryService,
+      sessionService, annoFamilyService,
+      wordStatService,
+      route, router, modalService);
   }
 
   filterVisib(visib) {

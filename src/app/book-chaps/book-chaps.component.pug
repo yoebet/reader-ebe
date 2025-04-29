@@ -24,7 +24,7 @@
 .ui.celled.selection.list(*ngIf='book')
   .item(*ngFor='let chap of book.chaps; trackBy: chapTracker; first as first; last as last')
     .right.floated.header([hidden]="chap===editingChap")
-      .ui.mini.teal.tag.label(*ngIf="chap.isFree") 免费
+      //.ui.mini.teal.tag.label(*ngIf="chap.isFree") 免费
       .ui.mini.left.pointing.basic.label([ngClass]='{"green": chap.status==="R"}') {{statusNames[chap.status]}}
       ng-template([ngIf]="tuneOrder")
         button.ui.mini.compact.button(*ngIf='!first', (click)='moveUp(chap)')
@@ -47,6 +47,7 @@
           .ui.mini.compact.basic.button((click)='dropPack(chap)') 删除
         .ui.mini.primary.compact.basic.button((click)='buildPack(chap)') 创建
       ng-template([ngIf]="!tuneOrder&&!contentPack")
+        a(*ngIf='chap.stat', (click)='showChapStat(chap)') &nbsp; {{chap.stat.total}} 词 &nbsp;
         button.ui.tiny.button(*ngIf='showRemove', (click)='remove(chap)') 删除
         button.ui.tiny.button(*ngIf='wxLink', (click)='showLink(chap)') 链接
         ng-template([ngIf]="!showRemove&&!wxLink")
@@ -83,7 +84,7 @@
           sui-select.selection([ngModel]="chap.status", [options]="statusOptions",
             valueField="value", labelField="label", placeholder='状态', #statusSelect='')
             sui-select-option(*ngFor="let option of statusSelect.filteredOptions", [value]="option")
-        .field
+        //.field
           sui-checkbox.toggle([(ngModel)]="editingChapFree") 免费
 
   .ui.hidden.clearing.divider

@@ -36,3 +36,7 @@
 .zhname.pre-wrap {
   margin-top: 0.3em;
 }
+
+a.book-stat {
+  cursor: pointer;
+}

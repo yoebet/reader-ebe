@@ -17,3 +17,7 @@ a .zhname {
 .cat-list {
   margin-top: 0;
 }
+
+a.stat-link {
+  cursor: pointer;
+}

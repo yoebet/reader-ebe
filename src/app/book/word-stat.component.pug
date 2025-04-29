@@ -1,0 +1,25 @@
+.ui.small.blue.header 词汇统计
+
+.ui.content
+  .title.pre-wrap {{title}}
+  br
+
+  .ui.divided.selection.list
+    .item
+      | 总词数
+      b.right.floated.content {{stat.total}}
+    .item
+      | 去重词数
+      b.right.floated.content {{stat.unique}}
+    .item(*ngFor='let cat of cats')
+      | {{catNames[cat]}}
+      .right.floated.content {{stat[cat]}}
+
+  .ui.hidden.clearing.divider
+
+  .words(*ngIf='showCat')
+    | {{catNames[cat]}} &nbsp;&nbsp;
+    br
+    .ui.horizontal.list(*ngIf='words.length>0')
+      .item.word(*ngFor='let iw of words') {{iw}}
+

@@ -1,6 +1,8 @@
 div(*ngIf='book')
   .ui.content
     .ui.right.floated.sub.header
+      a.ui.mini.book-stat(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total}} 词
+      | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
       .ui.pointing.dropdown.tiny.button(

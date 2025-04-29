@@ -1,0 +1,8 @@
+.words .item.word {
+  color: gray;
+  text-decoration: underline dashed;
+}
+
+.words .list {
+  margin-left: 2em;
+}

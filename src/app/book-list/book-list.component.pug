@@ -17,6 +17,7 @@ table.ui.striped.table
       th 作者
       th 类别
       th 状态
+      th 统计
       //th 定价
       th
   tbody
@@ -35,6 +36,8 @@ table.ui.striped.table
         .zhname(*ngIf='showZh && book.zhAuthor') {{book.zhAuthor}}
       td {{book.categoryName||categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
+      td
+        a.stat-link(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total}} 词
       //td
         ng-template([ngIf]="book.editExperiment")
           .ui.mini.gray.tag.label 编辑体验
@@ -55,7 +58,7 @@ table.ui.striped.table
       td(colspan='8') No Results.
   tfoot(*ngIf='books&&books.length>=pageSize')
     tr
-      th.ui.small.form(colspan='8')
+      th.ui.small.form(colspan='9')
         .pager
           input.ui.mini.input.page-input(type="number", min='1', #pi='', (change)='gotoPage(pi.value);pi.value=""')
           .ui.right.floated.mini.pagination.menu

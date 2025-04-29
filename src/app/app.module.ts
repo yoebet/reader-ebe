@@ -92,6 +92,8 @@ import {BookImportComponent} from './book-chaps/book-import.component';
 import {ChapTextEditComponent} from './book-chaps/chap-text-edit.component';
 import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
 import {UserMessagesPopupComponent} from './message/user-messages-popup.component';
+import {WordStatService} from './services/word-stat.service';
+import {WordStatComponent} from './book/word-stat.component';
 
 
 @NgModule({
@@ -165,7 +167,8 @@ import {UserMessagesPopupComponent} from './message/user-messages-popup.componen
     BookImportComponent,
     ChapTextEditComponent,
     ChapTextSplitComponent,
-    UserMessagesPopupComponent
+    UserMessagesPopupComponent,
+    WordStatComponent
   ],
   providers: [
     AppService,
@@ -188,7 +191,8 @@ import {UserMessagesPopupComponent} from './message/user-messages-popup.componen
     PriceLabelPipe,
     OrderService,
     UserStatService,
-    BookCategoryService
+    BookCategoryService,
+    WordStatService
   ],
   entryComponents: [
     LoginPopupComponent,
@@ -211,7 +215,8 @@ import {UserMessagesPopupComponent} from './message/user-messages-popup.componen
     BookImportComponent,
     ChapTextEditComponent,
     ChapTextSplitComponent,
-    UserMessagesPopupComponent
+    UserMessagesPopupComponent,
+    WordStatComponent
   ],
   bootstrap: [AppComponent]
 })

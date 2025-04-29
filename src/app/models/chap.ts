@@ -1,5 +1,6 @@
 import {Model} from './model';
 import {Para} from './para';
+import {WordStat} from './word-stat';
 
 export class Chap extends Model {
   name: string;
@@ -19,6 +20,8 @@ export class Chap extends Model {
   paras: Para[];
 
   paraCommentsCountLoaded = false;
+
+  stat?: WordStat;
 }
 
 export class ChapContentPack {

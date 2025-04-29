@@ -1,6 +1,7 @@
 import {Model} from './model';
 import {Chap} from './chap';
 import {UserBook} from './user-book';
+import {WordStat} from './word-stat';
 
 export class BookBasic extends Model {
   code: string;
@@ -84,6 +85,8 @@ export class Book extends BookBasic {
   chaps: Chap[];
 
   editorRole: string;
+
+  stat?: WordStat;
 
 
   static isChineseText(lang) {

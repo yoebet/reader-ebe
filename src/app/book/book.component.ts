@@ -18,6 +18,8 @@ import {User} from '../models/user';
 import {StaticResource} from '../config';
 import {BookImageModal} from './book-image.component';
 import {OpResult} from '../models/op-result';
+import {WordStatService} from '../services/word-stat.service';
+import {WordStatModal} from './word-stat.component';
 
 @Component({
   selector: 'book-detail',
@@ -37,6 +39,7 @@ export class BookComponent implements OnInit {
 
   constructor(private bookService: BookService,
               private sessionService: SessionService,
+              private wordStatService: WordStatService,
               private route: ActivatedRoute,
               private location: Location,
               public modalService: SuiModalService) {
@@ -102,6 +105,16 @@ export class BookComponent implements OnInit {
         }
         alert('ok');
       });
+  }
+
+  async showBookStat(book: Book) {
+    let stat = book.stat;
+    if (!stat) {
+      stat = await this.wordStatService.getBookStat(book._id).toPromise();
+    }
+    if (stat) {
+      this.modalService.open(new WordStatModal({ stat, title: book.name }));
+    }
   }
 
   goBack(): void {

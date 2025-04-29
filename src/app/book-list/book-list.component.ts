@@ -22,6 +22,8 @@ import {SessionService} from '../services/session.service';
 import {User} from '../models/user';
 import {BookExpsModal} from './book-exps.component';
 import {BookCategoryService} from '../services/book-category.service';
+import {WordStatService} from '../services/word-stat.service';
+import {WordStatModal} from '../book/word-stat.component';
 
 @Component({
   selector: 'book-list',
@@ -69,6 +71,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
               protected categoryService: BookCategoryService,
               protected sessionService: SessionService,
               protected annoFamilyService: AnnoFamilyService,
+              protected wordStatService: WordStatService,
               protected route: ActivatedRoute,
               protected router: Router,
               protected modalService: SuiModalService) {
@@ -337,6 +340,16 @@ export class BookListComponent extends SortableListComponent implements OnInit {
           this.loadBooks();
         }
       });
+  }
+
+  async showBookStat(book: Book) {
+    let stat = book.stat;
+    if (!stat) {
+      stat = await this.wordStatService.getBookStat(book._id).toPromise();
+    }
+    if (stat) {
+      this.modalService.open(new WordStatModal({ stat, title: book.name }));
+    }
   }
 
   bookTracker(index, book) {
