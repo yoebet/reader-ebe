@@ -1,7 +1,7 @@
 div(*ngIf='book')
   .ui.content
     .ui.right.floated.sub.header
-      a.ui.mini.book-stat(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total}} 词
+      a.book-stat(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total}} 词
       | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
@@ -13,6 +13,7 @@ div(*ngIf='book')
         .menu(suiDropdownMenu='')
           .item((click)='showForm()') 修改
           .item((click)='showUsers()') 人员
+          .item((click)='buildBookStat(book)') 词汇统计
           ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
             .item((click)='showPacks()') 内容包
             //.item((click)='showLink()') 微信链接

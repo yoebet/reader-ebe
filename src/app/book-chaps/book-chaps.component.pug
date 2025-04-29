@@ -47,9 +47,10 @@
           .ui.mini.compact.basic.button((click)='dropPack(chap)') 删除
         .ui.mini.primary.compact.basic.button((click)='buildPack(chap)') 创建
       ng-template([ngIf]="!tuneOrder&&!contentPack")
-        a(*ngIf='chap.stat', (click)='showChapStat(chap)') &nbsp; {{chap.stat.total}} 词 &nbsp;
-        button.ui.tiny.button(*ngIf='showRemove', (click)='remove(chap)') 删除
-        button.ui.tiny.button(*ngIf='wxLink', (click)='showLink(chap)') 链接
+        a.stat-link(*ngIf='chap.stat', (click)='showChapStat(chap)') &nbsp; {{chap.stat.total}} 词 &nbsp;
+        button.ui.tiny.compact.button((click)='buildChapStat(chap)') {{chap.stat? '重新统计':'统计词汇'}}
+        button.ui.tiny.compact.button(*ngIf='showRemove', (click)='remove(chap)') 删除
+        button.ui.tiny.compact.button(*ngIf='wxLink', (click)='showLink(chap)') 链接
         ng-template([ngIf]="!showRemove&&!wxLink")
           button.ui.tiny.compact.button((click)='edit(chap)') 标题
           button.ui.tiny.compact.button((click)='editStatus(chap)') 状态

@@ -1,0 +1,12 @@
+.ui.small.header
+  .title
+    i.red.outline.frown.icon(*ngIf='type==="error"')
+    i.blue.info.icon(*ngIf='type!=="error"')
+    | {{title}}
+
+.ui.content
+
+  .pre-wrap {{msg}}
+
+.actions
+  button.ui.tiny.button((click)="close()", autofocus='') 关闭

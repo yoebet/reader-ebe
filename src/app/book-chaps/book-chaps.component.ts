@@ -15,6 +15,7 @@ import {User} from '../models/user';
 import {BookImportModal} from './book-import.component';
 import {WordStatService} from '../services/word-stat.service';
 import {WordStatModal} from '../book/word-stat.component';
+import {MessageDialogModal} from '../common/message-dialog.component';
 
 @Component({
   selector: 'book-chaps',
@@ -256,8 +257,24 @@ export class BookChapsComponent extends SortableListComponent implements OnInit 
       stat = await this.wordStatService.getChapStat(chap._id).toPromise();
     }
     if (stat) {
-      this.modalService.open(new WordStatModal({ stat, title: chap.name }));
+      this.modalService.open(new WordStatModal({stat, title: chap.name}));
     }
+  }
+
+  async buildChapStat(chap: Chap) {
+    // const dr = this.modalService.open(new MessageDialogModal(
+    //   {
+    //     title: '统计',
+    //     msg: '已开始，请稍候 ...'
+    //   }
+    // ));
+    await this.wordStatService.buildChapStat(chap._id).pipe().subscribe(stat1 => {
+      // dr.approve('');
+      if (stat1) {
+        chap.stat = stat1;
+        this.modalService.open(new WordStatModal({stat: stat1, title: chap.name}));
+      }
+    });
   }
 
   chapTracker(index, chap) {

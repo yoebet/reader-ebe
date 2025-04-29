@@ -20,6 +20,7 @@ import {BookImageModal} from './book-image.component';
 import {OpResult} from '../models/op-result';
 import {WordStatService} from '../services/word-stat.service';
 import {WordStatModal} from './word-stat.component';
+import {MessageDialogModal} from '../common/message-dialog.component';
 
 @Component({
   selector: 'book-detail',
@@ -113,8 +114,33 @@ export class BookComponent implements OnInit {
       stat = await this.wordStatService.getBookStat(book._id).toPromise();
     }
     if (stat) {
-      this.modalService.open(new WordStatModal({ stat, title: book.name }));
+      this.modalService.open(new WordStatModal({stat, title: book.name}));
     }
+  }
+
+  async buildBookStat(book: Book) {
+    let stat = book.stat;
+    if (stat) {
+      if (!confirm('要重新统计吗？')) {
+        return;
+      }
+    }
+    const dr = this.modalService.open(new MessageDialogModal(
+      {
+        title: '全书统计',
+        msg: '已开始，请稍候 ...'
+      }
+    ));
+    await this.wordStatService.buildBookStat(book._id).subscribe(stat1 => {
+      dr.approve('');
+      if (stat1) {
+        book.stat = stat1;
+        this.modalService.open(new WordStatModal({stat: stat1, title: book.name}));
+        this.bookService.getDetail(book._id).subscribe(detail => {
+          Object.assign(this.book, detail);
+        });
+      }
+    });
   }
 
   goBack(): void {

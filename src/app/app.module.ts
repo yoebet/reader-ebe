@@ -94,6 +94,7 @@ import {ChapTextSplitComponent} from './book-chaps/chap-text-split.component';
 import {UserMessagesPopupComponent} from './message/user-messages-popup.component';
 import {WordStatService} from './services/word-stat.service';
 import {WordStatComponent} from './book/word-stat.component';
+import {MessageDialogComponent} from './common/message-dialog.component';
 
 
 @NgModule({
@@ -168,7 +169,8 @@ import {WordStatComponent} from './book/word-stat.component';
     ChapTextEditComponent,
     ChapTextSplitComponent,
     UserMessagesPopupComponent,
-    WordStatComponent
+    WordStatComponent,
+    MessageDialogComponent
   ],
   providers: [
     AppService,
@@ -216,7 +218,8 @@ import {WordStatComponent} from './book/word-stat.component';
     ChapTextEditComponent,
     ChapTextSplitComponent,
     UserMessagesPopupComponent,
-    WordStatComponent
+    WordStatComponent,
+    MessageDialogComponent
   ],
   bootstrap: [AppComponent]
 })
