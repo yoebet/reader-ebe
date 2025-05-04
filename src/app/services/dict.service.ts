@@ -25,8 +25,8 @@ export class DictService extends BaseService<DictEntry> {
     super(http, modalService, sessionService);
     let apiBase = environment.apiBase || '';
     this.baseUrl = `${apiBase}/${this.apiA}/dict`;
-    // this.pronsBase = `${environment.staticBase}/pron`;
-    this.pronsBase = `${apiBase}/${this.apiB}/dict/pron`;
+    this.pronsBase = `${environment.staticBase}/pron`;
+    // this.pronsBase = `${apiBase}/${this.apiB}/dict/pron`;
   }
 
   get entryHistory(): DictEntry[] {

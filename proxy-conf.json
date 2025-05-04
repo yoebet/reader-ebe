@@ -1,10 +1,22 @@
 {
-  "/api-*": {
-    "target": "18.139.41.36:3000",
-    "changeOrigin": true
+  "/api-a": {
+    "target": "http://18.139.41.36:3000",
+    "changeOrigin": true,
+    "secure": false
+  },
+  "/api-b": {
+    "target": "http://18.139.41.36:3000",
+    "changeOrigin": true,
+    "secure": false
   },
   "/pron": {
-    "target": "18.139.41.36:2025",
-    "changeOrigin": true
+    "target": "http://18.139.41.36:2025",
+    "changeOrigin": true,
+    "secure": false
+  },
+  "/dict-zh": {
+    "target": "http://18.139.41.36:2025",
+    "changeOrigin": true,
+    "secure": false
   }
 }

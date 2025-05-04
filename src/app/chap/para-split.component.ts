@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {SuiModal, ComponentModalConfig} from 'ng2-semantic-ui';
+import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 import {findIndex} from 'lodash';
 
 import {ParaSetting} from '../config';
@@ -63,13 +63,12 @@ export class ParaSplitComponent {
     }
   }
 
-  onKeyup(index, part, $event) {
-    $event.stopPropagation();
-    let textarea = $event.target;
-    if ($event.code !== 'Enter') {
+  private splitPara(index, part, splitPat) {
+    const eventRow = this.rows[index];
+    if (!eventRow) {
       return;
     }
-    let texts = textarea.value.split(this.splitPat);
+    let texts = eventRow[part].split(splitPat);
     if (texts.length === 1) {
       return;
     }
@@ -107,6 +106,23 @@ export class ParaSplitComponent {
     this.editingRow = this.rows[index + 1];
   }
 
+  splitParaByLf(index, part) {
+    this.splitPara(index, part, ParaSetting.NewLineSplitter);
+  }
+
+  onKeyup(index, part, $event) {
+    $event.stopPropagation();
+    if ($event.code === 'Escape') {
+      this.editingRow = null;
+      this.editingPart = null;
+      return;
+    }
+    if ($event.code !== 'Enter') {
+      return;
+    }
+    // this.splitPara(index, part, this.splitPat);
+  }
+
   moveUp(index, part, $event) {
     let preRow = this.rows[index - 1];
     let thisRow = this.rows[index];
@@ -115,9 +131,9 @@ export class ParaSplitComponent {
     }
 
     if (preRow[part] && thisRow[part]) {
-      if (this.splitBy2Lf) {
-        preRow[part] = preRow[part] + '\n';
-      }
+      // if (this.splitBy2Lf) {
+      preRow[part] = preRow[part] + '\n';
+      // }
     }
     preRow[part] = preRow[part] + thisRow[part];
 
@@ -136,6 +152,35 @@ export class ParaSplitComponent {
     if (last.left === '' && last.right === '') {
       this.rows.splice(lastIndex, 1);
     }
+  }
+
+  clickEdit(index, part) {
+    this.editingRow = this.rows[index];
+    this.editingPart = part;
+    let selection = window.getSelection();
+    if (selection.anchorNode === selection.focusNode) {
+      const offset = selection.focusOffset;
+      setTimeout(() => {
+        if (this.editingRow === this.rows[index] && this.editingPart === part) {
+          const textarea: any = document.querySelector(`textarea.textarea-${part}-${index}`);
+          if (textarea) {
+            textarea.selectionEnd = offset;
+            textarea.selectionStart = offset;
+            textarea.focus();
+          }
+        }
+      }, 100);
+    }
+  }
+
+  edit(row, part) {
+    this.editingRow = row;
+    this.editingPart = part;
+  }
+
+  endEdit(index, part) {
+    this.editingRow = null;
+    this.editingPart = null;
   }
 
   cancel() {

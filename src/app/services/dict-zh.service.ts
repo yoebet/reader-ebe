@@ -85,7 +85,8 @@ export class DictZhService extends BaseService<DictZh> {
     if (this.phrases) {
       return observableOf(this.phrases);
     }
-    let url = `${this.baseUrl}/phrases/all`;
+    // let url = `${this.baseUrl}/phrases/all`;
+    let url = `${environment.staticBase}/dict-zh/phrases_all.json`;
     return this.http.get<string[]>(url, this.httpOptions)
       .pipe(
         map(words => {

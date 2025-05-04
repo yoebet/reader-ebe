@@ -14,21 +14,39 @@
           button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
             i.chevron.up.icon
             | 合并
+          button.ui.mini.basic.button(*ngIf='splitBy2Lf', (click)='splitParaByLf(index,"left")')
+            i.resize.vertical.icon
+            | 换行
+          button.ui.mini.basic.button(*ngIf='row!==editingRow||editingPart!=="left"', (click)='edit(row, "left")')
+            i.edit.vertical.icon
+            | 编辑
+          button.ui.mini.basic.button(*ngIf='row===editingRow&&editingPart==="left"', (click)='endEdit(row, "left")')
+            i.checkmark.vertical.icon
+            | 完成
       .six.wide.column
-        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="left"&&!row.fix)', [innerHTML]='row.sanitizedLeft', (click)='editingRow=row;editingPart="left"')
-        textarea(*ngIf='row===editingRow&&editingPart==="left"&&!row.fix', [(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)')
+        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="left"&&!row.fix)', [innerHTML]='row.sanitizedLeft', (click)='clickEdit(index, "left")')
+        textarea(*ngIf='row===editingRow&&editingPart==="left"&&!row.fix', [ngClass]='"textarea-left-"+index', [(ngModel)]='row.left', (keyup)='onKeyup(index,"left",$event)')
       .one.wide.column.middle-column
         .fixit
           sui-checkbox([(ngModel)]='row.fix')
             | 固定
       .six.wide.column
-        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="right"&&!row.fix)', [innerHTML]='row.sanitizedRight', (click)='editingRow=row;editingPart="right"')
-        textarea(*ngIf='row===editingRow&&editingPart==="right"&&!row.fix', [(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)')
+        .para-text.content-text(*ngIf='!(row===editingRow&&editingPart==="right"&&!row.fix)', [innerHTML]='row.sanitizedRight', (click)='clickEdit(index, "right")')
+        textarea(*ngIf='row===editingRow&&editingPart==="right"&&!row.fix', [ngClass]='"textarea-right-"+index', [(ngModel)]='row.right', (keyup)='onKeyup(index,"right",$event)')
       .one.wide.column.right-column
         .ui.item.right-buttons
           button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
             i.chevron.up.icon
             | 合并
+          button.ui.mini.basic.button(*ngIf='splitBy2Lf', (click)='splitParaByLf(index,"right")')
+            i.resize.vertical.icon
+            | 换行
+          button.ui.mini.basic.button(*ngIf='row!==editingRow||editingPart!=="right"', (click)='edit(row, "right")')
+            i.edit.vertical.icon
+            | 编辑
+          button.ui.mini.basic.button(*ngIf='row===editingRow&&editingPart==="right"', (click)='endEdit(row, "right")')
+            i.checkmark.vertical.icon
+            | 完成
 .actions
   button.ui.tiny.button((click)="cancel()") 取消
   button.ui.tiny.primary.button((click)="completeAndSave()", [ngClass]='{disabled: saving}', autofocus='') 完成并保存
