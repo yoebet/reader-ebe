@@ -151,6 +151,7 @@ export class ParaSplitComponent {
     }
     preRow[part] = preRow[part] + thisRow[part];
 
+    let ttid = thisRow.trackId;
     let lastIndex = index;
     for (let i = index; i < this.rows.length - 1; i++) {
       let r1 = this.rows[i];
@@ -159,10 +160,12 @@ export class ParaSplitComponent {
         break;
       }
       r1[part] = r2[part];
+      r1.trackId = r2.trackId;
       lastIndex = i + 1;
     }
     let last = this.rows[lastIndex];
     last[part] = '';
+    last.trackId = ttid;
     if (last.left === '' && last.right === '') {
       this.rows.splice(lastIndex, 1);
     }
