@@ -71,7 +71,7 @@ export class DictEntry extends Model {
       } else {
         let wCategories = [
           ['gre', 'GRE'],
-          ['yasi', '雅思'],
+          ['ielts', '雅思'],
           ['pro', '英专']
         ];
         for (let [key, name] of wCategories) {
