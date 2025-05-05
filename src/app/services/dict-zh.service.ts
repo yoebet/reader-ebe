@@ -82,18 +82,19 @@ export class DictZhService extends BaseService<DictZh> {
   }
 
   getPhrases(): Observable<ZhPhrases> {
-    if (this.phrases) {
-      return observableOf(this.phrases);
-    }
+    return observableOf(new ZhPhrases([]));
+    // if (this.phrases) {
+    //   return observableOf(this.phrases);
+    // }
     // let url = `${this.baseUrl}/phrases/all`;
-    let url = `${environment.staticBase}/dict-zh/phrases_all.json`;
-    return this.http.get<string[]>(url, this.httpOptions)
-      .pipe(
-        map(words => {
-          this.phrases = new ZhPhrases(words);
-          return this.phrases;
-        }),
-        catchError(this.handleError));
+    // let url = `${environment.staticBase}/dict-zh/phrases_all.json`;
+    // return this.http.get<string[]>(url, this.httpOptions)
+    //   .pipe(
+    //     map(words => {
+    //       this.phrases = new ZhPhrases(words);
+    //       return this.phrases;
+    //     }),
+    //     catchError(this.handleError));
   }
 
 }
