@@ -3,7 +3,8 @@
   | 补中文
 .ui.content
   .ui.column.grid.form.para-split
-    .row.split-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
+    .row.split-para(*ngFor='let row of rows; index as index; first as first; trackBy: rowTracker',
+      [ngClass]='{fix: row.fix}')
       .one.wide.column
         .ui.item
           .ui.mini.teal.label.rowno {{index+1}}

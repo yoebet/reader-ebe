@@ -163,6 +163,10 @@ export class TransFillingComponent {
     });
   }
 
+  rowTracker(row: Row) {
+    return row.trackId;
+  }
+
 }
 
 

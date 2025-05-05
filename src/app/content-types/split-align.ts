@@ -1,5 +1,7 @@
 import {DomSanitizer} from '@angular/platform-browser';
 
+let tid = 0;
+
 export class Row {
   static sanitizer: DomSanitizer;
   _left = '';
@@ -7,6 +9,11 @@ export class Row {
   _sanitizedLeft;
   _sanitizedRight;
   fix = false;
+  trackId: number;
+
+  constructor() {
+    this.trackId = tid++;
+  }
 
   get left() {
     return this._left;

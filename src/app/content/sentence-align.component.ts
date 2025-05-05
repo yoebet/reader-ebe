@@ -314,6 +314,10 @@ export class SentenceAlignComponent {
     });
   }
 
+  rowTracker(row: Row) {
+    return row.trackId;
+  }
+
 }
 
 

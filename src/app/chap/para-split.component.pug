@@ -7,16 +7,17 @@
     | 分段）
 .ui.content
   .ui.column.grid.form.para-split
-    .row.split-para(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
+    .row.split-para(*ngFor='let row of rows; index as index; first as first; trackBy: rowTracker',
+      [ngClass]='{fix: row.fix}')
       .two.wide.column
         .ui.item
           .ui.mini.teal.label.rowno {{index+1}}
           button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"left", $event)')
             i.chevron.up.icon
             | 合并
-          button.ui.mini.basic.button(*ngIf='splitBy2Lf', (click)='splitParaByLf(index,"left")')
+          button.ui.mini.basic.button((click)='splitParaByLf(index,"left")')
             i.resize.vertical.icon
-            | 换行
+            | 拆分
           button.ui.mini.basic.button(*ngIf='row!==editingRow||editingPart!=="left"', (click)='edit(row, "left")')
             i.edit.vertical.icon
             | 编辑
@@ -38,9 +39,9 @@
           button.ui.mini.basic.button(*ngIf='!first', [ngClass]='{disabled: row.fix||rows[index-1].fix}', (click)='moveUp(index,"right", $event)')
             i.chevron.up.icon
             | 合并
-          button.ui.mini.basic.button(*ngIf='splitBy2Lf', (click)='splitParaByLf(index,"right")')
+          button.ui.mini.basic.button((click)='splitParaByLf(index,"right")')
             i.resize.vertical.icon
-            | 换行
+            | 拆分
           button.ui.mini.basic.button(*ngIf='row!==editingRow||editingPart!=="right"', (click)='edit(row, "right")')
             i.edit.vertical.icon
             | 编辑

@@ -36,7 +36,7 @@ export class ChapParasComponent extends ParaAnnotateComponent implements OnInit 
     this.loadAnnotations();
   }
 
-  showTrans = true;
+  showTrans = false;
   leftRight = true;
   annotateOnly = false;
   // editInplace = false;

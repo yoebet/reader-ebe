@@ -120,20 +120,34 @@ export class ParaSplitComponent {
     if ($event.code !== 'Enter') {
       return;
     }
-    // this.splitPara(index, part, this.splitPat);
+    // if (this.splitBy2Lf) {
+    this.splitPara(index, part, ParaSetting.EmptyLineSplitter);
+    // }
   }
 
   moveUp(index, part, $event) {
+    $event.stopPropagation();
     let preRow = this.rows[index - 1];
     let thisRow = this.rows[index];
     if (preRow.fix || thisRow.fix) {
       return;
     }
-
     if (preRow[part] && thisRow[part]) {
-      // if (this.splitBy2Lf) {
-      preRow[part] = preRow[part] + '\n';
-      // }
+      const lt = preRow[part];
+      const ctrl = $event.ctrlKey || $event.metaKey;
+      if (ctrl) {
+        if (/[a-z]$/i.test(lt)) {
+          preRow[part] = preRow[part] + ' ';
+        } else if (lt.endsWith('-')) {
+          //
+        } else if (/^[a-z]/.test(thisRow[part])) {
+          preRow[part] = preRow[part] + ' ';
+        } else {
+          preRow[part] = preRow[part] + '\n';
+        }
+      } else {
+        preRow[part] = lt + '\n';
+      }
     }
     preRow[part] = preRow[part] + thisRow[part];
 
@@ -206,6 +220,10 @@ export class ParaSplitComponent {
     this.paraSaver.saveSplit(paras, () => {
       this.modal.approve(paras);
     });
+  }
+
+  rowTracker(row: Row) {
+    return row.trackId;
   }
 
 }

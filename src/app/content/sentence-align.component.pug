@@ -2,7 +2,8 @@
   | 句子对齐
 .ui.content
   .ui.column.grid.form.sentences-align
-    .row.aligned-sentence(*ngFor='let row of rows; index as index; first as first', [ngClass]='{fix: row.fix}')
+    .row.aligned-sentence(*ngFor='let row of rows; index as index; first as first; trackBy: rowTracker',
+      [ngClass]='{fix: row.fix}')
       .two.wide.column
         .ui.item
           .ui.mini.blue.label.rowno {{index+1}}
