@@ -1,0 +1,17 @@
+{
+  "/api-a": {
+    "target": "http://localhost:3000",
+    "changeOrigin": true,
+    "secure": false
+  },
+  "/api-b": {
+    "target": "http://localhost:3000",
+    "changeOrigin": true,
+    "secure": false
+  },
+  "/res": {
+    "target": "http://localhost:3000",
+    "changeOrigin": true,
+    "secure": false
+  }
+}

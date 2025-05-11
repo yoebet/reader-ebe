@@ -1,13 +1,14 @@
 {
-  "name": "ee",
+  "name": "edit",
   "version": "0.2.0",
   "scripts": {
     "ng": "ng",
     "puggy": "pug src -P -w",
     "serve": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve",
-    "serve-proxy": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve --proxy-config proxy-conf.json",
+    "serve-proxy-local": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve --proxy-config proxy-conf.local.json",
+    "serve-proxy-remote": "set NODE_OPTIONS=--openssl-legacy-provider & ng serve --proxy-config proxy-conf.remote.json",
     "start": "npm run puggy & ng serve",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider & ng build --prod --base-href /ee/",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider & ng build --prod --base-href /edit/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
