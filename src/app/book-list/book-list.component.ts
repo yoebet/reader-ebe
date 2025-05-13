@@ -1,8 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-
 import {combineLatest} from 'rxjs/';
-
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {StaticResource} from '../config';

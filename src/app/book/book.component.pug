@@ -1,7 +1,7 @@
 div(*ngIf='book')
   .ui.content
     .ui.right.floated.sub.header
-      a.book-stat(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total | wanUnit}} 词
+      a.book-stat(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total | wanUnit}}词
       | &nbsp;&nbsp;
       button.ui.tiny.button((click)='showDetail()') 详情
       | &nbsp;&nbsp;
@@ -25,7 +25,7 @@ div(*ngIf='book')
     img.ui.tiny.left.floated.image(*ngIf='book.image',
       [src]='book.image? bookImagesBase+"/"+book.image.file: bookImageNotSet',
       [ngClass]='{disabled: !book.image}', (click)='showImage(book)')
-    .content
+    .book-meta
       .name-author
         .book-name {{book.name}}
         .author(*ngIf='book.author')

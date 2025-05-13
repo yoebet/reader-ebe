@@ -1,5 +1,9 @@
+.book-meta {
+  display: inline-block;
+}
+
 .zh-name-author, .props {
-  /*margin-top: 0.5em;*/
+  margin-top: 0.5em;
 }
 
 .book-name, .author {
@@ -8,6 +12,7 @@
 
 .book-name {
   font-weight: bold;
+  font-size: 1.1em;
 }
 
 .author-by {

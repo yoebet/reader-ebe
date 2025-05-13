@@ -37,7 +37,7 @@ table.ui.striped.table
       td {{book.categoryName||categoryNames[book.category]}}
       td([ngClass]='{"status-r": book.status==="R"}') {{statusNames[book.status]}}
       td
-        a.stat-link(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total | wanUnit}} 词
+        a.stat-link(*ngIf='book.stat', (click)='showBookStat(book)') {{book.stat.total | wanUnit}}词
       //td
         ng-template([ngIf]="book.editExperiment")
           .ui.mini.gray.tag.label 编辑体验
