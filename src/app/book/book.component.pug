@@ -22,7 +22,7 @@ div(*ngIf='book')
           ng-template([ngIf]='book.editExperiment')
             .item((click)='syncExpBook()') 同步
 
-    //img.ui.tiny.left.floated.image(*ngIf='book.image',
+    img.ui.tiny.left.floated.image(*ngIf='book.image',
       [src]='book.image? bookImagesBase+"/"+book.image.file: bookImageNotSet',
       [ngClass]='{disabled: !book.image}', (click)='showImage(book)')
     .content

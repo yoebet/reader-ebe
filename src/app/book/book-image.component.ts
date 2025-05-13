@@ -45,7 +45,7 @@ export class BookImageComponent implements OnInit {
   upload() {
     let files = this.file.nativeElement.files;
     // console.log(files);// FileList
-    if (!files || files.length == 0) {
+    if (!files || files.length === 0) {
       return;
     }
     this.uploading = true;

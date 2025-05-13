@@ -23,7 +23,7 @@ table.ui.striped.table
   tbody
     tr(*ngFor='let book of paginatedBooks; trackBy: bookTracker')
       td
-        //a((click)='showImage(book)', href='javascript:')
+        a((click)='showImage(book)', href='javascript:')
           img.ui.tiny.image(*ngIf='book.image', [src]='bookImagesBase+"/"+book.image.file')
           img.ui.tiny.image.disabled(*ngIf='!book.image', [src]='bookImageNotSet')
       td {{book.code}}

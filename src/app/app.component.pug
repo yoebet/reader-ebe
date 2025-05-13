@@ -3,10 +3,9 @@
     .ui.stackable.secondary.pointing.menu.container
       a.item(routerLink='') Home
       ng-template([ngIf]='currentUser')
-        ng-template([ngIf]='currentUser.role!=="R"')
-          a.item(routerLink='/books', routerLinkActive='active') 图书
+        a.item(routerLink='/books', routerLinkActive='active') 图书
         ng-template([ngIf]='currentUser.role==="R"')
-          a.item(routerLink='/books-admin', routerLinkActive='active') 图书
+          a.item(routerLink='/books-admin', routerLinkActive='active') 图书-A
         ng-template([ngIf]='currentUser.role==="A"||currentUser.role==="R"')
           a.item(routerLink='/book-categories', routerLinkActive='active') 分类
           //a.item(routerLink='/dict', routerLinkActive='active') 词典
@@ -14,13 +13,13 @@
           a.item(routerLink='/annotations', routerLinkActive='active') 标注
           a.item(routerLink='/issues', routerLinkActive='active') 纠错
           a.item(routerLink='/users', routerLinkActive='active') 用户
-          //a.item(routerLink='/users-admin', routerLinkActive='active') 用户-A
+          a.item(routerLink='/users-admin', routerLinkActive='active') 用户-A
           ng-template([ngIf]='currentUser.role==="R"')
             a.item(routerLink='/stat', routerLinkActive='active') 统计
             //a.item(routerLink='/orders', routerLinkActive='active') 订单
             a.item(routerLink='/feedbacks', routerLinkActive='active') 反馈
             a.item(routerLink='/comments', routerLinkActive='active') 评论
-            //a.item(routerLink='/releases', routerLinkActive='active') APP
+            a.item(routerLink='/releases', routerLinkActive='active') APP
       .right.menu
         a.item(*ngIf='!currentUser', routerLink='/login', routerLinkActive='active') 登录
         .item(*ngIf='currentUser')
