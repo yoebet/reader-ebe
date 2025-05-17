@@ -46,7 +46,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
 
   langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
-  categoryNames = BookCategory.CategoryNames;
+  categoryNames: Record<string, string> = {};
   bookImagesBase = StaticResource.BookImagesBase;
   bookImageNotSet = StaticResource.BookImageNotSet;
 
@@ -81,7 +81,12 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       .subscribe(afs => this.annOptions = afs);
 
     this.categoryService.listOptions()
-      .subscribe(cs => this.categoryOptions = cs);
+      .subscribe(cs => {
+        this.categoryOptions = cs;
+        for (const c of cs) {
+          this.categoryNames[c.code] = c.name;
+        }
+      });
 
     combineLatest(this.route.paramMap, this.route.queryParamMap)
       .subscribe(([pathParams, params]) => {
@@ -346,7 +351,7 @@ export class BookListComponent extends SortableListComponent implements OnInit {
       stat = await this.wordStatService.getBookStat(book._id).toPromise();
     }
     if (stat) {
-      this.modalService.open(new WordStatModal({ stat, title: book.name }));
+      this.modalService.open(new WordStatModal({stat, title: book.name}));
     }
   }
 

@@ -6,7 +6,6 @@ import {switchMap} from 'rxjs/operators';
 import {SuiModalService} from 'ng2-semantic-ui';
 
 import {Book} from '../models/book';
-import {BookCategory} from '../models/book-category';
 import {BookService} from '../services/book.service';
 import {BookFormModal} from './book-form.component';
 import {BookInfoModal} from './book-info.component';
@@ -21,6 +20,7 @@ import {OpResult} from '../models/op-result';
 import {WordStatService} from '../services/word-stat.service';
 import {WordStatModal} from './word-stat.component';
 import {MessageDialogModal} from '../common/message-dialog.component';
+import {BookCategoryService} from '../services/book-category.service';
 
 @Component({
   selector: 'book-detail',
@@ -30,7 +30,7 @@ import {MessageDialogModal} from '../common/message-dialog.component';
 export class BookComponent implements OnInit {
   book: Book;
   statusNames = Book.StatusNames;
-  categoryNames = BookCategory.CategoryNames;
+  categoryNames: Record<string, string> = {};
   bookImagesBase = StaticResource.BookImagesBase;
   bookImageNotSet = StaticResource.BookImageNotSet;
 
@@ -41,6 +41,7 @@ export class BookComponent implements OnInit {
   constructor(private bookService: BookService,
               private sessionService: SessionService,
               private wordStatService: WordStatService,
+              private categoryService: BookCategoryService,
               private route: ActivatedRoute,
               private location: Location,
               public modalService: SuiModalService) {
@@ -52,6 +53,10 @@ export class BookComponent implements OnInit {
     )).subscribe(book => {
       this.book = book;
     });
+    this.categoryService.getCategoryNames()
+      .subscribe(cns => {
+        this.categoryNames = cns;
+      });
   }
 
   showDetail() {

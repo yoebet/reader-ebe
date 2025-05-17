@@ -4,8 +4,7 @@ import {ComponentModalConfig, SuiModal} from 'ng2-semantic-ui';
 import {ModalSize} from 'ng2-semantic-ui/dist/modules/modal/classes/modal-config';
 
 import {Book} from '../models/book';
-import {BookCategory} from '../models/book-category';
-import {BookService} from '../services/book.service';
+import {BookCategoryService} from '../services/book-category.service';
 
 @Component({
   selector: 'book-info',
@@ -16,14 +15,18 @@ export class BookInfoComponent implements OnInit {
   @Input() book: Book;
   // langOptions = Book.LangTypes;
   statusNames = Book.StatusNames;
-  categoryNames = BookCategory.CategoryNames;
+  categoryNames = {};
 
-  constructor(private bookService: BookService,
+  constructor(private categoryService: BookCategoryService,
               private modal: SuiModal<Book, string, string>) {
     this.book = modal.context;
   }
 
   ngOnInit(): void {
+    this.categoryService.getCategoryNames()
+      .subscribe(cns => {
+        this.categoryNames = cns;
+      });
   }
 
   close() {

@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SuiModalService} from 'ng2-semantic-ui';
 
-import {catchError} from 'rxjs/operators';
-import {Observable} from 'rxjs/internal/Observable';
+import {catchError, map, switchMap} from 'rxjs/operators';
+import {Observable, of as ObservableOf} from 'rxjs/';
 
 import {environment} from '../../environments/environment';
 import {SorterService} from './sorter.service';
@@ -14,6 +14,7 @@ import {SessionService} from './session.service';
 @Injectable()
 export class BookCategoryService extends SorterService<BookCategory> {
 
+  private categoryNames: Record<string, string> = undefined;
 
   constructor(protected http: HttpClient,
               protected modalService: SuiModalService,
@@ -23,10 +24,28 @@ export class BookCategoryService extends SorterService<BookCategory> {
     this.baseUrl = `${apiBase}/${this.apiA}/book_categories`;
   }
 
+  getCategoryNames(): Observable<Record<string, string>> {
+    if (this.categoryNames) {
+      return ObservableOf(this.categoryNames);
+    }
+    return this.listOptions()
+      .pipe(switchMap(cs => ObservableOf(this.categoryNames)));
+  }
+
 
   listOptions(): Observable<BookCategory[]> {
     let url = `${this.baseUrl}/list/options`;
-    return super.list(url);
+    return super.list(url)
+      .pipe(map(cs => {
+          if (!this.categoryNames) {
+            this.categoryNames = {};
+          }
+          for (const c of cs) {
+            this.categoryNames[c.code] = c.name;
+          }
+          return cs;
+        })
+      );
   }
 
   findBooks(cat: string): Observable<BookBasic[]> {
